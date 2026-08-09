@@ -5,8 +5,17 @@ public class RoomTransitionManager : MonoBehaviour
 {
     public static RoomTransitionManager Instance;
 
+    [Header("Fade Settings")]
     [SerializeField] private CanvasGroup fadeCanvas;
-    [SerializeField] private float fadeDuration = 0.25f;
+
+    [Tooltip("How long it takes to fade TO black.")]
+    [SerializeField] private float fadeToBlackDuration = 0.25f;
+
+    [Tooltip("How long to wait AFTER reaching black and BEFORE teleporting.")]
+    [SerializeField] private float waitBeforeTeleportDuration = 0f;
+
+    [Tooltip("How long it takes to fade FROM black after teleporting.")]
+    [SerializeField] private float fadeFromBlackDuration = 0.25f;
 
     private bool isTransitioning;
 
@@ -21,12 +30,37 @@ public class RoomTransitionManager : MonoBehaviour
         Instance = this;
     }
 
-    public void TransitionPlayer(Transform player, Transform destination)
+    public void TransitionPlayer(
+        Transform player,
+        Transform destination)
     {
         if (isTransitioning)
             return;
 
-        StartCoroutine(TransitionRoutine(player, destination));
+        if (player == null)
+        {
+            Debug.LogError(
+                "RoomTransitionManager: Player is null."
+            );
+
+            return;
+        }
+
+        if (destination == null)
+        {
+            Debug.LogError(
+                "RoomTransitionManager: Destination is null."
+            );
+
+            return;
+        }
+
+        StartCoroutine(
+            TransitionRoutine(
+                player,
+                destination
+            )
+        );
     }
 
     private IEnumerator TransitionRoutine(
@@ -35,20 +69,56 @@ public class RoomTransitionManager : MonoBehaviour
     {
         isTransitioning = true;
 
-        // Fade to black
-        yield return Fade(1f);
+        // =============================================
+        // 1. FADE TO BLACK
+        // =============================================
 
-        // Teleport player
+        yield return Fade(
+            1f,
+            fadeToBlackDuration
+        );
+
+        // The screen is now COMPLETELY BLACK.
+        fadeCanvas.alpha = 1f;
+
+        // =============================================
+        // 2. OPTIONAL WAIT BEFORE TELEPORT
+        // =============================================
+
+        if (waitBeforeTeleportDuration > 0f)
+        {
+            yield return new WaitForSeconds(
+                waitBeforeTeleportDuration
+            );
+        }
+
+        // =============================================
+        // 3. TELEPORT
+        // =============================================
+        //
+        // IMPORTANT:
+        // The screen is STILL completely black here.
+        //
+        // We teleport BEFORE starting the fade-out.
+        // =============================================
+
         player.position = destination.position;
 
-        // Update player's elevation based on destination
+        // =============================================
+        // 4. UPDATE PLAYER ELEVATION
+        // =============================================
+
         ElevationDestination elevationDestination =
-            destination.GetComponent<ElevationDestination>();
+            destination.GetComponent<
+                ElevationDestination
+            >();
 
         if (elevationDestination != null)
         {
             PlayerElevationLevel playerElevation =
-                player.GetComponent<PlayerElevationLevel>();
+                player.GetComponent<
+                    PlayerElevationLevel
+                >();
 
             if (playerElevation != null)
             {
@@ -59,39 +129,60 @@ public class RoomTransitionManager : MonoBehaviour
             else
             {
                 Debug.LogWarning(
-                    "Player does not have a PlayerElevationLevel component."
+                    "Player does not have a " +
+                    "PlayerElevationLevel component."
                 );
             }
         }
         else
         {
             Debug.LogWarning(
-                $"Destination '{destination.name}' does not have an ElevationDestination component."
+                $"Destination '{destination.name}' " +
+                "does not have an " +
+                "ElevationDestination component."
             );
         }
 
-        // Fade back in
-        yield return Fade(0f);
+        // =============================================
+        // 5. FADE FROM BLACK
+        // =============================================
+
+        yield return Fade(
+            0f,
+            fadeFromBlackDuration
+        );
 
         isTransitioning = false;
     }
 
-    private IEnumerator Fade(float targetAlpha)
+    private IEnumerator Fade(
+        float targetAlpha,
+        float duration)
     {
         float startAlpha = fadeCanvas.alpha;
         float elapsed = 0f;
 
-        while (elapsed < fadeDuration)
+        if (duration <= 0f)
+        {
+            fadeCanvas.alpha = targetAlpha;
+            yield break;
+        }
+
+        while (elapsed < duration)
         {
             elapsed += Time.deltaTime;
 
-            float t = elapsed / fadeDuration;
+            float t =
+                Mathf.Clamp01(
+                    elapsed / duration
+                );
 
-            fadeCanvas.alpha = Mathf.Lerp(
-                startAlpha,
-                targetAlpha,
-                t
-            );
+            fadeCanvas.alpha =
+                Mathf.Lerp(
+                    startAlpha,
+                    targetAlpha,
+                    t
+                );
 
             yield return null;
         }
