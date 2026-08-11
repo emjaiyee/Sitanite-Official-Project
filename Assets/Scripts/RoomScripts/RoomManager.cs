@@ -19,6 +19,14 @@ public class RoomManager : MonoBehaviour
     [Header("Generation Settings")]
     [SerializeField] private bool generateOnStart = true;
 
+    [Header("Room Progression")]
+    [SerializeField] private bool lockNextRoomUntilCleared = true;
+
+    private int currentRoomNumber = 1;
+
+    public int CurrentRoomNumber => currentRoomNumber;
+    public bool LockNextRoomUntilCleared => lockNextRoomUntilCleared;
+
     private readonly List<RoomInstance> generatedRooms =
         new List<RoomInstance>();
 
@@ -190,6 +198,22 @@ public class RoomManager : MonoBehaviour
                 $"{finalRoom.RoomNumber}."
             );
         }
+
+        // ---------------------------------------------
+        // ROOM PROGRESSION
+        // ---------------------------------------------
+
+        currentRoomNumber = 1;
+
+        if (lockNextRoomUntilCleared)
+        {
+            LockAllRoomGateways();
+            UnlockCurrentRoom();
+        }
+
+        // ---------------------------------------------
+        // PLAYER
+        // ---------------------------------------------
 
         SpawnPlayerAtFirstRoom();
     }
@@ -628,6 +652,19 @@ public class RoomManager : MonoBehaviour
 
         return null;
     }
+    public void SetRoomCleared(int roomNumber)
+    {
+        if (roomNumber != currentRoomNumber)
+        {
+            return;
+        }
+
+        Debug.Log($"Room {roomNumber} cleared.");
+
+        currentRoomNumber++;
+
+        UnlockCurrentRoom();
+    }
 
     private void ClearGeneratedRooms()
     {
@@ -640,5 +677,70 @@ public class RoomManager : MonoBehaviour
         }
 
         generatedRooms.Clear();
+    }
+    private void UnlockCurrentRoom()
+    {
+        if (currentRoomNumber > generatedRooms.Count)
+        {
+            Debug.Log("Floor cleared!");
+
+            // For future references, to whoever does the GameManager's floor clearing:
+            // GameManager.Instance.FloorCleared();
+
+            return;
+        }
+
+        RoomInstance currentRoom =
+            generatedRooms[currentRoomNumber - 1];
+
+        Gateway forwardGateway =
+            FindGateway(
+                currentRoom,
+                GatewayFlow.Forward
+            );
+
+        if (forwardGateway == null)
+        {
+            Debug.LogWarning(
+                $"Room {currentRoomNumber} " +
+                "has no Forward Gateway."
+            );
+
+            return;
+        }
+
+        GatewayVisibility visibility =
+            forwardGateway.GetComponent<GatewayVisibility>();
+
+        if (visibility != null)
+        {
+            visibility.SetVisible(true);
+        }
+
+        Debug.Log(
+            $"Room {currentRoomNumber} unlocked."
+        );
+    }
+    private void LockAllRoomGateways()
+    {
+        foreach (RoomInstance room in generatedRooms)
+        {
+            Gateway forwardGateway =
+                FindGateway(
+                    room,
+                    GatewayFlow.Forward
+                );
+
+            if (forwardGateway == null)
+                continue;
+
+            GatewayVisibility visibility =
+                forwardGateway.GetComponent<GatewayVisibility>();
+
+            if (visibility != null)
+            {
+                visibility.SetVisible(false);
+            }
+        }
     }
 }
