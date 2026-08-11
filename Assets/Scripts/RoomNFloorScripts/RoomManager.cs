@@ -3,10 +3,6 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField]
-    private RoomManager roomManager;
-
     [Header("Room Prefabs")]
     [SerializeField] private List<GameObject> smallRoomPrefabs =
         new List<GameObject>();
