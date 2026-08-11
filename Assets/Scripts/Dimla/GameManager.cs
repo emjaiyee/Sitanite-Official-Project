@@ -1,25 +1,43 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Base Game Manager - Handles core game state and events
-/// This is a standalone base that can be extended without dependencies
-/// </summary>
+[DisallowMultipleComponent]
 public class GameManager : MonoBehaviour
 {
-    // Singleton instance
     public static GameManager Instance { get; private set; }
 
-    // Game State
-    private bool isPlayerDead = false;
-    private bool isLevelCleared = false;
+    public enum LevelState { Playing, Cleared, Failed }
 
-    // Properties
-    public bool IsPlayerDead => isPlayerDead;
-    public bool IsLevelCleared => isLevelCleared;
+    [Header("Health")]
+    [SerializeField] private int maxHealth = 10;
+    [SerializeField] private bool enableDebugLogs = true;
+
+    [Header("Poison")]
+    [SerializeField] private float poisonTickInterval = 1f;
+    [SerializeField] private int poisonDamagePerTick = 1;
+
+    // Events
+    public event Action OnPlayerDead;
+    public event Action OnLevelCleared;            // legacy: level cleared occurred
+    public event Action<int> OnLevelClearedWithId; // reports which level id was cleared
+    public event Action OnLevelFailed;
+
+    // State
+    private int currentHealth;
+    private bool isPlayerDead;
+    private LevelState levelState = LevelState.Playing;
+    private Coroutine poisonCoroutine;
+
+    // Runtime cleared level tracking (unlimited)
+    private HashSet<int> clearedLevels = new HashSet<int>();
+
+    // Optional inspector-initialized cleared levels (useful for testing)
+    [SerializeField] private List<int> initialClearedLevels = new List<int>();
 
     private void Awake()
     {
-        // Singleton pattern
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -29,59 +47,165 @@ public class GameManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        Debug.Log("[GameManager] Initialized");
+        currentHealth = maxHealth;
+
+        // seed clearedLevels from inspector list if provided
+        if (initialClearedLevels != null)
+        {
+            foreach (var id in initialClearedLevels)
+                clearedLevels.Add(id);
+        }
+
+        if (enableDebugLogs) Debug.Log("[GameManager] Initialized");
     }
 
-    private void Start()
+    private void OnDestroy()
     {
-        Debug.Log("[GameManager] Game Started");
+        if (Instance == this) Instance = null;
     }
 
-    /// <summary>
-    /// Called when the player dies
-    /// </summary>
+    // Public accessors
+    public int CurrentHealth => currentHealth;
+    public int MaxHealth => maxHealth;
+    public bool IsPlayerDead => isPlayerDead;
+    public LevelState CurrentLevelState => levelState;
+    public IReadOnlyCollection<int> ClearedLevels => clearedLevels;
+
+    // Damage / heal API
+    public void ApplyDamage(int amount)
+    {
+        if (isPlayerDead) return;
+        if (amount <= 0) return;
+
+        currentHealth = Mathf.Max(0, currentHealth - amount);
+        if (enableDebugLogs) Debug.Log($"[GameManager] Player took {amount} damage. Health: {currentHealth}/{maxHealth}");
+
+        if (currentHealth == 0) PlayerDead();
+    }
+
+    public void Heal(int amount)
+    {
+        if (isPlayerDead) return;
+        if (amount <= 0) return;
+
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        if (enableDebugLogs) Debug.Log($"[GameManager] Player healed {amount}. Health: {currentHealth}/{maxHealth}");
+    }
+
+    // Poison DoT
+    public void StartPoison()
+    {
+        if (isPlayerDead) return;
+        if (poisonCoroutine != null) return;
+        poisonCoroutine = StartCoroutine(PoisonCoroutine());
+        if (enableDebugLogs) Debug.Log("[GameManager] Poison started");
+    }
+
+    public void StopPoison()
+    {
+        if (poisonCoroutine == null) return;
+        StopCoroutine(poisonCoroutine);
+        poisonCoroutine = null;
+        if (enableDebugLogs) Debug.Log("[GameManager] Poison stopped");
+    }
+
+    private IEnumerator PoisonCoroutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(poisonTickInterval);
+            ApplyDamage(poisonDamagePerTick);
+            if (isPlayerDead)
+            {
+                StopPoison();
+                yield break;
+            }
+        }
+    }
+
+    // Death handling
     public void PlayerDead()
     {
-        if (isPlayerDead)
-            return; // Prevent multiple calls
+        if (isPlayerDead) return;
 
         isPlayerDead = true;
-        Debug.Log("[GameManager] Player Dead!");
+        SetLevelFailed();
+        StopPoison();
 
-        // TODO: Add death logic here (UI, restart, etc.)
-        // This will be called by Player script later
+        if (enableDebugLogs) Debug.Log("[GameManager] Player Dead!");
+        OnPlayerDead?.Invoke();
     }
 
-    /// <summary>
-    /// Called when the level is completed
-    /// </summary>
+    // Level clearing (universal)
+    // Call this from level triggers with the level's integer id.
+    public void PlayerSteppedOnLevel(int levelId)
+    {
+        if (isPlayerDead) return;                // dead player can't clear
+        if (levelState != LevelState.Playing) return; // only while playing
+
+        if (clearedLevels.Contains(levelId))
+        {
+            if (enableDebugLogs) Debug.Log($"[GameManager] Level {levelId} already cleared");
+            return;
+        }
+
+        clearedLevels.Add(levelId);
+
+        if (enableDebugLogs) Debug.Log($"[GameManager] Level {levelId} is Cleared");
+        // Notify listeners
+        OnLevelCleared?.Invoke();
+        OnLevelClearedWithId?.Invoke(levelId);
+
+        // If you want levelState to reflect a cleared session-wide state change,
+        // call LevelCleared() instead of just PlayerSteppedOnLevel.
+        LevelCleared();
+    }
+
+    // Generic LevelCleared state update (keeps same behavior as before)
     public void LevelCleared()
     {
-        if (isLevelCleared)
-            return; // Prevent multiple calls
+        if (levelState != LevelState.Playing) return;
 
-        isLevelCleared = true;
-        Debug.Log("[GameManager] Level Cleared!");
-
-        // TODO: Add level clear logic here (UI, next level, rewards, etc.)
-        // This will be called by Level script later
+        levelState = LevelState.Cleared;
+        if (enableDebugLogs) Debug.Log("[GameManager] Level Cleared (global state)!");
+        OnLevelCleared?.Invoke();
     }
 
-    /// <summary>
-    /// Reset game state for new level
-    /// </summary>
-    public void ResetLevel()
+    // Explicit failure
+    public void SetLevelFailed()
+    {
+        if (levelState == LevelState.Failed) return;
+
+        levelState = LevelState.Failed;
+        if (enableDebugLogs) Debug.Log("[GameManager] Level Failed!");
+        OnLevelFailed?.Invoke();
+    }
+
+    // Query whether a specific levelId has been cleared
+    public bool IsLevelCleared(int levelId)
+    {
+        return clearedLevels.Contains(levelId);
+    }
+
+    // Reset state for a new run
+    // clearAllClearedLevels: if true, removes all recorded cleared levels
+    public void ResetLevel(bool clearAllClearedLevels = true)
     {
         isPlayerDead = false;
-        isLevelCleared = false;
-        Debug.Log("[GameManager] Level Reset");
+        levelState = LevelState.Playing;
+        currentHealth = maxHealth;
+        StopPoison();
+
+        if (clearAllClearedLevels)
+            clearedLevels.Clear();
+
+        if (enableDebugLogs) Debug.Log("[GameManager] Level Reset");
     }
 
-    /// <summary>
-    /// Get current game state
-    /// </summary>
+    // Debug helper
     public void LogGameState()
     {
-        Debug.Log($"[GameManager State] Player Dead: {isPlayerDead} | Level Cleared: {isLevelCleared}");
+        if (!enableDebugLogs) return;
+        Debug.Log($"[GameManager State] Player Dead: {isPlayerDead} | LevelState: {levelState} | Health: {currentHealth}/{maxHealth} | ClearedLevels: {string.Join(",", clearedLevels)}");
     }
 }
