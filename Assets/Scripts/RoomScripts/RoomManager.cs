@@ -3,21 +3,25 @@ using UnityEngine;
 
 public class RoomManager : MonoBehaviour
 {
-    [Header("Room Generation")]
-    [SerializeField] private List<GameObject> roomPrefabs =
+    [Header("References")]
+    [SerializeField]
+    private RoomManager roomManager;
+
+    [Header("Room Prefabs")]
+    [SerializeField] private List<GameObject> smallRoomPrefabs =
         new List<GameObject>();
 
-    [SerializeField, Range(4, 10)]
-    private int minimumRooms = 4;
+    [SerializeField] private List<GameObject> mediumRoomPrefabs =
+        new List<GameObject>();
 
-    [SerializeField, Range(4, 10)]
-    private int maximumRooms = 10;
+    [SerializeField] private List<GameObject> largeRoomPrefabs =
+        new List<GameObject>();
+
+    [SerializeField] private List<GameObject> xlRoomPrefabs =
+        new List<GameObject>();
 
     [Header("Room Spacing")]
     [SerializeField] private float roomSpacingX = 30f;
-
-    [Header("Generation Settings")]
-    [SerializeField] private bool generateOnStart = true;
 
     [Header("Room Progression")]
     [SerializeField] private bool lockNextRoomUntilCleared = true;
@@ -35,36 +39,85 @@ public class RoomManager : MonoBehaviour
 
     private void Start()
     {
-        if (generateOnStart)
-        {
-            GenerateFloor();
-        }
+
     }
 
-    public void GenerateFloor()
+    private List<GameObject> GetAllowedRoomPrefabs(
+        FloorConfiguration configuration)
     {
-        ClearGeneratedRooms();
+        List<GameObject> allowedPrefabs =
+            new List<GameObject>();
 
-        if (roomPrefabs.Count == 0)
+        if (configuration.allowSmall)
+        {
+            allowedPrefabs.AddRange(
+                smallRoomPrefabs
+            );
+        }
+
+        if (configuration.allowMedium)
+        {
+            allowedPrefabs.AddRange(
+                mediumRoomPrefabs
+            );
+        }
+
+        if (configuration.allowLarge)
+        {
+            allowedPrefabs.AddRange(
+                largeRoomPrefabs
+            );
+        }
+
+        if (configuration.allowXL)
+        {
+            allowedPrefabs.AddRange(
+                xlRoomPrefabs
+            );
+        }
+
+        return allowedPrefabs;
+    }
+
+    public void GenerateFloor(
+        FloorConfiguration configuration)
+    {
+        if (configuration == null)
         {
             Debug.LogError(
-                "RoomManager has no room prefabs assigned."
+                "RoomManager cannot generate a floor: " +
+                "FloorConfiguration is null."
             );
 
             return;
         }
 
-        minimumRooms = Mathf.Clamp(
-            minimumRooms,
-            4,
-            10
-        );
+        ClearGeneratedRooms();
 
-        maximumRooms = Mathf.Clamp(
-            maximumRooms,
-            4,
-            10
-        );
+        List<GameObject> prefabPool =
+            GetAllowedRoomPrefabs(configuration);
+
+        if (prefabPool.Count == 0)
+        {
+            Debug.LogError(
+                "No room prefabs are available for " +
+                "the current FloorConfiguration."
+            );
+
+            return;
+        }
+
+        int minimumRooms =
+            Mathf.Max(
+                1,
+                configuration.minimumRooms
+            );
+
+        int maximumRooms =
+            Mathf.Max(
+                1,
+                configuration.maximumRooms
+            );
 
         if (minimumRooms > maximumRooms)
         {
@@ -85,7 +138,7 @@ public class RoomManager : MonoBehaviour
         // ---------------------------------------------
 
         RoomInstance firstRoom =
-            GenerateFirstRoom();
+            GenerateFirstRoom(prefabPool);
 
         if (firstRoom == null)
         {
@@ -140,7 +193,8 @@ public class RoomManager : MonoBehaviour
 
             GameObject compatiblePrefab =
                 FindCompatibleRoomPrefab(
-                    previousForwardGateway
+                    previousForwardGateway,
+                    prefabPool
                 );
 
             if (compatiblePrefab == null)
@@ -218,13 +272,14 @@ public class RoomManager : MonoBehaviour
         SpawnPlayerAtFirstRoom();
     }
 
-    private RoomInstance GenerateFirstRoom()
+    private RoomInstance GenerateFirstRoom(
+        List<GameObject> prefabPool)
     {
         GameObject selectedPrefab =
-            roomPrefabs[
+            prefabPool[
                 Random.Range(
                     0,
-                    roomPrefabs.Count
+                    prefabPool.Count
                 )
             ];
 
@@ -354,7 +409,8 @@ public class RoomManager : MonoBehaviour
 
 
     private GameObject FindCompatibleRoomPrefab(
-        Gateway previousForwardGateway)
+        Gateway previousForwardGateway,
+        List<GameObject> prefabPool)
     {
         GatewayDirection requiredDirection =
             previousForwardGateway.Direction.Opposite();
@@ -375,7 +431,7 @@ public class RoomManager : MonoBehaviour
         List<GameObject> compatiblePrefabs =
             new List<GameObject>();
 
-        foreach (GameObject prefab in roomPrefabs)
+        foreach (GameObject prefab in prefabPool)
         {
             if (prefab == null)
             {
