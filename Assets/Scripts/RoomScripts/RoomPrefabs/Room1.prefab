@@ -1782,7 +1782,7 @@ Transform:
   m_GameObject: {fileID: 813509379841093977}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.4353249, y: 0.44999993, z: 0}
+  m_LocalPosition: {x: 5.79264, y: 3.21441, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9506,7 +9506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3981623331039287070}
   - component: {fileID: 4097125141998627024}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemySpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9540,7 +9540,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba2bf5d56427dfd41bee5e6e93b96c4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 3586115904521672654, guid: 9c1074b6f917938449581efeaa18094c, type: 3}
   enemySprite: {fileID: -7758460354362911127, guid: 0007b553b78982d48a5d3e10d004a118, type: 3}
   useRandomCount: 1
   minSpawn: 2
@@ -9566,9 +9566,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   maxPositionAttempts: 12
-  enemyMaxHealth: 10
-  clearWhenAllDead: 1
-  clearLevelId: 1
+  spawnLayerName: Enemy
   createdEnemyName: Slime
 --- !u!1 &7289219903309256592
 GameObject:

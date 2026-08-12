@@ -21,6 +21,7 @@ public class PlayerWASD : MonoBehaviour
     private Vector2 rampForward = Vector2.right;
 
     public Vector2 MoveDirection => movement;
+    public float SpeedMultiplier { get; set; } = 1f;
 
     private void Awake()
     {
@@ -82,7 +83,7 @@ public class PlayerWASD : MonoBehaviour
     private void FixedUpdate()
     {
         rb.MovePosition(
-            rb.position + movement * moveSpeed * Time.fixedDeltaTime
+            rb.position + movement * moveSpeed * SpeedMultiplier * Time.fixedDeltaTime
         );
     }
 
