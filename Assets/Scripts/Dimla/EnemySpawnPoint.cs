@@ -7,17 +7,9 @@ using UnityEngine.Rendering;
 [AddComponentMenu("Dimla/Enemy Spawn Point")]
 public class EnemySpawnPoint : MonoBehaviour
 {
-    public enum SizeMode
-    {
-        UseSpriteNativeSize,
-        ScaleToDesiredSize
-    }
-
     [Header("Spawn Source")]
-    [Tooltip("Preferred: assign a prefab (drag the enemy prefab here). If left empty, the script will create a GameObject using the assigned sprite.")]
+    [Tooltip("Assign the enemy prefab. Spawned enemies use the prefab's own sprite, collider, and size.")]
     [SerializeField] private GameObject enemyPrefab;
-    [Tooltip("Used only when no prefab is assigned. Drag a Sprite to create a simple enemy GameObject at runtime.")]
-    [SerializeField] private Sprite enemySprite;
 
     [Header("Spawn Count (random)")]
     [Tooltip("Spawn a random number of enemies between Min and Max (inclusive).")]
@@ -45,15 +37,6 @@ public class EnemySpawnPoint : MonoBehaviour
     [SerializeField] private float spawnDelay = 0f;
     [SerializeField] private Transform spawnParent;
 
-    [Header("Sizing")]
-    [SerializeField] private SizeMode sizeMode = SizeMode.UseSpriteNativeSize;
-    [Tooltip("When SizeMode is ScaleToDesiredSize: desired world size (units) of spawned enemy. Set to tile size (e.g. 1,1) to match tiles.")]
-    [SerializeField] private Vector2 desiredSize = Vector2.one;
-    [Tooltip("If true, add or resize a BoxCollider2D to match sprite bounds (applies after scaling).")]
-    [SerializeField] private bool ensureBoxCollider = true;
-    [Tooltip("If true, force using sprite-native size even for prefabs that contain a SpriteRenderer.")]
-    [SerializeField] private bool forceUseSpriteNativeForPrefab = false;
-
     [Header("Rendering (ensure visibility)")]
     [Tooltip("Sorting layer name to apply to spawned enemies.")]
     [SerializeField] private string sortingLayer = "Default";
@@ -77,14 +60,23 @@ public class EnemySpawnPoint : MonoBehaviour
     [Tooltip("If > 0, this levelId will be sent to GameManager.PlayerSteppedOnLevel(levelId). If 0, GameManager.LevelCleared() will be called.")]
     [SerializeField] private int clearLevelId = 0;
 
-    [Header("Runtime")]
-    [SerializeField] private string createdEnemyName = "Enemy";
+    [Tooltip("Damage dealt to the player while this enemy is touching them.")]
+    [Min(0)][SerializeField] private int enemyAttackDamage = 5;
+    [Tooltip("Maximum distance at which the enemy can deal contact damage.")]
+    [Min(0.01f)][SerializeField] private float enemyAttackRange = 0.7f;
+    [Tooltip("Time between contact damage hits.")]
+    [Min(0.01f)][SerializeField] private float enemyAttackCooldown = 1.5f;
+
 
     // Event invoked when an enemy is spawned.
     public event Action<GameObject> OnEnemySpawned;
 
+    // Event invoked once after every enemy spawned by this point has died.
+    public event Action OnWaveCleared;
+
     // tracked spawned enemies created by this spawn point
     private readonly List<GameObject> trackedEnemies = new List<GameObject>();
+    private bool waveClearedRaised;
 
     private void Start()
     {
@@ -169,7 +161,7 @@ public class EnemySpawnPoint : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"[EnemySpawnPoint] Could not find free spot for evenly distributed enemy slot {i+1} at '{name}'.");
+                    Debug.LogWarning($"[EnemySpawnPoint] Could not find free spot for evenly distributed enemy slot {i + 1} at '{name}'.");
                 }
             }
         }
@@ -211,7 +203,7 @@ public class EnemySpawnPoint : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning($"[EnemySpawnPoint] Could not find free spot for enemy {i+1} at '{name}' after {maxPositionAttempts} attempts.");
+                    Debug.LogWarning($"[EnemySpawnPoint] Could not find free spot for enemy {i + 1} at '{name}' after {maxPositionAttempts} attempts.");
                 }
 
                 if (attemptsTotal > 1000) break;
@@ -235,56 +227,28 @@ public class EnemySpawnPoint : MonoBehaviour
     /// </summary>
     public GameObject SpawnEnemyAt(Vector3 worldPosition)
     {
-        GameObject instance = null;
-
-        if (enemyPrefab != null)
+        if (enemyPrefab == null)
         {
-            instance = Instantiate(enemyPrefab, worldPosition, transform.rotation, spawnParent);
-            ApplySizeAndCollider(instance);
-            ApplyRenderingSettings(instance);
-        }
-        else if (enemySprite != null)
-        {
-            GameObject go = new GameObject(createdEnemyName);
-            go.transform.position = worldPosition;
-            go.transform.rotation = transform.rotation;
-            if (spawnParent != null) go.transform.SetParent(spawnParent, true);
-
-            var sr = go.AddComponent<SpriteRenderer>();
-            sr.sprite = enemySprite;
-
-            if (sizeMode == SizeMode.UseSpriteNativeSize)
-            {
-                go.transform.localScale = Vector3.one;
-                if (ensureBoxCollider) EnsureCollider(sr);
-            }
-            else if (sizeMode == SizeMode.ScaleToDesiredSize && desiredSize != Vector2.zero)
-            {
-                ApplyDesiredSize(go.transform, sr, desiredSize, ensureBoxCollider);
-            }
-
-            ApplyRenderingSettings(go);
-            instance = go;
-        }
-        else
-        {
-            Debug.LogWarning("[EnemySpawnPoint] No enemyPrefab or enemySprite assigned on " + name);
+            Debug.LogWarning("[EnemySpawnPoint] No enemyPrefab assigned on " + name);
             return null;
         }
 
+        GameObject instance = Instantiate(enemyPrefab, worldPosition, transform.rotation, spawnParent);
+        ApplyRenderingSettings(instance);
+
         // ensure enemy has health component and set HP
-        bool addedNewHealth = false;
         var eh = instance.GetComponent<EnemyHealth>();
         if (eh == null)
-        {
             eh = instance.AddComponent<EnemyHealth>();
-            addedNewHealth = true;
-        }
 
-        // Only initialize health when the component was just added.
-        // This lets a prefab's EnemyHealth inspector value remain in effect.
-        if (addedNewHealth)
-            eh.Init(Mathf.Max(1, enemyMaxHealth));
+        // Always apply the spawn point's configured HP to every spawned enemy.
+        eh.Init(Mathf.Max(1, enemyMaxHealth));
+
+        var contactDamage = instance.GetComponent<EnemyContactDamage>();
+        if (contactDamage == null)
+            contactDamage = instance.AddComponent<EnemyContactDamage>();
+        contactDamage.Configure(enemyAttackDamage, enemyAttackRange, enemyAttackCooldown);
+        EnsureEnemyPhysics(instance);
 
         // subscribe to the death event
         eh.OnEnemyDied += HandleTrackedEnemyDied;
@@ -305,15 +269,18 @@ public class EnemySpawnPoint : MonoBehaviour
         // Remove nulls and this enemy
         trackedEnemies.RemoveAll(g => g == null || g == enemy);
 
-        if (clearWhenAllDead && trackedEnemies.Count == 0)
+        if (clearWhenAllDead && trackedEnemies.Count == 0 && !waveClearedRaised)
         {
-                if (GameManager.Instance != null)
-                {
-                    if (clearLevelId > 0)
-                        GameManager.Instance.PlayerSteppedOnLevel(clearLevelId);
-                    else
-                        GameManager.Instance.LevelCleared();
-                }
+            waveClearedRaised = true;
+            OnWaveCleared?.Invoke();
+
+            if (GameManager.Instance != null)
+            {
+                if (clearLevelId > 0)
+                    GameManager.Instance.PlayerSteppedOnLevel(clearLevelId);
+                else
+                    GameManager.Instance.LevelCleared();
+            }
             else
             {
                 Debug.Log("[EnemySpawnPoint] Level Cleared (no GameManager present)");
@@ -349,55 +316,25 @@ public class EnemySpawnPoint : MonoBehaviour
 
     private float GetApproximateRadius()
     {
-        // approximate radius (world units) for prefab or sprite before spawn
         if (enemyPrefab != null)
         {
-            var sr = enemyPrefab.GetComponentInChildren<SpriteRenderer>();
-            if (sr != null && sr.sprite != null)
-            {
-                // sprite bounds are in local (world) units when scale == 1
-                return sr.sprite.bounds.extents.magnitude * Mathf.Max(1f, sr.transform.lossyScale.x);
-            }
+            var collider = enemyPrefab.GetComponentInChildren<Collider2D>(true);
+            if (collider != null)
+                return collider.bounds.extents.magnitude;
         }
 
-        if (enemySprite != null)
-        {
-            return enemySprite.bounds.extents.magnitude;
-        }
-
-        // fallback to half of minSeparation
         return minSeparation * 0.5f;
     }
 
     private float GetApproximateRadiusForGameObject(GameObject go)
     {
         if (go == null) return minSeparation * 0.5f;
-        var sr = go.GetComponentInChildren<SpriteRenderer>();
-        if (sr != null && sr.sprite != null)
-        {
-            // take transform scale into account
-            Vector3 lossy = sr.transform.lossyScale;
-            float maxScale = Mathf.Max(lossy.x, lossy.y);
-            return sr.sprite.bounds.extents.magnitude * maxScale;
-        }
+
+        var collider = go.GetComponentInChildren<Collider2D>(true);
+        if (collider != null)
+            return collider.bounds.extents.magnitude;
 
         return minSeparation * 0.5f;
-    }
-
-    private void ApplySizeAndCollider(GameObject instance)
-    {
-        var sr = instance.GetComponentInChildren<SpriteRenderer>();
-        if (sr == null) return;
-
-        if (sizeMode == SizeMode.UseSpriteNativeSize && forceUseSpriteNativeForPrefab)
-        {
-            sr.transform.localScale = Vector3.one;
-            if (ensureBoxCollider) EnsureCollider(sr);
-        }
-        else if (sizeMode == SizeMode.ScaleToDesiredSize && desiredSize != Vector2.zero)
-        {
-            ApplyDesiredSize(instance.transform, sr, desiredSize, ensureBoxCollider);
-        }
     }
 
     private void ApplyRenderingSettings(GameObject root)
@@ -427,30 +364,33 @@ public class EnemySpawnPoint : MonoBehaviour
         }
     }
 
-    private static void ApplyDesiredSize(Transform root, SpriteRenderer sr, Vector2 desiredSize, bool ensureCollider)
+    private static void EnsureEnemyPhysics(GameObject instance)
     {
-        if (sr == null || sr.sprite == null) return;
+        if (instance == null) return;
 
-        Vector2 spriteWorldSize = sr.sprite.bounds.size;
-        if (spriteWorldSize.x <= 0 || spriteWorldSize.y <= 0) return;
+        Rigidbody2D body = instance.GetComponent<Rigidbody2D>();
+        if (body == null)
+            body = instance.AddComponent<Rigidbody2D>();
 
-        float scaleX = desiredSize.x / spriteWorldSize.x;
-        float scaleY = desiredSize.y / spriteWorldSize.y;
-        root.localScale = new Vector3(scaleX, scaleY, root.localScale.z);
+        body.bodyType = RigidbodyType2D.Dynamic;
+        body.simulated = true;
+        body.gravityScale = 0f;
+        body.constraints = RigidbodyConstraints2D.FreezeAll;
+        body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
-        if (ensureCollider) EnsureCollider(sr);
-    }
+        Collider2D[] colliders = instance.GetComponentsInChildren<Collider2D>(true);
+        if (colliders.Length == 0)
+        {
+            BoxCollider2D fallbackCollider = instance.AddComponent<BoxCollider2D>();
+            fallbackCollider.size = new Vector2(0.5f, 0.5f);
+            colliders = new Collider2D[] { fallbackCollider };
+        }
 
-    private static void EnsureCollider(SpriteRenderer sr)
-    {
-        if (sr == null || sr.sprite == null) return;
-
-        var go = sr.gameObject;
-        var collider = go.GetComponent<BoxCollider2D>();
-        if (collider == null) collider = go.AddComponent<BoxCollider2D>();
-
-        collider.size = sr.sprite.bounds.size;
-        collider.offset = sr.sprite.bounds.center;
+        foreach (Collider2D collider in colliders)
+        {
+            collider.enabled = true;
+            collider.isTrigger = false;
+        }
     }
 
 #if UNITY_EDITOR
