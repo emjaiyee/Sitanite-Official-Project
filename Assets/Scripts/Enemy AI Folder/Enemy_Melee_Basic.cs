@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.AI;
+
 
 public class Enemy_Melee_Basic : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class Enemy_Melee_Basic : MonoBehaviour
     [SerializeField] private Vector2 _enemySpawnPoint;
     [SerializeField] private SpriteRenderer _color;
 
+    NavMeshAgent _agent;
+   
+
     [Header("Bolean Variables")]
     [SerializeField] private bool _detected = false;
     [SerializeField] private bool _outsideZone = false;
@@ -27,6 +32,10 @@ public class Enemy_Melee_Basic : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _enemySpawnPoint = transform.position;
         _color = GetComponent<SpriteRenderer>();
+        _agent = GetComponent<NavMeshAgent>();
+        _agent.updateRotation = false;
+        _agent.updateUpAxis = false;
+        _agent.speed = _enemySpeed;
     }
 
     void Update()
@@ -42,15 +51,20 @@ public class Enemy_Melee_Basic : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_attackable) {Debug.Log("Swing"); _color.color = Color.red; return;}
+        if (_attackable) 
+        {
+            Debug.Log("Swing");
+            _color.color = Color.red;
+            return;
+        }
         if (_detected)
         {
-            _rb.MovePosition(_rb.position + _movement * _enemySpeed * Time.fixedDeltaTime);
+            _agent.SetDestination(_player.position);
             _color.color = Color.yellow;
         }
         if (!_detected && _outsideZone)
         {
-           transform.position = Vector2.MoveTowards(transform.position, _enemySpawnPoint, _enemySpeed * Time.deltaTime);
+           _agent.SetDestination(_enemySpawnPoint);
         }
     }
 
