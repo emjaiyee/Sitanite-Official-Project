@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2cd34ffd46efd7542b8a6d2a8a8fe074
+guid: daadd2691e2deca47ab92c434eb88968
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 5731584507761909605
-    second: archer_0
+      213: -157462123239765685
+    second: 2ndcrystal_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,27 +96,40 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: archer_0
+      name: 2ndcrystal_0
       rect:
         serializedVersion: 2
-        x: 57
-        y: 73
-        width: 86
-        height: 78
+        x: 97
+        y: 35
+        width: 14
+        height: 18
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 56fd7491ebdaa8f40800000000000000
-      internalID: 5731584507761909605
+      spriteID: b4907be780590ddf0800000000000000
+      internalID: -157462123239765685
       vertices: []
       indices: 
       edges: []
@@ -125,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 556b3de8413b8b546894602354ccf802
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -133,11 +146,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      archer_0: 5731584507761909605
+      2ndcrystal_0: -157462123239765685
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

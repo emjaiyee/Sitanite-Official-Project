@@ -22,12 +22,16 @@ public class EnemySpawnPoint : MonoBehaviour
     [Header("Spawn Distribution")]
     [Tooltip("Radius around the spawn point where enemies are placed.")]
     [SerializeField] private float spawnRadius = 0.5f;
+
     [Tooltip("Prevent spawned enemies from stacking exactly on the spawn point (keeps them slightly apart).")]
     [SerializeField] private float minSeparation = 0.3f;
+
     [Tooltip("If true, evenly distribute enemies around the spawn point (ring). If false, use random positions inside circle.")]
     [SerializeField] private bool evenDistribution = true;
+
     [Tooltip("Maximum angular jitter (degrees) applied to each evenly distributed spawn position.")]
     [SerializeField] private float angleJitterDegrees = 12f;
+
     [Tooltip("Radial jitter fraction (0..1) applied when using even distribution; 0 = exact radius, 1 = range [0, spawnRadius].")]
     [Range(0f, 1f)]
     [SerializeField] private float radialJitter = 0.25f;
@@ -40,47 +44,61 @@ public class EnemySpawnPoint : MonoBehaviour
     [Header("Rendering (ensure visibility)")]
     [Tooltip("Sorting layer name to apply to spawned enemies.")]
     [SerializeField] private string sortingLayer = "Default";
+
     [Tooltip("Sorting order to apply to spawned enemies.")]
     [SerializeField] private int sortingOrder = 50;
+
     [Tooltip("Small Z offset applied after spawn to avoid Z-fighting.")]
     [SerializeField] private float zOffset = 0f;
+
     [SerializeField] private bool addSortingGroupIfMultipleRenderers = true;
 
     [Header("Collision checks")]
     [Tooltip("Layers considered when checking whether a spawn position is blocked (enemies, obstacles, tilemap etc.).")]
     [SerializeField] private LayerMask spawnCheckMask = Physics2D.AllLayers;
+
     [Tooltip("How many attempts to find a free position per enemy.")]
     [SerializeField] private int maxPositionAttempts = 12;
 
     [Header("Enemy health & clear behavior")]
     [Tooltip("Max health assigned to each spawned enemy.")]
     [SerializeField] private int enemyMaxHealth = 10;
-    [Tooltip("If true, when all enemies spawned by this spawn point die, mark the level cleared.")]
+
+    [Tooltip("If true, this spawn point reports itself cleared when all enemies spawned by it have died.")]
     [SerializeField] private bool clearWhenAllDead = true;
-    [Tooltip("If > 0, this levelId will be sent to GameManager.PlayerSteppedOnLevel(levelId). If 0, GameManager.LevelCleared() will be called.")]
-    [SerializeField] private int clearLevelId = 0;
 
     [Tooltip("Damage dealt to the player while this enemy is touching them.")]
-    [Min(0)][SerializeField] private int enemyAttackDamage = 5;
+    [Min(0)]
+    [SerializeField] private int enemyAttackDamage = 5;
+
     [Tooltip("Maximum distance at which the enemy can deal contact damage.")]
-    [Min(0.01f)][SerializeField] private float enemyAttackRange = 0.7f;
+    [Min(0.01f)]
+    [SerializeField] private float enemyAttackRange = 0.7f;
+
     [Tooltip("Time between contact damage hits.")]
-    [Min(0.01f)][SerializeField] private float enemyAttackCooldown = 1.5f;
+    [Min(0.01f)]
+    [SerializeField] private float enemyAttackCooldown = 1.5f;
 
 
-    // Event invoked when an enemy is spawned.
+    // Event invoked whenever an enemy is successfully spawned.
     public event Action<GameObject> OnEnemySpawned;
 
-    // Event invoked once after every enemy spawned by this point has died.
+    // Event invoked once when every enemy spawned by this point has died.
+    // This also fires immediately if this spawn point spawns zero enemies.
     public event Action OnWaveCleared;
 
-    // tracked spawned enemies created by this spawn point
+
+    // Tracked enemies created by this spawn point.
     private readonly List<GameObject> trackedEnemies = new List<GameObject>();
+
+    // Prevents OnWaveCleared from being invoked more than once.
     private bool waveClearedRaised;
+
 
     private void Start()
     {
-        if (!spawnOnStart) return;
+        if (!spawnOnStart)
+            return;
 
         if (spawnDelay > 0f)
             StartCoroutine(DelayedSpawn(spawnDelay));
@@ -88,49 +106,67 @@ public class EnemySpawnPoint : MonoBehaviour
             SpawnEnemies();
     }
 
+
     private IEnumerator DelayedSpawn(float delay)
     {
         yield return new WaitForSeconds(delay);
         SpawnEnemies();
     }
 
+
     /// <summary>
     /// Spawns multiple enemies according to configuration (random or fixed count).
-    /// Returns list of spawned GameObjects.
+    /// Returns the list of successfully spawned GameObjects.
     /// </summary>
     public List<GameObject> SpawnEnemies()
     {
         int count = fixedSpawnCount;
+
         if (useRandomCount)
         {
             int min = Mathf.Max(0, minSpawn);
             int max = Mathf.Max(min, maxSpawn);
+
             count = UnityEngine.Random.Range(min, max + 1);
         }
 
         var spawned = new List<GameObject>();
+
+        // No enemies means this spawn point is already clear.
         if (count <= 0)
         {
-            Debug.Log($"[EnemySpawnPoint] Spawn count is {count} at '{name}'");
+            Debug.Log($"[EnemySpawnPoint] Spawn count is {count} at '{name}'. Spawn point is already clear.");
+
+            RaiseWaveCleared();
             return spawned;
         }
+
 
         if (evenDistribution && count > 1)
         {
             float baseRadius = Mathf.Max(0.01f, spawnRadius);
+
             for (int i = 0; i < count; i++)
             {
                 bool found = false;
                 Vector2 chosenPos = (Vector2)transform.position;
+
                 float baseAngle = (2f * Mathf.PI) * (i / (float)count);
 
                 for (int attempt = 0; attempt < maxPositionAttempts; attempt++)
                 {
-                    float jitterRad = Mathf.Deg2Rad * UnityEngine.Random.Range(-angleJitterDegrees, angleJitterDegrees);
+                    float jitterRad =
+                        Mathf.Deg2Rad *
+                        UnityEngine.Random.Range(-angleJitterDegrees, angleJitterDegrees);
+
                     float angle = baseAngle + jitterRad;
+
                     float rMin = baseRadius * (1f - radialJitter);
                     float r = UnityEngine.Random.Range(rMin, baseRadius);
-                    Vector2 pos = (Vector2)transform.position + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * r;
+
+                    Vector2 pos =
+                        (Vector2)transform.position +
+                        new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * r;
 
                     if (IsPositionAcceptable(pos, spawned))
                     {
@@ -140,11 +176,15 @@ public class EnemySpawnPoint : MonoBehaviour
                     }
                 }
 
+
                 if (!found)
                 {
                     for (int fallback = 0; fallback < maxPositionAttempts; fallback++)
                     {
-                        Vector2 pos = (Vector2)transform.position + UnityEngine.Random.insideUnitCircle * spawnRadius;
+                        Vector2 pos =
+                            (Vector2)transform.position +
+                            UnityEngine.Random.insideUnitCircle * spawnRadius;
+
                         if (IsPositionAcceptable(pos, spawned))
                         {
                             chosenPos = pos;
@@ -154,20 +194,26 @@ public class EnemySpawnPoint : MonoBehaviour
                     }
                 }
 
+
                 if (found)
                 {
                     var go = SpawnEnemyAt((Vector3)chosenPos);
-                    if (go != null) spawned.Add(go);
+
+                    if (go != null)
+                        spawned.Add(go);
                 }
                 else
                 {
-                    Debug.LogWarning($"[EnemySpawnPoint] Could not find free spot for evenly distributed enemy slot {i + 1} at '{name}'.");
+                    Debug.LogWarning(
+                        $"[EnemySpawnPoint] Could not find free spot for evenly distributed enemy slot {i + 1} at '{name}'."
+                    );
                 }
             }
         }
         else
         {
             int attemptsTotal = 0;
+
             for (int i = 0; i < count; i++)
             {
                 Vector2 pos2D = Vector2.zero;
@@ -176,19 +222,25 @@ public class EnemySpawnPoint : MonoBehaviour
 
                 while (!found && tries < maxPositionAttempts)
                 {
-                    pos2D = (Vector2)transform.position + UnityEngine.Random.insideUnitCircle * spawnRadius;
+                    pos2D =
+                        (Vector2)transform.position +
+                        UnityEngine.Random.insideUnitCircle * spawnRadius;
+
                     if (IsPositionAcceptable(pos2D, spawned))
                     {
                         found = true;
                         break;
                     }
+
                     tries++;
                     attemptsTotal++;
                 }
 
+
                 if (!found)
                 {
                     Vector2 centerPos = transform.position;
+
                     if (IsPositionAcceptable(centerPos, spawned))
                     {
                         pos2D = centerPos;
@@ -196,23 +248,44 @@ public class EnemySpawnPoint : MonoBehaviour
                     }
                 }
 
+
                 if (found)
                 {
                     var go = SpawnEnemyAt((Vector3)pos2D);
-                    if (go != null) spawned.Add(go);
+
+                    if (go != null)
+                        spawned.Add(go);
                 }
                 else
                 {
-                    Debug.LogWarning($"[EnemySpawnPoint] Could not find free spot for enemy {i + 1} at '{name}' after {maxPositionAttempts} attempts.");
+                    Debug.LogWarning(
+                        $"[EnemySpawnPoint] Could not find free spot for enemy {i + 1} at '{name}' after {maxPositionAttempts} attempts."
+                    );
                 }
 
-                if (attemptsTotal > 1000) break;
+                if (attemptsTotal > 1000)
+                    break;
             }
         }
 
-        Debug.Log($"[EnemySpawnPoint] Spawned {spawned.Count} enemy(ies) at '{name}'");
+
+        Debug.Log(
+            $"[EnemySpawnPoint] Spawned {spawned.Count} enemy(ies) at '{name}'"
+        );
+
+
+        // This is important:
+        // If the requested count was greater than zero but no enemies
+        // could actually be spawned, this spawn point should not remain
+        // permanently uncleared.
+        if (spawned.Count == 0)
+        {
+            RaiseWaveCleared();
+        }
+
         return spawned;
     }
+
 
     /// <summary>
     /// Spawns a single enemy at the spawn point position (no offset).
@@ -222,6 +295,7 @@ public class EnemySpawnPoint : MonoBehaviour
         return SpawnEnemyAt(transform.position);
     }
 
+
     /// <summary>
     /// Spawns a single enemy at the world position provided.
     /// </summary>
@@ -229,96 +303,169 @@ public class EnemySpawnPoint : MonoBehaviour
     {
         if (enemyPrefab == null)
         {
-            Debug.LogWarning("[EnemySpawnPoint] No enemyPrefab assigned on " + name);
+            Debug.LogWarning(
+                "[EnemySpawnPoint] No enemyPrefab assigned on " + name
+            );
+
             return null;
         }
 
-        GameObject instance = Instantiate(enemyPrefab, worldPosition, transform.rotation, spawnParent);
+
+        GameObject instance =
+            Instantiate(
+                enemyPrefab,
+                worldPosition,
+                transform.rotation,
+                spawnParent
+            );
+
         ApplyRenderingSettings(instance);
 
-        // ensure enemy has health component and set HP
+
+        // Ensure enemy has health component and set HP.
         var eh = instance.GetComponent<EnemyHealth>();
+
         if (eh == null)
             eh = instance.AddComponent<EnemyHealth>();
 
-        // Always apply the spawn point's configured HP to every spawned enemy.
+
+        // Always apply the spawn point's configured HP.
         eh.Init(Mathf.Max(1, enemyMaxHealth));
 
-        var contactDamage = instance.GetComponent<EnemyContactDamage>();
+
+        var contactDamage =
+            instance.GetComponent<EnemyContactDamage>();
+
         if (contactDamage == null)
             contactDamage = instance.AddComponent<EnemyContactDamage>();
-        contactDamage.Configure(enemyAttackDamage, enemyAttackRange, enemyAttackCooldown);
+
+        contactDamage.Configure(
+            enemyAttackDamage,
+            enemyAttackRange,
+            enemyAttackCooldown
+        );
+
+
         EnsureEnemyPhysics(instance);
 
-        // subscribe to the death event
+
+        // Subscribe to the enemy's death event.
         eh.OnEnemyDied += HandleTrackedEnemyDied;
+
 
         trackedEnemies.Add(instance);
 
+
         OnEnemySpawned?.Invoke(instance);
+
         return instance;
     }
 
+
+    /// <summary>
+    /// Called when one of the enemies spawned by this spawn point dies.
+    /// </summary>
     private void HandleTrackedEnemyDied(GameObject enemy)
     {
-        // Unsubscribe if possible
-        var eh = enemy != null ? enemy.GetComponent<EnemyHealth>() : null;
+        // Unsubscribe if possible.
+        var eh =
+            enemy != null
+                ? enemy.GetComponent<EnemyHealth>()
+                : null;
+
         if (eh != null)
             eh.OnEnemyDied -= HandleTrackedEnemyDied;
 
-        // Remove nulls and this enemy
-        trackedEnemies.RemoveAll(g => g == null || g == enemy);
 
-        if (clearWhenAllDead && trackedEnemies.Count == 0 && !waveClearedRaised)
+        // Remove the dead enemy and any destroyed references.
+        trackedEnemies.RemoveAll(
+            g => g == null || g == enemy
+        );
+
+
+        // If no enemies spawned by this point remain,
+        // report this spawn point as cleared.
+        if (clearWhenAllDead &&
+            trackedEnemies.Count == 0 &&
+            !waveClearedRaised)
         {
-            waveClearedRaised = true;
-            OnWaveCleared?.Invoke();
-
-            if (GameManager.Instance != null)
-            {
-                if (clearLevelId > 0)
-                    GameManager.Instance.PlayerSteppedOnLevel(clearLevelId);
-                else
-                    GameManager.Instance.LevelCleared();
-            }
-            else
-            {
-                Debug.Log("[EnemySpawnPoint] Level Cleared (no GameManager present)");
-            }
+            RaiseWaveCleared();
         }
     }
 
-    private bool IsPositionAcceptable(Vector2 pos, List<GameObject> alreadySpawned)
+
+    /// <summary>
+    /// Raises the wave-cleared event once.
+    /// RoomManager will listen to this event later.
+    /// </summary>
+    private void RaiseWaveCleared()
     {
-        // compute approximate collision radius from prefab/sprite and combine with minSeparation
+        if (waveClearedRaised)
+            return;
+
+        waveClearedRaised = true;
+
+        Debug.Log(
+            $"[EnemySpawnPoint] Wave cleared at '{name}'."
+        );
+
+        OnWaveCleared?.Invoke();
+    }
+
+
+    private bool IsPositionAcceptable(
+        Vector2 pos,
+        List<GameObject> alreadySpawned)
+    {
+        // Compute approximate collision radius from prefab/sprite
+        // and combine with minSeparation.
         float approxRadius = GetApproximateRadius();
         float required = Mathf.Max(minSeparation, approxRadius);
 
-        // Reject if any world collider overlaps here (tilemap, obstacles, other enemies etc.)
-        Collider2D hit = Physics2D.OverlapCircle(pos, required, spawnCheckMask);
-        if (hit != null)
-        {
-            return false;
-        }
 
-        // also ensure separation from already spawned (use their positions and their approximate radii)
+        // Reject if any world collider overlaps here.
+        Collider2D hit =
+            Physics2D.OverlapCircle(
+                pos,
+                required,
+                spawnCheckMask
+            );
+
+        if (hit != null)
+            return false;
+
+
+        // Also ensure separation from already spawned enemies.
         foreach (var go in alreadySpawned)
         {
-            if (go == null) continue;
-            float otherRadius = GetApproximateRadiusForGameObject(go);
-            float dist = Vector2.Distance(pos, go.transform.position);
+            if (go == null)
+                continue;
+
+            float otherRadius =
+                GetApproximateRadiusForGameObject(go);
+
+            float dist =
+                Vector2.Distance(
+                    pos,
+                    go.transform.position
+                );
+
             if (dist < (required + otherRadius))
                 return false;
         }
 
+
         return true;
     }
+
 
     private float GetApproximateRadius()
     {
         if (enemyPrefab != null)
         {
-            var collider = enemyPrefab.GetComponentInChildren<Collider2D>(true);
+            var collider =
+                enemyPrefab.GetComponentInChildren<Collider2D>(true);
+
             if (collider != null)
                 return collider.bounds.extents.magnitude;
         }
@@ -326,65 +473,105 @@ public class EnemySpawnPoint : MonoBehaviour
         return minSeparation * 0.5f;
     }
 
+
     private float GetApproximateRadiusForGameObject(GameObject go)
     {
-        if (go == null) return minSeparation * 0.5f;
+        if (go == null)
+            return minSeparation * 0.5f;
 
-        var collider = go.GetComponentInChildren<Collider2D>(true);
+        var collider =
+            go.GetComponentInChildren<Collider2D>(true);
+
         if (collider != null)
             return collider.bounds.extents.magnitude;
 
         return minSeparation * 0.5f;
     }
 
+
     private void ApplyRenderingSettings(GameObject root)
     {
-        if (root == null) return;
+        if (root == null)
+            return;
 
-        var srs = root.GetComponentsInChildren<SpriteRenderer>(true);
+
+        var srs =
+            root.GetComponentsInChildren<SpriteRenderer>(true);
+
         foreach (var sr in srs)
         {
             if (!string.IsNullOrEmpty(sortingLayer))
                 sr.sortingLayerName = sortingLayer;
+
             sr.sortingOrder = sortingOrder;
         }
 
-        if (addSortingGroupIfMultipleRenderers && srs.Length > 1)
+
+        if (addSortingGroupIfMultipleRenderers &&
+            srs.Length > 1)
         {
-            var sg = root.GetComponent<SortingGroup>();
-            if (sg == null) sg = root.AddComponent<SortingGroup>();
+            var sg =
+                root.GetComponent<SortingGroup>();
+
+            if (sg == null)
+                sg = root.AddComponent<SortingGroup>();
+
             sg.sortingLayerName = sortingLayer;
             sg.sortingOrder = sortingOrder;
         }
 
+
         if (Mathf.Abs(zOffset) > 0f)
         {
             var p = root.transform.position;
-            root.transform.position = new Vector3(p.x, p.y, p.z + zOffset);
+
+            root.transform.position =
+                new Vector3(
+                    p.x,
+                    p.y,
+                    p.z + zOffset
+                );
         }
     }
 
+
     private static void EnsureEnemyPhysics(GameObject instance)
     {
-        if (instance == null) return;
+        if (instance == null)
+            return;
 
-        Rigidbody2D body = instance.GetComponent<Rigidbody2D>();
+
+        Rigidbody2D body =
+            instance.GetComponent<Rigidbody2D>();
+
         if (body == null)
             body = instance.AddComponent<Rigidbody2D>();
+
 
         body.bodyType = RigidbodyType2D.Dynamic;
         body.simulated = true;
         body.gravityScale = 0f;
         body.constraints = RigidbodyConstraints2D.FreezeAll;
-        body.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        body.collisionDetectionMode =
+            CollisionDetectionMode2D.Continuous;
 
-        Collider2D[] colliders = instance.GetComponentsInChildren<Collider2D>(true);
+
+        Collider2D[] colliders =
+            instance.GetComponentsInChildren<Collider2D>(true);
+
+
         if (colliders.Length == 0)
         {
-            BoxCollider2D fallbackCollider = instance.AddComponent<BoxCollider2D>();
-            fallbackCollider.size = new Vector2(0.5f, 0.5f);
-            colliders = new Collider2D[] { fallbackCollider };
+            BoxCollider2D fallbackCollider =
+                instance.AddComponent<BoxCollider2D>();
+
+            fallbackCollider.size =
+                new Vector2(0.5f, 0.5f);
+
+            colliders =
+                new Collider2D[] { fallbackCollider };
         }
+
 
         foreach (Collider2D collider in colliders)
         {
@@ -393,15 +580,33 @@ public class EnemySpawnPoint : MonoBehaviour
         }
     }
 
+
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;
-        Gizmos.DrawWireSphere(transform.position, Mathf.Max(0.01f, spawnRadius));
-        Gizmos.color = new Color(1, 0, 1, 0.1f);
-        Gizmos.DrawSphere(transform.position, 0.02f);
+
+        Gizmos.DrawWireSphere(
+            transform.position,
+            Mathf.Max(0.01f, spawnRadius)
+        );
+
+
+        Gizmos.color =
+            new Color(1, 0, 1, 0.1f);
+
+        Gizmos.DrawSphere(
+            transform.position,
+            0.02f
+        );
+
+
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, minSeparation);
+
+        Gizmos.DrawWireSphere(
+            transform.position,
+            minSeparation
+        );
     }
 #endif
-} //
+}

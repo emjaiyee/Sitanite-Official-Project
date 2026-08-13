@@ -20,8 +20,13 @@ public class PlayerWASD : MonoBehaviour
     private bool overrideMovement = false;
     private Vector2 rampForward = Vector2.right;
 
+    // PlayerDash can temporarily take control of the Rigidbody.
+    private bool movementLocked = false;
+
     public Vector2 MoveDirection => movement;
     public float SpeedMultiplier { get; set; } = 1f;
+
+    public bool IsMovementLocked => movementLocked;
 
     private void Awake()
     {
@@ -35,16 +40,24 @@ public class PlayerWASD : MonoBehaviour
 
     private void OnEnable()
     {
-        moveAction.action.Enable();
+        if (moveAction != null)
+            moveAction.action.Enable();
     }
 
     private void OnDisable()
     {
-        moveAction.action.Disable();
+        if (moveAction != null)
+            moveAction.action.Disable();
     }
 
     private void Update()
     {
+        if (moveAction == null)
+        {
+            movement = Vector2.zero;
+            return;
+        }
+
         input = moveAction.action.ReadValue<Vector2>();
         input = Vector2.ClampMagnitude(input, 1f);
 
@@ -55,7 +68,10 @@ public class PlayerWASD : MonoBehaviour
             desiredMovement = new Vector2(
                 input.x - input.y,
                 (input.x + input.y) * 0.5f
-            ).normalized;
+            );
+
+            if (desiredMovement.sqrMagnitude > 0.0001f)
+                desiredMovement.Normalize();
         }
         else
         {
@@ -66,8 +82,11 @@ public class PlayerWASD : MonoBehaviour
         {
             Vector2 forward = rampForward.normalized;
 
-            // Keep only the movement along the ramp.
-            float amount = Vector2.Dot(desiredMovement, forward);
+            float amount =
+                Vector2.Dot(
+                    desiredMovement,
+                    forward
+                );
 
             movement = forward * amount;
         }
@@ -82,10 +101,36 @@ public class PlayerWASD : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // PlayerDash currently controls the Rigidbody.
+        if (movementLocked)
+            return;
+
         rb.MovePosition(
-            rb.position + movement * moveSpeed * SpeedMultiplier * Time.fixedDeltaTime
+            rb.position +
+            movement *
+            moveSpeed *
+            SpeedMultiplier *
+            Time.fixedDeltaTime
         );
     }
+
+    // -------------------------------------------------
+    // DASH CONTROL
+    // -------------------------------------------------
+
+    public void LockMovement()
+    {
+        movementLocked = true;
+    }
+
+    public void UnlockMovement()
+    {
+        movementLocked = false;
+    }
+
+    // -------------------------------------------------
+    // RAMP METHODS
+    // -------------------------------------------------
 
     public void EnterRamp(Vector2 forward)
     {

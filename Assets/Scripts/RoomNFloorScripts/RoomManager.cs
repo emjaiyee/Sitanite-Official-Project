@@ -32,11 +32,40 @@ public class RoomManager : MonoBehaviour
 
     public IReadOnlyList<RoomInstance> GeneratedRooms =>
         generatedRooms;
+    private readonly HashSet<int> clearedRooms =
+    new HashSet<int>();
+
+
+    // -------------------------------------------------
+    // ROOM CLEAR TRACKING
+    // -------------------------------------------------
+
+    // Tracks every EnemySpawnPoint belonging to each room.
+    private readonly Dictionary<
+        RoomInstance,
+        List<EnemySpawnPoint>
+    > roomSpawnPoints =
+        new Dictionary<
+            RoomInstance,
+            List<EnemySpawnPoint>
+        >();
+
+    // Tracks which spawn points have reported themselves cleared.
+    private readonly Dictionary<
+        RoomInstance,
+        HashSet<EnemySpawnPoint>
+    > clearedSpawnPoints =
+        new Dictionary<
+            RoomInstance,
+            HashSet<EnemySpawnPoint>
+        >();
+
 
     private void Start()
     {
 
     }
+
 
     private List<GameObject> GetAllowedRoomPrefabs(
         FloorConfiguration configuration)
@@ -74,6 +103,7 @@ public class RoomManager : MonoBehaviour
 
         return allowedPrefabs;
     }
+
 
     public void GenerateFloor(
         FloorConfiguration configuration)
@@ -129,6 +159,7 @@ public class RoomManager : MonoBehaviour
             $"Generating floor with {roomCount} rooms."
         );
 
+
         // ---------------------------------------------
         // ROOM 1
         // ---------------------------------------------
@@ -153,8 +184,15 @@ public class RoomManager : MonoBehaviour
 
         if (firstBackwardGateway != null)
         {
-            firstBackwardGateway.SetGatewayEnabled(false);
+            GatewayVisibility visibility =
+                firstBackwardGateway.GetComponent<GatewayVisibility>();
+
+            if (visibility != null)
+            {
+                visibility.Lock();
+            }
         }
+
 
         // ---------------------------------------------
         // ROOMS 2+
@@ -222,6 +260,29 @@ public class RoomManager : MonoBehaviour
         }
 
         // ---------------------------------------------
+        // ROOM PROGRESSION
+        // ---------------------------------------------
+
+        currentRoomNumber = 1;
+
+        if (lockNextRoomUntilCleared)
+        {
+            // Lock every Forward Gateway first.
+            LockAllRoomGateways();
+
+            // Room 1 is immediately accessible only if
+            // it has no enemy spawn points.
+            bool firstRoomHasEnemies =
+                roomSpawnPoints.ContainsKey(firstRoom) &&
+                roomSpawnPoints[firstRoom].Count > 0;
+
+            SetRoomGatewayState(
+                firstRoom,
+                !firstRoomHasEnemies
+            );
+        }
+
+        // ---------------------------------------------
         // FINAL ROOM
         // ---------------------------------------------
 
@@ -240,7 +301,13 @@ public class RoomManager : MonoBehaviour
 
             if (finalForwardGateway != null)
             {
-                finalForwardGateway.SetGatewayEnabled(false);
+                GatewayVisibility visibility =
+                    finalForwardGateway.GetComponent<GatewayVisibility>();
+
+                if (visibility != null)
+                {
+                    visibility.Lock();
+                }
             }
 
             Debug.Log(
@@ -250,23 +317,12 @@ public class RoomManager : MonoBehaviour
         }
 
         // ---------------------------------------------
-        // ROOM PROGRESSION
-        // ---------------------------------------------
-
-        currentRoomNumber = 1;
-
-        if (lockNextRoomUntilCleared)
-        {
-            LockAllRoomGateways();
-            UnlockCurrentRoom();
-        }
-
-        // ---------------------------------------------
         // PLAYER
         // ---------------------------------------------
 
         SpawnPlayerAtFirstRoom();
     }
+
 
     private RoomInstance GenerateFirstRoom(
         List<GameObject> prefabPool)
@@ -284,6 +340,7 @@ public class RoomManager : MonoBehaviour
             selectedPrefab
         );
     }
+
 
     private RoomInstance GenerateRoom(
         int roomNumber,
@@ -324,6 +381,14 @@ public class RoomManager : MonoBehaviour
 
         generatedRooms.Add(roomInstance);
 
+        // ---------------------------------------------
+        // REGISTER ENEMY SPAWN POINTS
+        // ---------------------------------------------
+
+        RegisterRoomEnemySpawnPoints(
+            roomInstance
+        );
+
         Debug.Log(
             $"Generated Room {roomNumber}: " +
             $"{roomPrefab.name} " +
@@ -332,6 +397,149 @@ public class RoomManager : MonoBehaviour
 
         return roomInstance;
     }
+
+
+    // -------------------------------------------------
+    // ENEMY / ROOM CLEAR SYSTEM
+    // -------------------------------------------------
+
+    private void RegisterRoomEnemySpawnPoints(
+    RoomInstance room)
+    {
+        if (room == null)
+            return;
+
+        EnemySpawnPoint[] spawnPoints =
+            room.GetComponentsInChildren<EnemySpawnPoint>(true);
+
+        List<EnemySpawnPoint> roomPoints =
+            new List<EnemySpawnPoint>(spawnPoints);
+
+        HashSet<EnemySpawnPoint> clearedPoints =
+            new HashSet<EnemySpawnPoint>();
+
+        roomSpawnPoints[room] = roomPoints;
+        clearedSpawnPoints[room] = clearedPoints;
+
+
+        Debug.Log(
+            $"Room {room.RoomNumber} has " +
+            $"{roomPoints.Count} EnemySpawnPoint(s)."
+        );
+
+
+        // -------------------------------------------------
+        // NO ENEMIES
+        // -------------------------------------------------
+
+        if (roomPoints.Count == 0)
+        {
+            Debug.Log(
+                $"Room {room.RoomNumber} contains no " +
+                "EnemySpawnPoints. Room is immediately cleared."
+            );
+
+            SetRoomCleared(
+                room.RoomNumber
+            );
+
+            return;
+        }
+
+
+        // -------------------------------------------------
+        // ROOM HAS ENEMIES
+        // -------------------------------------------------
+
+        // Lock this room's Forward Gateway immediately.
+        SetRoomGatewayState(
+            room,
+            false
+        );
+
+
+        // -------------------------------------------------
+        // SUBSCRIBE TO SPAWN POINTS
+        // -------------------------------------------------
+
+        foreach (
+            EnemySpawnPoint spawnPoint
+            in roomPoints
+        )
+        {
+            if (spawnPoint == null)
+                continue;
+
+            EnemySpawnPoint capturedSpawnPoint =
+                spawnPoint;
+
+            spawnPoint.OnWaveCleared +=
+                () => HandleSpawnPointCleared(
+                    room,
+                    capturedSpawnPoint
+                );
+        }
+    }
+
+
+    private void HandleSpawnPointCleared(
+        RoomInstance room,
+        EnemySpawnPoint spawnPoint)
+    {
+        if (room == null || spawnPoint == null)
+            return;
+
+        if (!roomSpawnPoints.ContainsKey(room))
+            return;
+
+        HashSet<EnemySpawnPoint> clearedPoints =
+            clearedSpawnPoints[room];
+
+        // Prevent duplicate notifications.
+        if (!clearedPoints.Add(spawnPoint))
+            return;
+
+        Debug.Log(
+            $"Room {room.RoomNumber}: " +
+            $"EnemySpawnPoint '{spawnPoint.name}' cleared. " +
+            $"{clearedPoints.Count}/" +
+            $"{roomSpawnPoints[room].Count} cleared."
+        );
+
+
+        // ---------------------------------------------
+        // CHECK WHETHER THE WHOLE ROOM IS CLEARED
+        // ---------------------------------------------
+
+        if (
+            clearedPoints.Count >=
+            roomSpawnPoints[room].Count
+        )
+        {
+            HandleRoomCleared(room);
+        }
+    }
+
+
+    private void HandleRoomCleared(
+        RoomInstance room)
+    {
+        if (room == null)
+            return;
+
+        Debug.Log(
+            $"Room {room.RoomNumber} has been cleared."
+        );
+
+        SetRoomCleared(
+            room.RoomNumber
+        );
+    }
+
+
+    // -------------------------------------------------
+    // PLAYER SPAWN
+    // -------------------------------------------------
 
     private void SpawnPlayerAtFirstRoom()
     {
@@ -404,6 +612,10 @@ public class RoomManager : MonoBehaviour
     }
 
 
+    // -------------------------------------------------
+    // ROOM PREFAB COMPATIBILITY
+    // -------------------------------------------------
+
     private GameObject FindCompatibleRoomPrefab(
         Gateway previousForwardGateway,
         List<GameObject> prefabPool)
@@ -411,7 +623,7 @@ public class RoomManager : MonoBehaviour
         GatewayDirection requiredDirection =
             previousForwardGateway.Direction.Opposite();
 
-            Debug.Log(
+        Debug.Log(
             $"PCG CONNECTION REQUIREMENT: " +
             $"Gateway '{previousForwardGateway.name}' " +
             $"is {previousForwardGateway.Direction} / " +
@@ -490,6 +702,12 @@ public class RoomManager : MonoBehaviour
 
         return selectedPrefab;
     }
+
+
+    // -------------------------------------------------
+    // ROOM CONNECTION
+    // -------------------------------------------------
+
     private void ConnectRooms(
         RoomInstance previousRoom,
         RoomInstance newRoom)
@@ -512,6 +730,7 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
+
         // ---------------------------------------------
         // FIND PREVIOUS ROOM'S FORWARD GATEWAY
         // ---------------------------------------------
@@ -531,6 +750,7 @@ public class RoomManager : MonoBehaviour
 
             return;
         }
+
 
         // ---------------------------------------------
         // FIND NEW ROOM'S BACKWARD GATEWAY
@@ -552,6 +772,7 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
+
         // ---------------------------------------------
         // DETERMINE REQUIRED DESTINATIONS
         // ---------------------------------------------
@@ -561,6 +782,7 @@ public class RoomManager : MonoBehaviour
 
         GatewayDirection backwardDestinationDirection =
             newBackwardGateway.Direction.Opposite();
+
 
         // ---------------------------------------------
         // FIND NEW ROOM'S FORWARD DESTINATION
@@ -584,6 +806,7 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
+
         // ---------------------------------------------
         // FIND PREVIOUS ROOM'S BACKWARD DESTINATION
         // ---------------------------------------------
@@ -606,6 +829,7 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
+
         // ---------------------------------------------
         // CONNECT FORWARD
         // ---------------------------------------------
@@ -613,6 +837,7 @@ public class RoomManager : MonoBehaviour
         previousForwardGateway.SetDestination(
             newForwardDestination.transform
         );
+
 
         // ---------------------------------------------
         // CONNECT BACKWARD
@@ -628,6 +853,12 @@ public class RoomManager : MonoBehaviour
             $"Room {newRoom.RoomNumber}."
         );
     }
+
+
+    // -------------------------------------------------
+    // GATEWAY / DESTINATION LOOKUPS
+    // -------------------------------------------------
+
     private Gateway FindGateway(
         RoomInstance room,
         GatewayFlow flow)
@@ -678,6 +909,7 @@ public class RoomManager : MonoBehaviour
         return null;
     }
 
+
     private ElevationDestination FindDestination(
         RoomInstance room,
         GatewayFlow flow,
@@ -704,75 +936,94 @@ public class RoomManager : MonoBehaviour
 
         return null;
     }
+
+
+    // -------------------------------------------------
+    // ROOM PROGRESSION
+    // -------------------------------------------------
+
     public void SetRoomCleared(int roomNumber)
     {
-        if (roomNumber != currentRoomNumber)
-        {
-            return;
-        }
-
-        Debug.Log($"Room {roomNumber} cleared.");
-
-        currentRoomNumber++;
-
-        UnlockCurrentRoom();
-    }
-
-    private void ClearGeneratedRooms()
-    {
-        foreach (RoomInstance room in generatedRooms)
-        {
-            if (room != null)
-            {
-                Destroy(room.gameObject);
-            }
-        }
-
-        generatedRooms.Clear();
-    }
-    private void UnlockCurrentRoom()
-    {
-        if (currentRoomNumber > generatedRooms.Count)
-        {
-            Debug.Log("Floor cleared!");
-
-            // For future references, to whoever does the GameManager's floor clearing:
-            // GameManager.Instance.FloorCleared();
-
-            return;
-        }
-
-        RoomInstance currentRoom =
-            generatedRooms[currentRoomNumber - 1];
-
-        Gateway forwardGateway =
-            FindGateway(
-                currentRoom,
-                GatewayFlow.Forward
-            );
-
-        if (forwardGateway == null)
+        if (roomNumber < 1 || roomNumber > generatedRooms.Count)
         {
             Debug.LogWarning(
-                $"Room {currentRoomNumber} " +
-                "has no Forward Gateway."
+                $"SetRoomCleared received invalid room number: {roomNumber}."
             );
 
             return;
         }
 
-        GatewayVisibility visibility =
-            forwardGateway.GetComponent<GatewayVisibility>();
-
-        if (visibility != null)
+        // Prevent duplicate clear notifications.
+        if (!clearedRooms.Add(roomNumber))
         {
-            visibility.SetVisible(true);
+            Debug.Log(
+                $"Room {roomNumber} was already marked as cleared."
+            );
+
+            return;
         }
 
         Debug.Log(
-            $"Room {currentRoomNumber} unlocked."
+            $"Room {roomNumber} cleared."
+        );
+
+
+        // -------------------------------------------------
+        // UNLOCK THIS ROOM'S FORWARD GATEWAY
+        // -------------------------------------------------
+
+        RoomInstance clearedRoom =
+            generatedRooms[roomNumber - 1];
+
+        SetRoomGatewayState(
+            clearedRoom,
+            true
+        );
+
+
+        // -------------------------------------------------
+        // UPDATE CURRENT ROOM PROGRESSION
+        // -------------------------------------------------
+
+        // Move currentRoomNumber forward while the next
+        // room in sequence has already been cleared.
+
+        while (
+            currentRoomNumber <= generatedRooms.Count &&
+            clearedRooms.Contains(currentRoomNumber)
+        )
+        {
+            currentRoomNumber++;
+        }
+
+
+        // -------------------------------------------------
+        // FLOOR COMPLETE
+        // -------------------------------------------------
+
+        if (currentRoomNumber > generatedRooms.Count)
+        {
+            Debug.Log(
+                "All rooms on this floor have been cleared."
+            );
+
+            if (GameManager.Instance != null)
+            {
+                // Replace 1 with your actual floor ID later.
+                GameManager.Instance.FloorCleared(1);
+            }
+
+            return;
+        }
+
+
+        Debug.Log(
+            $"Room progression advanced. " +
+            $"Current room: {currentRoomNumber}."
         );
     }
+
+
     private void LockAllRoomGateways()
     {
         foreach (RoomInstance room in generatedRooms)
@@ -787,12 +1038,128 @@ public class RoomManager : MonoBehaviour
                 continue;
 
             GatewayVisibility visibility =
-                forwardGateway.GetComponent<GatewayVisibility>();
+                forwardGateway.GetComponent<
+                    GatewayVisibility
+                >();
 
             if (visibility != null)
             {
                 visibility.SetVisible(false);
             }
         }
+    }
+
+
+    // -------------------------------------------------
+    // CLEANUP
+    // -------------------------------------------------
+
+    private void ClearGeneratedRooms()
+    {
+        // Remove event subscriptions before destroying rooms.
+        foreach (
+            KeyValuePair<
+                RoomInstance,
+                List<EnemySpawnPoint>
+            > entry
+            in roomSpawnPoints
+        )
+        {
+            RoomInstance room =
+                entry.Key;
+
+            List<EnemySpawnPoint> spawnPoints =
+                entry.Value;
+
+            if (spawnPoints == null)
+                continue;
+
+            foreach (
+                EnemySpawnPoint spawnPoint
+                in spawnPoints
+            )
+            {
+                if (spawnPoint == null)
+                    continue;
+
+                // We subscribed using a lambda, so the
+                // subscription will disappear when the
+                // spawn point is destroyed.
+                //
+                // The room itself is being destroyed below.
+            }
+        }
+
+        roomSpawnPoints.Clear();
+        clearedSpawnPoints.Clear();
+        clearedRooms.Clear();
+
+
+        foreach (RoomInstance room in generatedRooms)
+        {
+            if (room != null)
+            {
+                Destroy(room.gameObject);
+            }
+        }
+
+        generatedRooms.Clear();
+    }
+    private void SetRoomGatewayState(
+    RoomInstance room,
+    bool unlocked)
+    {
+        if (room == null)
+            return;
+
+
+        Gateway forwardGateway =
+            FindGateway(
+                room,
+                GatewayFlow.Forward
+            );
+
+        if (forwardGateway == null)
+        {
+            Debug.LogWarning(
+                $"Room {room.RoomNumber} has no " +
+                "Forward Gateway."
+            );
+
+            return;
+        }
+
+
+        GatewayVisibility visibility =
+            forwardGateway.GetComponent<
+                GatewayVisibility
+            >();
+
+        if (visibility == null)
+        {
+            Debug.LogWarning(
+                $"Forward Gateway '{forwardGateway.name}' " +
+                $"in Room {room.RoomNumber} has no " +
+                "GatewayVisibility component."
+            );
+
+            return;
+        }
+
+
+        if (unlocked)
+        {
+            visibility.Unlock();
+        }
+        else
+        {
+            visibility.Lock();
+        }
+
+
+        Debug.Log(
+            $"Room {room.RoomNumber} Forward Gateway " +
+            $"{(unlocked ? "UNLOCKED" : "LOCKED")}."
+        );
     }
 }

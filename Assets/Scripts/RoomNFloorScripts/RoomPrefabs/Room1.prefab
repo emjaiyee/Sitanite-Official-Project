@@ -1781,7 +1781,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 813509379841093977}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.79264, y: 3.21441, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7454,6 +7454,7 @@ GameObject:
   - component: {fileID: 8504790148244354131}
   - component: {fileID: 196885661134957990}
   - component: {fileID: 8913808033718529060}
+  - component: {fileID: 8679468880445852381}
   m_Layer: 0
   m_Name: Gateway
   m_TagString: Untagged
@@ -7537,6 +7538,23 @@ MonoBehaviour:
   direction: 1
   flow: 0
   destination: {fileID: 0}
+--- !u!114 &8679468880445852381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5063170989203778060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 385364d81cbdf6941adece8fbfb8bfed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GatewayVisibility
+  visibleWhenUnlocked: 1
+  smoothFade: 1
+  fadeDuration: 0.2
+  spriteRenderer: {fileID: 0}
+  gatewayCollider: {fileID: 196885661134957990}
 --- !u!1 &5102005859509345375
 GameObject:
   m_ObjectHideFlags: 0
@@ -9541,7 +9559,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
   enemyPrefab: {fileID: 3586115904521672654, guid: 9c1074b6f917938449581efeaa18094c, type: 3}
-  enemySprite: {fileID: -7758460354362911127, guid: 0007b553b78982d48a5d3e10d004a118, type: 3}
   useRandomCount: 1
   minSpawn: 2
   maxSpawn: 4
@@ -9554,10 +9571,6 @@ MonoBehaviour:
   spawnOnStart: 1
   spawnDelay: 0.6
   spawnParent: {fileID: 3981623331039287070}
-  sizeMode: 0
-  desiredSize: {x: 1, y: 1}
-  ensureBoxCollider: 1
-  forceUseSpriteNativeForPrefab: 0
   sortingLayer: Default
   sortingOrder: 50
   zOffset: 0
@@ -9566,8 +9579,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   maxPositionAttempts: 12
-  spawnLayerName: Enemy
-  createdEnemyName: Slime
+  enemyMaxHealth: 10
+  clearWhenAllDead: 1
+  enemyAttackDamage: 5
+  enemyAttackRange: 0.7
+  enemyAttackCooldown: 1.5
 --- !u!1 &7289219903309256592
 GameObject:
   m_ObjectHideFlags: 0
