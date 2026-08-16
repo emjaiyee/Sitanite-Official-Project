@@ -1,8 +1,24 @@
 using UnityEngine;
 
+public enum ItemType
+{
+    None,
+    Consumable,
+    Weapon,
+    Helmet,
+    Chestplate,
+    Legging
+
+}
+
 [CreateAssetMenu(fileName = "ItemData", menuName = "Inventory/ItemData")]
 public class ItemData : ScriptableObject
 {
+
+    [Header("Item Type")]
+    [SerializeField] private ItemType itemType = ItemType.None;
+    public ItemType ItemType => itemType;
+
     public string itemName;
     public Sprite icon;
     [TextArea] public string itemDescription;
