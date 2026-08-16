@@ -1,3 +1,5 @@
+// TODO: Refactor snap item visual to grid, try to detect sprite size and use that as base.
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
