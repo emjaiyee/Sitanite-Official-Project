@@ -2,15 +2,5 @@ using UnityEngine;
 
 public class EquipmentSlotUI : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // Declare slots + slot type + detect input + Evaluate if can equip item + also unequipped it.
 }
