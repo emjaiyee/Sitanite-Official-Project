@@ -11,16 +11,35 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public event Action<GameObject> OnEnemyDied;
 
+    private bool hasDied;
+
+
+    // =========================================================
+    // UNITY
+    // =========================================================
+
     private void Awake()
     {
         CurrentHealth = maxHealth;
+        hasDied = false;
     }
+
+
+    // =========================================================
+    // INITIALIZATION
+    // =========================================================
 
     public void Init(int max)
     {
         maxHealth = Mathf.Max(1, max);
         CurrentHealth = maxHealth;
+        hasDied = false;
     }
+
+
+    // =========================================================
+    // DAMAGE
+    // =========================================================
 
     public void TakeDamage(
         int amount,
@@ -29,8 +48,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         if (amount <= 0)
             return;
 
+        if (hasDied)
+            return;
+
         if (CurrentHealth <= 0)
             return;
+
 
         CurrentHealth =
             Mathf.Max(
@@ -38,11 +61,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable
                 CurrentHealth - amount
             );
 
+
         Debug.Log(
             $"[EnemyHealth] {gameObject.name} took " +
             $"{amount} {damageType} damage. " +
             $"HP: {CurrentHealth}/{maxHealth}"
         );
+
 
         if (CurrentHealth == 0)
         {
@@ -50,13 +75,22 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         }
     }
 
+
+    // =========================================================
+    // HEAL
+    // =========================================================
+
     public void Heal(int amount)
     {
         if (amount <= 0)
             return;
 
+        if (hasDied)
+            return;
+
         if (CurrentHealth <= 0)
             return;
+
 
         CurrentHealth =
             Mathf.Min(
@@ -65,14 +99,26 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             );
     }
 
+
+    // =========================================================
+    // DEATH
+    // =========================================================
+
     private void Die()
     {
+        if (hasDied)
+            return;
+
+        hasDied = true;
+
+
         Debug.Log(
             $"[EnemyHealth] {gameObject.name} died"
         );
 
-        OnEnemyDied?.Invoke(gameObject);
 
-        Destroy(gameObject);
+        // EnemyMelee listens to this and
+        // transitions into its Death state.
+        OnEnemyDied?.Invoke(gameObject);
     }
 }

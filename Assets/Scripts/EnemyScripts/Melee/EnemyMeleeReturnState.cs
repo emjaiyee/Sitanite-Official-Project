@@ -1,42 +1,68 @@
 using UnityEngine;
 
-public class EnemyMeleeReturnState : EnemyMeleeState
+public class EnemyMeleeSearchState : EnemyMeleeState
 {
-    public EnemyMeleeReturnState(
+    private float searchTimer;
+
+    private const float SearchDuration = 3.5f;
+
+
+    public EnemyMeleeSearchState(
         EnemyMelee enemy)
         : base(enemy)
     {
     }
 
 
+    // =========================================================
+    // ENTER
+    // =========================================================
+
     public override void Enter()
     {
+        // -----------------------------------------------------
+        // STOP AT LAST KNOWN POSITION
+        // -----------------------------------------------------
+
+        Enemy.StopMoving();
+
+        searchTimer = 0f;
+
         Debug.Log(
-            $"[EnemyMelee] {Enemy.name} entered Return state."
+            $"[Search] {Enemy.name}: " +
+            "Player lost. Searching..."
         );
-
-        if (Enemy.Agent == null)
-            return;
-
-        Enemy.Agent.isStopped = false;
-
-        if (Enemy.Agent.isOnNavMesh)
-        {
-            Enemy.Agent.SetDestination(
-                Enemy.SpawnPosition
-            );
-        }
     }
 
 
+    // =========================================================
+    // TICK
+    // =========================================================
+
     public override void Tick()
     {
-        // -------------------------------------------------
-        // PLAYER DETECTED
-        // -------------------------------------------------
+        // -----------------------------------------------------
+        // PLAYER EXISTS?
+        // -----------------------------------------------------
+
+        if (Enemy.Player == null)
+        {
+            FinishSearch();
+            return;
+        }
+
+
+        // -----------------------------------------------------
+        // PLAYER FOUND AGAIN?
+        // -----------------------------------------------------
 
         if (Enemy.IsPlayerDetected())
         {
+            Debug.Log(
+                $"[Search] {Enemy.name}: " +
+                "Player detected again!"
+            );
+
             Enemy.ChangeState(
                 EnemyMelee.EnemyState.Chase
             );
@@ -45,33 +71,48 @@ public class EnemyMeleeReturnState : EnemyMeleeState
         }
 
 
-        // -------------------------------------------------
-        // RETURN TO SPAWN
-        // -------------------------------------------------
+        // -----------------------------------------------------
+        // SEARCH TIMER
+        // -----------------------------------------------------
 
-        float distanceToSpawn =
-            Vector2.Distance(
-                Enemy.transform.position,
-                Enemy.SpawnPosition
-            );
+        searchTimer += Time.deltaTime;
 
 
-        if (
-            distanceToSpawn <=
-            Enemy.ReturnThreshold
-        )
+        if (searchTimer >= SearchDuration)
         {
-            Enemy.StopMoving();
-
-            Enemy.ChangeState(
-                EnemyMelee.EnemyState.Idle
-            );
+            FinishSearch();
         }
     }
 
 
+    // =========================================================
+    // FINISH SEARCH
+    // =========================================================
+
+    private void FinishSearch()
+    {
+        Debug.Log(
+            $"[Search] {Enemy.name}: " +
+            "Search finished. Returning to Idle."
+        );
+
+        Enemy.ChangeState(
+            EnemyMelee.EnemyState.Idle
+        );
+    }
+
+
+    // =========================================================
+    // EXIT
+    // =========================================================
+
     public override void Exit()
     {
         Enemy.StopMoving();
+
+        Debug.Log(
+            $"[Search] {Enemy.name}: " +
+            "Exited Search."
+        );
     }
 }

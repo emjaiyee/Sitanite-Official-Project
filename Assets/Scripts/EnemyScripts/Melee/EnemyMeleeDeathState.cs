@@ -2,7 +2,10 @@ using UnityEngine;
 
 public class EnemyMeleeDeathState : EnemyMeleeState
 {
-    private bool deathStarted;
+    private float deathTimer;
+
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
 
 
     public EnemyMeleeDeathState(
@@ -12,55 +15,152 @@ public class EnemyMeleeDeathState : EnemyMeleeState
     }
 
 
+    // =========================================================
+    // ENTER
+    // =========================================================
+
     public override void Enter()
     {
-        if (deathStarted)
-            return;
-
-        deathStarted = true;
-
-
-        Debug.Log(
-            $"[EnemyMelee] {Enemy.name} entered Death state."
-        );
-
-
-        // -------------------------------------------------
-        // STOP MOVEMENT
-        // -------------------------------------------------
+        deathTimer = 0f;
 
         Enemy.StopMoving();
 
 
-        // -------------------------------------------------
-        // FUTURE DEATH BEHAVIOR
-        // -------------------------------------------------
-        //
-        // This is where we can eventually add:
-        //
-        // - Death animation
-        // - Death VFX
-        // - Sound
-        // - Loot
-        // - XP
-        // - Delayed destruction
-        //
-        // EnemyHealth currently owns the actual
-        // destruction of the GameObject.
+        // -----------------------------------------------------
+        // FIND SPRITE RENDERER
+        // -----------------------------------------------------
+
+        spriteRenderer =
+            Enemy.GetComponentInChildren<SpriteRenderer>();
+
+
+        if (spriteRenderer != null)
+        {
+            originalColor =
+                spriteRenderer.color;
+        }
+        else
+        {
+            Debug.LogWarning(
+                $"[Death] {Enemy.name}: " +
+                "No SpriteRenderer found."
+            );
+        }
+
+
+        Debug.Log(
+            $"[Death] {Enemy.name}: " +
+            $"Entered Death state. " +
+            $"Animation delay = " +
+            $"{Enemy.DeathAnimationDelay}s, " +
+            $"Fade duration = " +
+            $"{Enemy.DeathFadeDuration}s"
+        );
     }
 
+
+    // =========================================================
+    // TICK
+    // =========================================================
 
     public override void Tick()
     {
-        // Death is currently a terminal state.
-        //
-        // EnemyHealth already destroys the enemy
-        // after firing OnEnemyDied.
+        deathTimer += Time.deltaTime;
+
+
+        // =====================================================
+        // PHASE 1 — DEATH ANIMATION DELAY
+        // =====================================================
+
+        if (deathTimer <
+            Enemy.DeathAnimationDelay)
+        {
+            return;
+        }
+
+
+        // =====================================================
+        // PHASE 2 — FADE
+        // =====================================================
+
+        float fadeTimer =
+            deathTimer -
+            Enemy.DeathAnimationDelay;
+
+
+        float fadeDuration =
+            Enemy.DeathFadeDuration;
+
+
+        float fadeProgress;
+
+
+        if (fadeDuration <= 0f)
+        {
+            fadeProgress = 1f;
+        }
+        else
+        {
+            fadeProgress =
+                Mathf.Clamp01(
+                    fadeTimer /
+                    fadeDuration
+                );
+        }
+
+
+        if (spriteRenderer != null)
+        {
+            Color color =
+                originalColor;
+
+            color.a =
+                Mathf.Lerp(
+                    originalColor.a,
+                    0f,
+                    fadeProgress
+                );
+
+            spriteRenderer.color =
+                color;
+        }
+
+
+        // =====================================================
+        // PHASE 3 — DESTROY
+        // =====================================================
+
+        if (fadeProgress >= 1f)
+        {
+            DestroyEnemy();
+        }
     }
 
 
+    // =========================================================
+    // DESTROY
+    // =========================================================
+
+    private void DestroyEnemy()
+    {
+        Debug.Log(
+            $"[Death] {Enemy.name}: " +
+            "Death sequence finished. " +
+            "Destroying enemy."
+        );
+
+
+        Object.Destroy(
+            Enemy.gameObject
+        );
+    }
+
+
+    // =========================================================
+    // EXIT
+    // =========================================================
+
     public override void Exit()
     {
-        // Death is terminal.
     }
 }

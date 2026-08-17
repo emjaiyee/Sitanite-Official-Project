@@ -1,29 +1,39 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 [RequireComponent(typeof(EnemyHealth))]
-[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyMelee : MonoBehaviour
 {
     // =========================================================
     // STATE
     // =========================================================
 
+
     public enum EnemyState
     {
         Idle,
         Chase,
         Search,
-        Attack,
-        Return,
         Death
     }
+
 
     [Header("State")]
     [SerializeField] private EnemyState startingState =
         EnemyState.Idle;
 
-    public EnemyState CurrentState { get; private set; }
+
+    public EnemyState? CurrentState { get; private set; }
+
+
+
+
+    // =========================================================
+    // STATE INSTANCE
+    // =========================================================
+
+
+    private EnemyMeleeState currentState;
 
 
     // =========================================================
@@ -31,10 +41,12 @@ public class EnemyMelee : MonoBehaviour
     // =========================================================
 
     [Header("Detection")]
-    [SerializeField] private float detectionRange = 3f;
 
-    public float DetectionRange =>
-        detectionRange;
+    [Tooltip("Detection distance measured in A* grid cells.")]
+    [SerializeField] private int detectionRadius = 6;
+
+    public int DetectionRadius =>
+        detectionRadius;
 
 
     // =========================================================
@@ -42,32 +54,43 @@ public class EnemyMelee : MonoBehaviour
     // =========================================================
 
     [Header("Movement")]
+
     [SerializeField] private float moveSpeed = 2f;
 
     public float MoveSpeed =>
         moveSpeed;
 
 
-    // =========================================================
-    // COMBAT
-    // =========================================================
+    [SerializeField] private int idleWanderRadius = 4;
 
-    [Header("Combat")]
-    [SerializeField] private float attackRange = 1f;
-
-    public float AttackRange =>
-        attackRange;
+    public int IdleWanderRadius =>
+        idleWanderRadius;
 
 
     // =========================================================
-    // RETURN
+    // DEATH
     // =========================================================
 
-    [Header("Return")]
-    [SerializeField] private float returnThreshold = 0.1f;
+    [Header("Death")]
 
-    public float ReturnThreshold =>
-        returnThreshold;
+    [Tooltip(
+        "How long the enemy remains fully visible " +
+        "before the fade begins."
+    )]
+    [SerializeField] private float deathAnimationDelay = 0.5f;
+
+    public float DeathAnimationDelay =>
+        deathAnimationDelay;
+
+
+    [Tooltip(
+        "How long the enemy takes to fade out " +
+        "before being destroyed."
+    )]
+    [SerializeField] private float deathFadeDuration = 0.75f;
+
+    public float DeathFadeDuration =>
+        deathFadeDuration;
 
 
     // =========================================================
@@ -75,7 +98,6 @@ public class EnemyMelee : MonoBehaviour
     // =========================================================
 
     private EnemyHealth enemyHealth;
-    private NavMeshAgent agent;
     private Transform player;
 
     private Vector3 spawnPosition;
@@ -83,9 +105,6 @@ public class EnemyMelee : MonoBehaviour
 
     public EnemyHealth Health =>
         enemyHealth;
-
-    public NavMeshAgent Agent =>
-        agent;
 
     public Transform Player =>
         player;
@@ -95,10 +114,16 @@ public class EnemyMelee : MonoBehaviour
 
 
     // =========================================================
-    // STATE INSTANCE
+    // PATH
     // =========================================================
 
-    private EnemyMeleeState currentState;
+    private List<Vector3> currentPath;
+    private int currentPathIndex;
+
+
+    public bool HasPath =>
+        currentPath != null &&
+        currentPathIndex < currentPath.Count;
 
 
     // =========================================================
@@ -109,9 +134,6 @@ public class EnemyMelee : MonoBehaviour
     {
         enemyHealth =
             GetComponent<EnemyHealth>();
-
-        agent =
-            GetComponent<NavMeshAgent>();
 
         spawnPosition =
             transform.position;
@@ -136,13 +158,6 @@ public class EnemyMelee : MonoBehaviour
                 "a GameObject tagged 'Player'."
             );
         }
-
-
-        // -----------------------------------------------------
-        // NAVMESH AGENT
-        // -----------------------------------------------------
-
-        ConfigureAgent();
     }
 
 
@@ -157,6 +172,40 @@ public class EnemyMelee : MonoBehaviour
 
     private void Start()
     {
+        // -----------------------------------------------------
+        // CHECK A* SPAWN TILE
+        // -----------------------------------------------------
+
+        if (AStarManager.Instance == null)
+        {
+            Debug.LogError(
+                $"[EnemyMelee] {name} could not find " +
+                "an AStarManager."
+            );
+
+            return;
+        }
+
+
+        if (!AStarManager.Instance.IsPositionWalkable(
+                transform.position))
+        {
+            Debug.LogError(
+                $"[EnemyMelee] {name} spawned on a " +
+                $"NON-WALKABLE A* tile at " +
+                $"{transform.position}."
+            );
+
+            return;
+        }
+
+
+        Debug.Log(
+            $"[EnemyMelee] {name} spawned on " +
+            "a valid A* tile."
+        );
+
+
         ChangeState(startingState);
     }
 
@@ -184,69 +233,73 @@ public class EnemyMelee : MonoBehaviour
     // =========================================================
 
     private void HandleEnemyDied(
-        GameObject deadEnemy)
+    GameObject deadEnemy)
     {
-        if (CurrentState == EnemyState.Death)
-            return;
-
         ChangeState(
             EnemyState.Death
         );
     }
 
 
-    // =========================================================
-    // NAVMESH CONFIGURATION
-    // =========================================================
-
-    private void ConfigureAgent()
-    {
-        if (agent == null)
-            return;
-
-        // We are using this as a 2D NavMesh agent.
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;
-
-        agent.speed =
-            moveSpeed;
-    }
-
-
-    // =========================================================
-    // STATE MANAGEMENT
-    // =========================================================
-
     public void ChangeState(
-        EnemyState newState)
+    EnemyState newState)
     {
-        if (CurrentState == newState)
+        // -----------------------------------------------------
+        // Ignore the request only if we ALREADY have an
+        // actual state instance of this state.
+        // -----------------------------------------------------
+
+        if (CurrentState.HasValue &&
+            CurrentState.Value == newState &&
+            currentState != null)
+        {
             return;
+        }
+
+
+        // -----------------------------------------------------
+        // EXIT OLD STATE
+        // -----------------------------------------------------
 
         if (currentState != null)
         {
             currentState.Exit();
         }
 
+
+        // -----------------------------------------------------
+        // SET NEW STATE
+        // -----------------------------------------------------
+
         CurrentState =
             newState;
 
+
+        // -----------------------------------------------------
+        // CREATE STATE INSTANCE
+        // -----------------------------------------------------
+
         currentState =
             CreateState(newState);
+
+
+        // -----------------------------------------------------
+        // ENTER NEW STATE
+        // -----------------------------------------------------
 
         if (currentState != null)
         {
             currentState.Enter();
         }
 
+
         Debug.Log(
             $"[EnemyMelee] {name} -> {newState}"
         );
     }
 
-
     private EnemyMeleeState CreateState(
-        EnemyState state)
+    EnemyState state)
     {
         switch (state)
         {
@@ -259,149 +312,204 @@ public class EnemyMelee : MonoBehaviour
             case EnemyState.Search:
                 return new EnemyMeleeSearchState(this);
 
-            case EnemyState.Attack:
-                return new EnemyMeleeAttackState(this);
-
-            case EnemyState.Return:
-                return new EnemyMeleeReturnState(this);
-
             case EnemyState.Death:
                 return new EnemyMeleeDeathState(this);
+
+            default:
+                Debug.LogError(
+                    $"[EnemyMelee] {name}: " +
+                    $"Unknown state {state}."
+                );
+
+                return null;
         }
-
-        return null;
     }
-
-
+    
     // =========================================================
-    // COMMON ENEMY QUERIES
+    // DETECTION
     // =========================================================
-
-    public float DistanceToPlayer()
-    {
-        if (player == null)
-            return float.MaxValue;
-
-        return Vector2.Distance(
-            transform.position,
-            player.position
-        );
-    }
-
 
     public bool IsPlayerDetected()
     {
-        return DistanceToPlayer()
-            <= detectionRange;
-    }
-
-
-    public bool IsPlayerInAttackRange()
-    {
-        return DistanceToPlayer()
-            <= attackRange;
-    }
-
-
-    public float DistanceFromSpawn()
-    {
-        return Vector2.Distance(
-            transform.position,
-            spawnPosition
-        );
-    }
-
-
-    public bool IsAtSpawn()
-    {
-        return DistanceFromSpawn()
-            <= returnThreshold;
-    }
-
-
-    // =========================================================
-    // HEALTH
-    // =========================================================
-
-    public bool IsDead()
-    {
-        if (enemyHealth == null)
+        if (player == null)
             return false;
 
-        return enemyHealth.CurrentHealth <= 0;
+
+        if (AStarManager.Instance == null)
+            return false;
+
+
+        return AStarManager.Instance
+            .IsPositionWithinDetectionRadius(
+                transform.position,
+                player.position,
+                detectionRadius
+            );
     }
 
 
     // =========================================================
-    // MOVEMENT HELPERS
+    // MOVEMENT
     // =========================================================
 
     public void StopMoving()
     {
-        if (agent == null)
-            return;
-
-        agent.isStopped = true;
-        agent.ResetPath();
+        currentPath = null;
+        currentPathIndex = 0;
     }
 
 
-    public void ResumeMoving()
+    public bool SetPath(
+        List<Vector3> path)
     {
-        if (agent == null)
-            return;
+        if (path == null ||
+            path.Count == 0)
+        {
+            StopMoving();
 
-        agent.isStopped = false;
+            return false;
+        }
+
+
+        currentPath =
+            path;
+
+        currentPathIndex = 0;
+
+        return true;
     }
 
 
-    public void MoveTo(
-        Vector3 destination)
+    public void FollowCurrentPath()
     {
-        if (agent == null)
+        if (!HasPath)
             return;
 
-        if (!agent.isOnNavMesh)
-            return;
+        Vector3 target =
+            currentPath[currentPathIndex];
 
-        agent.isStopped = false;
-        agent.SetDestination(destination);
+        Debug.Log(
+            $"[PATH] {name} moving toward " +
+            $"index {currentPathIndex}/{currentPath.Count} " +
+            $"target={target} " +
+            $"current={transform.position}"
+        );
+
+        transform.position =
+            Vector3.MoveTowards(
+                transform.position,
+                target,
+                moveSpeed * Time.deltaTime
+            );
+
+        if (Vector3.Distance(
+                transform.position,
+                target) <= 0.01f)
+        {
+            transform.position = target;
+            currentPathIndex++;
+
+            Debug.Log(
+                $"[PATH] {name} reached waypoint. " +
+                $"Next index = {currentPathIndex}"
+            );
+        }
     }
 
 
     // =========================================================
-    // DEBUG
+    // DEBUG GIZMOS
     // =========================================================
 
     private void OnDrawGizmosSelected()
     {
-        // Detection range
-        Gizmos.color = Color.yellow;
-
-        Gizmos.DrawWireSphere(
-            transform.position,
-            detectionRange
-        );
+        if (AStarManager.Instance == null)
+            return;
 
 
-        // Attack range
-        Gizmos.color = Color.red;
+        // -----------------------------------------------------
+        // FIND ENEMY'S A* TILEMAP
+        // -----------------------------------------------------
 
-        Gizmos.DrawWireSphere(
-            transform.position,
-            attackRange
-        );
+        UnityEngine.Tilemaps.Tilemap tilemap =
+            AStarManager.Instance
+                .GetTilemapAtPosition(
+                    transform.position
+                );
 
 
-        // Spawn position
-        if (Application.isPlaying)
-        {
-            Gizmos.color = Color.blue;
+        if (tilemap == null)
+            return;
 
-            Gizmos.DrawWireSphere(
-                spawnPosition,
-                returnThreshold
+
+        Vector3Int enemyCell =
+            tilemap.WorldToCell(
+                transform.position
             );
+
+
+        // -----------------------------------------------------
+        // DETECTION CELLS
+        // -----------------------------------------------------
+
+        Gizmos.color =
+            new Color(
+                1f,
+                1f,
+                0f,
+                0.25f
+            );
+
+
+        for (int x = -detectionRadius;
+            x <= detectionRadius;
+            x++)
+        {
+            for (int y = -detectionRadius;
+                y <= detectionRadius;
+                y++)
+            {
+                int squaredDistance =
+                    x * x +
+                    y * y;
+
+
+                int squaredRadius =
+                    detectionRadius *
+                    detectionRadius;
+
+
+                if (squaredDistance >
+                    squaredRadius)
+                {
+                    continue;
+                }
+
+
+                Vector3Int cell =
+                    enemyCell +
+                    new Vector3Int(
+                        x,
+                        y,
+                        0
+                    );
+
+
+                if (!tilemap.HasTile(cell))
+                    continue;
+
+
+                Vector3 center =
+                    tilemap.GetCellCenterWorld(
+                        cell
+                    );
+
+
+                Gizmos.DrawCube(
+                    center,
+                    tilemap.cellSize
+                );
+            }
         }
     }
 }
