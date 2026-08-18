@@ -33,34 +33,21 @@ public class PlayerDash : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-
         movement = GetComponent<PlayerWASD>();
-
         stats = GetComponent<PlayerStats>();
 
         if (movement == null)
-        {
-            Debug.LogError(
-                "PlayerDash requires a PlayerWASD component."
-            );
-        }
+            Debug.LogError("PlayerDash requires a PlayerWASD component.");
 
         if (stats == null)
-        {
-            Debug.LogError(
-                "PlayerDash requires a PlayerStats component."
-            );
-        }
+            Debug.LogError("PlayerDash requires a PlayerStats component.");
     }
 
     private void OnEnable()
     {
         if (dashAction == null)
         {
-            Debug.LogWarning(
-                "PlayerDash has no Dash InputActionReference assigned."
-            );
-
+            Debug.LogWarning("PlayerDash has no Dash InputActionReference assigned.");
             return;
         }
 
@@ -70,8 +57,7 @@ public class PlayerDash : MonoBehaviour
 
     private void OnDisable()
     {
-        if (dashAction == null)
-            return;
+        if (dashAction == null) return;
 
         dashAction.action.performed -= OnDashPerformed;
         dashAction.action.Disable();
@@ -79,147 +65,81 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
-        // Keep track of the player's latest movement direction.
+        // Track latest movement direction
         if (movement != null)
         {
-            Vector2 currentMovement =
-                movement.MoveDirection;
-
+            Vector2 currentMovement = movement.MoveDirection;
             if (currentMovement.sqrMagnitude > 0.0001f)
-            {
-                lastMoveDirection =
-                    currentMovement.normalized;
-            }
+                lastMoveDirection = currentMovement.normalized;
         }
 
-        if (
-            isDashing &&
-            Time.time >=
-            dashTime + dashDuration
-        )
-        {
+        // End dash after duration
+        if (isDashing && Time.time >= dashTime + dashDuration)
             EndDash();
-        }
     }
 
-    private void OnDashPerformed(
-        InputAction.CallbackContext context)
+    private void OnDashPerformed(InputAction.CallbackContext context)
     {
         StartDash();
     }
 
     private void StartDash()
     {
-        if (isDashing)
-            return;
+        if (isDashing) return;
 
-        if (stats != null)
+        // ✅ Stamina check before dash
+        if (stats != null && !stats.UseStamina(dashCost))
         {
-            if (!stats.UseStamina(dashCost))
-            {
-                Debug.Log(
-                    "[PlayerDash] Not enough stamina."
-                );
-
-                return;
-            }
+            Debug.Log("[PlayerDash] Not enough stamina.");
+            return;
         }
 
-        Vector2 dashDirection =
-            lastMoveDirection;
+        Vector2 dashDirection = lastMoveDirection;
 
-        // -------------------------------------------------
-        // RAMP SUPPORT
-        // -------------------------------------------------
-
+        // Ramp support
         if (overrideMovement)
         {
-            Vector2 forward =
-                rampForward.normalized;
-
-            float amount =
-                Vector2.Dot(
-                    dashDirection,
-                    forward
-                );
-
-            dashDirection =
-                forward * amount;
+            Vector2 forward = rampForward.normalized;
+            float amount = Vector2.Dot(dashDirection, forward);
+            dashDirection = forward * amount;
         }
 
-        if (dashDirection.sqrMagnitude <= 0.0001f)
-            return;
-
+        if (dashDirection.sqrMagnitude <= 0.0001f) return;
         dashDirection.Normalize();
 
-        // -------------------------------------------------
-        // START DASH
-        // -------------------------------------------------
-
+        // ✅ Start dash
         isDashing = true;
+        dashTime = Time.time;
 
-        dashTime =
-            Time.time;
+        if (movement != null) movement.LockMovement();
 
-        // Tell PlayerWASD to stop using MovePosition().
-        if (movement != null)
-        {
-            movement.LockMovement();
-        }
+        rb.linearVelocity = Vector2.zero; // clear existing movement
+        rb.linearVelocity = dashDirection * dashSpeed;
 
-        // Clear any existing movement first.
-        rb.linearVelocity =
-            Vector2.zero;
-
-        // Apply dash velocity.
-        rb.linearVelocity =
-            dashDirection * dashSpeed;
-
-        Debug.Log(
-            $"[PlayerDash] Dash triggered! Direction: {dashDirection}"
-        );
+        Debug.Log($"[PlayerDash] Dash triggered! Direction: {dashDirection}");
     }
 
     private void EndDash()
     {
         isDashing = false;
+        rb.linearVelocity = Vector2.zero;
 
-        // Stop the dash.
-        rb.linearVelocity =
-            Vector2.zero;
+        if (movement != null) movement.UnlockMovement();
 
-        // Give Rigidbody control back to PlayerWASD.
-        if (movement != null)
-        {
-            movement.UnlockMovement();
-        }
-
-        Debug.Log(
-            "[PlayerDash] Dash ended."
-        );
+        Debug.Log("[PlayerDash] Dash ended.");
     }
 
-    // -------------------------------------------------
-    // RAMP METHODS
-    // -------------------------------------------------
-
+    // Ramp methods
     public void EnterRamp(Vector2 forward)
     {
         overrideMovement = true;
-        rampForward =
-            forward.normalized;
-
-        Debug.Log(
-            $"[PlayerDash] Entered ramp. Forward: {rampForward}"
-        );
+        rampForward = forward.normalized;
+        Debug.Log($"[PlayerDash] Entered ramp. Forward: {rampForward}");
     }
 
     public void ExitRamp()
     {
         overrideMovement = false;
-
-        Debug.Log(
-            "[PlayerDash] Exited ramp."
-        );
+        Debug.Log("[PlayerDash] Exited ramp.");
     }
 }

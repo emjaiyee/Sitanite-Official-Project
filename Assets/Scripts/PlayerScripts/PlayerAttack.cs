@@ -7,11 +7,12 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private InputActionReference attackAction;
 
     private PlayerEquipment equipment;
+    private PlayerStats playerStats; // ✅ added reference for future stamina/mana checks
 
     private void Awake()
     {
-        equipment =
-            GetComponent<PlayerEquipment>();
+        equipment = GetComponent<PlayerEquipment>();
+        playerStats = GetComponent<PlayerStats>(); // ✅ grab PlayerStats
 
         if (equipment == null)
         {
@@ -29,7 +30,6 @@ public class PlayerAttack : MonoBehaviour
             Debug.LogWarning(
                 "PlayerAttack has no Attack InputActionReference assigned."
             );
-
             return;
         }
 
@@ -46,18 +46,15 @@ public class PlayerAttack : MonoBehaviour
         attackAction.action.Disable();
     }
 
-    private void OnAttackPerformed(
-        InputAction.CallbackContext context)
+    private void OnAttackPerformed(InputAction.CallbackContext context)
     {
         Attack();
     }
 
     private void Attack()
     {
-        if (
-            equipment != null &&
-            equipment.CurrentWeapon != null
-        )
+        // ✅ Normal melee attack does NOT consume stamina
+        if (equipment != null && equipment.CurrentWeapon != null)
         {
             equipment.CurrentWeapon.Attack();
         }

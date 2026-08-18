@@ -65,14 +65,16 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             );
     }
 
-    private void Die()
-    {
-        Debug.Log(
-            $"[EnemyHealth] {gameObject.name} died"
-        );
+   private void Die()
+{
+    Debug.Log($"[EnemyHealth] {gameObject.name} died");
+    OnEnemyDied?.Invoke(gameObject);
 
-        OnEnemyDied?.Invoke(gameObject);
+    // EXP GAIN TO PAG NAMATAY
+    PlayerExperience playerXP = FindFirstObjectByType<PlayerExperience>();
+    if (playerXP != null)
+        playerXP.GainXP(50); // award XP per enemy
 
-        Destroy(gameObject);
-    }
+    Destroy(gameObject);
+}
 }
