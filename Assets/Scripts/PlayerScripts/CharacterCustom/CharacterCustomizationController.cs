@@ -14,10 +14,12 @@ public class CharacterCustomizationController : MonoBehaviour
     [Header("Male Defaults")]
     [SerializeField] private CharacterPartDefinition maleBody;
     [SerializeField] private CharacterPartDefinition maleEyes;
+    [SerializeField] private CharacterPartDefinition maleHair;
 
     [Header("Female Defaults")]
     [SerializeField] private CharacterPartDefinition femaleBody;
     [SerializeField] private CharacterPartDefinition femaleEyes;
+    [SerializeField] private CharacterPartDefinition femaleHair;
 
     private void Start()
     {
@@ -38,7 +40,7 @@ public class CharacterCustomizationController : MonoBehaviour
 
         CharacterAppearance appearance = characterRenderer.Appearance;
 
-        Debug.Log($"========================================");
+        Debug.Log("========================================");
         Debug.Log($"SET GENDER CALLED: {gender}");
         Debug.Log($"Previous Gender: {appearance.gender}");
 
@@ -50,9 +52,11 @@ public class CharacterCustomizationController : MonoBehaviour
 
                 Debug.Log($"Applying Male Body: {maleBody}");
                 Debug.Log($"Applying Male Eyes: {maleEyes}");
+                Debug.Log($"Applying Male Hair: {maleHair}");
 
                 appearance.body = maleBody;
                 appearance.eyes = maleEyes;
+                appearance.hair = maleHair;
 
                 break;
 
@@ -60,9 +64,11 @@ public class CharacterCustomizationController : MonoBehaviour
 
                 Debug.Log($"Applying Female Body: {femaleBody}");
                 Debug.Log($"Applying Female Eyes: {femaleEyes}");
+                Debug.Log($"Applying Female Hair: {femaleHair}");
 
                 appearance.body = femaleBody;
                 appearance.eyes = femaleEyes;
+                appearance.hair = femaleHair;
 
                 break;
         }
@@ -70,11 +76,12 @@ public class CharacterCustomizationController : MonoBehaviour
         Debug.Log($"New Gender: {appearance.gender}");
         Debug.Log($"New Body: {appearance.body}");
         Debug.Log($"New Eyes: {appearance.eyes}");
+        Debug.Log($"New Hair: {appearance.hair}");
 
         RefreshAppearance();
 
         Debug.Log("CharacterRenderer.Refresh() called.");
-        Debug.Log($"========================================");
+        Debug.Log("========================================");
     }
 
     public CharacterGender GetGender()
@@ -89,8 +96,8 @@ public class CharacterCustomizationController : MonoBehaviour
     }
 
     public void SetEyes(
-    CharacterPartDefinition maleEyes,
-    CharacterPartDefinition femaleEyes)
+        CharacterPartDefinition maleEyes,
+        CharacterPartDefinition femaleEyes)
     {
         CharacterAppearance appearance = characterRenderer.Appearance;
 
@@ -131,9 +138,10 @@ public class CharacterCustomizationController : MonoBehaviour
         characterRenderer.Appearance.legs = legs;
         RefreshAppearance();
     }
+
     public void SetSkinTone(
-    CharacterPartDefinition maleSkinTone,
-    CharacterPartDefinition femaleSkinTone)
+        CharacterPartDefinition maleSkinTone,
+        CharacterPartDefinition femaleSkinTone)
     {
         CharacterAppearance appearance = characterRenderer.Appearance;
 
@@ -150,10 +158,12 @@ public class CharacterCustomizationController : MonoBehaviour
 
         RefreshAppearance();
     }
+
     public CharacterAppearance GetAppearance()
     {
         return characterRenderer.Appearance;
     }
+
     private void RefreshAppearance()
     {
         characterRenderer.Refresh();

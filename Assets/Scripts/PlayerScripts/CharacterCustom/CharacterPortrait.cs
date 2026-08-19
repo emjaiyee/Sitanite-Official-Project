@@ -3,33 +3,70 @@ using UnityEngine.UI;
 
 public class CharacterPortrait : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private CharacterCustomizationController customizationController;
-
     [Header("Portrait Renderers")]
     [SerializeField] private Image bodyPortrait;
     [SerializeField] private Image eyesPortrait;
     [SerializeField] private Image hairPortrait;
     [SerializeField] private Image torsoPortrait;
-    [SerializeField] private Image legsPortrait;
     [SerializeField] private Image headwearPortrait;
+
+    private CharacterCustomizationController customizationController;
 
     private void Start()
     {
-        Refresh();
-    }
+        FindCustomizationController();
 
-    public void Refresh()
-    {
         if (customizationController == null)
         {
             Debug.LogError(
-                "CharacterPortrait: CharacterCustomizationController is not assigned.",
+                "CharacterPortrait: Could not find CharacterCustomizationController.",
                 this
             );
 
             return;
         }
+
+        customizationController.OnAppearanceChanged += Refresh;
+
+        Refresh();
+    }
+
+    private void OnDestroy()
+    {
+        if (customizationController != null)
+        {
+            customizationController.OnAppearanceChanged -= Refresh;
+        }
+    }
+
+    private void FindCustomizationController()
+    {
+        if (Player.Instance == null)
+        {
+            Debug.LogError(
+                "CharacterPortrait: Player.Instance is NULL!",
+                this
+            );
+
+            return;
+        }
+
+        customizationController =
+            Player.Instance.GetComponent<CharacterCustomizationController>();
+
+        if (customizationController == null)
+        {
+            Debug.LogError(
+                "CharacterPortrait: CharacterCustomizationController not found on Player!",
+                Player.Instance
+            );
+        }
+    }
+
+    public void Refresh()
+    {
+        if (customizationController == null)
+            return;
 
         CharacterAppearance appearance =
             customizationController.GetAppearance();
@@ -38,7 +75,6 @@ public class CharacterPortrait : MonoBehaviour
         SetPortrait(eyesPortrait, appearance.eyes);
         SetPortrait(hairPortrait, appearance.hair);
         SetPortrait(torsoPortrait, appearance.torso);
-        SetPortrait(legsPortrait, appearance.legs);
         SetPortrait(headwearPortrait, appearance.headwear);
     }
 
@@ -58,20 +94,5 @@ public class CharacterPortrait : MonoBehaviour
 
         image.sprite = definition.portrait;
         image.enabled = true;
-    }
-    private void OnEnable()
-    {
-        if (customizationController != null)
-        {
-            customizationController.OnAppearanceChanged += Refresh;
-        }
-    }
-
-    private void OnDisable()
-    {
-        if (customizationController != null)
-        {
-            customizationController.OnAppearanceChanged -= Refresh;
-        }
     }
 }

@@ -2,20 +2,30 @@ using UnityEngine;
 
 public class EyeButton : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private CharacterCustomizationController customizationController;
-
     [Header("Eye Set")]
     [SerializeField] private CharacterPartDefinition maleEyes;
     [SerializeField] private CharacterPartDefinition femaleEyes;
 
     public void SelectEyes()
     {
+        if (Player.Instance == null)
+        {
+            Debug.LogError(
+                $"EyeButton '{name}': Player.Instance is NULL.",
+                this
+            );
+
+            return;
+        }
+
+        CharacterCustomizationController customizationController =
+            Player.Instance.GetComponent<CharacterCustomizationController>();
+
         if (customizationController == null)
         {
             Debug.LogError(
-                $"EyeButton '{name}' has no CharacterCustomizationController assigned.",
-                this
+                "EyeButton: CharacterCustomizationController not found on Player.",
+                Player.Instance
             );
 
             return;

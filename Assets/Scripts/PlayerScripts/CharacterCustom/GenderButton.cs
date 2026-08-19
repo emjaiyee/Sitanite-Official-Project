@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class GenderButton : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private CharacterCustomizationController customizationController;
     [SerializeField] private Image buttonImage;
 
     [Header("Gender")]
@@ -14,17 +13,22 @@ public class GenderButton : MonoBehaviour
     [SerializeField] private Sprite activeSprite;
     [SerializeField] private Sprite inactiveSprite;
 
+    private CharacterCustomizationController customizationController;
+
     private void Start()
     {
+        FindCustomizationController();
         RefreshVisual();
     }
 
     public void SelectGender()
     {
+        FindCustomizationController();
+
         if (customizationController == null)
         {
             Debug.LogError(
-                $"GenderButton '{name}' has no CharacterCustomizationController assigned.",
+                $"GenderButton '{name}': CharacterCustomizationController could not be found.",
                 this
             );
 
@@ -34,18 +38,15 @@ public class GenderButton : MonoBehaviour
         Debug.Log($"Gender button selected: {gender}");
 
         customizationController.SetGender(gender);
-
-        GenderButtonGroup group =
-            GetComponentInParent<GenderButtonGroup>();
-
-        if (group != null)
-        {
-            group.Refresh();
-        }
     }
 
     public void RefreshVisual()
     {
+        if (customizationController == null)
+        {
+            FindCustomizationController();
+        }
+
         if (customizationController == null || buttonImage == null)
             return;
 
@@ -55,5 +56,29 @@ public class GenderButton : MonoBehaviour
         buttonImage.sprite = isActive
             ? activeSprite
             : inactiveSprite;
+    }
+
+    private void FindCustomizationController()
+    {
+        if (Player.Instance == null)
+        {
+            Debug.LogError(
+                $"GenderButton '{name}': Player.Instance is NULL.",
+                this
+            );
+
+            return;
+        }
+
+        customizationController =
+            Player.Instance.GetComponent<CharacterCustomizationController>();
+
+        if (customizationController == null)
+        {
+            Debug.LogError(
+                $"GenderButton '{name}': CharacterCustomizationController not found on Player.",
+                Player.Instance
+            );
+        }
     }
 }
