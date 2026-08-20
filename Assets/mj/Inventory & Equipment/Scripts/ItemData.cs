@@ -1,7 +1,42 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
+
 /// <summary>
-/// Categorizes equipment slot for wearable or holdable inventory items.
+/// Type of stats that equipments can have.
+/// </summary>
+public enum StatType
+{
+    Health,
+    Mana,
+    MoveSpeed,
+    Defense,
+    Attack
+}
+
+/// <summary>
+/// Determines how the stat calculation applies.
+/// </summary>
+public enum StatModifierType
+{
+    Flat,       
+    Percent     
+}
+
+/// <summary>
+/// Individual stat modification entry.
+/// </summary>
+[Serializable]
+public struct EquipmentStat
+{
+    public StatType statType;
+    public StatModifierType modifierType;
+    public float value;
+}
+
+/// <summary>
+/// Type of equipments that the player can wear or hold.
 /// </summary>
 public enum EquipmentType
 {
@@ -39,6 +74,10 @@ public class ItemData : ScriptableObject
     [Tooltip("Target equipment slot.")]
     [SerializeField] private EquipmentType equipmentType = EquipmentType.None;
 
+    [Header("Stat Modifiers")]
+    [Tooltip("Attributes added or multiplied when this item is equipped.")]
+    [SerializeField] private List<EquipmentStat> statModifiers = new List<EquipmentStat>();
+
     [Header("Item Grid Layout")]
     [Tooltip("2D footprint dimensions in grid cells (X = Width, Y = Height).")]
     public Vector2Int gridSize = new Vector2Int(1, 1);
@@ -60,6 +99,9 @@ public class ItemData : ScriptableObject
     #region Properties
     /// <summary>Get designated equipment</summary>
     public EquipmentType EquipmentType => equipmentType;
+
+    /// <summary>Read-only collection of stat modifiers</summary>
+    public IReadOnlyList<EquipmentStat> StatModifiers => statModifiers;
     #endregion
 
     #region Lifecycle
