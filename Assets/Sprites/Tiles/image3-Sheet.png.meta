@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bbadda283514d88469cd86dd375d181f
+guid: f2a7512b42a3d7e459b57068cce673d6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8180437400112260788
-    second: PrototypeGameTilesTemplate_0
+      213: 4688900002309477435
+    second: image3-Sheet_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -73,7 +73,7 @@ TextureImporter:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -86,13 +86,13 @@ TextureImporter:
   - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
-    resizeAlgorithm: 1
-    textureFormat: 25
+    resizeAlgorithm: 0
+    textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
-    overridden: 1
+    overridden: 0
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
@@ -112,9 +112,9 @@ TextureImporter:
   - serializedVersion: 4
     buildTarget: WindowsStoreApps
     maxTextureSize: 2048
-    resizeAlgorithm: 1
+    resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -126,7 +126,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_0
+      name: image3-Sheet_0
       rect:
         serializedVersion: 2
         x: 0
@@ -138,24 +138,17 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape:
-      - - {x: 16, y: -9}
-        - {x: 16, y: 7}
-        - {x: 0, y: 0}
-        - {x: -16, y: 8}
-        - {x: -16, y: -9}
-        - {x: -2, y: -16}
-        - {x: 2, y: -16}
-      tessellationDetail: 0
+      physicsShape: []
+      tessellationDetail: -1
       bones: []
-      spriteID: c491df2c68f397e80800000000000000
-      internalID: -8180437400112260788
+      spriteID: b341cf095b1521140800000000000000
+      internalID: 4688900002309477435
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_1
+      name: image3-Sheet_1
       rect:
         serializedVersion: 2
         x: 32
@@ -170,14 +163,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a415a017bdf6624c92b10771122d830
-      internalID: 1134739162
+      spriteID: f6a3b0470ba8bb9429e139790e6670bb
+      internalID: -1609324735
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_2
+      name: image3-Sheet_2
       rect:
         serializedVersion: 2
         x: 64
@@ -192,14 +185,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 99742ac57113f474f8b78fcd721c0328
-      internalID: -840084538
+      spriteID: d8b795db3e24ddc43870a34542c9002d
+      internalID: 459874025
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_3
+      name: image3-Sheet_3
       rect:
         serializedVersion: 2
         x: 96
@@ -214,14 +207,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aebc220a31254584dbc468f4c7491b14
-      internalID: -548889476
+      spriteID: 65d413f388e976c4db35a7bc422f6105
+      internalID: -1437674589
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_4
+      name: image3-Sheet_4
       rect:
         serializedVersion: 2
         x: 128
@@ -236,14 +229,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ce6d126fc32bb914ca130217be6c3ee2
-      internalID: -566862697
+      spriteID: f8d6317209f077e4eb1659088b45c0d5
+      internalID: -563583667
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_5
+      name: image3-Sheet_5
       rect:
         serializedVersion: 2
         x: 0
@@ -255,28 +248,17 @@ TextureImporter:
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape:
-      - - {x: 16, y: -9}
-        - {x: 16, y: 8}
-        - {x: 12, y: 7}
-        - {x: 12, y: 2}
-        - {x: 8, y: 1}
-        - {x: 8, y: -4}
-        - {x: 4, y: -5}
-        - {x: 4, y: -10}
-        - {x: 0, y: -11}
-        - {x: 0, y: -16}
-        - {x: 2, y: -16}
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c600fce169d514c40967875057f9167f
-      internalID: 767659455
+      spriteID: 2b6674dfab9931148a1cab73eaa4cd6a
+      internalID: 1732138198
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_6
+      name: image3-Sheet_6
       rect:
         serializedVersion: 2
         x: 32
@@ -291,14 +273,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 11a01f118118b424791b9b24f43373c8
-      internalID: 1484720849
+      spriteID: 80bf39fd13957914e91243c087700b0f
+      internalID: 1359463975
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_7
+      name: image3-Sheet_7
       rect:
         serializedVersion: 2
         x: 64
@@ -313,14 +295,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 74a1e2629005f4341bce77cb989bb6c5
-      internalID: -731164266
+      spriteID: 378d83f934578f44e94e1b75b66ce33b
+      internalID: -73217351
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_8
+      name: image3-Sheet_8
       rect:
         serializedVersion: 2
         x: 96
@@ -335,14 +317,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 858fd018175ac094faf80dfb932a2942
-      internalID: 1102412459
+      spriteID: c790134b87a5a3248a563b51920735f8
+      internalID: -1085816651
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_9
+      name: image3-Sheet_9
       rect:
         serializedVersion: 2
         x: 128
@@ -357,14 +339,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9e4610bb197e50941a379c001929480c
-      internalID: 743890752
+      spriteID: 7152177c6980a7c488ccd95e3e4b3eb8
+      internalID: -1761481538
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_10
+      name: image3-Sheet_10
       rect:
         serializedVersion: 2
         x: 0
@@ -379,14 +361,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 58ba454906a5b374d8c53db71f0e1e45
-      internalID: 968499921
+      spriteID: 39f887659ca5641489ba9c2fd88f129a
+      internalID: -514229973
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_11
+      name: image3-Sheet_11
       rect:
         serializedVersion: 2
         x: 32
@@ -401,14 +383,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 10dc34b053e604d40bcc0a0fc95c9ece
-      internalID: -1676499628
+      spriteID: 4d3871c5067196441ac229f39da43484
+      internalID: 735127336
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_12
+      name: image3-Sheet_12
       rect:
         serializedVersion: 2
         x: 64
@@ -423,14 +405,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 879b07de4a3ab2e41a3440afc5988f62
-      internalID: 1826441365
+      spriteID: 699e04887201c6e46aa01c05acea16f8
+      internalID: 1860263469
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_13
+      name: image3-Sheet_13
       rect:
         serializedVersion: 2
         x: 96
@@ -445,14 +427,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 58e40bd3489748441a688430e00d3d92
-      internalID: -2119934546
+      spriteID: 747f483d1076f6c4eb5b332a41f5a1bb
+      internalID: 1838814184
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_14
+      name: image3-Sheet_14
       rect:
         serializedVersion: 2
         x: 128
@@ -467,14 +449,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8180fc1683ee6e94887e930683ed35c4
-      internalID: 240348368
+      spriteID: 87695c07a89878b48a6cc97e3b39259c
+      internalID: -1096547735
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_15
+      name: image3-Sheet_15
       rect:
         serializedVersion: 2
         x: 0
@@ -489,14 +471,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 15f91f2fdd717dd48b35b2b95895d5a9
-      internalID: 1054003229
+      spriteID: 7bbecd7758d2fa84787c019636039cda
+      internalID: -386014370
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_16
+      name: image3-Sheet_16
       rect:
         serializedVersion: 2
         x: 32
@@ -511,14 +493,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f71ff2a2043631c4d976f38dbd212e81
-      internalID: -1827682983
+      spriteID: 2a20db57e0a624d4da356c012d8d87b3
+      internalID: -1541012185
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_17
+      name: image3-Sheet_17
       rect:
         serializedVersion: 2
         x: 64
@@ -533,14 +515,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d4a60b0206016a84e8bafa9cef0bae1e
-      internalID: -53271743
+      spriteID: 17b55d2f10da4a04a9cc5aa067c30440
+      internalID: 1033161960
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_18
+      name: image3-Sheet_18
       rect:
         serializedVersion: 2
         x: 96
@@ -555,14 +537,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 64cdef9b38f1bc7459e536125595ee64
-      internalID: -1012303399
+      spriteID: 066034b0de764de4da67a2367dad1136
+      internalID: 1225705827
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: PrototypeGameTilesTemplate_19
+      name: image3-Sheet_19
       rect:
         serializedVersion: 2
         x: 128
@@ -577,8 +559,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1f9441e6e9b350047a3b747f75c27797
-      internalID: 94066487
+      spriteID: 439a207fe937f2f40a02e66f88e0347f
+      internalID: 1238721698
       vertices: []
       indices: 
       edges: []
@@ -587,40 +569,38 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: c04437e39834dca409394598f94c9309
+    spriteID: ba3b30006c1b7f649ad4d6d827d4a646
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
-    secondaryTextures:
-    - texture: {fileID: 2800000, guid: f2a7512b42a3d7e459b57068cce673d6, type: 3}
-      name: NormalMap
+    secondaryTextures: []
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.25},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      PrototypeGameTilesTemplate_0: -8180437400112260788
-      PrototypeGameTilesTemplate_1: 1134739162
-      PrototypeGameTilesTemplate_10: 968499921
-      PrototypeGameTilesTemplate_11: -1676499628
-      PrototypeGameTilesTemplate_12: 1826441365
-      PrototypeGameTilesTemplate_13: -2119934546
-      PrototypeGameTilesTemplate_14: 240348368
-      PrototypeGameTilesTemplate_15: 1054003229
-      PrototypeGameTilesTemplate_16: -1827682983
-      PrototypeGameTilesTemplate_17: -53271743
-      PrototypeGameTilesTemplate_18: -1012303399
-      PrototypeGameTilesTemplate_19: 94066487
-      PrototypeGameTilesTemplate_2: -840084538
-      PrototypeGameTilesTemplate_3: -548889476
-      PrototypeGameTilesTemplate_4: -566862697
-      PrototypeGameTilesTemplate_5: 767659455
-      PrototypeGameTilesTemplate_6: 1484720849
-      PrototypeGameTilesTemplate_7: -731164266
-      PrototypeGameTilesTemplate_8: 1102412459
-      PrototypeGameTilesTemplate_9: 743890752
+      image3-Sheet_0: 4688900002309477435
+      image3-Sheet_1: -1609324735
+      image3-Sheet_10: -514229973
+      image3-Sheet_11: 735127336
+      image3-Sheet_12: 1860263469
+      image3-Sheet_13: 1838814184
+      image3-Sheet_14: -1096547735
+      image3-Sheet_15: -386014370
+      image3-Sheet_16: -1541012185
+      image3-Sheet_17: 1033161960
+      image3-Sheet_18: 1225705827
+      image3-Sheet_19: 1238721698
+      image3-Sheet_2: 459874025
+      image3-Sheet_3: -1437674589
+      image3-Sheet_4: -563583667
+      image3-Sheet_5: 1732138198
+      image3-Sheet_6: 1359463975
+      image3-Sheet_7: -73217351
+      image3-Sheet_8: -1085816651
+      image3-Sheet_9: -1761481538
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
