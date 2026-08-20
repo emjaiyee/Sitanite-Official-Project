@@ -1,19 +1,40 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// UI view component for each individual equipment slots.
+/// Handles user pointer interactions, item swap logic, and visual state sync.
+/// </summary>
 public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
 {
+    #region Serialized Fields
+    [Header("Slot Configuration")]
+    [Tooltip("Type of equipment slot.")]
     [SerializeField] private EquipmentType slotType;
-    [SerializeField] private RectTransform slotRectTransform;
-    [SerializeField] private float slotSize = 64f;
 
+    [Tooltip("RectTransform container holding the item visual within slot.")]
+    [SerializeField] private RectTransform slotRectTransform;
+
+    [Tooltip("Target dimensions (in pixels) for item scaling within the slot.")]
+    [SerializeField] private float slotSize = 64f;
+    #endregion
+
+    #region Private Fields
+    private RectTransform equippedVisual;
+    #endregion
+
+    #region Properties
+    /// <summary>Get assigned equipment slot type constraint.</summary>
     public EquipmentType SlotType => slotType;
+
+    /// <summary>Get item currently equipped in this slot from EquipmentManager.</summary>
     public InventoryItem EquippedItem => EquipmentManager.Instance != null 
         ? EquipmentManager.Instance.GetEquippedItem(slotType) 
         : null;
+    #endregion
 
-    private RectTransform equippedVisual;
-
+    #region Lifecycle
     private void Awake()
     {
         if (slotRectTransform == null) slotRectTransform = GetComponent<RectTransform>();
@@ -30,24 +51,14 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
         UnbindEvents();
         ClearVisualOnly();
     }
+    #endregion
 
-    private void BindEvents()
-    {
-        if (EquipmentManager.Instance != null)
-        {
-            EquipmentManager.Instance.OnEquipmentChanged -= HandleEquipmentChanged;
-            EquipmentManager.Instance.OnEquipmentChanged += HandleEquipmentChanged;
-        }
-    }
-
-    private void UnbindEvents()
-    {
-        if (EquipmentManager.Instance != null)
-        {
-            EquipmentManager.Instance.OnEquipmentChanged -= HandleEquipmentChanged;
-        }
-    }
-
+    #region Input Handling
+    /// <summary>
+    /// Event handler for pointer click inputs on the equipment slot.
+    /// Handles equipping held items, swapping equipment, or unequipping items.
+    /// </summary>
+    /// <param name="eventData">Pointer event containing button input.</param>
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
@@ -68,11 +79,54 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
             UnequipItem();
         }
     }
+    #endregion
 
+    #region Public API
+    /// <summary>
+    /// Checks if given item matches this slot's designated equipment type.
+    /// </summary>
+    /// <param name="item">Item instance to evaluate.</param>
+    /// <returns>True if item is valid and compatible with this slot type.</returns>
     public bool CanEquip(InventoryItem item)
     {
         if (item == null || item.Data == null) return false;
         return item.Data.EquipmentType == slotType;
+    }
+
+    /// <summary>
+    /// Re-synchronizes the visual state of the slot with the active equipment data from manager.
+    /// </summary>
+    public void SyncVisualFromManager()
+    {
+        ClearVisualOnly();
+
+        if (EquipmentManager.Instance == null) return;
+
+        InventoryItem item = EquipmentManager.Instance.GetEquippedItem(slotType);
+        if (item != null)
+        {
+            equippedVisual = CreateAndSetupVisual(item);
+            SnapVisualToSlot(equippedVisual, item);
+        }
+    }
+    #endregion
+
+    #region Internal Helpers
+    private void BindEvents()
+    {
+        if (EquipmentManager.Instance != null)
+        {
+            EquipmentManager.Instance.OnEquipmentChanged -= HandleEquipmentChanged;
+            EquipmentManager.Instance.OnEquipmentChanged += HandleEquipmentChanged;
+        }
+    }
+
+    private void UnbindEvents()
+    {
+        if (EquipmentManager.Instance != null)
+        {
+            EquipmentManager.Instance.OnEquipmentChanged -= HandleEquipmentChanged;
+        }
     }
 
     private void EquipHeldItem(InventoryItem newItem)
@@ -140,20 +194,6 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    public void SyncVisualFromManager()
-    {
-        ClearVisualOnly();
-
-        if (EquipmentManager.Instance == null) return;
-
-        InventoryItem item = EquipmentManager.Instance.GetEquippedItem(slotType);
-        if (item != null)
-        {
-            equippedVisual = CreateAndSetupVisual(item);
-            SnapVisualToSlot(equippedVisual, item);
-        }
-    }
-
     private void SnapVisualToSlot(RectTransform visual, InventoryItem item)
     {
         if (visual == null) return;
@@ -209,4 +249,5 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
             }
         }
     }
+    #endregion
 }
