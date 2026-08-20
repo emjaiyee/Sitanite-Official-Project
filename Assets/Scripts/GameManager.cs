@@ -505,7 +505,7 @@ public class GameManager : MonoBehaviour
     // =====================================================================
 
     [Header("Class Selection (added)")]
-    [SerializeField] private PlayerClass selectedClass = PlayerClass.Melee;
+    [SerializeField] private PlayerClass selectedClass = PlayerClass.Warrior;
 
     public PlayerClass SelectedClass => selectedClass;
 

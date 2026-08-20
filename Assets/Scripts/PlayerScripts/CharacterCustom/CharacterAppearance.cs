@@ -5,6 +5,7 @@ public class CharacterAppearance
 {
     [Header("Character")]
     public CharacterGender gender;
+    public PlayerClass playerClass;
 
     [Header("Appearance")]
     public CharacterPartDefinition body;

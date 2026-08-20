@@ -1,22 +1,31 @@
 fileFormatVersion: 2
-guid: 33963261de6e25c4aa65fe3738555437
+guid: 8bf88daf3d8f3d04e81698a3961a46c6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7076380597899680806
-    second: maleskintoneportrait-Sheet_0
+      213: -7910566832851248561
+    second: femalehair1_0
   - first:
-      213: 448035432494221722
-    second: maleskintoneportrait-Sheet_1
+      213: 876932553035469653
+    second: femalehair1_1
   - first:
-      213: -3696798148797018
-    second: maleskintoneportrait-Sheet_2
+      213: 6949421471393225080
+    second: femalehair1_2
   - first:
-      213: 6033555323950121588
-    second: maleskintoneportrait-Sheet_3
+      213: 3510769851249203005
+    second: femalehair1_3
   - first:
-      213: 110543974029291397
-    second: maleskintoneportrait-Sheet_4
+      213: -1932240557988440418
+    second: femalehair1_4
+  - first:
+      213: 5606650513727280056
+    second: femalehair1_5
+  - first:
+      213: -6094048640503122919
+    second: femalehair1_6
+  - first:
+      213: 1946218379559763966
+    second: femalehair1_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -125,13 +134,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: maleskintoneportrait-Sheet_0
+      name: femalehair1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 128
-        height: 128
+        width: 32
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,20 +149,86 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ad329b6a655abcd90800000000000000
-      internalID: -7076380597899680806
+      spriteID: f4a1ae3a065083290800000000000000
+      internalID: -7910566832851248561
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: maleskintoneportrait-Sheet_1
+      name: femalehair1_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 553d7a3c28d7b2c00800000000000000
+      internalID: 876932553035469653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: femalehair1_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8799dd4320e417060800000000000000
+      internalID: 6949421471393225080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: femalehair1_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d371cdf2492c8b030800000000000000
+      internalID: 3510769851249203005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: femalehair1_4
       rect:
         serializedVersion: 2
         x: 128
         y: 0
-        width: 128
-        height: 128
+        width: 32
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,20 +237,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a994b902addb73600800000000000000
-      internalID: 448035432494221722
+      spriteID: e961f70337d4f25e0800000000000000
+      internalID: -1932240557988440418
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: maleskintoneportrait-Sheet_2
+      name: femalehair1_5
       rect:
         serializedVersion: 2
-        x: 256
+        x: 160
         y: 0
-        width: 128
-        height: 128
+        width: 32
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -184,20 +259,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6add88b18cdd2fff0800000000000000
-      internalID: -3696798148797018
+      spriteID: 8b3d97adfe2decd40800000000000000
+      internalID: 5606650513727280056
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: maleskintoneportrait-Sheet_3
+      name: femalehair1_6
       rect:
         serializedVersion: 2
-        x: 384
+        x: 192
         y: 0
-        width: 128
-        height: 128
+        width: 32
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -206,20 +281,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 472c6b8999e7bb350800000000000000
-      internalID: 6033555323950121588
+      spriteID: 914fbd29c079d6ba0800000000000000
+      internalID: -6094048640503122919
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: maleskintoneportrait-Sheet_4
+      name: femalehair1_7
       rect:
         serializedVersion: 2
-        x: 512
+        x: 224
         y: 0
-        width: 128
-        height: 128
+        width: 32
+        height: 48
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -228,8 +303,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 58f6310a82bb88100800000000000000
-      internalID: 110543974029291397
+      spriteID: efffef00e4b520b10800000000000000
+      internalID: 1946218379559763966
       vertices: []
       indices: 
       edges: []
@@ -238,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 60355ece2658c5149bbfa1b008c16960
+    spriteID: ab9888a7d9a8ad047bf8d5538c09c642
     internalID: 0
     vertices: []
     indices: 
@@ -248,13 +323,16 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":128.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":48.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      maleskintoneportrait-Sheet_0: -7076380597899680806
-      maleskintoneportrait-Sheet_1: 448035432494221722
-      maleskintoneportrait-Sheet_2: -3696798148797018
-      maleskintoneportrait-Sheet_3: 6033555323950121588
-      maleskintoneportrait-Sheet_4: 110543974029291397
+      femalehair1_0: -7910566832851248561
+      femalehair1_1: 876932553035469653
+      femalehair1_2: 6949421471393225080
+      femalehair1_3: 3510769851249203005
+      femalehair1_4: -1932240557988440418
+      femalehair1_5: 5606650513727280056
+      femalehair1_6: -6094048640503122919
+      femalehair1_7: 1946218379559763966
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

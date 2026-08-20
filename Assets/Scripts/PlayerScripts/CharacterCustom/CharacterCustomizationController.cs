@@ -21,9 +21,28 @@ public class CharacterCustomizationController : MonoBehaviour
     [SerializeField] private CharacterPartDefinition femaleEyes;
     [SerializeField] private CharacterPartDefinition femaleHair;
 
+    [Header("Starting Class")]
+    [SerializeField] private PlayerClass startingClass = PlayerClass.Warrior;
+
+    [Header("Melee Outfit")]
+    [SerializeField] private HeadwearDefinition warriorHeadwear;
+    [SerializeField] private CharacterPartDefinition warriorTorso;
+    [SerializeField] private CharacterPartDefinition warriorLegs;
+
+    [Header("Ranger Outfit")]
+    [SerializeField] private HeadwearDefinition rangerHeadwear;
+    [SerializeField] private CharacterPartDefinition rangerTorso;
+    [SerializeField] private CharacterPartDefinition rangerLegs;
+
+    [Header("Mage Outfit")]
+    [SerializeField] private HeadwearDefinition mageHeadwear;
+    [SerializeField] private CharacterPartDefinition mageTorso;
+    [SerializeField] private CharacterPartDefinition mageLegs;
+
     private void Start()
     {
         SetGender(startingGender);
+        SetClass(startingClass);
     }
 
     public void SetGender(CharacterGender gender)
@@ -87,6 +106,11 @@ public class CharacterCustomizationController : MonoBehaviour
     public CharacterGender GetGender()
     {
         return characterRenderer.Appearance.gender;
+    }
+
+    public PlayerClass GetClass()
+    {
+        return characterRenderer.Appearance.playerClass;
     }
 
     public void SetBody(CharacterPartDefinition body)
@@ -153,6 +177,53 @@ public class CharacterCustomizationController : MonoBehaviour
 
             case CharacterGender.Female:
                 appearance.body = femaleSkinTone;
+                break;
+        }
+
+        RefreshAppearance();
+    }
+
+    public void SetClass(PlayerClass playerClass)
+    {
+        if (characterRenderer == null)
+        {
+            Debug.LogError(
+                "CharacterCustomizationController: CharacterRenderer is not assigned.",
+                this
+            );
+
+            return;
+        }
+
+        CharacterAppearance appearance =
+            characterRenderer.Appearance;
+
+        appearance.playerClass = playerClass;
+
+        switch (playerClass)
+        {
+            case PlayerClass.Warrior:
+
+                appearance.headwear = warriorHeadwear;
+                appearance.torso = warriorTorso;
+                appearance.legs = warriorLegs;
+
+                break;
+
+            case PlayerClass.Ranger:
+
+                appearance.headwear = rangerHeadwear;
+                appearance.torso = rangerTorso;
+                appearance.legs = rangerLegs;
+
+                break;
+
+            case PlayerClass.Mage:
+
+                appearance.headwear = mageHeadwear;
+                appearance.torso = mageTorso;
+                appearance.legs = mageLegs;
+
                 break;
         }
 

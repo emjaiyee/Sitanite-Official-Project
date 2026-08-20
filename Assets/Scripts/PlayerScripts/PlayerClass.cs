@@ -1,6 +1,6 @@
 public enum PlayerClass
 {
-    Melee,
-    Ranged,
+    Warrior,
+    Ranger,
     Mage
 }
