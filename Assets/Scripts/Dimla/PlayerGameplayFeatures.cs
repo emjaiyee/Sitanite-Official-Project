@@ -145,26 +145,46 @@ public class PlayerGameplayFeatures : MonoBehaviour
             screenPosition.y,
             Mathf.Abs(Camera.main.transform.position.z)));
         Collider2D[] hits = Physics2D.OverlapPointAll(worldPosition, attackLayers);
-        EnemyHealth target = null;
-        float closestDistanceSqr = float.MaxValue;
+        BreakablePot potTarget = null;
+        float closestPotDistanceSqr = float.MaxValue;
+        EnemyHealth enemyTarget = null;
+        float closestEnemyDistanceSqr = float.MaxValue;
 
         foreach (Collider2D hit in hits)
         {
+            BreakablePot pot = hit.GetComponentInParent<BreakablePot>();
+            if (pot != null && !pot.IsBroken)
+            {
+                float distanceSqr = ((Vector2)pot.transform.position - (Vector2)actionOrigin.position).sqrMagnitude;
+                if (distanceSqr < closestPotDistanceSqr)
+                {
+                    potTarget = pot;
+                    closestPotDistanceSqr = distanceSqr;
+                }
+                continue;
+            }
+
             EnemyHealth enemy = hit.GetComponentInParent<EnemyHealth>();
             if (enemy == null) continue;
 
-            float distanceSqr = ((Vector2)enemy.transform.position - (Vector2)actionOrigin.position).sqrMagnitude;
-            if (distanceSqr < closestDistanceSqr)
+            float enemyDistanceSqr = ((Vector2)enemy.transform.position - (Vector2)actionOrigin.position).sqrMagnitude;
+            if (enemyDistanceSqr < closestEnemyDistanceSqr)
             {
-                target = enemy;
-                closestDistanceSqr = distanceSqr;
+                enemyTarget = enemy;
+                closestEnemyDistanceSqr = enemyDistanceSqr;
             }
         }
 
+        if (potTarget != null)
+        {
+            TryBreakPot(potTarget);
+            return;
+        }
+
+        EnemyHealth target = enemyTarget;
         if (target == null) return;
 
         float maxAttackDistance = attackRange + attackWidth * 0.5f;
-        if (closestDistanceSqr > maxAttackDistance * maxAttackDistance) return;
         if (!stats.UseStamina(attackCost)) return;
 
         Vector2 targetDirection = (Vector2)target.transform.position - (Vector2)actionOrigin.position;
@@ -174,6 +194,31 @@ public class PlayerGameplayFeatures : MonoBehaviour
         Debug.Log($"MOUSE CLICK - ATTACK {target.name} for {attackDamage} damage");
         target.ApplyDamage(attackDamage);
     }
+
+    /// <summary>Attempts to break a nearby pot using the player's attack stamina cost.</summary>
+    public bool TryBreakPot(BreakablePot pot)
+    {
+        if (playerDead || stats.IsDead || pot == null || pot.IsBroken)
+            return false;
+
+        Transform origin = actionOrigin == null ? transform : actionOrigin;
+        float range = Mathf.Max(attackRange + attackWidth * 0.5f, pot.InteractionRange);
+        Vector2 offset = (Vector2)pot.transform.position - (Vector2)origin.position;
+        if (offset.sqrMagnitude > range * range)
+            return false;
+
+        if (!stats.UseStamina(attackCost))
+            return false;
+
+        if (offset.sqrMagnitude > 0.01f)
+            facing = offset.normalized;
+
+        bool broke = pot.TryBreak();
+        if (broke)
+            Debug.Log($"MOUSE CLICK - BROKE {pot.name}");
+        return broke;
+    }
+
 
     private void Dash()
     {
@@ -232,4 +277,3 @@ public class PlayerGameplayFeatures : MonoBehaviour
         Gizmos.DrawWireCube(origin.position + direction * (dashDistance * 0.5f), new Vector3(dashDistance, 0.15f, 0.05f));
     }
 }
-
