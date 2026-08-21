@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8644881294611109962}
   - component: {fileID: 8648172501756555010}
   m_Layer: 0
-  m_Name: Loot_Potion (x5)
+  m_Name: ExampleLoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -3074023447068413781, guid: 0c734b45df687094ab0a0f24be5debce, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -91,7 +91,7 @@ SpriteRenderer:
   m_Size: {x: 0.3125, y: 0.3125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!61 &8644881294611109962
 BoxCollider2D:
@@ -151,6 +151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5b3b097a1167fd49b06672d71a630cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Loot
-  itemData: {fileID: 11400000, guid: 727b3716660ad6e48ab413c90834554b, type: 2}
-  quantity: 5
+  itemData: {fileID: 0}
+  quantity: 1
   spriteRenderer: {fileID: 5247334863221687476}

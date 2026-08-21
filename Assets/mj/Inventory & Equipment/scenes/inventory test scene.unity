@@ -189,16 +189,6 @@ MonoBehaviour:
   gridManager: {fileID: 139060585}
   gridRectTransform: {fileID: 139060584}
   cellSize: 64
-  itemPrefab: {fileID: 7280740310313003861, guid: 19797a6c8cbb80b4bbff855910c41c45, type: 3}
-  storedItems:
-  - itemData: {fileID: 11400000, guid: 8610f980cd8ef51458f2f3fa70243120, type: 2}
-    quantity: 32
-  - itemData: {fileID: 11400000, guid: 8f7e75417161fde4d8009db96e61b9bf, type: 2}
-    quantity: 1
-  - itemData: {fileID: 11400000, guid: ef537c10b628da146a1639debe2c3157, type: 2}
-    quantity: 3
-  - itemData: {fileID: 11400000, guid: e43a3b41b6ab9394c9aa613d7ae7e63c, type: 2}
-    quantity: 1
   clickAction:
     m_Name: Click
     m_Type: 0
@@ -216,6 +206,16 @@ MonoBehaviour:
       m_Action: Click
       m_Flags: 0
     m_Flags: 0
+  itemPrefab: {fileID: 7280740310313003861, guid: 19797a6c8cbb80b4bbff855910c41c45, type: 3}
+  storedItems:
+  - itemData: {fileID: 11400000, guid: 8610f980cd8ef51458f2f3fa70243120, type: 2}
+    quantity: 32
+  - itemData: {fileID: 11400000, guid: 8f7e75417161fde4d8009db96e61b9bf, type: 2}
+    quantity: 1
+  - itemData: {fileID: 11400000, guid: ef537c10b628da146a1639debe2c3157, type: 2}
+    quantity: 3
+  - itemData: {fileID: 11400000, guid: e43a3b41b6ab9394c9aa613d7ae7e63c, type: 2}
+    quantity: 1
 --- !u!114 &139060587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -320,6 +320,7 @@ MonoBehaviour:
       m_Action: Rotate
       m_Flags: 0
     m_Flags: 0
+  heldItemVisual: {fileID: 0}
 --- !u!1 &185033508
 GameObject:
   m_ObjectHideFlags: 0
