@@ -73,9 +73,28 @@ public class CharacterPortrait : MonoBehaviour
 
         SetPortrait(bodyPortrait, appearance.body);
         SetPortrait(eyesPortrait, appearance.eyes);
-        SetPortrait(hairPortrait, appearance.hair);
         SetPortrait(torsoPortrait, appearance.torso);
-        SetPortrait(headwearPortrait, appearance.headwear);
+
+        UpdateHairPortrait(appearance);
+        UpdateHeadwearPortrait(appearance);
+    }
+
+    private void SetHairPortrait(CharacterAppearance appearance)
+    {
+        if (hairPortrait == null)
+            return;
+
+        // Hide portrait hair if the current headwear hides hair.
+        if (appearance.headwear != null &&
+            appearance.headwear.hidesHair)
+        {
+            hairPortrait.sprite = null;
+            hairPortrait.enabled = false;
+            return;
+        }
+
+        // Otherwise, display the currently selected hair.
+        SetPortrait(hairPortrait, appearance.hair);
     }
 
     private void SetPortrait(
@@ -94,5 +113,38 @@ public class CharacterPortrait : MonoBehaviour
 
         image.sprite = definition.portrait;
         image.enabled = true;
+    }
+    private void UpdateHairPortrait(CharacterAppearance appearance)
+    {
+        if (hairPortrait == null)
+            return;
+
+        if (appearance.headwear != null &&
+            appearance.headwear.hidesHair &&
+            !appearance.hideHeadwear)
+        {
+            hairPortrait.sprite = null;
+            hairPortrait.enabled = false;
+            return;
+        }
+
+        SetPortrait(hairPortrait, appearance.hair);
+    }
+    private void UpdateHeadwearPortrait(CharacterAppearance appearance)
+    {
+        if (headwearPortrait == null)
+            return;
+
+        if (appearance.hideHeadwear)
+        {
+            headwearPortrait.sprite = null;
+            headwearPortrait.enabled = false;
+            return;
+        }
+
+        SetPortrait(
+            headwearPortrait,
+            appearance.headwear
+        );
     }
 }

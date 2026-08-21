@@ -57,19 +57,38 @@ public class CharacterRenderer : MonoBehaviour
 
     private void UpdateHair()
     {
-        if (appearance.headwear != null && appearance.headwear.hidesHair)
+        if (hairRenderer == null)
+            return;
+
+        // If headwear is hidden, it should NOT hide the hair.
+        if (appearance.headwear != null &&
+            appearance.headwear.hidesHair &&
+            !appearance.hideHeadwear)
         {
+            hairRenderer.sprite = null;
             hairRenderer.enabled = false;
             return;
         }
 
-        hairRenderer.enabled = true;
         SetSprite(hairRenderer, appearance.hair);
     }
 
     private void UpdateHeadwear()
     {
-        SetSprite(headwearRenderer, appearance.headwear);
+        if (headwearRenderer == null)
+            return;
+
+        if (appearance.headwear == null ||
+            appearance.hideHeadwear)
+        {
+            headwearRenderer.sprite = null;
+            headwearRenderer.enabled = false;
+            return;
+        }
+
+        headwearRenderer.enabled = true;
+        headwearRenderer.sprite =
+            appearance.headwear.GetSprite(currentDirection);
     }
 
     private void UpdateWeapon()

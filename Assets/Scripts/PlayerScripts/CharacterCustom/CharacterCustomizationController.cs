@@ -147,8 +147,30 @@ public class CharacterCustomizationController : MonoBehaviour
 
     public void SetHeadwear(HeadwearDefinition headwear)
     {
-        characterRenderer.Appearance.headwear = headwear;
+        CharacterAppearance appearance =
+            characterRenderer.Appearance;
+
+        appearance.headwear = headwear;
+
+        // Equipping new headwear shows it by default.
+        appearance.hideHeadwear = false;
+
         RefreshAppearance();
+    }
+
+    public void SetHeadwearHidden(bool hidden)
+    {
+        CharacterAppearance appearance =
+            characterRenderer.Appearance;
+
+        appearance.hideHeadwear = hidden;
+
+        RefreshAppearance();
+    }
+
+    public bool IsHeadwearHidden()
+    {
+        return characterRenderer.Appearance.hideHeadwear;
     }
 
     public void SetTorso(CharacterPartDefinition torso)

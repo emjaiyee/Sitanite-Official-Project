@@ -1,15 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ClassButton : MonoBehaviour
+public class HeadwearVanityButton : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Image buttonImage;
 
-    [Header("Class")]
-    [SerializeField] private PlayerClass playerClass;
-
-    [Header("Sprites")]
+    [Header("Button Sprites")]
     [SerializeField] private Sprite activeSprite;
     [SerializeField] private Sprite inactiveSprite;
 
@@ -35,25 +32,19 @@ public class ClassButton : MonoBehaviour
         }
     }
 
-    public void SelectClass()
+    public void ToggleVanity()
     {
         FindCustomizationController();
 
         if (customizationController == null)
-        {
-            Debug.LogError(
-                $"ClassButton '{name}': CharacterCustomizationController could not be found.",
-                this
-            );
-
             return;
-        }
 
-        Debug.Log(
-            $"Class button selected: {playerClass}"
+        bool currentlyHidden =
+            customizationController.IsHeadwearHidden();
+
+        customizationController.SetHeadwearHidden(
+            !currentlyHidden
         );
-
-        customizationController.SetClass(playerClass);
     }
 
     public void RefreshVisual()
@@ -63,13 +54,14 @@ public class ClassButton : MonoBehaviour
             FindCustomizationController();
         }
 
-        if (customizationController == null || buttonImage == null)
+        if (customizationController == null ||
+            buttonImage == null)
             return;
 
-        bool isActive =
-            customizationController.GetClass() == playerClass;
+        bool isHidden =
+            customizationController.IsHeadwearHidden();
 
-        buttonImage.sprite = isActive
+        buttonImage.sprite = isHidden
             ? activeSprite
             : inactiveSprite;
     }
@@ -79,7 +71,7 @@ public class ClassButton : MonoBehaviour
         if (Player.Instance == null)
         {
             Debug.LogError(
-                $"ClassButton '{name}': Player.Instance is NULL.",
+                $"HeadwearVanityButton '{name}': Player.Instance is NULL.",
                 this
             );
 
@@ -92,7 +84,7 @@ public class ClassButton : MonoBehaviour
         if (customizationController == null)
         {
             Debug.LogError(
-                $"ClassButton '{name}': CharacterCustomizationController not found on Player.",
+                $"HeadwearVanityButton '{name}': CharacterCustomizationController not found on Player.",
                 Player.Instance
             );
         }

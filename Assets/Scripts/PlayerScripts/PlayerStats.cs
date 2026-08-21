@@ -13,6 +13,15 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private int currentMana;
     [SerializeField] private int currentStamina;
 
+    [Header("Character")]
+    [SerializeField] private string characterName;
+    [SerializeField] private CharacterGender gender;
+    [SerializeField] private PlayerClass playerClass;
+
+    public string CharacterName => characterName;
+    public CharacterGender Gender => gender;
+    public PlayerClass PlayerClass => playerClass;
+
     public int CurrentHealth => currentHealth;
     public int CurrentMana => currentMana;
     public int CurrentStamina => currentStamina;
@@ -89,6 +98,24 @@ public class PlayerStats : MonoBehaviour
     {
         if (amount <= 0) return;
         currentStamina = Mathf.Min(Mathf.Max(1, maxStamina), currentStamina + amount);
+        NotifyChanged();
+    }
+
+    public void SetCharacterName(string newName)
+    {
+        characterName = newName.Trim();
+        NotifyChanged();
+    }
+
+    public void SetCharacterGender(CharacterGender newGender)
+    {
+        gender = newGender;
+        NotifyChanged();
+    }
+
+    public void SetPlayerClass(PlayerClass newClass)
+    {
+        playerClass = newClass;
         NotifyChanged();
     }
 

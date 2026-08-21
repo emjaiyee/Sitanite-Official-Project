@@ -16,24 +16,33 @@ public class HairSelectionUI : MonoBehaviour
 
     public void OpenMaleHair()
     {
-        maleHairWindow.SetActive(true);
-        femaleHairWindow.SetActive(false);
+        if (maleHairWindow != null)
+            maleHairWindow.SetActive(true);
+
+        if (femaleHairWindow != null)
+            femaleHairWindow.SetActive(false);
 
         SetCustomizationButtonsInteractable(false);
     }
 
     public void OpenFemaleHair()
     {
-        maleHairWindow.SetActive(false);
-        femaleHairWindow.SetActive(true);
+        if (maleHairWindow != null)
+            maleHairWindow.SetActive(false);
+
+        if (femaleHairWindow != null)
+            femaleHairWindow.SetActive(true);
 
         SetCustomizationButtonsInteractable(false);
     }
 
     public void CloseHairWindows()
     {
-        maleHairWindow.SetActive(false);
-        femaleHairWindow.SetActive(false);
+        if (maleHairWindow != null)
+            maleHairWindow.SetActive(false);
+
+        if (femaleHairWindow != null)
+            femaleHairWindow.SetActive(false);
 
         SetCustomizationButtonsInteractable(true);
     }
