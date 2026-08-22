@@ -1,29 +1,118 @@
 using UnityEngine;
 
-// Attach to the player prefab, alongside PlayerActions.
-// Drag the sword GameObject (with MeleeWeapon) into the slot below.
+// Handles the player's currently equipped weapon.
+//
+// Weapon GameObjects should be children of the player and contain
+// a component implementing IWeapon.
+//
+// Example:
+// Player
+// ├── LongSword
+// │   └── Sword : MeleeWeapon
+// └── BattleAxe
+//     └── Axe : MeleeWeapon
 public class PlayerEquipment : MonoBehaviour
 {
-    [Header("Weapon Object (child of the player)")]
-    [SerializeField] private GameObject swordObject;
+    [Header("Weapon Objects (children of the player)")]
+
+    [SerializeField]
+    private GameObject swordObject;
+
+    [SerializeField]
+    private GameObject battleAxeObject;
 
     public IWeapon CurrentWeapon { get; private set; }
 
-    void Start()
+    private void Start()
     {
-        EquipSword();
+        // Default weapon.
+        EquipWeapon("LongSword");
     }
 
-    private void EquipSword()
+    /// <summary>
+    /// Equips a weapon using its WeaponId.
+    /// </summary>
+    public void EquipWeapon(string weaponId)
+    {
+        if (string.IsNullOrEmpty(weaponId))
+        {
+            Debug.LogWarning(
+                "PlayerEquipment: Weapon ID is empty."
+            );
+
+            return;
+        }
+
+        // Disable all currently equipped weapon objects.
+        DisableAllWeapons();
+
+        // Find the requested weapon.
+        GameObject weaponObject =
+            GetWeaponObject(weaponId);
+
+        if (weaponObject == null)
+        {
+            Debug.LogWarning(
+                $"PlayerEquipment: No weapon found for ID '{weaponId}'."
+            );
+
+            CurrentWeapon = null;
+            return;
+        }
+
+        // Make sure the weapon actually implements IWeapon.
+        IWeapon weapon =
+            weaponObject.GetComponent<IWeapon>();
+
+        if (weapon == null)
+        {
+            Debug.LogError(
+                $"PlayerEquipment: '{weaponObject.name}' does not " +
+                "contain a component implementing IWeapon."
+            );
+
+            CurrentWeapon = null;
+            return;
+        }
+
+        weaponObject.SetActive(true);
+
+        CurrentWeapon = weapon;
+
+        Debug.Log(
+            $"PlayerEquipment: Equipped {weaponId}."
+        );
+    }
+
+    // -------------------------------------------------
+    // WEAPON LOOKUP
+    // -------------------------------------------------
+
+    private GameObject GetWeaponObject(string weaponId)
+    {
+        switch (weaponId)
+        {
+            case "LongSword":
+                return swordObject;
+
+            case "BattleAxe":
+                return battleAxeObject;
+
+            default:
+                return null;
+        }
+    }
+
+    // -------------------------------------------------
+    // DISABLE WEAPONS
+    // -------------------------------------------------
+
+    private void DisableAllWeapons()
     {
         if (swordObject != null)
-        {
-            swordObject.SetActive(true);
-            CurrentWeapon = swordObject.GetComponent<IWeapon>();
-        }
-        else
-        {
-            Debug.LogWarning("PlayerEquipment: swordObject not assigned.");
-        }
+            swordObject.SetActive(false);
+
+        if (battleAxeObject != null)
+            battleAxeObject.SetActive(false);
     }
 }

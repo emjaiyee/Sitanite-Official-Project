@@ -1,54 +1,51 @@
 using UnityEngine;
 
-// Basic sword. Attach to a child GameObject under the player (e.g. "Sword").
-public class MeleeWeapon : MonoBehaviour, IWeapon
+// Base class for all melee weapons.
+// Handles shared attack and damage logic.
+// Specific weapons should inherit from this class and provide their WeaponId.
+public abstract class MeleeWeapon : MonoBehaviour, IWeapon
 {
-    [Header("Sword Settings")]
-    [SerializeField] private int damage = 10;
-    [SerializeField] private float attackRange = 1f;
-    [SerializeField] private LayerMask hittableLayers;
+    [Header("Attack Settings")]
+    [SerializeField] protected int damage = 10;
+    [SerializeField] protected float attackRange = 1f;
+    [SerializeField] protected LayerMask hittableLayers;
 
     [Tooltip(
-        "Point the swing radius is centered on - " +
-        "usually an empty child in front of the player."
+        "Point where the attack radius is centered. " +
+        "Usually an empty child positioned in front of the player."
     )]
-    [SerializeField] private Transform attackPoint;
+    [SerializeField] protected Transform attackPoint;
 
+    // Every weapon must have a unique ID.
+    public abstract string WeaponId { get; }
 
-    public void Attack()
+    public virtual void Attack()
     {
-        Debug.Log("Sword swing!");
-
+        Debug.Log($"{WeaponId} swing!");
 
         if (attackPoint == null)
         {
             Debug.LogWarning(
-                "MeleeWeapon: attackPoint not assigned in the Inspector."
+                $"{WeaponId}: attackPoint not assigned in the Inspector."
             );
 
             return;
         }
 
-
-        Collider2D[] hits =
-            Physics2D.OverlapCircleAll(
-                attackPoint.position,
-                attackRange,
-                hittableLayers
-            );
-
+        Collider2D[] hits = Physics2D.OverlapCircleAll(
+            attackPoint.position,
+            attackRange,
+            hittableLayers
+        );
 
         foreach (Collider2D hit in hits)
         {
             if (hit == null)
                 continue;
 
-
-            // Find the damageable component on the collider
+            // Look for IDamageable on the collider
             // or one of its parent objects.
-            IDamageable target =
-                hit.GetComponentInParent<IDamageable>();
-
+            IDamageable target = hit.GetComponentInParent<IDamageable>();
 
             if (target != null)
             {
@@ -56,17 +53,19 @@ public class MeleeWeapon : MonoBehaviour, IWeapon
                     damage,
                     DamageType.Physical
                 );
+
+                Debug.Log(
+                    $"{WeaponId} hit {hit.name} for {damage} damage."
+                );
             }
         }
     }
-
 
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         if (attackPoint == null)
             return;
-
 
         Gizmos.color = Color.red;
 

@@ -24,18 +24,23 @@ public class PlayerDash : MonoBehaviour
     // Last valid movement direction.
     private Vector2 lastMoveDirection = Vector2.right;
 
-    // Ramp support
+    // -------------------------------------------------
+    // RAMP SUPPORT
+    // -------------------------------------------------
+
     private bool overrideMovement;
     private Vector2 rampForward = Vector2.right;
 
     public bool IsDashing => isDashing;
 
+    // -------------------------------------------------
+    // UNITY
+    // -------------------------------------------------
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-
         movement = GetComponent<PlayerWASD>();
-
         stats = GetComponent<PlayerStats>();
 
         if (movement == null)
@@ -79,28 +84,39 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
-        // Keep track of the player's latest movement direction.
-        if (movement != null)
-        {
-            Vector2 currentMovement =
-                movement.MoveDirection;
-
-            if (currentMovement.sqrMagnitude > 0.0001f)
-            {
-                lastMoveDirection =
-                    currentMovement.normalized;
-            }
-        }
+        TrackMovementDirection();
 
         if (
             isDashing &&
-            Time.time >=
-            dashTime + dashDuration
+            Time.time >= dashTime + dashDuration
         )
         {
             EndDash();
         }
     }
+
+    // -------------------------------------------------
+    // MOVEMENT DIRECTION
+    // -------------------------------------------------
+
+    private void TrackMovementDirection()
+    {
+        if (movement == null)
+            return;
+
+        Vector2 currentMovement =
+            movement.MoveDirection;
+
+        if (currentMovement.sqrMagnitude > 0.0001f)
+        {
+            lastMoveDirection =
+                currentMovement.normalized;
+        }
+    }
+
+    // -------------------------------------------------
+    // INPUT
+    // -------------------------------------------------
 
     private void OnDashPerformed(
         InputAction.CallbackContext context)
@@ -108,10 +124,22 @@ public class PlayerDash : MonoBehaviour
         StartDash();
     }
 
+    // -------------------------------------------------
+    // DASH
+    // -------------------------------------------------
+
     private void StartDash()
     {
         if (isDashing)
             return;
+
+        // Dead players cannot dash.
+        if (stats != null && stats.IsDead)
+            return;
+
+        // ---------------------------------------------
+        // STAMINA
+        // ---------------------------------------------
 
         if (stats != null)
         {
@@ -125,12 +153,16 @@ public class PlayerDash : MonoBehaviour
             }
         }
 
+        // ---------------------------------------------
+        // DIRECTION
+        // ---------------------------------------------
+
         Vector2 dashDirection =
             lastMoveDirection;
 
-        // -------------------------------------------------
+        // ---------------------------------------------
         // RAMP SUPPORT
-        // -------------------------------------------------
+        // ---------------------------------------------
 
         if (overrideMovement)
         {
@@ -152,24 +184,21 @@ public class PlayerDash : MonoBehaviour
 
         dashDirection.Normalize();
 
-        // -------------------------------------------------
+        // ---------------------------------------------
         // START DASH
-        // -------------------------------------------------
+        // ---------------------------------------------
 
         isDashing = true;
+        dashTime = Time.time;
 
-        dashTime =
-            Time.time;
-
-        // Tell PlayerWASD to stop using MovePosition().
+        // Tell PlayerWASD to stop controlling the Rigidbody.
         if (movement != null)
         {
             movement.LockMovement();
         }
 
-        // Clear any existing movement first.
-        rb.linearVelocity =
-            Vector2.zero;
+        // Clear existing movement.
+        rb.linearVelocity = Vector2.zero;
 
         // Apply dash velocity.
         rb.linearVelocity =
@@ -182,13 +211,15 @@ public class PlayerDash : MonoBehaviour
 
     private void EndDash()
     {
+        if (!isDashing)
+            return;
+
         isDashing = false;
 
-        // Stop the dash.
-        rb.linearVelocity =
-            Vector2.zero;
+        // Stop dash velocity.
+        rb.linearVelocity = Vector2.zero;
 
-        // Give Rigidbody control back to PlayerWASD.
+        // Give movement control back to PlayerWASD.
         if (movement != null)
         {
             movement.UnlockMovement();
@@ -205,9 +236,11 @@ public class PlayerDash : MonoBehaviour
 
     public void EnterRamp(Vector2 forward)
     {
+        if (forward.sqrMagnitude <= 0.0001f)
+            return;
+
         overrideMovement = true;
-        rampForward =
-            forward.normalized;
+        rampForward = forward.normalized;
 
         Debug.Log(
             $"[PlayerDash] Entered ramp. Forward: {rampForward}"
