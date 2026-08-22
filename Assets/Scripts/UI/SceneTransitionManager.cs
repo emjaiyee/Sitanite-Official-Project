@@ -6,33 +6,18 @@ public class SceneTransitionManager : MonoBehaviour
 {
     [Header("Fade")]
     [SerializeField] private CanvasGroup fadeCanvas;
-
-    [SerializeField]
-    private float fadeToBlackDuration = 0.5f;
-
-    [SerializeField]
-    private float fadeFromBlackDuration = 0.5f;
+    [SerializeField] private float fadeToBlackDuration = 0.5f;
 
     private bool isTransitioning;
 
     private void Awake()
     {
-        // Every scene starts completely black.
+        // This manager is responsible for fading OUT
+        // the scene it belongs to.
         if (fadeCanvas != null)
         {
-            fadeCanvas.alpha = 1f;
+            fadeCanvas.alpha = 0f;
         }
-    }
-
-    private void Start()
-    {
-        // Automatically reveal the scene.
-        StartCoroutine(
-            Fade(
-                0f,
-                fadeFromBlackDuration
-            )
-        );
     }
 
     public void TransitionToScene(string sceneName)
@@ -69,13 +54,8 @@ public class SceneTransitionManager : MonoBehaviour
     {
         isTransitioning = true;
 
-        // Fade current scene to black.
-        yield return Fade(
-            1f,
-            fadeToBlackDuration
-        );
+        yield return FadeToBlack();
 
-        // Load next scene.
         SceneManager.LoadScene(sceneName);
     }
 
@@ -83,19 +63,12 @@ public class SceneTransitionManager : MonoBehaviour
     {
         isTransitioning = true;
 
-        // Fade current scene to black.
-        yield return Fade(
-            1f,
-            fadeToBlackDuration
-        );
+        yield return FadeToBlack();
 
-        // Load next scene.
         SceneManager.LoadScene(sceneBuildIndex);
     }
 
-    private IEnumerator Fade(
-        float targetAlpha,
-        float duration)
+    private IEnumerator FadeToBlack()
     {
         if (fadeCanvas == null)
         {
@@ -107,39 +80,32 @@ public class SceneTransitionManager : MonoBehaviour
             yield break;
         }
 
-        float startAlpha =
-            fadeCanvas.alpha;
-
+        float startAlpha = fadeCanvas.alpha;
         float elapsed = 0f;
 
-        if (duration <= 0f)
+        if (fadeToBlackDuration <= 0f)
         {
-            fadeCanvas.alpha =
-                targetAlpha;
-
+            fadeCanvas.alpha = 1f;
             yield break;
         }
 
-        while (elapsed < duration)
+        while (elapsed < fadeToBlackDuration)
         {
             elapsed += Time.unscaledDeltaTime;
 
-            float t =
-                Mathf.Clamp01(
-                    elapsed / duration
-                );
+            float t = Mathf.Clamp01(
+                elapsed / fadeToBlackDuration
+            );
 
-            fadeCanvas.alpha =
-                Mathf.Lerp(
-                    startAlpha,
-                    targetAlpha,
-                    t
-                );
+            fadeCanvas.alpha = Mathf.Lerp(
+                startAlpha,
+                1f,
+                t
+            );
 
             yield return null;
         }
 
-        fadeCanvas.alpha =
-            targetAlpha;
+        fadeCanvas.alpha = 1f;
     }
 }
