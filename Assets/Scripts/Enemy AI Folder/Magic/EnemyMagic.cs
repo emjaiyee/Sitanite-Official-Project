@@ -1,10 +1,10 @@
-using NUnit.Framework.Constraints;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyHealth))]
-public class EnemyRange : MonoBehaviour
+public class EnemyMagic : MonoBehaviour
 {
+
     #region Variables 
     //==========================================================
     // STATES 
@@ -15,13 +15,14 @@ public class EnemyRange : MonoBehaviour
     {
         Idle,
         Chase,
-        Search, 
+        Search,
         Death
     }
 
 
     [Header("State")]
-    [SerializeField] private EnemyState startingState =
+    [SerializeField]
+    private EnemyState startingState =
             EnemyState.Idle;
 
 
@@ -33,7 +34,7 @@ public class EnemyRange : MonoBehaviour
     // STATE INSTANCE
     // =========================================================
 
-    private EnemyRangeState currentState;
+    private EnemyMagicState currentState;
 
 
 
@@ -107,8 +108,8 @@ public class EnemyRange : MonoBehaviour
     private EnemyHealth enemyHealth;
     private Transform player;
 
-
     private Vector3 spawnPosition;
+
 
     public EnemyHealth Health =>
         enemyHealth;
@@ -141,7 +142,6 @@ public class EnemyRange : MonoBehaviour
 
     private void Awake()
     {
-
         enemyHealth =
             GetComponent<EnemyHealth>();
 
@@ -231,7 +231,6 @@ public class EnemyRange : MonoBehaviour
 
     private void Update()
     {
-       
         if (currentState == null)
             return;
 
@@ -311,22 +310,22 @@ public class EnemyRange : MonoBehaviour
         );
     }
 
-    private EnemyRangeState CreateState(
+    private EnemyMagicState CreateState(
     EnemyState state)
     {
         switch (state)
         {
             case EnemyState.Idle:
-               return new EnemyRangeIdleState(this);
+                return new EnemyMagicIdleState(this);
 
             case EnemyState.Chase:
-               return new EnemyRangeChaseState(this);
+                return new EnemyMagicChaseState(this);
 
             case EnemyState.Search:
-               return new EnemyRangeSearchState(this);
+                return new EnemyMagicSearchState(this);
 
             case EnemyState.Death:
-               return new EnemyRangeDeathState(this);
+                return new EnemyMagicDeathState(this);
 
             default:
                 Debug.LogError(
@@ -379,30 +378,6 @@ public class EnemyRange : MonoBehaviour
                 player.position,
                 attackDetectionRadius
             );
-
-    }
-
-    public bool IsPlayerRayCasted()
-    {
-        if (player == null)
-            return false;
-
-        int layerMask = LayerMask.GetMask("Default");
-
-        RaycastHit2D hit =
-                       Physics2D.Raycast(
-                transform.position,
-                player.position - transform.position,
-                Mathf.Infinity,
-                layerMask
-            );
-
-        if (hit.collider.CompareTag("Player"))
-        {
-            Debug.Log($"[EnemyRayCast] {name} Raycast hit: {hit.collider.name}");
-            return true;
-        }
-        return false;
 
     }
 
@@ -511,7 +486,7 @@ public class EnemyRange : MonoBehaviour
         // DETECTION CELLS
         // -----------------------------------------------------
 
-        Debug.DrawRay(transform.position, player.position - transform.position, Color.green);
+
 
 
         Gizmos.color =
@@ -522,7 +497,7 @@ public class EnemyRange : MonoBehaviour
                 0.25f
             );
 
-        if (IsPlayerRayCasted())
+        if (IsPlayerWithinAttackRange())
         {
             Gizmos.color =
                 new Color(
@@ -589,3 +564,5 @@ public class EnemyRange : MonoBehaviour
 
 
 }
+  
+

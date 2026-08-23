@@ -1,22 +1,19 @@
 using UnityEngine;
 
-public class EnemyMeleeSearchState : EnemyMeleeState
+public class EnemyRangeSearchState : EnemyRangeState
 {
+    #region Variables Part
     private float searchTimer;
 
     private const float SearchDuration = 3.5f;
 
-
-    public EnemyMeleeSearchState(
-        EnemyMelee enemy)
-        : base(enemy)
+    public EnemyRangeSearchState(
+       EnemyRange enemy)
+       : base(enemy)
     {
     }
+    #endregion
 
-
-    // =========================================================
-    // ENTER
-    // =========================================================
 
     public override void Enter()
     {
@@ -34,10 +31,6 @@ public class EnemyMeleeSearchState : EnemyMeleeState
         );
     }
 
-
-    // =========================================================
-    // TICK
-    // =========================================================
 
     public override void Tick()
     {
@@ -64,7 +57,7 @@ public class EnemyMeleeSearchState : EnemyMeleeState
             );
 
             Enemy.ChangeState(
-                EnemyMelee.EnemyState.Chase
+                EnemyRange.EnemyState.Chase
             );
 
             return;
@@ -85,10 +78,6 @@ public class EnemyMeleeSearchState : EnemyMeleeState
     }
 
 
-    // =========================================================
-    // FINISH SEARCH
-    // =========================================================
-
     private void FinishSearch()
     {
         Debug.Log(
@@ -97,14 +86,10 @@ public class EnemyMeleeSearchState : EnemyMeleeState
         );
 
         Enemy.ChangeState(
-            EnemyMelee.EnemyState.Idle
+            EnemyRange.EnemyState.Idle
         );
     }
 
-
-    // =========================================================
-    // EXIT
-    // =========================================================
 
     public override void Exit()
     {
