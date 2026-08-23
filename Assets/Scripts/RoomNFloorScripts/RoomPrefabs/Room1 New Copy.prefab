@@ -6755,7 +6755,7 @@ GameObject:
   - component: {fileID: 8937185649144537092}
   - component: {fileID: 9095396620695411502}
   m_Layer: 0
-  m_Name: Room1
+  m_Name: Room1 New Copy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16169,7 +16169,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3981623331039287070}
-  - component: {fileID: 4097125141998627024}
+  - component: {fileID: 8926687521540158425}
   m_Layer: 6
   m_Name: EnemySpawnPoint
   m_TagString: Untagged
@@ -16192,7 +16192,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8664578934110568288}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4097125141998627024
+--- !u!114 &8926687521540158425
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -16201,10 +16201,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7198421759059014258}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba2bf5d56427dfd41bee5e6e93b96c4a, type: 3}
+  m_Script: {fileID: 11500000, guid: f007c17e5ac898440b0befbac2a806d0, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
-  enemyPrefab: {fileID: 3586115904521672654, guid: 9c1074b6f917938449581efeaa18094c, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnerScript
+  enemyPrefab: {fileID: 3448337782947929249, guid: 25ec5c8d234a40248b22a9b4500f0410, type: 3}
   useRandomCount: 1
   minSpawn: 2
   maxSpawn: 4
