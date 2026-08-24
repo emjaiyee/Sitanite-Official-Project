@@ -23,6 +23,12 @@ public class Gateway : MonoBehaviour
         if (!other.CompareTag("Player"))
             return;
 
+        RoomManager roomManager =
+            GetComponentInParent<RoomManager>();
+
+        if (roomManager != null && roomManager.HandleGatewayEntered(this))
+            return;
+
         if (destination == null)
         {
             Debug.LogWarning(

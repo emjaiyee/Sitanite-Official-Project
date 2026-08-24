@@ -15,6 +15,7 @@ public class CharacterAppearance
     public CharacterPartDefinition hair;
     public HeadwearDefinition headwear;
     public CharacterPartDefinition weapon;
+    public CharacterPartDefinition shield;
 
     [Header("Vanity")]
     public bool hideHeadwear;

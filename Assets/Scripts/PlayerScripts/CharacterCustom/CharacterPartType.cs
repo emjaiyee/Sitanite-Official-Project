@@ -6,5 +6,6 @@ public enum CharacterPartType
     Eyes,
     Hair,
     Headwear,
-    Weapon
+    Weapon,
+    Shield
 }

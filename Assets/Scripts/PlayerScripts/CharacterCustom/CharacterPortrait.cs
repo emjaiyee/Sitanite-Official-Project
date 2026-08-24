@@ -9,6 +9,8 @@ public class CharacterPortrait : MonoBehaviour
     [SerializeField] private Image hairPortrait;
     [SerializeField] private Image torsoPortrait;
     [SerializeField] private Image headwearPortrait;
+    [SerializeField] private Image weaponPortrait;
+    [SerializeField] private Image shieldPortrait;
 
     private CharacterCustomizationController customizationController;
 
@@ -74,6 +76,8 @@ public class CharacterPortrait : MonoBehaviour
         SetPortrait(bodyPortrait, appearance.body);
         SetPortrait(eyesPortrait, appearance.eyes);
         SetPortrait(torsoPortrait, appearance.torso);
+        SetPortrait(weaponPortrait, appearance.weapon);
+        SetPortrait(shieldPortrait, appearance.shield);
 
         UpdateHairPortrait(appearance);
         UpdateHeadwearPortrait(appearance);

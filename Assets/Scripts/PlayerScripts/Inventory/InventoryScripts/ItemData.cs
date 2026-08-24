@@ -74,6 +74,9 @@ public class ItemData : ScriptableObject
     [Tooltip("Target equipment slot.")]
     [SerializeField] private EquipmentType equipmentType = EquipmentType.None;
 
+    [Tooltip("Character definition applied while this item is equipped.")]
+    [SerializeField] private CharacterPartDefinition characterDefinition;
+
     [Header("Stat Modifiers")]
     [Tooltip("Attributes added or multiplied when this item is equipped.")]
     [SerializeField] private List<EquipmentStat> statModifiers = new List<EquipmentStat>();
@@ -100,6 +103,9 @@ public class ItemData : ScriptableObject
     /// <summary>Get designated equipment</summary>
     public EquipmentType EquipmentType => equipmentType;
 
+    /// <summary>Get the character definition applied by this item.</summary>
+    public CharacterPartDefinition CharacterDefinition => characterDefinition;
+
     /// <summary>Read-only collection of stat modifiers</summary>
     public IReadOnlyList<EquipmentStat> StatModifiers => statModifiers;
     #endregion
@@ -123,6 +129,12 @@ public class ItemData : ScriptableObject
         else
         {
             maxStackSize = Mathf.Max(1, maxStackSize);
+        }
+
+        if (characterDefinition != null && equipmentType == EquipmentType.Helmet &&
+            characterDefinition is not HeadwearDefinition)
+        {
+            Debug.LogWarning("Helmet items must reference a HeadwearDefinition.", this);
         }
     }
     #endregion

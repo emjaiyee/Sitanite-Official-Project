@@ -22,6 +22,11 @@ public class RoomManager : MonoBehaviour
     [Header("Room Progression")]
     [SerializeField] private bool lockNextRoomUntilCleared = true;
 
+    [Header("Special Gateways")]
+    [Range(0f, 1f)]
+    [SerializeField] private float secretGatewayChance = 0.35f;
+    [SerializeField] private FloorManager floorManager;
+
     private int currentRoomNumber = 1;
 
     public int CurrentRoomNumber => currentRoomNumber;
@@ -34,6 +39,12 @@ public class RoomManager : MonoBehaviour
         generatedRooms;
     private readonly HashSet<int> clearedRooms =
     new HashSet<int>();
+
+    private readonly HashSet<Gateway> validFloorGateways =
+        new HashSet<Gateway>();
+
+    private Gateway validSecretGateway;
+    private RoomInstance secretUnlockRoom;
 
 
     // -------------------------------------------------
@@ -258,6 +269,8 @@ public class RoomManager : MonoBehaviour
                 newRoom
             );
         }
+
+        ConfigureSpecialGateways();
 
         // ---------------------------------------------
         // ROOM PROGRESSION
@@ -534,6 +547,192 @@ public class RoomManager : MonoBehaviour
         SetRoomCleared(
             room.RoomNumber
         );
+
+        if (
+            validSecretGateway == null ||
+            secretUnlockRoom != room
+        )
+            return;
+
+        SetGatewayVisible(validSecretGateway, true);
+        Debug.Log(
+            $"Secret Gateway '{validSecretGateway.name}' opened after " +
+            $"clearing Room {room.RoomNumber}."
+        );
+
+        validSecretGateway = null;
+        secretUnlockRoom = null;
+    }
+
+    public bool HandleGatewayEntered(Gateway gateway)
+    {
+        if (gateway == null || gateway.Flow != GatewayFlow.Floor)
+            return false;
+
+        if (!validFloorGateways.Contains(gateway))
+            return true;
+
+        if (floorManager == null)
+            floorManager = FindFirstObjectByType<FloorManager>();
+
+        if (floorManager == null)
+        {
+            Debug.LogError("No FloorManager exists for the Floor Gateway.");
+            return true;
+        }
+
+        floorManager.EnterNextFloor();
+        return true;
+    }
+
+    private void ConfigureSpecialGateways()
+    {
+        List<Gateway> floorGateways = new List<Gateway>();
+        List<Gateway> secretGateways = new List<Gateway>();
+
+        foreach (RoomInstance room in generatedRooms)
+        {
+            Gateway[] gateways = room.GetComponentsInChildren<Gateway>(true);
+
+            foreach (Gateway gateway in gateways)
+            {
+                if (gateway.Flow == GatewayFlow.Floor)
+                    floorGateways.Add(gateway);
+                else if (
+                    gateway.Flow == GatewayFlow.SecretForward ||
+                    gateway.Flow == GatewayFlow.SecretBackward
+                )
+                    secretGateways.Add(gateway);
+            }
+        }
+
+        validFloorGateways.Clear();
+
+        foreach (Gateway gateway in floorGateways)
+            SetGatewayVisible(gateway, false);
+
+        if (floorGateways.Count > 0)
+        {
+            Gateway selectedGateway =
+                floorGateways[Random.Range(0, floorGateways.Count)];
+
+            validFloorGateways.Add(selectedGateway);
+
+            if (currentRoomNumber > generatedRooms.Count)
+                SetGatewayVisible(selectedGateway, true);
+        }
+
+        validSecretGateway = null;
+        secretUnlockRoom = null;
+
+        List<Gateway> eligibleSecretGateways =
+            new List<Gateway>();
+
+        foreach (Gateway gateway in secretGateways)
+        {
+            SetGatewayVisible(gateway, false);
+
+            ElevationDestination destination =
+                FindSpecialDestination(
+                    gateway,
+                    GetSecretDestinationFlow(gateway.Flow)
+                );
+
+            if (destination != null)
+            {
+                gateway.SetDestination(destination.transform);
+                eligibleSecretGateways.Add(gateway);
+            }
+            else
+                Debug.LogWarning(
+                    $"Secret Gateway '{gateway.name}' has no matching " +
+                    "Secret destination."
+                );
+        }
+
+        if (
+            eligibleSecretGateways.Count == 0 ||
+            Random.value > secretGatewayChance
+        )
+            return;
+
+        validSecretGateway =
+            eligibleSecretGateways[
+                Random.Range(0, eligibleSecretGateways.Count)
+            ];
+
+        RoomInstance secretRoom =
+            validSecretGateway.GetComponentInParent<RoomInstance>();
+
+        List<RoomInstance> unlockRooms =
+            new List<RoomInstance>();
+
+        foreach (RoomInstance room in generatedRooms)
+        {
+            if (room != secretRoom)
+                unlockRooms.Add(room);
+        }
+
+        if (unlockRooms.Count == 0)
+        {
+            validSecretGateway = null;
+            return;
+        }
+
+        secretUnlockRoom =
+            unlockRooms[Random.Range(0, unlockRooms.Count)];
+
+        if (clearedRooms.Contains(secretUnlockRoom.RoomNumber))
+        {
+            SetGatewayVisible(validSecretGateway, true);
+            validSecretGateway = null;
+            secretUnlockRoom = null;
+        }
+    }
+
+    private GatewayFlow GetSecretDestinationFlow(
+        GatewayFlow gatewayFlow)
+    {
+        return gatewayFlow == GatewayFlow.SecretForward
+            ? GatewayFlow.SecretBackward
+            : GatewayFlow.SecretForward;
+    }
+
+    private ElevationDestination FindSpecialDestination(
+        Gateway gateway,
+        GatewayFlow flow)
+    {
+        GatewayDirection requiredDirection = gateway.Direction.Opposite();
+
+        foreach (RoomInstance room in generatedRooms)
+        {
+            ElevationDestination[] destinations =
+                room.GetComponentsInChildren<ElevationDestination>(true);
+
+            foreach (ElevationDestination destination in destinations)
+            {
+                if (
+                    destination.Flow == flow &&
+                    destination.Direction == requiredDirection
+                )
+                {
+                    return destination;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private void SetGatewayVisible(Gateway gateway, bool visible)
+    {
+        GatewayVisibility visibility =
+            gateway.GetComponent<GatewayVisibility>();
+
+        if (visibility != null)
+            visibility.SetVisible(visible);
+        else
+            gateway.enabled = visible;
     }
 
 
@@ -1007,6 +1206,9 @@ public class RoomManager : MonoBehaviour
                 "All rooms on this floor have been cleared."
             );
 
+            foreach (Gateway gateway in validFloorGateways)
+                SetGatewayVisible(gateway, true);
+
             if (GameManager.Instance != null)
             {
                 // Replace 1 with your actual floor ID later.
@@ -1093,6 +1295,9 @@ public class RoomManager : MonoBehaviour
         roomSpawnPoints.Clear();
         clearedSpawnPoints.Clear();
         clearedRooms.Clear();
+        validFloorGateways.Clear();
+        validSecretGateway = null;
+        secretUnlockRoom = null;
 
 
         foreach (RoomInstance room in generatedRooms)

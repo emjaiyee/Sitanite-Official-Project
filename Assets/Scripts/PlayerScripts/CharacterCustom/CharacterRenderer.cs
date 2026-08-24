@@ -16,6 +16,7 @@ public class CharacterRenderer : MonoBehaviour
     [SerializeField] private SpriteRenderer hairRenderer;
     [SerializeField] private SpriteRenderer headwearRenderer;
     [SerializeField] private SpriteRenderer weaponOverRenderer;
+    [SerializeField] private SpriteRenderer shieldRenderer;
 
     private CharacterDirection currentDirection = CharacterDirection.SouthWest;
 
@@ -33,6 +34,7 @@ public class CharacterRenderer : MonoBehaviour
         UpdateHair();
         UpdateHeadwear();
         UpdateWeapon();
+        UpdateShield();
     }
 
     private void UpdateBody()
@@ -93,7 +95,17 @@ public class CharacterRenderer : MonoBehaviour
 
     private void UpdateWeapon()
     {
-        // We'll handle weapon layering separately.
+        bool weaponIsUnder = currentDirection == CharacterDirection.North ||
+            currentDirection == CharacterDirection.NorthEast ||
+            currentDirection == CharacterDirection.NorthWest;
+
+        SetSprite(weaponUnderRenderer, weaponIsUnder ? appearance.weapon : null);
+        SetSprite(weaponOverRenderer, weaponIsUnder ? null : appearance.weapon);
+    }
+
+    private void UpdateShield()
+    {
+        SetSprite(shieldRenderer, appearance.shield);
     }
 
     private void SetSprite(

@@ -6,6 +6,8 @@ public class GatewayVisibility : MonoBehaviour
     [Header("Visibility")]
     [Tooltip("Initial state of the gateway when the room is loaded.")]
     [SerializeField] private bool visibleWhenUnlocked = true;
+    [Tooltip("Keeps the gateway visual hidden while its collider remains usable when unlocked.")]
+    [SerializeField] private bool invisibleWhenUnlocked;
 
     [Header("Fade")]
     [SerializeField] private bool smoothFade = true;
@@ -73,7 +75,7 @@ public class GatewayVisibility : MonoBehaviour
         // VISUAL
         // ---------------------------------------------
 
-        float targetAlpha = visible
+        float targetAlpha = visible && !invisibleWhenUnlocked
             ? originalColor.a
             : 0f;
 
