@@ -1,240 +1,98 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class Chest : MonoBehaviour
+[RequireComponent(typeof(Collider2D))]
+public class Chest : MonoBehaviour, IDamageable
 {
     [System.Serializable]
     public struct LootDrop
     {
         public ItemData itemData;
-
-        [Min(1)]
-        public int minQuantity;
-
-        [Min(1)]
-        public int maxQuantity;
-
-        [Range(0f, 1f)]
-        public float dropChance;
+        [Min(1)] public int minQuantity;
+        [Min(1)] public int maxQuantity;
+        [Range(0f, 1f)] public float dropChance;
     }
 
     [Header("References")]
     [SerializeField] private SpriteRenderer chestRenderer;
     [SerializeField] private Sprite openSprite;
-    [SerializeField] private GameObject promptObject;
     [SerializeField] private Transform spawnPoint;
 
     [Header("Loot Configuration")]
-    [SerializeField] private Loot lootPrefab;
-    [SerializeField] private List<LootDrop> lootTable = new List<LootDrop>();
+    [SerializeField] private GameObject lootPrefab;
+    [SerializeField] private List<LootDrop> lootPool = new List<LootDrop>();
 
-    [Header("Isometric Scatter Settings")]
-    [SerializeField] private float scatterForce = 3f;
-
-    [Tooltip(
-        "Flattens vertical force to match isometric 2:1 projection aspect ratio."
-    )]
-    [SerializeField] private float isoVerticalRatio = 0.5f;
-
-    [Header("Interaction")]
-    [Min(0.01f)]
-    [SerializeField] private float interactionRange = 1.5f;
+    [Header("Isometric Scatter")]
+    [SerializeField] private float scatterForce = 10f;
+    [SerializeField] private float verticalRatio = 0.5f;
 
     private bool opened;
-
-    // PlayerStats replaces the deleted PlayerGameplayFeatures.
-    private PlayerStats player;
+    private Collider2D chestCollider;
 
     public bool IsOpened => opened;
-
-    // -------------------------------------------------
-    // UNITY
-    // -------------------------------------------------
 
     private void Awake()
     {
         if (chestRenderer == null)
             chestRenderer = GetComponent<SpriteRenderer>();
 
-        if (promptObject == null)
-        {
-            Transform promptTransform =
-                transform.Find("PRESS (E)");
-
-            if (promptTransform != null)
-                promptObject = promptTransform.gameObject;
-        }
-
-        SetPromptVisible(false);
+        chestCollider = GetComponent<Collider2D>();
     }
 
-    private void Update()
+    /// <summary>
+    /// IDamageable implementation. Allows weapon hits to trigger the chest open state.
+    /// </summary>
+    public void TakeDamage(int amount, DamageType damageType = DamageType.Physical)
     {
-        if (opened)
-            return;
-
-        // Find the player using the PlayerStats component.
-        if (player == null)
-        {
-            player =
-                FindFirstObjectByType<PlayerStats>(
-                    FindObjectsInactive.Include
-                );
-        }
-
-        bool inRange =
-            player != null &&
-            IsPlayerInRange();
-
-        SetPromptVisible(inRange);
-
-        if (
-            inRange &&
-            Keyboard.current != null &&
-            Keyboard.current.eKey.wasPressedThisFrame
-        )
-        {
-            OpenChest();
-        }
+        OpenChest();
     }
 
-    // -------------------------------------------------
-    // OPEN CHEST
-    // -------------------------------------------------
-
+    /// <summary>Swaps sprite and scatters configured loot onto the isometric ground plane.</summary>
     public bool OpenChest()
     {
-        if (
-            opened ||
-            player == null ||
-            !IsPlayerInRange()
-        )
-        {
-            return false;
-        }
+        if (opened) return false;
 
         opened = true;
 
-        SetPromptVisible(false);
-
-        if (
-            chestRenderer != null &&
-            openSprite != null
-        )
-        {
+        if (chestRenderer != null && openSprite != null)
             chestRenderer.sprite = openSprite;
-        }
 
         SpawnAndScatterLoot();
-
         return true;
     }
-
-    // -------------------------------------------------
-    // LOOT
-    // -------------------------------------------------
 
     private void SpawnAndScatterLoot()
     {
         if (lootPrefab == null)
         {
-            Debug.LogError(
-                $"[Chest] {name} is missing a Loot prefab assignment!"
-            );
-
+            Debug.LogWarning($"[Chest] {name} is missing an assigned lootPrefab!");
             return;
         }
 
-        Vector3 origin =
-            spawnPoint != null
-                ? spawnPoint.position
-                : transform.position;
+        Vector3 origin = spawnPoint != null ? spawnPoint.position : transform.position;
 
-        foreach (LootDrop drop in lootTable)
+        foreach (LootDrop drop in lootPool)
         {
-            if (
-                drop.itemData == null ||
-                Random.value > drop.dropChance
-            )
-            {
+            if (drop.itemData == null || Random.value > drop.dropChance)
                 continue;
-            }
 
-            int totalQuantity = Random.Range(
-                drop.minQuantity,
-                drop.maxQuantity + 1
-            );
+            int totalQuantity = Random.Range(drop.minQuantity, drop.maxQuantity + 1);
 
-            Loot spawnedLoot =
-                Instantiate(
-                    lootPrefab,
-                    origin,
-                    Quaternion.identity
-                );
+            GameObject spawnedGo = Instantiate(lootPrefab, origin, Quaternion.identity);
 
-            spawnedLoot.Setup(
-                drop.itemData,
-                totalQuantity
-            );
-
-            // Generate a random direction on the 2D ground plane.
-            Vector2 randomDirection =
-                Random.insideUnitCircle.normalized;
-
-            // Compress Y to match the isometric projection.
-            Vector2 isoDirection =
-                new Vector2(
-                    randomDirection.x,
-                    randomDirection.y * isoVerticalRatio
-                ).normalized;
-
-            if (
-                spawnedLoot.TryGetComponent(
-                    out Rigidbody2D rb
-                )
-            )
+            if (spawnedGo.TryGetComponent(out Loot spawnedLoot))
             {
-                float randomizedForce =
-                    scatterForce *
-                    Random.Range(0.8f, 1.2f);
-
-                rb.AddForce(
-                    isoDirection * randomizedForce,
-                    ForceMode2D.Impulse
-                );
+                spawnedLoot.Setup(drop.itemData, totalQuantity);
             }
-        }
-    }
 
-    // -------------------------------------------------
-    // PLAYER RANGE
-    // -------------------------------------------------
+            Vector2 randomDirection = Random.insideUnitCircle.normalized;
+            Vector2 isoDirection = new Vector2(randomDirection.x, randomDirection.y * verticalRatio).normalized;
 
-    private bool IsPlayerInRange()
-    {
-        if (player == null)
-            return false;
-
-        Vector2 offset =
-            (Vector2)transform.position -
-            (Vector2)player.transform.position;
-
-        return offset.sqrMagnitude <=
-               interactionRange * interactionRange;
-    }
-
-    // -------------------------------------------------
-    // PROMPT
-    // -------------------------------------------------
-
-    private void SetPromptVisible(bool visible)
-    {
-        if (promptObject != null)
-        {
-            promptObject.SetActive(
-                visible && !opened
-            );
+            if (spawnedGo.TryGetComponent(out Rigidbody2D rb))
+            {
+                float randomizedForce = scatterForce * Random.Range(0.8f, 1.2f);
+                rb.AddForce(isoDirection * randomizedForce, ForceMode2D.Impulse);
+            }
         }
     }
 }
