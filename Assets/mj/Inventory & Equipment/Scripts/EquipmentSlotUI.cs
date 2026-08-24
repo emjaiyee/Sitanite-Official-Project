@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// UI view component for each individual equipment slots.
@@ -18,6 +19,9 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
 
     [Tooltip("Target dimensions (in pixels) for item scaling within the slot.")]
     [SerializeField] private float slotSize = 64f;
+
+    [Header("Slot Appearance")]
+    [SerializeField] private Image slotIcon;
     #endregion
 
     #region Private Fields
@@ -100,14 +104,30 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
     {
         ClearVisualOnly();
 
-        if (EquipmentManager.Instance == null) return;
+        if (EquipmentManager.Instance == null)
+        {
+            UpdateSlotIcon(null);
+            return;
+        }
 
         InventoryItem item = EquipmentManager.Instance.GetEquippedItem(slotType);
+
+        UpdateSlotIcon(item);
+
         if (item != null)
         {
             equippedVisual = CreateAndSetupVisual(item);
             SnapVisualToSlot(equippedVisual, item);
         }
+    }
+
+    private void UpdateSlotIcon(InventoryItem equippedItem)
+    {
+        if (slotIcon == null)
+            return;
+
+        // Show the slot's default icon only when empty.
+        slotIcon.gameObject.SetActive(equippedItem == null);
     }
     #endregion
 

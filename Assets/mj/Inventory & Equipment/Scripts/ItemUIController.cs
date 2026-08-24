@@ -14,16 +14,11 @@ public class ItemUIController : MonoBehaviour
     [Tooltip("Rendered icon for sprite")]
     [SerializeField] private Image iconImage;
 
-    [Tooltip("Optional sprite shown across the cells occupied by this item.")]
-    [SerializeField] private Sprite occupiedSprite;
-
     [Tooltip("TextMeshPro displaying stack amount.")]
     [SerializeField] private TextMeshProUGUI stackText;
 
     [Tooltip("RectTransform of the prefab")]
     [SerializeField] private RectTransform rectTransform;
-
-    private Image occupiedImage;
     #endregion
 
     #region Lifecycle
@@ -31,20 +26,6 @@ public class ItemUIController : MonoBehaviour
     {
         if (rectTransform == null)
             rectTransform = GetComponent<RectTransform>();
-
-        if (occupiedSprite != null)
-        {
-            GameObject occupiedObject = new GameObject("Occupied Overlay", typeof(RectTransform), typeof(Image));
-            occupiedObject.transform.SetParent(transform, false);
-            occupiedImage = occupiedObject.GetComponent<Image>();
-            occupiedImage.sprite = occupiedSprite;
-            occupiedImage.raycastTarget = false;
-            occupiedImage.rectTransform.anchorMin = Vector2.zero;
-            occupiedImage.rectTransform.anchorMax = Vector2.one;
-            occupiedImage.rectTransform.offsetMin = Vector2.zero;
-            occupiedImage.rectTransform.offsetMax = Vector2.zero;
-            occupiedImage.rectTransform.SetAsFirstSibling();
-        }
     }
     #endregion
 
@@ -61,7 +42,6 @@ public class ItemUIController : MonoBehaviour
         UpdateIconSprite(item);
         UpdateStackText(item);
         UpdateLayout(item, cellSize);
-        SetOccupiedVisible(true);
     }
 
     /// <summary>
@@ -89,7 +69,6 @@ public class ItemUIController : MonoBehaviour
         }
 
         UpdateStackText(item);
-        SetOccupiedVisible(false);
     }
 
     /// <summary>
@@ -125,17 +104,6 @@ public class ItemUIController : MonoBehaviour
         }
 
         UpdateStackText(item);
-    }
-
-    /// <summary>
-    /// Controls whether the optional occupied overlay is visible in the current UI context.
-    /// </summary>
-    public void SetOccupiedVisible(bool isVisible)
-    {
-        if (occupiedImage != null)
-        {
-            occupiedImage.gameObject.SetActive(isVisible);
-        }
     }
     #endregion
 

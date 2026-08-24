@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 /// <summary>
 /// Handles UI rendering, input detection, and spatial grid mapping for items in inventory.
@@ -71,7 +72,6 @@ public class ItemGridUI : MonoBehaviour
         clickAction.Enable();
 
         gridManager.OnItemPlaced += HandleItemPlaced;
-        gridManager.OnItemRemoved += HandleItemRemoved;
         gridManager.OnItemRotated += HandleItemRotated;
         gridManager.OnItemUpdated += HandleItemUpdated;
         
@@ -83,16 +83,15 @@ public class ItemGridUI : MonoBehaviour
         clickAction.Disable();
 
         gridManager.OnItemPlaced -= HandleItemPlaced;
-        gridManager.OnItemRemoved -= HandleItemRemoved;
         gridManager.OnItemRotated -= HandleItemRotated;
         gridManager.OnItemUpdated -= HandleItemUpdated;
     }
 
     private void Start()
     {
-        // Resize container RectTransform to match grid footprint bounds
         float totalWidth = gridManager.GridWidth * cellSize;
         float totalHeight = gridManager.GridHeight * cellSize;
+
         gridRectTransform.sizeDelta = new Vector2(totalWidth, totalHeight);
 
         InitializeInventoryItems();
@@ -208,17 +207,14 @@ public class ItemGridUI : MonoBehaviour
     {
         DragDropManager dragManager = DragDropManager.Instance;
 
-        // Reparent existing drag visual if item originates from active drag
         if (dragManager.HeldItem == item && dragManager.HeldItemVisual != null)
         {
             RectTransform heldVisual = dragManager.HeldItemVisual;
+
             heldVisual.SetParent(gridRectTransform, false);
             itemVisualMap[item] = heldVisual;
+
             SnapVisualToGrid(item, heldVisual);
-            if (heldVisual.TryGetComponent<ItemUIController>(out var heldController))
-            {
-                heldController.SetOccupiedVisible(true);
-            }
             return;
         }
 
@@ -230,19 +226,6 @@ public class ItemGridUI : MonoBehaviour
         visual.SetParent(gridRectTransform, false);
         SnapVisualToGrid(item, visual);
     }
-
-    private void HandleItemRemoved(InventoryItem item, Vector2Int previousPosition)
-    {
-        if (DragDropManager.Instance.HeldItem != item && itemVisualMap.TryGetValue(item, out var visual))
-        {
-            if (visual != null)
-            {
-                Destroy(visual.gameObject);
-            }
-            itemVisualMap.Remove(item);
-        }
-    }
-
     private void HandleItemRotated(InventoryItem item)
     {
         if (itemVisualMap.TryGetValue(item, out var visual) && visual != null)
