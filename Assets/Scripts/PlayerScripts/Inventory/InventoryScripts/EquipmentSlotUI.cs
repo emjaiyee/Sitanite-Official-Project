@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// UI view component for each individual equipment slots.
 /// Handles user pointer interactions, item swap logic, and visual state sync.
 /// </summary>
-public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
+public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
 {
     #region Serialized Fields
     [Header("Slot Configuration")]
@@ -19,20 +19,11 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
 
     [Tooltip("Target dimensions (in pixels) for item scaling within the slot.")]
     [SerializeField] private float slotSize = 64f;
-
-    [Header("Slot Appearance")]
-    [Tooltip("Image component used for the equipment slot background.")]
-    [SerializeField] private Image slotImage;
-
-    [Tooltip("Sprite shown when the slot is empty.")]
-    [SerializeField] private Sprite emptySlotSprite;
-
-    [Tooltip("Sprite shown when the slot has an item equipped.")]
-    [SerializeField] private Sprite occupiedSlotSprite;
     #endregion
 
     #region Private Fields
     private RectTransform equippedVisual;
+    private bool dropHandled;
     #endregion
 
     #region Properties
@@ -49,6 +40,18 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
     private void Awake()
     {
         if (slotRectTransform == null) slotRectTransform = GetComponent<RectTransform>();
+
+        Graphic dropTarget = GetComponent<Graphic>();
+        if (dropTarget == null)
+        {
+            Image raycastTarget = gameObject.AddComponent<Image>();
+            raycastTarget.color = Color.clear;
+            raycastTarget.raycastTarget = true;
+        }
+        else
+        {
+            dropTarget.raycastTarget = true;
+        }
     }
 
     private void OnEnable()
@@ -74,6 +77,12 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
+        if (dropHandled)
+        {
+            dropHandled = false;
+            return;
+        }
+
         DragDropManager dragManager = DragDropManager.Instance;
         EquipmentManager equipManager = EquipmentManager.Instance;
         if (dragManager == null || equipManager == null) return;
@@ -89,6 +98,23 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
         {
             UnequipItem();
         }
+    }
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        DragDropManager dragManager = DragDropManager.Instance;
+        if (dragManager == null || dragManager.HeldItem == null)
+            return;
+
+        dropHandled = true;
+
+        if (!CanEquip(dragManager.HeldItem))
+        {
+            dragManager.CancelDrag();
+            return;
+        }
+
+        EquipHeldItem(dragManager.HeldItem);
     }
     #endregion
 
@@ -111,31 +137,14 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
     {
         ClearVisualOnly();
 
-        if (EquipmentManager.Instance == null)
-        {
-            UpdateSlotAppearance(null);
-            return;
-        }
+        if (EquipmentManager.Instance == null) return;
 
         InventoryItem item = EquipmentManager.Instance.GetEquippedItem(slotType);
-
-        UpdateSlotAppearance(item);
-
         if (item != null)
         {
             equippedVisual = CreateAndSetupVisual(item);
             SnapVisualToSlot(equippedVisual, item);
         }
-    }
-
-    private void UpdateSlotAppearance(InventoryItem equippedItem)
-    {
-        if (slotImage == null)
-            return;
-
-        slotImage.sprite = equippedItem == null
-            ? emptySlotSprite
-            : occupiedSlotSprite;
     }
     #endregion
 
@@ -162,6 +171,9 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
         DragDropManager dragManager = DragDropManager.Instance;
         EquipmentManager equipManager = EquipmentManager.Instance;
 
+        if (dragManager == null || equipManager == null || !CanEquip(newItem))
+            return;
+
         RectTransform incomingVisual = dragManager.heldItemVisual;
 
         UnbindEvents();
@@ -175,6 +187,11 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
         if (incomingVisual != null)
         {
             equippedVisual = incomingVisual;
+            SnapVisualToSlot(equippedVisual, newItem);
+        }
+        else
+        {
+            equippedVisual = CreateAndSetupVisual(newItem);
             SnapVisualToSlot(equippedVisual, newItem);
         }
 

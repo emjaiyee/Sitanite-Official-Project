@@ -34,7 +34,7 @@ public class CharacterCustomizationController : MonoBehaviour
     [Tooltip("Item data granted to a Mage when the class is selected.")]
     [SerializeField] private ItemData[] mageStartingGear;
 
-    private bool startingGearSpawned;
+    private PlayerClass? grantedStartingGearClass;
 
     private void Start()
     {
@@ -44,7 +44,7 @@ public class CharacterCustomizationController : MonoBehaviour
 
     private void Update()
     {
-        if (!startingGearSpawned && characterRenderer != null)
+        if (characterRenderer != null)
             SpawnStartingGear(characterRenderer.Appearance.playerClass);
     }
 
@@ -280,7 +280,7 @@ public class CharacterCustomizationController : MonoBehaviour
 
     public int SpawnStartingGear(PlayerClass playerClass)
     {
-        if (startingGearSpawned)
+        if (grantedStartingGearClass == playerClass)
             return 0;
 
         ItemData[] startingGear = playerClass switch
@@ -293,7 +293,7 @@ public class CharacterCustomizationController : MonoBehaviour
 
         int spawnedCount = SpawnItemsToInventory(startingGear);
         if (spawnedCount >= 0)
-            startingGearSpawned = true;
+            grantedStartingGearClass = playerClass;
 
         return spawnedCount;
     }
@@ -304,8 +304,22 @@ public class CharacterCustomizationController : MonoBehaviour
             return 0;
 
         PlayerInventory playerInventory = GetComponent<PlayerInventory>();
-        if (playerInventory == null || playerInventory.MainBackPack == null)
-            return -1;
+        EquipmentManager equipmentManager = EquipmentManager.Instance;
+
+        foreach (ItemData data in itemData)
+        {
+            if (data == null)
+                continue;
+
+            if (data.EquipmentType != EquipmentType.None && equipmentManager == null)
+                return -1;
+
+            if (data.EquipmentType == EquipmentType.None &&
+                (playerInventory == null || playerInventory.MainBackPack == null))
+            {
+                return -1;
+            }
+        }
 
         int spawnedCount = 0;
         foreach (ItemData data in itemData)
@@ -314,8 +328,25 @@ public class CharacterCustomizationController : MonoBehaviour
                 continue;
 
             InventoryItem item = new InventoryItem(data);
-            if (playerInventory.MainBackPack.TryAddItem(item))
+            if (data.EquipmentType != EquipmentType.None)
+            {
+                if (equipmentManager != null &&
+                    equipmentManager.Equip(data.EquipmentType, item, out _))
+                {
+                    spawnedCount++;
+                    continue;
+                }
+
+                Debug.LogWarning(
+                    $"CharacterCustomizationController: Could not equip '{data.itemName}' as starting gear.",
+                    this
+                );
+            }
+            else if (playerInventory.MainBackPack.TryAddItem(item))
+            {
                 spawnedCount++;
+                continue;
+            }
             else
                 Debug.LogWarning(
                     $"CharacterCustomizationController: Could not add '{data.itemName}' to the inventory.",
