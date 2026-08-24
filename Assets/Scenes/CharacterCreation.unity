@@ -10863,10 +10863,6 @@ PrefabInstance:
       propertyPath: occupiedSlotSprite
       value: 
       objectReference: {fileID: 21300000, guid: b16ddf6e57925ab4d9da139825c35827, type: 3}
-    - target: {fileID: 923046149714943363, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
-      propertyPath: <GridWidth>k__BackingField
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: 1525298524712776974, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
       propertyPath: slotImage
       value: 
@@ -10903,18 +10899,6 @@ PrefabInstance:
       propertyPath: occupiedSlotSprite
       value: 
       objectReference: {fileID: 21300000, guid: b16ddf6e57925ab4d9da139825c35827, type: 3}
-    - target: {fileID: 5085268164513537803, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
-      propertyPath: gridCellPrefab
-      value: 
-      objectReference: {fileID: 5669319675592131211}
-    - target: {fileID: 5085268164513537803, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
-      propertyPath: gridCellContainer
-      value: 
-      objectReference: {fileID: 5669319675592131210}
-    - target: {fileID: 5465599210382171236, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: d017db66bbfc45d4793268c217c8a521, type: 3}
     - target: {fileID: 6674772597310707271, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -10999,14 +10983,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Inventory & Equipment Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 8533858639903197548, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
-      propertyPath: m_Type
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8533858639903197548, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 16567eb2b10485d4c8265f26e36688cc, type: 3}
     - target: {fileID: 9060780764469531123, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
       propertyPath: slotImage
       value: 
@@ -11024,16 +11000,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
---- !u!224 &5669319675592131210 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8857750890353105516, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
-  m_PrefabInstance: {fileID: 5669319675592131209}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &5669319675592131211 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 703698794186519076, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
-  m_PrefabInstance: {fileID: 5669319675592131209}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5669319675592131212 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 509974452765633453, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
