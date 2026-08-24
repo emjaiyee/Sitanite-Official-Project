@@ -686,6 +686,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 566840753858708005, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+      propertyPath: m_Color.a
+      value: 0.13333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465599210382171236, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+      propertyPath: m_Color.a
+      value: 0.05490196
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465599210382171236, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+      propertyPath: m_Color.b
+      value: 0.254717
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465599210382171236, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+      propertyPath: m_Color.g
+      value: 0.254717
+      objectReference: {fileID: 0}
+    - target: {fileID: 5465599210382171236, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+      propertyPath: m_Color.r
+      value: 0.254717
+      objectReference: {fileID: 0}
     - target: {fileID: 6674772597310707271, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -770,11 +790,59 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player Inventory & Equipment Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8533858639903197548, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 16567eb2b10485d4c8265f26e36688cc, type: 3}
+    - target: {fileID: 8533858639903197548, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+      propertyPath: m_Color.a
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7858173068951779388, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 763585915}
   m_SourcePrefab: {fileID: 100100000, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+--- !u!114 &763585913 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8533858639903197548, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+  m_PrefabInstance: {fileID: 763585912}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+--- !u!1 &763585914 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7858173068951779388, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+  m_PrefabInstance: {fileID: 763585912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &763585915
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763585914}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8f1d5c1231178644af28105d6b7e04e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemUIController
+  iconImage: {fileID: 763585913}
+  occupiedSprite: {fileID: 21300000, guid: b16ddf6e57925ab4d9da139825c35827, type: 3}
+  stackText: {fileID: 0}
+  rectTransform: {fileID: 763585916}
+--- !u!224 &763585916 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 425711029986606490, guid: 4f6ede7442f2eaa4fb5834872650024a, type: 3}
+  m_PrefabInstance: {fileID: 763585912}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1435930601
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,7 +1013,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1895883630
 MonoBehaviour:
   m_ObjectHideFlags: 0

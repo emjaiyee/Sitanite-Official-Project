@@ -215,6 +215,10 @@ public class ItemGridUI : MonoBehaviour
             heldVisual.SetParent(gridRectTransform, false);
             itemVisualMap[item] = heldVisual;
             SnapVisualToGrid(item, heldVisual);
+            if (heldVisual.TryGetComponent<ItemUIController>(out var heldController))
+            {
+                heldController.SetOccupiedVisible(true);
+            }
             return;
         }
 
