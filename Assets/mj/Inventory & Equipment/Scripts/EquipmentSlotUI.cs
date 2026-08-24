@@ -21,7 +21,14 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private float slotSize = 64f;
 
     [Header("Slot Appearance")]
-    [SerializeField] private Image slotIcon;
+    [Tooltip("Image component used for the equipment slot background.")]
+    [SerializeField] private Image slotImage;
+
+    [Tooltip("Sprite shown when the slot is empty.")]
+    [SerializeField] private Sprite emptySlotSprite;
+
+    [Tooltip("Sprite shown when the slot has an item equipped.")]
+    [SerializeField] private Sprite occupiedSlotSprite;
     #endregion
 
     #region Private Fields
@@ -106,13 +113,13 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
 
         if (EquipmentManager.Instance == null)
         {
-            UpdateSlotIcon(null);
+            UpdateSlotAppearance(null);
             return;
         }
 
         InventoryItem item = EquipmentManager.Instance.GetEquippedItem(slotType);
 
-        UpdateSlotIcon(item);
+        UpdateSlotAppearance(item);
 
         if (item != null)
         {
@@ -121,13 +128,14 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    private void UpdateSlotIcon(InventoryItem equippedItem)
+    private void UpdateSlotAppearance(InventoryItem equippedItem)
     {
-        if (slotIcon == null)
+        if (slotImage == null)
             return;
 
-        // Show the slot's default icon only when empty.
-        slotIcon.gameObject.SetActive(equippedItem == null);
+        slotImage.sprite = equippedItem == null
+            ? emptySlotSprite
+            : occupiedSlotSprite;
     }
     #endregion
 
