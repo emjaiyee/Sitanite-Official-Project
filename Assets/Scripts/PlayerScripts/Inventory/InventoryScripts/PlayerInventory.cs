@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -12,6 +15,14 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PlayerInventory : MonoBehaviour
 {
+    [Serializable]
+    private class SavedInventoryItem
+    {
+        public ItemData itemData;
+        public int quantity;
+        public int rotationIndex;
+        public Vector2Int originPosition;
+    }
     #region Serialized Fields
 
     [Header("Inventory Components")]
@@ -32,6 +43,11 @@ public class PlayerInventory : MonoBehaviour
     [Header("UI Suppression")]
     [Tooltip("Scene-local UI elements that are automatically hidden while the inventory is open.")]
     [SerializeField] private UISuppressor[] suppressedUIs;
+
+    private readonly List<SavedInventoryItem> savedItems = new List<SavedInventoryItem>();
+    private bool hasSavedInventory;
+    private InventoryGrid boundGrid;
+    private bool suppressGridSnapshot;
 
     #endregion
 
@@ -64,6 +80,8 @@ public class PlayerInventory : MonoBehaviour
             inventoryAction.action.Enable();
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
+        SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
 
     private void OnDisable()
@@ -72,6 +90,9 @@ public class PlayerInventory : MonoBehaviour
             inventoryAction.action.Disable();
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        UnbindGrid();
     }
 
     private void Start()
@@ -91,8 +112,21 @@ public class PlayerInventory : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        suppressGridSnapshot = hasSavedInventory;
         FindSceneReferences();
         SetInventoryState(startOpen);
+        StartCoroutine(RestoreInventoryAfterSceneLoad());
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        SaveInventory();
+    }
+
+    private void OnActiveSceneChanged(Scene oldScene, Scene newScene)
+    {
+        if (oldScene.IsValid() && oldScene != newScene)
+            SaveInventory();
     }
 
     #endregion
@@ -105,10 +139,14 @@ public class PlayerInventory : MonoBehaviour
     /// </summary>
     private void FindSceneReferences()
     {
+        UnbindGrid();
+
         // Find the scene-local inventory grid, including inactive objects.
         mainBackpack = FindFirstObjectByType<InventoryGrid>(
             FindObjectsInactive.Include
         );
+
+        BindGrid(mainBackpack);
 
         if (mainBackpack == null)
         {
@@ -199,6 +237,108 @@ public class PlayerInventory : MonoBehaviour
             return false;
 
         return item.TryPickup(mainBackpack);
+    }
+
+    private void SaveInventory()
+    {
+        if (mainBackpack == null)
+            return;
+
+        savedItems.Clear();
+        foreach (InventoryItem item in mainBackpack.GetItems())
+        {
+            savedItems.Add(new SavedInventoryItem
+            {
+                itemData = item.Data,
+                quantity = item.Quantity,
+                rotationIndex = item.RotationIndex,
+                originPosition = item.OriginPosition
+            });
+        }
+
+        hasSavedInventory = true;
+    }
+
+    private void BindGrid(InventoryGrid grid)
+    {
+        if (grid == null)
+            return;
+
+        boundGrid = grid;
+        boundGrid.OnItemPlaced += HandleGridChanged;
+        boundGrid.OnItemRemoved += HandleGridChanged;
+        boundGrid.OnItemRotated += HandleGridChanged;
+        boundGrid.OnItemUpdated += HandleGridChanged;
+    }
+
+    private void UnbindGrid()
+    {
+        if (boundGrid == null)
+            return;
+
+        boundGrid.OnItemPlaced -= HandleGridChanged;
+        boundGrid.OnItemRemoved -= HandleGridChanged;
+        boundGrid.OnItemRotated -= HandleGridChanged;
+        boundGrid.OnItemUpdated -= HandleGridChanged;
+        boundGrid = null;
+    }
+
+    private void HandleGridChanged(InventoryItem item, Vector2Int position)
+    {
+        if (!suppressGridSnapshot)
+            SaveInventory();
+    }
+
+    private void HandleGridChanged(InventoryItem item)
+    {
+        if (!suppressGridSnapshot)
+            SaveInventory();
+    }
+
+    private IEnumerator RestoreInventoryAfterSceneLoad()
+    {
+        yield return null;
+
+        if (!hasSavedInventory || mainBackpack == null)
+        {
+            suppressGridSnapshot = false;
+            yield break;
+        }
+
+        suppressGridSnapshot = true;
+        mainBackpack.Clear();
+        foreach (SavedInventoryItem savedItem in savedItems)
+        {
+            if (savedItem.itemData == null)
+                continue;
+
+            InventoryItem item = new InventoryItem(savedItem.itemData, savedItem.quantity);
+            for (int rotation = 0; rotation < savedItem.rotationIndex; rotation++)
+                item.Rotate();
+
+            bool restored = mainBackpack.CanPlaceItem(
+                item,
+                savedItem.originPosition.x,
+                savedItem.originPosition.y
+            ) && mainBackpack.PlaceItem(
+                item,
+                savedItem.originPosition.x,
+                savedItem.originPosition.y
+            );
+
+            if (!restored)
+                restored = mainBackpack.TryAddItem(item);
+
+            if (!restored)
+            {
+                Debug.LogWarning(
+                    $"PlayerInventory: Could not restore '{savedItem.itemData.itemName}' in the new scene."
+                );
+            }
+        }
+
+        suppressGridSnapshot = false;
+        SaveInventory();
     }
 
     #endregion

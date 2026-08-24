@@ -29,6 +29,10 @@ public class BreakablePot : MonoBehaviour, IDamageable
     [Header("Interaction")]
     [Min(0.01f)] [SerializeField] private float interactionRange = 1.2f;
 
+    [Header("Damage")]
+    [SerializeField] private DamageType breakableDamageTypes =
+        DamageType.Physical | DamageType.Blunt;
+
     private bool broken;
     private Collider2D potCollider;
 
@@ -46,8 +50,11 @@ public class BreakablePot : MonoBehaviour, IDamageable
     /// <summary>
     /// IDamageable implementation. Allows MeleeWeapon.cs to break the pot via interface.
     /// </summary>
-    public void TakeDamage(int amount, DamageType damageType = DamageType.Physical)
+    public void TakeDamage(int amount, DamageType damageType = DamageType.Slash)
     {
+        if ((damageType & breakableDamageTypes) == 0)
+            return;
+
         TryBreak();
     }
 

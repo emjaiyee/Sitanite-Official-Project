@@ -26,6 +26,10 @@ public class Chest : MonoBehaviour, IDamageable
     [SerializeField] private float scatterForce = 10f;
     [SerializeField] private float verticalRatio = 0.5f;
 
+    [Header("Damage")]
+    [SerializeField] private DamageType openableDamageTypes =
+        DamageType.Physical | DamageType.Blunt;
+
     private bool opened;
     private Collider2D chestCollider;
 
@@ -42,8 +46,11 @@ public class Chest : MonoBehaviour, IDamageable
     /// <summary>
     /// IDamageable implementation. Allows weapon hits to trigger the chest open state.
     /// </summary>
-    public void TakeDamage(int amount, DamageType damageType = DamageType.Physical)
+    public void TakeDamage(int amount, DamageType damageType = DamageType.Slash)
     {
+        if ((damageType & openableDamageTypes) == 0)
+            return;
+
         OpenChest();
     }
 

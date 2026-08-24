@@ -14,6 +14,12 @@ public class ItemUIController : MonoBehaviour
     [Tooltip("Rendered icon for sprite")]
     [SerializeField] private Image iconImage;
 
+    [Tooltip("9-slice background highlighting the item's occupied grid cells.")]
+    [SerializeField] private Image gridBackgroundImage;
+
+    [Tooltip("Sprite used by the 9-slice item background.")]
+    [SerializeField] private Sprite gridBackgroundSprite;
+
     [Tooltip("TextMeshPro displaying stack amount.")]
     [SerializeField] private TextMeshProUGUI stackText;
 
@@ -40,6 +46,7 @@ public class ItemUIController : MonoBehaviour
         if (item == null || item.Data == null) return;
 
         UpdateIconSprite(item);
+        UpdateGridBackground(item, cellSize);
         UpdateStackText(item);
         UpdateLayout(item, cellSize);
     }
@@ -54,6 +61,8 @@ public class ItemUIController : MonoBehaviour
         if (item == null || item.Data == null) return;
 
         rectTransform.sizeDelta = new Vector2(slotSize, slotSize);
+        if (gridBackgroundImage != null)
+            gridBackgroundImage.enabled = false;
 
         if (iconImage != null)
         {
@@ -85,6 +94,7 @@ public class ItemUIController : MonoBehaviour
         float activeWidth = item.GetWidth() * cellSize;
         float activeHeight = item.GetHeight() * cellSize;
         rectTransform.sizeDelta = new Vector2(activeWidth, activeHeight);
+        UpdateGridBackground(item, cellSize);
 
         if (iconImage != null)
         {
@@ -113,6 +123,22 @@ public class ItemUIController : MonoBehaviour
         if (iconImage == null || item?.Data == null) return;
 
         iconImage.sprite = item.Data.inventoryIcon;
+    }
+
+    private void UpdateGridBackground(InventoryItem item, float cellSize)
+    {
+        if (gridBackgroundImage == null)
+            return;
+
+        gridBackgroundImage.sprite = gridBackgroundSprite;
+        gridBackgroundImage.type = Image.Type.Sliced;
+        gridBackgroundImage.raycastTarget = false;
+        gridBackgroundImage.enabled = gridBackgroundSprite != null;
+        gridBackgroundImage.rectTransform.SetAsFirstSibling();
+        gridBackgroundImage.rectTransform.sizeDelta = new Vector2(
+            item.GetWidth() * cellSize,
+            item.GetHeight() * cellSize
+        );
     }
 
     private void UpdateStackText(InventoryItem item)

@@ -442,7 +442,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.007843138, g: 0.003921569, b: 0.003921569, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -870,7 +870,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomManager
   smallRoomPrefabs:
-  - {fileID: 813509379841093977, guid: 091fec89a3f5b854d896705269df7ae4, type: 3}
+  - {fileID: 813509379841093977, guid: 00bb0326593d36e4b8f803048b1be003, type: 3}
   - {fileID: 4057089196393080423, guid: 96884bbef967961488826ea9fa5ead74, type: 3}
   - {fileID: 4446540059129025920, guid: c0a710d2d6370be44b56ac80bddf06e3, type: 3}
   - {fileID: 3472139270589249039, guid: cfed6d6ed49e14840bbe67174ecb9931, type: 3}
@@ -879,6 +879,8 @@ MonoBehaviour:
   xlRoomPrefabs: []
   roomSpacingX: 60
   lockNextRoomUntilCleared: 1
+  secretGatewayChance: 0.35
+  floorManager: {fileID: 1969959510}
 --- !u!1 &1686456529
 GameObject:
   m_ObjectHideFlags: 0

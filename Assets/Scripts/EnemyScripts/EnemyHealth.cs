@@ -43,7 +43,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public void TakeDamage(
         int amount,
-        DamageType damageType = DamageType.Physical)
+        DamageType damageType = DamageType.Slash)
     {
         if (amount <= 0)
             return;

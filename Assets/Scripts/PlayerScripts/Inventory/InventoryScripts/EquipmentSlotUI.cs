@@ -19,6 +19,11 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
 
     [Tooltip("Target dimensions (in pixels) for item scaling within the slot.")]
     [SerializeField] private float slotSize = 64f;
+
+    [Header("Slot Appearance")]
+    [SerializeField] private Image slotImage;
+    [SerializeField] private Sprite emptySlotSprite;
+    [SerializeField] private Sprite occupiedSlotSprite;
     #endregion
 
     #region Private Fields
@@ -137,13 +142,28 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
     {
         ClearVisualOnly();
 
-        if (EquipmentManager.Instance == null) return;
+        if (EquipmentManager.Instance == null)
+        {
+            UpdateSlotAppearance(null);
+            return;
+        }
 
         InventoryItem item = EquipmentManager.Instance.GetEquippedItem(slotType);
+        UpdateSlotAppearance(item);
         if (item != null)
         {
             equippedVisual = CreateAndSetupVisual(item);
             SnapVisualToSlot(equippedVisual, item);
+        }
+    }
+
+    private void UpdateSlotAppearance(InventoryItem equippedItem)
+    {
+        if (slotImage != null)
+        {
+            slotImage.sprite = equippedItem == null
+                ? emptySlotSprite
+                : occupiedSlotSprite;
         }
     }
     #endregion
@@ -184,6 +204,8 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
             return;
         }
 
+        UpdateSlotAppearance(newItem);
+
         if (incomingVisual != null)
         {
             equippedVisual = incomingVisual;
@@ -200,6 +222,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
         if (previousItem != null)
         {
             RectTransform previousVisual = CreateAndSetupVisual(previousItem);
+            SetupVisualForInventory(previousVisual, previousItem);
             dragManager.PickUpItem(previousItem, null, previousVisual, this);
         }
 
@@ -218,6 +241,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
 
         UnbindEvents();
         equipManager.Unequip(slotType);
+        UpdateSlotAppearance(null);
         BindEvents();
 
         if (itemToPickup != null)
@@ -227,6 +251,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
                 visualToPickup = CreateAndSetupVisual(itemToPickup);
             }
 
+            SetupVisualForInventory(visualToPickup, itemToPickup);
             dragManager.PickUpItem(itemToPickup, null, visualToPickup, this);
         }
     }
@@ -275,6 +300,22 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
         }
 
         return rect;
+    }
+
+    private void SetupVisualForInventory(RectTransform visual, InventoryItem item)
+    {
+        if (visual == null || item == null)
+            return;
+
+        float cellSize = 64f;
+        ItemGridUI itemGrid = FindFirstObjectByType<ItemGridUI>(FindObjectsInactive.Include);
+        if (itemGrid != null)
+            cellSize = itemGrid.CellSize;
+
+        if (visual.TryGetComponent<ItemUIController>(out var controller))
+        {
+            controller.Setup(item, cellSize);
+        }
     }
 
     private void ClearVisualOnly()

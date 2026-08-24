@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -134,6 +135,42 @@ public class InventoryGrid : MonoBehaviour
         {
             OnItemRemoved?.Invoke(item, pos);
         }
+    }
+
+    public void Clear()
+    {
+        System.Collections.Generic.HashSet<InventoryItem> items =
+            new System.Collections.Generic.HashSet<InventoryItem>();
+
+        for (int x = 0; x < GridWidth; x++)
+        {
+            for (int y = 0; y < GridHeight; y++)
+            {
+                if (gridMatrix[x, y] != null)
+                    items.Add(gridMatrix[x, y]);
+            }
+        }
+
+        foreach (InventoryItem item in items)
+            RemoveItem(item);
+    }
+
+    public List<InventoryItem> GetItems()
+    {
+        List<InventoryItem> items = new List<InventoryItem>();
+        HashSet<InventoryItem> uniqueItems = new HashSet<InventoryItem>();
+
+        for (int x = 0; x < GridWidth; x++)
+        {
+            for (int y = 0; y < GridHeight; y++)
+            {
+                InventoryItem item = gridMatrix[x, y];
+                if (item != null && uniqueItems.Add(item))
+                    items.Add(item);
+            }
+        }
+
+        return items;
     }
 
     /// <summary>

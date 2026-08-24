@@ -34,7 +34,17 @@ public class CharacterCustomizationController : MonoBehaviour
     [Tooltip("Item data granted to a Mage when the class is selected.")]
     [SerializeField] private ItemData[] mageStartingGear;
 
-    private PlayerClass? grantedStartingGearClass;
+    [Header("Class Starter Items")]
+    [Tooltip("Non-equipment item data granted to a Warrior when the class is selected.")]
+    [SerializeField] private ItemData[] warriorStartingItems;
+
+    [Tooltip("Non-equipment item data granted to a Ranger when the class is selected.")]
+    [SerializeField] private ItemData[] rangerStartingItems;
+
+    [Tooltip("Non-equipment item data granted to a Mage when the class is selected.")]
+    [SerializeField] private ItemData[] mageStartingItems;
+
+    private PlayerClass? grantedStartingLoadoutClass;
 
     private void Start()
     {
@@ -45,7 +55,7 @@ public class CharacterCustomizationController : MonoBehaviour
     private void Update()
     {
         if (characterRenderer != null)
-            SpawnStartingGear(characterRenderer.Appearance.playerClass);
+            SpawnClassLoadout(characterRenderer.Appearance.playerClass);
     }
 
     public void SetGender(CharacterGender gender)
@@ -266,6 +276,20 @@ public class CharacterCustomizationController : MonoBehaviour
         CharacterAppearance appearance =
             characterRenderer.Appearance;
 
+        EquipmentManager equipmentManager = EquipmentManager.Instance;
+        if (equipmentManager != null)
+        {
+            equipmentManager.Unequip(EquipmentType.Helmet);
+            equipmentManager.Unequip(EquipmentType.Chestplate);
+            equipmentManager.Unequip(EquipmentType.Legging);
+            equipmentManager.Unequip(EquipmentType.Weapon);
+            equipmentManager.Unequip(EquipmentType.Shield);
+        }
+
+        PlayerInventory playerInventory = GetComponent<PlayerInventory>();
+        if (playerInventory != null && playerInventory.MainBackPack != null)
+            playerInventory.MainBackPack.Clear();
+
         appearance.playerClass = playerClass;
         appearance.headwear = null;
         appearance.torso = null;
@@ -274,15 +298,12 @@ public class CharacterCustomizationController : MonoBehaviour
         appearance.shield = null;
 
         RefreshAppearance();
-        ReapplyEquipmentVisuals();
-        SpawnStartingGear(playerClass);
+        grantedStartingLoadoutClass = null;
+        SpawnClassLoadout(playerClass);
     }
 
     public int SpawnStartingGear(PlayerClass playerClass)
     {
-        if (grantedStartingGearClass == playerClass)
-            return 0;
-
         ItemData[] startingGear = playerClass switch
         {
             PlayerClass.Warrior => warriorStartingGear,
@@ -291,11 +312,58 @@ public class CharacterCustomizationController : MonoBehaviour
             _ => null
         };
 
-        int spawnedCount = SpawnItemsToInventory(startingGear);
+        return SpawnItemsToInventory(startingGear);
+    }
+
+    public int SpawnClassLoadout(PlayerClass playerClass)
+    {
+        if (grantedStartingLoadoutClass == playerClass)
+            return 0;
+
+        ItemData[] startingGear = GetStartingGear(playerClass);
+        ItemData[] startingItems = GetStartingItems(playerClass);
+        ItemData[] loadout = new ItemData[(startingGear?.Length ?? 0) + (startingItems?.Length ?? 0)];
+
+        int loadoutIndex = 0;
+        if (startingGear != null)
+        {
+            foreach (ItemData data in startingGear)
+                loadout[loadoutIndex++] = data;
+        }
+
+        if (startingItems != null)
+        {
+            foreach (ItemData data in startingItems)
+                loadout[loadoutIndex++] = data;
+        }
+
+        int spawnedCount = SpawnItemsToInventory(loadout);
         if (spawnedCount >= 0)
-            grantedStartingGearClass = playerClass;
+            grantedStartingLoadoutClass = playerClass;
 
         return spawnedCount;
+    }
+
+    private ItemData[] GetStartingGear(PlayerClass playerClass)
+    {
+        return playerClass switch
+        {
+            PlayerClass.Warrior => warriorStartingGear,
+            PlayerClass.Ranger => rangerStartingGear,
+            PlayerClass.Mage => mageStartingGear,
+            _ => null
+        };
+    }
+
+    private ItemData[] GetStartingItems(PlayerClass playerClass)
+    {
+        return playerClass switch
+        {
+            PlayerClass.Warrior => warriorStartingItems,
+            PlayerClass.Ranger => rangerStartingItems,
+            PlayerClass.Mage => mageStartingItems,
+            _ => null
+        };
     }
 
     public int SpawnItemsToInventory(ItemData[] itemData)

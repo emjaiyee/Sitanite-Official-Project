@@ -1,5 +1,5 @@
 public interface IDamageable
 {
-    void TakeDamage(int amount, DamageType damageType = DamageType.Physical);
+    void TakeDamage(int amount, DamageType damageType = DamageType.Slash);
 }
  
