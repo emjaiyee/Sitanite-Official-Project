@@ -4,13 +4,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerDash : MonoBehaviour
 {
-    [Header("Dash Settings")]
-    [SerializeField] private float dashSpeed = 10f;
-    [SerializeField] private float dashDuration = 0.2f;
-
-    [Header("Stamina")]
-    [SerializeField] private int dashCost = 20;
-
     [Header("Input")]
     [SerializeField] private InputActionReference dashAction;
 
@@ -88,7 +81,7 @@ public class PlayerDash : MonoBehaviour
 
         if (
             isDashing &&
-            Time.time >= dashTime + dashDuration
+            Time.time >= dashTime + stats.dashDuration
         )
         {
             EndDash();
@@ -143,7 +136,7 @@ public class PlayerDash : MonoBehaviour
 
         if (stats != null)
         {
-            if (!stats.UseStamina(dashCost))
+            if (!stats.UseStamina(stats.dashCost))
             {
                 Debug.Log(
                     "[PlayerDash] Not enough stamina."
@@ -202,7 +195,7 @@ public class PlayerDash : MonoBehaviour
 
         // Apply dash velocity.
         rb.linearVelocity =
-            dashDirection * dashSpeed;
+            dashDirection * stats.dashSpeed;
 
         Debug.Log(
             $"[PlayerDash] Dash triggered! Direction: {dashDirection}"

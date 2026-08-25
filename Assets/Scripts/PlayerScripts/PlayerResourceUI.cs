@@ -42,13 +42,13 @@ public class PlayerResourceUI : MonoBehaviour
 
     private void Refresh(PlayerStats stats)
     {
-        SetSlider(healthSlider, stats.CurrentHealth, stats.maxHealth);
-        SetSlider(staminaSlider, stats.CurrentStamina, stats.maxStamina);
-        float manaPerCrystal = Mathf.Max(1f, stats.maxMana / 3f);
+        SetSlider(healthSlider, stats.CurrentHealth, stats.MaxHealth);
+        SetSlider(staminaSlider, stats.CurrentStamina, stats.MaxStamina);
+        float manaPerCrystal = Mathf.Max(1f, stats.MaxMana / 3f);
         for (int i = 0; i < manaCrystals.Length; i++)
         {
             if (manaCrystals[i] == null) continue;
-            float threshold = stats.maxMana - (i + 1) * manaPerCrystal;
+            float threshold = stats.MaxMana - (i + 1) * manaPerCrystal;
             bool active = stats.CurrentMana > threshold;
             Color color = manaCrystals[i].color;
             color.a = active ? 1f : emptyOpacity;

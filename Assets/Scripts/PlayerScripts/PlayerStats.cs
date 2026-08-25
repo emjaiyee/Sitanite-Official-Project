@@ -1,8 +1,7 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(PlayerAttributesNTraits))]
 public class PlayerStats : MonoBehaviour
 {
     [Header("Maximum Resources")]
@@ -14,6 +13,30 @@ public class PlayerStats : MonoBehaviour
 
     [Min(1)]
     public int maxStamina = 75;
+
+    [Header("Base Damage")]
+    [Min(0)] public int basePierceDamage = 0;
+    [Min(0)] public int baseStabDamage = 0;
+    [Min(0)] public int baseSlashDamage = 0;
+    [Min(0)] public int baseBluntDamage = 0;
+    [Min(0)] public int baseBurningDamage = 0;
+    [Min(0)] public int baseFrostDamage = 0;
+    [Min(0)] public int basePoisonDamage = 0;
+    [Min(0)] public int baseLightningDamage = 0;
+    [Min(0)] public int basePsychicDamage = 0;
+    [Min(0)] public int basePhysicalDamage = 0;
+
+    [Header("Base Damage Resistance")]
+    [Min(0)] public int basePierceResistance = 0;
+    [Min(0)] public int baseStabResistance = 0;
+    [Min(0)] public int baseSlashResistance = 0;
+    [Min(0)] public int baseBluntResistance = 0;
+    [Min(0)] public int baseBurningResistance = 0;
+    [Min(0)] public int baseFrostResistance = 0;
+    [Min(0)] public int basePoisonResistance = 0;
+    [Min(0)] public int baseLightningResistance = 0;
+    [Min(0)] public int basePsychicResistance = 0;
+    [Min(0)] public int basePhysicalResistance = 0;
 
     [Header("Current Resources")]
     [SerializeField] private int currentHealth;
@@ -27,6 +50,17 @@ public class PlayerStats : MonoBehaviour
 
     [Header("References")]
     [SerializeField] private PlayerWASD movement;
+
+    [SerializeField] private PlayerAttributesNTraits attributes;
+
+    [Header("Movement")]
+    [Min(0f)] public float moveSpeed = 5f;
+    [Min(0f)] public float sprintSpeed = 8f;
+
+    [Header("Dash")]
+    [Min(0f)] public float dashSpeed = 10f;
+    [Min(0f)] public float dashDuration = 0.2f;
+    [Min(0)] public int dashCost = 20;
 
     [Header("Sprint")]
     [Min(0f)]
@@ -64,12 +98,6 @@ public class PlayerStats : MonoBehaviour
     [SerializeField]
     private float mageStaminaRegen = 1f;
 
-    [Header("Skill")]
-    [Min(0)]
-    [SerializeField] private int skillManaCost = 25;
-
-    [SerializeField] private InputActionReference skillAction;
-
     [Header("Death Visual")]
     [Range(0f, 1f)]
     [SerializeField] private float deadPlayerOpacity = 0.5f;
@@ -89,6 +117,58 @@ public class PlayerStats : MonoBehaviour
     public int CurrentHealth => currentHealth;
     public int CurrentMana => currentMana;
     public int CurrentStamina => currentStamina;
+
+    public int MaxHealth => Mathf.Max(1, maxHealth + MaxHealthModifier);
+    public int MaxMana => Mathf.Max(1, maxMana + MaxManaModifier);
+    public int MaxStamina => Mathf.Max(1, maxStamina + MaxStaminaModifier);
+
+    public int PierceDamage => EffectiveDamage(basePierceDamage, DamageType.Pierce);
+    public int StabDamage => EffectiveDamage(baseStabDamage, DamageType.Stab);
+    public int SlashDamage => EffectiveDamage(baseSlashDamage, DamageType.Slash);
+    public int BluntDamage => EffectiveDamage(baseBluntDamage, DamageType.Blunt);
+    public int BurningDamage => EffectiveDamage(baseBurningDamage, DamageType.Burning);
+    public int FrostDamage => EffectiveDamage(baseFrostDamage, DamageType.Frost);
+    public int PoisonDamage => EffectiveDamage(basePoisonDamage, DamageType.Poison);
+    public int LightningDamage => EffectiveDamage(baseLightningDamage, DamageType.Lightning);
+    public int PsychicDamage => EffectiveDamage(basePsychicDamage, DamageType.Psychic);
+    public int PhysicalDamage => EffectiveDamage(basePhysicalDamage, DamageType.Physical);
+
+    public int PierceResistance => basePierceResistance;
+    public int StabResistance => baseStabResistance;
+    public int SlashResistance => baseSlashResistance;
+    public int BluntResistance => baseBluntResistance;
+    public int BurningResistance => baseBurningResistance;
+    public int FrostResistance => baseFrostResistance;
+    public int PoisonResistance => basePoisonResistance;
+    public int LightningResistance => baseLightningResistance;
+    public int PsychicResistance => basePsychicResistance;
+    public int PhysicalResistance => basePhysicalResistance;
+
+    public int GetDamageResistance(DamageType damageType)
+    {
+        if ((damageType & DamageType.Pierce) != 0)
+            return PierceResistance;
+        if ((damageType & DamageType.Stab) != 0)
+            return StabResistance;
+        if ((damageType & DamageType.Slash) != 0)
+            return SlashResistance;
+        if ((damageType & DamageType.Blunt) != 0)
+            return BluntResistance;
+        if ((damageType & DamageType.Burning) != 0)
+            return BurningResistance;
+        if ((damageType & DamageType.Frost) != 0)
+            return FrostResistance;
+        if ((damageType & DamageType.Poison) != 0)
+            return PoisonResistance;
+        if ((damageType & DamageType.Lightning) != 0)
+            return LightningResistance;
+        if ((damageType & DamageType.Psychic) != 0)
+            return PsychicResistance;
+        if ((damageType & DamageType.Physical) != 0)
+            return PhysicalResistance;
+
+        return 0;
+    }
 
     public bool IsDead { get; private set; }
 
@@ -113,6 +193,20 @@ public class PlayerStats : MonoBehaviour
 
     private float sprintDrainAccumulator;
 
+    private int MaxHealthModifier => attributes != null ? attributes.MaxHealthModifier : 0;
+    private int MaxManaModifier => attributes != null ? attributes.MaxManaModifier : 0;
+    private int MaxStaminaModifier => attributes != null ? attributes.MaxStaminaModifier : 0;
+
+    private int GetDamageModifier(DamageType damageType)
+    {
+        return attributes != null ? attributes.GetDamageModifier(damageType) : 0;
+    }
+
+    private int EffectiveDamage(int baseDamage, DamageType damageType)
+    {
+        return Mathf.Max(0, baseDamage + GetDamageModifier(damageType));
+    }
+
     // -------------------------------------------------
     // UNITY
     // -------------------------------------------------
@@ -122,25 +216,38 @@ public class PlayerStats : MonoBehaviour
         if (movement == null)
             movement = GetComponent<PlayerWASD>();
 
+        if (attributes == null)
+            attributes = GetComponent<PlayerAttributesNTraits>();
+
+        InitializeDamageDefaults();
         ResetToFull();
     }
 
-    private void OnEnable()
+    private void InitializeDamageDefaults()
     {
-        if (skillAction != null)
-        {
-            skillAction.action.Enable();
-            skillAction.action.performed += OnSkillPerformed;
-        }
-    }
+        basePierceDamage = 5;
+        baseStabDamage = 5;
+        baseSlashDamage = 5;
+        baseBluntDamage = 5;
+        basePhysicalDamage = 5;
 
-    private void OnDisable()
-    {
-        if (skillAction != null)
-        {
-            skillAction.action.performed -= OnSkillPerformed;
-            skillAction.action.Disable();
-        }
+        baseBurningDamage = 3;
+        baseFrostDamage = 3;
+        basePoisonDamage = 3;
+        baseLightningDamage = 3;
+        basePsychicDamage = 3;
+
+        basePierceResistance = 5;
+        baseStabResistance = 5;
+        baseSlashResistance = 5;
+        baseBluntResistance = 5;
+        basePhysicalResistance = 5;
+
+        baseBurningResistance = 3;
+        baseFrostResistance = 3;
+        basePoisonResistance = 3;
+        baseLightningResistance = 3;
+        basePsychicResistance = 3;
     }
 
     private void Update()
@@ -165,9 +272,9 @@ public class PlayerStats : MonoBehaviour
     /// </summary>
     public void ResetToFull()
     {
-        currentHealth = Mathf.Max(1, maxHealth);
-        currentMana = Mathf.Max(1, maxMana);
-        currentStamina = Mathf.Max(1, maxStamina);
+        currentHealth = MaxHealth;
+        currentMana = MaxMana;
+        currentStamina = MaxStamina;
 
         healthRegenAccumulator = 0f;
         manaRegenAccumulator = 0f;
@@ -186,10 +293,12 @@ public class PlayerStats : MonoBehaviour
     // HEALTH
     // -------------------------------------------------
 
-    public void TakeDamage(int amount)
+    public void TakeDamage(int amount, DamageType damageType = DamageType.Slash)
     {
         if (amount <= 0 || IsDead || currentHealth <= 0)
             return;
+
+        amount = Mathf.Max(0, amount - GetDamageResistance(damageType));
 
         currentHealth = Mathf.Max(
             0,
@@ -216,7 +325,7 @@ public class PlayerStats : MonoBehaviour
             return;
 
         currentHealth = Mathf.Min(
-            Mathf.Max(1, maxHealth),
+            MaxHealth,
             currentHealth + amount
         );
 
@@ -245,7 +354,7 @@ public class PlayerStats : MonoBehaviour
             return;
 
         currentMana = Mathf.Min(
-            Mathf.Max(1, maxMana),
+            MaxMana,
             currentMana + amount
         );
 
@@ -274,7 +383,7 @@ public class PlayerStats : MonoBehaviour
             return;
 
         currentStamina = Mathf.Min(
-            Mathf.Max(1, maxStamina),
+            MaxStamina,
             currentStamina + amount
         );
 
@@ -388,7 +497,7 @@ public class PlayerStats : MonoBehaviour
         bool changed = false;
 
         // HEALTH
-        if (currentHealth < maxHealth && healthRegen > 0f)
+        if (currentHealth < MaxHealth && healthRegen > 0f)
         {
             healthRegenAccumulator +=
                 healthRegen * Time.deltaTime;
@@ -403,7 +512,7 @@ public class PlayerStats : MonoBehaviour
                 int oldHealth = currentHealth;
 
                 currentHealth = Mathf.Min(
-                    maxHealth,
+                    MaxHealth,
                     currentHealth + restoreAmount
                 );
 
@@ -417,7 +526,7 @@ public class PlayerStats : MonoBehaviour
         }
 
         // MANA
-        if (currentMana < maxMana && manaRegen > 0f)
+        if (currentMana < MaxMana && manaRegen > 0f)
         {
             manaRegenAccumulator +=
                 manaRegen * Time.deltaTime;
@@ -432,7 +541,7 @@ public class PlayerStats : MonoBehaviour
                 int oldMana = currentMana;
 
                 currentMana = Mathf.Min(
-                    maxMana,
+                    MaxMana,
                     currentMana + restoreAmount
                 );
 
@@ -446,7 +555,7 @@ public class PlayerStats : MonoBehaviour
         }
 
         // STAMINA
-        if (currentStamina < maxStamina && staminaRegen > 0f)
+        if (currentStamina < MaxStamina && staminaRegen > 0f)
         {
             staminaRegenAccumulator +=
                 staminaRegen * Time.deltaTime;
@@ -461,7 +570,7 @@ public class PlayerStats : MonoBehaviour
                 int oldStamina = currentStamina;
 
                 currentStamina = Mathf.Min(
-                    maxStamina,
+                    MaxStamina,
                     currentStamina + restoreAmount
                 );
 
@@ -509,29 +618,6 @@ public class PlayerStats : MonoBehaviour
                 manaRegen = 0f;
                 staminaRegen = 0f;
                 break;
-        }
-    }
-
-    // -------------------------------------------------
-    // SKILL
-    // -------------------------------------------------
-
-    private void OnSkillPerformed(
-        InputAction.CallbackContext context)
-    {
-        UseSkill();
-    }
-
-    private void UseSkill()
-    {
-        if (IsDead)
-            return;
-
-        if (UseMana(skillManaCost))
-        {
-            Debug.Log("Skill activated!");
-
-            // Add actual skill behavior here later.
         }
     }
 

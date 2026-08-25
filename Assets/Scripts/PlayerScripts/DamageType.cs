@@ -11,4 +11,5 @@ public enum DamageType
     Lightning = 1 << 6,
     Psychic = 1 << 7,
     Physical = 1 << 8,
+    Stab = 1 << 9,
 }

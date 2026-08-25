@@ -4,13 +4,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D), typeof(PlayerStats))]
 public class PlayerWASD : MonoBehaviour
 {
-    [Header("Movement")]
-    [Min(0f)]
-    [SerializeField] private float moveSpeed = 5f;
-
-    [Min(0f)]
-    [SerializeField] private float sprintSpeed = 8f;
-
     [Header("Input")]
     [SerializeField] private InputActionReference moveAction;
     [SerializeField] private InputActionReference sprintAction;
@@ -151,8 +144,8 @@ public class PlayerWASD : MonoBehaviour
 
         float currentSpeed =
             IsSprinting
-                ? sprintSpeed
-                : moveSpeed;
+                ? stats.sprintSpeed
+                : stats.moveSpeed;
 
         rb.MovePosition(
             rb.position +
