@@ -26,7 +26,7 @@ public class PlayerEquipment : MonoBehaviour
     private void Start()
     {
         // Default weapon.
-        EquipWeapon("LongSword");
+        EquipWeapon("BattleAxe");
     }
 
     /// <summary>
