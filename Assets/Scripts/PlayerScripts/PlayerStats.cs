@@ -81,32 +81,17 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Regeneration Settings (per second)")]
 
-    [SerializeField]
-    private float meleeHealthRegen = 1f;
+    [Min(0f)]
+    [SerializeField] private float regenerationCooldown = 0.5f;
 
     [SerializeField]
-    private float meleeManaRegen = 0f;
+    private float healthRegen = 1f;
 
     [SerializeField]
-    private float meleeStaminaRegen = 3f;
+    private float manaRegen = 0f;
 
     [SerializeField]
-    private float rangedHealthRegen = 1f;
-
-    [SerializeField]
-    private float rangedManaRegen = 2f;
-
-    [SerializeField]
-    private float rangedStaminaRegen = 2f;
-
-    [SerializeField]
-    private float mageHealthRegen = 1f;
-
-    [SerializeField]
-    private float mageManaRegen = 4f;
-
-    [SerializeField]
-    private float mageStaminaRegen = 1f;
+    private float staminaRegen = 3f;
 
     [Header("Death Visual")]
     [Range(0f, 1f)]
@@ -134,6 +119,9 @@ public class PlayerStats : MonoBehaviour
     public float MoveSpeed => Mathf.Max(0f, moveSpeed + MovementSpeedModifier);
     public float SprintSpeed => Mathf.Max(0f, sprintSpeed + MovementSpeedModifier);
     public float DashSpeed => Mathf.Max(0f, dashSpeed + MovementSpeedModifier);
+    public float HealthRegen => healthRegen + HealthRegenModifier;
+    public float ManaRegen => manaRegen + ManaRegenModifier;
+    public float StaminaRegen => staminaRegen + StaminaRegenModifier;
 
     public float PierceDamage => EffectiveDamage(basePierceDamage, DamageType.Pierce);
     public float StabDamage => EffectiveDamage(baseStabDamage, DamageType.Stab);
@@ -219,6 +207,9 @@ public class PlayerStats : MonoBehaviour
     private float healthRegenAccumulator;
     private float manaRegenAccumulator;
     private float staminaRegenAccumulator;
+    private float healthRegenCooldown;
+    private float manaRegenCooldown;
+    private float staminaRegenCooldown;
 
     // -------------------------------------------------
     // SPRINT ACCUMULATOR
@@ -336,6 +327,11 @@ public class PlayerStats : MonoBehaviour
         NotifyChanged();
     }
 
+    public void NotifyStatsChanged()
+    {
+        NotifyChanged();
+    }
+
     // -------------------------------------------------
     // RESET
     // -------------------------------------------------
@@ -352,6 +348,9 @@ public class PlayerStats : MonoBehaviour
         healthRegenAccumulator = 0f;
         manaRegenAccumulator = 0f;
         staminaRegenAccumulator = 0f;
+        healthRegenCooldown = 0f;
+        manaRegenCooldown = 0f;
+        staminaRegenCooldown = 0f;
         sprintDrainAccumulator = 0f;
 
         IsDead = false;
@@ -377,6 +376,9 @@ public class PlayerStats : MonoBehaviour
             0,
             currentHealth - amount
         );
+
+        healthRegenCooldown = regenerationCooldown;
+        healthRegenAccumulator = 0f;
 
         NotifyChanged();
 
@@ -416,6 +418,9 @@ public class PlayerStats : MonoBehaviour
 
         currentMana -= amount;
 
+        manaRegenCooldown = regenerationCooldown;
+        manaRegenAccumulator = 0f;
+
         NotifyChanged();
 
         return true;
@@ -444,6 +449,9 @@ public class PlayerStats : MonoBehaviour
             return false;
 
         currentStamina -= amount;
+
+        staminaRegenCooldown = regenerationCooldown;
+        staminaRegenAccumulator = 0f;
 
         NotifyChanged();
 
@@ -561,23 +569,25 @@ public class PlayerStats : MonoBehaviour
         if (IsDead)
             return;
 
-        GetRegenerationRates(
-            out float healthRegen,
-            out float manaRegen,
-            out float staminaRegen
-        );
-
-        healthRegen += HealthRegenModifier;
-        manaRegen += ManaRegenModifier;
-        staminaRegen += StaminaRegenModifier;
+        float currentHealthRegen = HealthRegen;
+        float currentManaRegen = ManaRegen;
+        float currentStaminaRegen = StaminaRegen;
 
         bool changed = false;
 
         // HEALTH
-        if (currentHealth < MaxHealth && healthRegen > 0f)
+        if (healthRegenCooldown > 0f)
+        {
+            healthRegenCooldown = Mathf.Max(
+                0f,
+                healthRegenCooldown - Time.deltaTime
+            );
+            healthRegenAccumulator = 0f;
+        }
+        else if (currentHealth < MaxHealth && currentHealthRegen > 0f)
         {
             healthRegenAccumulator +=
-                healthRegen * Time.deltaTime;
+                currentHealthRegen * Time.deltaTime;
 
             float restoreAmount = healthRegenAccumulator;
 
@@ -602,10 +612,18 @@ public class PlayerStats : MonoBehaviour
         }
 
         // MANA
-        if (currentMana < MaxMana && manaRegen > 0f)
+        if (manaRegenCooldown > 0f)
+        {
+            manaRegenCooldown = Mathf.Max(
+                0f,
+                manaRegenCooldown - Time.deltaTime
+            );
+            manaRegenAccumulator = 0f;
+        }
+        else if (currentMana < MaxMana && currentManaRegen > 0f)
         {
             manaRegenAccumulator +=
-                manaRegen * Time.deltaTime;
+                currentManaRegen * Time.deltaTime;
 
             float restoreAmount = manaRegenAccumulator;
 
@@ -630,10 +648,18 @@ public class PlayerStats : MonoBehaviour
         }
 
         // STAMINA
-        if (currentStamina < MaxStamina && staminaRegen > 0f)
+        if (staminaRegenCooldown > 0f)
+        {
+            staminaRegenCooldown = Mathf.Max(
+                0f,
+                staminaRegenCooldown - Time.deltaTime
+            );
+            staminaRegenAccumulator = 0f;
+        }
+        else if (currentStamina < MaxStamina && currentStaminaRegen > 0f)
         {
             staminaRegenAccumulator +=
-                staminaRegen * Time.deltaTime;
+                currentStaminaRegen * Time.deltaTime;
 
             float restoreAmount = staminaRegenAccumulator;
 
@@ -659,40 +685,6 @@ public class PlayerStats : MonoBehaviour
 
         if (changed)
             NotifyChanged();
-    }
-
-    private void GetRegenerationRates(
-        out float healthRegen,
-        out float manaRegen,
-        out float staminaRegen
-    )
-    {
-        switch (playerClass)
-        {
-            case PlayerClass.Warrior:
-                healthRegen = meleeHealthRegen;
-                manaRegen = meleeManaRegen;
-                staminaRegen = meleeStaminaRegen;
-                break;
-
-            case PlayerClass.Ranger:
-                healthRegen = rangedHealthRegen;
-                manaRegen = rangedManaRegen;
-                staminaRegen = rangedStaminaRegen;
-                break;
-
-            case PlayerClass.Mage:
-                healthRegen = mageHealthRegen;
-                manaRegen = mageManaRegen;
-                staminaRegen = mageStaminaRegen;
-                break;
-
-            default:
-                healthRegen = 0f;
-                manaRegen = 0f;
-                staminaRegen = 0f;
-                break;
-        }
     }
 
     // -------------------------------------------------

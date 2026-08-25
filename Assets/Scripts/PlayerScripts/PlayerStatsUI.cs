@@ -40,6 +40,7 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private GameObject[] exceptions;
 
     private PlayerAttributesNTraits attributes;
+    private PlayerInventory inventory;
     private bool subscribed;
     public event Action PendingAllocationsChanged;
     private readonly Dictionary<PrimaryAttribute, int> pendingAttributes =
@@ -50,6 +51,7 @@ public class PlayerStatsUI : MonoBehaviour
     private void Awake()
     {
         ResolvePlayerReferences();
+        ResolveInventoryReference();
         AssignSuppressedUIs();
     }
 
@@ -67,6 +69,7 @@ public class PlayerStatsUI : MonoBehaviour
     private void Start()
     {
         ResolvePlayerReferences();
+        ResolveInventoryReference();
         SubscribeToAttributes();
         SetStatsWindowState(startOpen);
         Refresh(attributes);
@@ -100,6 +103,9 @@ public class PlayerStatsUI : MonoBehaviour
     {
         if (statsWindow == null)
             return;
+
+        if (isOpen && inventory != null && inventory.IsOpen)
+            inventory.SetInventoryState(false);
 
         statsWindow.SetActive(isOpen);
         SetSuppressedUIState(isOpen);
@@ -184,6 +190,13 @@ public class PlayerStatsUI : MonoBehaviour
                 attributes.TryAllocate(allocation.Key);
         }
 
+
+        PlayerStats playerStats = Player.Instance != null
+            ? Player.Instance.GetComponent<PlayerStats>()
+            : null;
+
+        if (playerStats != null)
+            playerStats.NotifyStatsChanged();
         ClearPendingAllocations();
     }
 
@@ -239,6 +252,12 @@ public class PlayerStatsUI : MonoBehaviour
             return;
 
         attributes = Player.Instance.GetComponent<PlayerAttributesNTraits>();
+    }
+
+    private void ResolveInventoryReference()
+    {
+        if (Player.Instance != null)
+            inventory = Player.Instance.GetComponent<PlayerInventory>();
     }
 
     private void AssignSuppressedUIs()

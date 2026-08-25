@@ -44,6 +44,8 @@ public class PlayerInventory : MonoBehaviour
     [Tooltip("Scene-local UI elements that are automatically hidden while the inventory is open.")]
     [SerializeField] private UISuppressor[] suppressedUIs;
 
+    private PlayerStatsUI statsUI;
+
     private readonly List<SavedInventoryItem> savedItems = new List<SavedInventoryItem>();
     private bool hasSavedInventory;
     private InventoryGrid boundGrid;
@@ -173,6 +175,10 @@ public class PlayerInventory : MonoBehaviour
             );
         }
 
+        statsUI = FindFirstObjectByType<PlayerStatsUI>(
+            FindObjectsInactive.Include
+        );
+
         // Find all scene-local UI elements marked for suppression.
         suppressedUIs = FindObjectsByType<UISuppressor>(
             FindObjectsInactive.Include,
@@ -210,6 +216,9 @@ public class PlayerInventory : MonoBehaviour
     {
         if (inventoryPanel == null)
             return;
+
+        if (isOpen && statsUI != null && statsUI.IsOpen)
+            statsUI.SetStatsWindowState(false);
 
         // Returns dragged items to original slot if UI closes mid-drag.
         if (!isOpen &&
