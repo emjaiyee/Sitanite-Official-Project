@@ -144,8 +144,8 @@ public class PlayerWASD : MonoBehaviour
 
         float currentSpeed =
             IsSprinting
-                ? stats.sprintSpeed
-                : stats.moveSpeed;
+                ? stats.SprintSpeed
+                : stats.MoveSpeed;
 
         rb.MovePosition(
             rb.position +

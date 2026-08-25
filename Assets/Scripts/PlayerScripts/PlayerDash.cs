@@ -195,7 +195,7 @@ public class PlayerDash : MonoBehaviour
 
         // Apply dash velocity.
         rb.linearVelocity =
-            dashDirection * stats.dashSpeed;
+            dashDirection * stats.DashSpeed;
 
         Debug.Log(
             $"[PlayerDash] Dash triggered! Direction: {dashDirection}"

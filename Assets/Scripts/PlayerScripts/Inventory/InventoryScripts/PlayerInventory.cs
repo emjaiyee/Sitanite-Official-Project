@@ -350,7 +350,8 @@ public class PlayerInventory : MonoBehaviour
 
         foreach (UISuppressor suppressor in suppressedUIs)
         {
-            if (suppressor == null)
+            if (suppressor == null ||
+                suppressor.GetComponent<InventoryPanel>() != null)
                 continue;
 
             if (inventoryOpen)

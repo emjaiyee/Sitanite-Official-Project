@@ -6,42 +6,52 @@ public class PlayerStats : MonoBehaviour
 {
     [Header("Maximum Resources")]
     [Min(1)]
-    public int maxHealth = 100;
+    public float maxHealth = 100f;
 
     [Min(1)]
-    public int maxMana = 75;
+    public float maxMana = 75f;
 
     [Min(1)]
-    public int maxStamina = 75;
+    public float maxStamina = 75f;
 
     [Header("Base Damage")]
-    [Min(0)] public int basePierceDamage = 0;
-    [Min(0)] public int baseStabDamage = 0;
-    [Min(0)] public int baseSlashDamage = 0;
-    [Min(0)] public int baseBluntDamage = 0;
-    [Min(0)] public int baseBurningDamage = 0;
-    [Min(0)] public int baseFrostDamage = 0;
-    [Min(0)] public int basePoisonDamage = 0;
-    [Min(0)] public int baseLightningDamage = 0;
-    [Min(0)] public int basePsychicDamage = 0;
-    [Min(0)] public int basePhysicalDamage = 0;
+    [Min(0)] public float basePierceDamage = 0f;
+    [Min(0)] public float baseStabDamage = 0f;
+    [Min(0)] public float baseSlashDamage = 0f;
+    [Min(0)] public float baseBluntDamage = 0f;
+    [Min(0)] public float baseBurningDamage = 0f;
+    [Min(0)] public float baseFrostDamage = 0f;
+    [Min(0)] public float basePoisonDamage = 0f;
+    [Min(0)] public float baseLightningDamage = 0f;
+    [Min(0)] public float basePsychicDamage = 0f;
+    [Min(0)] public float baseNecrosisDamage = 0f;
+    [Min(0)] public float baseWaterDamage = 0f;
+    [Min(0)] public float baseEarthDamage = 0f;
+    [Min(0)] public float baseFireDamage = 0f;
+    [Min(0)] public float baseAirDamage = 0f;
+    [Min(0)] public float basePhysicalDamage = 0f;
 
     [Header("Base Damage Resistance")]
-    [Min(0)] public int basePierceResistance = 0;
-    [Min(0)] public int baseStabResistance = 0;
-    [Min(0)] public int baseSlashResistance = 0;
-    [Min(0)] public int baseBluntResistance = 0;
-    [Min(0)] public int baseBurningResistance = 0;
-    [Min(0)] public int baseFrostResistance = 0;
-    [Min(0)] public int basePoisonResistance = 0;
-    [Min(0)] public int baseLightningResistance = 0;
-    [Min(0)] public int basePsychicResistance = 0;
-    [Min(0)] public int basePhysicalResistance = 0;
+    [Min(0)] public float basePierceResistance = 0f;
+    [Min(0)] public float baseStabResistance = 0f;
+    [Min(0)] public float baseSlashResistance = 0f;
+    [Min(0)] public float baseBluntResistance = 0f;
+    [Min(0)] public float baseBurningResistance = 0f;
+    [Min(0)] public float baseFrostResistance = 0f;
+    [Min(0)] public float basePoisonResistance = 0f;
+    [Min(0)] public float baseLightningResistance = 0f;
+    [Min(0)] public float basePsychicResistance = 0f;
+    [Min(0)] public float baseNecrosisResistance = 0f;
+    [Min(0)] public float baseWaterResistance = 0f;
+    [Min(0)] public float baseEarthResistance = 0f;
+    [Min(0)] public float baseFireResistance = 0f;
+    [Min(0)] public float baseAirResistance = 0f;
+    [Min(0)] public float basePhysicalResistance = 0f;
 
     [Header("Current Resources")]
-    [SerializeField] private int currentHealth;
-    [SerializeField] private int currentMana;
-    [SerializeField] private int currentStamina;
+    [SerializeField] private float currentHealth;
+    [SerializeField] private float currentMana;
+    [SerializeField] private float currentStamina;
 
     [Header("Character")]
     [SerializeField] private string characterName;
@@ -54,11 +64,11 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private PlayerAttributesNTraits attributes;
 
     [Header("Movement")]
-    [Min(0f)] public float moveSpeed = 5f;
-    [Min(0f)] public float sprintSpeed = 8f;
+    [Min(0f)] public float moveSpeed = 1.2f;
+    [Min(0f)] public float sprintSpeed = 1.8f;
 
     [Header("Dash")]
-    [Min(0f)] public float dashSpeed = 10f;
+    [Min(0f)] public float dashSpeed = 2f;
     [Min(0f)] public float dashDuration = 0.2f;
     [Min(0)] public int dashCost = 20;
 
@@ -114,37 +124,50 @@ public class PlayerStats : MonoBehaviour
     // CURRENT RESOURCES
     // -------------------------------------------------
 
-    public int CurrentHealth => currentHealth;
-    public int CurrentMana => currentMana;
-    public int CurrentStamina => currentStamina;
+    public float CurrentHealth => currentHealth;
+    public float CurrentMana => currentMana;
+    public float CurrentStamina => currentStamina;
 
-    public int MaxHealth => Mathf.Max(1, maxHealth + MaxHealthModifier);
-    public int MaxMana => Mathf.Max(1, maxMana + MaxManaModifier);
-    public int MaxStamina => Mathf.Max(1, maxStamina + MaxStaminaModifier);
+    public float MaxHealth => Mathf.Max(1f, maxHealth + MaxHealthModifier);
+    public float MaxMana => Mathf.Max(1f, maxMana + MaxManaModifier);
+    public float MaxStamina => Mathf.Max(1f, maxStamina + MaxStaminaModifier);
+    public float MoveSpeed => Mathf.Max(0f, moveSpeed + MovementSpeedModifier);
+    public float SprintSpeed => Mathf.Max(0f, sprintSpeed + MovementSpeedModifier);
+    public float DashSpeed => Mathf.Max(0f, dashSpeed + MovementSpeedModifier);
 
-    public int PierceDamage => EffectiveDamage(basePierceDamage, DamageType.Pierce);
-    public int StabDamage => EffectiveDamage(baseStabDamage, DamageType.Stab);
-    public int SlashDamage => EffectiveDamage(baseSlashDamage, DamageType.Slash);
-    public int BluntDamage => EffectiveDamage(baseBluntDamage, DamageType.Blunt);
-    public int BurningDamage => EffectiveDamage(baseBurningDamage, DamageType.Burning);
-    public int FrostDamage => EffectiveDamage(baseFrostDamage, DamageType.Frost);
-    public int PoisonDamage => EffectiveDamage(basePoisonDamage, DamageType.Poison);
-    public int LightningDamage => EffectiveDamage(baseLightningDamage, DamageType.Lightning);
-    public int PsychicDamage => EffectiveDamage(basePsychicDamage, DamageType.Psychic);
-    public int PhysicalDamage => EffectiveDamage(basePhysicalDamage, DamageType.Physical);
+    public float PierceDamage => EffectiveDamage(basePierceDamage, DamageType.Pierce);
+    public float StabDamage => EffectiveDamage(baseStabDamage, DamageType.Stab);
+    public float SlashDamage => EffectiveDamage(baseSlashDamage, DamageType.Slash);
+    public float BluntDamage => EffectiveDamage(baseBluntDamage, DamageType.Blunt);
+    public float BurningDamage => EffectiveDamage(baseBurningDamage, DamageType.Burning);
+    public float FrostDamage => EffectiveDamage(baseFrostDamage, DamageType.Frost);
+    public float PoisonDamage => EffectiveDamage(basePoisonDamage, DamageType.Poison);
+    public float LightningDamage => EffectiveDamage(baseLightningDamage, DamageType.Lightning);
+    public float PsychicDamage => EffectiveDamage(basePsychicDamage, DamageType.Psychic);
+    public float NecrosisDamage => EffectiveDamage(baseNecrosisDamage, DamageType.Necrosis);
+    public float WaterDamage => EffectiveDamage(baseWaterDamage, DamageType.Water);
+    public float EarthDamage => EffectiveDamage(baseEarthDamage, DamageType.Earth);
+    public float FireDamage => EffectiveDamage(baseFireDamage, DamageType.Fire);
+    public float AirDamage => EffectiveDamage(baseAirDamage, DamageType.Air);
+    public float PhysicalDamage => EffectiveDamage(basePhysicalDamage, DamageType.Physical);
 
-    public int PierceResistance => basePierceResistance;
-    public int StabResistance => baseStabResistance;
-    public int SlashResistance => baseSlashResistance;
-    public int BluntResistance => baseBluntResistance;
-    public int BurningResistance => baseBurningResistance;
-    public int FrostResistance => baseFrostResistance;
-    public int PoisonResistance => basePoisonResistance;
-    public int LightningResistance => baseLightningResistance;
-    public int PsychicResistance => basePsychicResistance;
-    public int PhysicalResistance => basePhysicalResistance;
+    public float PierceResistance => basePierceResistance + ResistanceModifier(DamageType.Pierce);
+    public float StabResistance => baseStabResistance + ResistanceModifier(DamageType.Stab);
+    public float SlashResistance => baseSlashResistance + ResistanceModifier(DamageType.Slash);
+    public float BluntResistance => baseBluntResistance + ResistanceModifier(DamageType.Blunt);
+    public float BurningResistance => baseBurningResistance + ResistanceModifier(DamageType.Burning);
+    public float FrostResistance => baseFrostResistance + ResistanceModifier(DamageType.Frost);
+    public float PoisonResistance => basePoisonResistance + ResistanceModifier(DamageType.Poison);
+    public float LightningResistance => baseLightningResistance + ResistanceModifier(DamageType.Lightning);
+    public float PsychicResistance => basePsychicResistance + ResistanceModifier(DamageType.Psychic);
+    public float NecrosisResistance => baseNecrosisResistance + ResistanceModifier(DamageType.Necrosis);
+    public float WaterResistance => baseWaterResistance + ResistanceModifier(DamageType.Water);
+    public float EarthResistance => baseEarthResistance + ResistanceModifier(DamageType.Earth);
+    public float FireResistance => baseFireResistance + ResistanceModifier(DamageType.Fire);
+    public float AirResistance => baseAirResistance + ResistanceModifier(DamageType.Air);
+    public float PhysicalResistance => basePhysicalResistance + ResistanceModifier(DamageType.Physical);
 
-    public int GetDamageResistance(DamageType damageType)
+    public float GetDamageResistance(DamageType damageType)
     {
         if ((damageType & DamageType.Pierce) != 0)
             return PierceResistance;
@@ -164,6 +187,16 @@ public class PlayerStats : MonoBehaviour
             return LightningResistance;
         if ((damageType & DamageType.Psychic) != 0)
             return PsychicResistance;
+        if ((damageType & DamageType.Necrosis) != 0)
+            return NecrosisResistance;
+        if ((damageType & DamageType.Water) != 0)
+            return WaterResistance;
+        if ((damageType & DamageType.Earth) != 0)
+            return EarthResistance;
+        if ((damageType & DamageType.Fire) != 0)
+            return FireResistance;
+        if ((damageType & DamageType.Air) != 0)
+            return AirResistance;
         if ((damageType & DamageType.Physical) != 0)
             return PhysicalResistance;
 
@@ -193,18 +226,31 @@ public class PlayerStats : MonoBehaviour
 
     private float sprintDrainAccumulator;
 
-    private int MaxHealthModifier => attributes != null ? attributes.MaxHealthModifier : 0;
-    private int MaxManaModifier => attributes != null ? attributes.MaxManaModifier : 0;
-    private int MaxStaminaModifier => attributes != null ? attributes.MaxStaminaModifier : 0;
+    private float MaxHealthModifier => attributes != null ? attributes.MaxHealthModifier : 0f;
+    private float MaxManaModifier => attributes != null ? attributes.MaxManaModifier : 0f;
+    private float MaxStaminaModifier => attributes != null ? attributes.MaxStaminaModifier : 0f;
+    private float HealthRegenModifier => attributes != null ? attributes.HealthRegenModifier : 0f;
+    private float ManaRegenModifier => attributes != null ? attributes.ManaRegenModifier : 0f;
+    private float StaminaRegenModifier => attributes != null ? attributes.StaminaRegenModifier : 0f;
+    private float MovementSpeedModifier => attributes != null ? attributes.MovementSpeedModifier : 0f;
 
-    private int GetDamageModifier(DamageType damageType)
+    private float GetDamageModifier(DamageType damageType)
     {
         return attributes != null ? attributes.GetDamageModifier(damageType) : 0;
     }
 
-    private int EffectiveDamage(int baseDamage, DamageType damageType)
+    private float EffectiveDamage(float baseDamage, DamageType damageType)
     {
         return Mathf.Max(0, baseDamage + GetDamageModifier(damageType));
+    }
+
+    private float ResistanceModifier(DamageType damageType)
+    {
+        if ((damageType & (DamageType.Pierce | DamageType.Stab | DamageType.Slash |
+                           DamageType.Blunt | DamageType.Physical)) != 0)
+            return attributes != null ? attributes.DamageResistanceModifier : 0f;
+
+        return attributes != null ? attributes.MagicalResistanceModifier : 0f;
     }
 
     // -------------------------------------------------
@@ -236,6 +282,11 @@ public class PlayerStats : MonoBehaviour
         basePoisonDamage = 3;
         baseLightningDamage = 3;
         basePsychicDamage = 3;
+        baseNecrosisDamage = 3;
+        baseWaterDamage = 3;
+        baseEarthDamage = 3;
+        baseFireDamage = 3;
+        baseAirDamage = 3;
 
         basePierceResistance = 5;
         baseStabResistance = 5;
@@ -248,6 +299,11 @@ public class PlayerStats : MonoBehaviour
         basePoisonResistance = 3;
         baseLightningResistance = 3;
         basePsychicResistance = 3;
+        baseNecrosisResistance = 3;
+        baseWaterResistance = 3;
+        baseEarthResistance = 3;
+        baseFireResistance = 3;
+        baseAirResistance = 3;
     }
 
     private void Update()
@@ -261,6 +317,23 @@ public class PlayerStats : MonoBehaviour
         UpdateSprint();
         UpdateMovementMultiplier();
         RegenerateResources();
+    }
+
+    private void OnEnable()
+    {
+        if (attributes != null)
+            attributes.Changed += HandleAttributesChanged;
+    }
+
+    private void OnDisable()
+    {
+        if (attributes != null)
+            attributes.Changed -= HandleAttributesChanged;
+    }
+
+    private void HandleAttributesChanged(PlayerAttributesNTraits source)
+    {
+        NotifyChanged();
     }
 
     // -------------------------------------------------
@@ -293,12 +366,12 @@ public class PlayerStats : MonoBehaviour
     // HEALTH
     // -------------------------------------------------
 
-    public void TakeDamage(int amount, DamageType damageType = DamageType.Slash)
+    public void TakeDamage(float amount, DamageType damageType = DamageType.Slash)
     {
         if (amount <= 0 || IsDead || currentHealth <= 0)
             return;
 
-        amount = Mathf.Max(0, amount - GetDamageResistance(damageType));
+        amount = Mathf.Max(0f, amount - GetDamageResistance(damageType));
 
         currentHealth = Mathf.Max(
             0,
@@ -494,6 +567,10 @@ public class PlayerStats : MonoBehaviour
             out float staminaRegen
         );
 
+        healthRegen += HealthRegenModifier;
+        manaRegen += ManaRegenModifier;
+        staminaRegen += StaminaRegenModifier;
+
         bool changed = false;
 
         // HEALTH
@@ -502,14 +579,13 @@ public class PlayerStats : MonoBehaviour
             healthRegenAccumulator +=
                 healthRegen * Time.deltaTime;
 
-            int restoreAmount =
-                Mathf.FloorToInt(healthRegenAccumulator);
+            float restoreAmount = healthRegenAccumulator;
 
             if (restoreAmount > 0)
             {
-                healthRegenAccumulator -= restoreAmount;
+                healthRegenAccumulator = 0f;
 
-                int oldHealth = currentHealth;
+                float oldHealth = currentHealth;
 
                 currentHealth = Mathf.Min(
                     MaxHealth,
@@ -531,14 +607,13 @@ public class PlayerStats : MonoBehaviour
             manaRegenAccumulator +=
                 manaRegen * Time.deltaTime;
 
-            int restoreAmount =
-                Mathf.FloorToInt(manaRegenAccumulator);
+            float restoreAmount = manaRegenAccumulator;
 
             if (restoreAmount > 0)
             {
-                manaRegenAccumulator -= restoreAmount;
+                manaRegenAccumulator = 0f;
 
-                int oldMana = currentMana;
+                float oldMana = currentMana;
 
                 currentMana = Mathf.Min(
                     MaxMana,
@@ -560,14 +635,13 @@ public class PlayerStats : MonoBehaviour
             staminaRegenAccumulator +=
                 staminaRegen * Time.deltaTime;
 
-            int restoreAmount =
-                Mathf.FloorToInt(staminaRegenAccumulator);
+            float restoreAmount = staminaRegenAccumulator;
 
             if (restoreAmount > 0)
             {
-                staminaRegenAccumulator -= restoreAmount;
+                staminaRegenAccumulator = 0f;
 
-                int oldStamina = currentStamina;
+                float oldStamina = currentStamina;
 
                 currentStamina = Mathf.Min(
                     MaxStamina,

@@ -24,6 +24,10 @@ public class CharacterCustomizationController : MonoBehaviour
     [Header("Starting Class")]
     [SerializeField] private PlayerClass startingClass = PlayerClass.Warrior;
 
+    [Header("Attribute References")]
+    [SerializeField] private PlayerAttributesNTraits attributes;
+    [SerializeField] private PlayerStats playerStats;
+
     [Header("Class Starting Gear")]
     [Tooltip("Item data granted to a Warrior when the class is selected.")]
     [SerializeField] private ItemData[] warriorStartingGear;
@@ -45,6 +49,16 @@ public class CharacterCustomizationController : MonoBehaviour
     [SerializeField] private ItemData[] mageStartingItems;
 
     private PlayerClass? grantedStartingLoadoutClass;
+    private bool appliedStartingAttributes;
+
+    private void Awake()
+    {
+        if (attributes == null)
+            attributes = GetComponent<PlayerAttributesNTraits>();
+
+        if (playerStats == null)
+            playerStats = GetComponent<PlayerStats>();
+    }
 
     private void Start()
     {
@@ -276,6 +290,8 @@ public class CharacterCustomizationController : MonoBehaviour
         CharacterAppearance appearance =
             characterRenderer.Appearance;
 
+        bool classChanged = appearance.playerClass != playerClass;
+
         EquipmentManager equipmentManager = EquipmentManager.Instance;
         if (equipmentManager != null)
         {
@@ -296,6 +312,15 @@ public class CharacterCustomizationController : MonoBehaviour
         appearance.legs = null;
         appearance.weapon = null;
         appearance.shield = null;
+
+        if (attributes != null && (classChanged || !appliedStartingAttributes))
+        {
+            attributes.ApplyClassDefaults(playerClass);
+            appliedStartingAttributes = true;
+
+            if (playerStats != null)
+                playerStats.ResetToFull();
+        }
 
         RefreshAppearance();
         grantedStartingLoadoutClass = null;

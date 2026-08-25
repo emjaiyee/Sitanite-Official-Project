@@ -12,4 +12,9 @@ public enum DamageType
     Psychic = 1 << 7,
     Physical = 1 << 8,
     Stab = 1 << 9,
+    Necrosis = 1 << 10,
+    Water = 1 << 11,
+    Earth = 1 << 12,
+    Fire = 1 << 13,
+    Air = 1 << 14,
 }

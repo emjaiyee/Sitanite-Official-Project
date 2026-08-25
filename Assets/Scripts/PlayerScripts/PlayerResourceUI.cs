@@ -57,7 +57,7 @@ public class PlayerResourceUI : MonoBehaviour
         }
     }
 
-    private static void SetSlider(Slider slider, int value, int maximum)
+    private static void SetSlider(Slider slider, float value, float maximum)
     {
         if (slider == null) return;
         slider.minValue = 0f;
