@@ -20,13 +20,17 @@ public class PlayerEquipment : MonoBehaviour
 
     [SerializeField]
     private GameObject battleAxeObject;
+    [SerializeField]
+    private GameObject shortBowObject;
+    [SerializeField]
+    private GameObject longBowObject;
 
     public IWeapon CurrentWeapon { get; private set; }
 
     private void Start()
     {
         // Default weapon.
-        EquipWeapon("BattleAxe");
+        EquipWeapon("ShortBow");
     }
 
     /// <summary>
@@ -88,31 +92,43 @@ public class PlayerEquipment : MonoBehaviour
     // WEAPON LOOKUP
     // -------------------------------------------------
 
-    private GameObject GetWeaponObject(string weaponId)
+   private GameObject GetWeaponObject(string weaponId)
+{
+    switch (weaponId)
     {
-        switch (weaponId)
-        {
-            case "LongSword":
-                return swordObject;
+        case "LongSword":
+            return swordObject;
 
-            case "BattleAxe":
-                return battleAxeObject;
+        case "BattleAxe":
+            return battleAxeObject;
 
-            default:
-                return null;
-        }
+        case "ShortBow":
+            return shortBowObject;
+
+        case "LongBow":
+            return longBowObject;
+
+        default:
+            return null;
     }
+}
 
     // -------------------------------------------------
     // DISABLE WEAPONS
     // -------------------------------------------------
 
     private void DisableAllWeapons()
-    {
-        if (swordObject != null)
-            swordObject.SetActive(false);
+{
+    if (swordObject != null)
+        swordObject.SetActive(false);
 
-        if (battleAxeObject != null)
-            battleAxeObject.SetActive(false);
-    }
+    if (battleAxeObject != null)
+        battleAxeObject.SetActive(false);
+
+    if (shortBowObject != null)
+        shortBowObject.SetActive(false);
+
+    if (longBowObject != null)
+        longBowObject.SetActive(false);
+}
 }
