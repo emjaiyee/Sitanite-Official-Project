@@ -14,6 +14,11 @@ public class PlayerStats : MonoBehaviour
     [Min(1)]
     public float maxStamina = 75f;
 
+    [Header("Effective Maximum Resources (Runtime)")]
+    [SerializeField] private float effectiveMaxHealth;
+    [SerializeField] private float effectiveMaxMana;
+    [SerializeField] private float effectiveMaxStamina;
+
     [Header("Base Damage")]
     [Min(0)] public float basePierceDamage = 0f;
     [Min(0)] public float baseStabDamage = 0f;
@@ -31,6 +36,23 @@ public class PlayerStats : MonoBehaviour
     [Min(0)] public float baseAirDamage = 0f;
     [Min(0)] public float basePhysicalDamage = 0f;
 
+    [Header("Effective Damage (Runtime)")]
+    [SerializeField] private float effectivePierceDamage;
+    [SerializeField] private float effectiveStabDamage;
+    [SerializeField] private float effectiveSlashDamage;
+    [SerializeField] private float effectiveBluntDamage;
+    [SerializeField] private float effectiveBurningDamage;
+    [SerializeField] private float effectiveFrostDamage;
+    [SerializeField] private float effectivePoisonDamage;
+    [SerializeField] private float effectiveLightningDamage;
+    [SerializeField] private float effectivePsychicDamage;
+    [SerializeField] private float effectiveNecrosisDamage;
+    [SerializeField] private float effectiveWaterDamage;
+    [SerializeField] private float effectiveEarthDamage;
+    [SerializeField] private float effectiveFireDamage;
+    [SerializeField] private float effectiveAirDamage;
+    [SerializeField] private float effectivePhysicalDamage;
+
     [Header("Base Damage Resistance")]
     [Min(0)] public float basePierceResistance = 0f;
     [Min(0)] public float baseStabResistance = 0f;
@@ -47,6 +69,23 @@ public class PlayerStats : MonoBehaviour
     [Min(0)] public float baseFireResistance = 0f;
     [Min(0)] public float baseAirResistance = 0f;
     [Min(0)] public float basePhysicalResistance = 0f;
+
+    [Header("Effective Damage Resistance (Runtime)")]
+    [SerializeField] private float effectivePierceResistance;
+    [SerializeField] private float effectiveStabResistance;
+    [SerializeField] private float effectiveSlashResistance;
+    [SerializeField] private float effectiveBluntResistance;
+    [SerializeField] private float effectiveBurningResistance;
+    [SerializeField] private float effectiveFrostResistance;
+    [SerializeField] private float effectivePoisonResistance;
+    [SerializeField] private float effectiveLightningResistance;
+    [SerializeField] private float effectivePsychicResistance;
+    [SerializeField] private float effectiveNecrosisResistance;
+    [SerializeField] private float effectiveWaterResistance;
+    [SerializeField] private float effectiveEarthResistance;
+    [SerializeField] private float effectiveFireResistance;
+    [SerializeField] private float effectiveAirResistance;
+    [SerializeField] private float effectivePhysicalResistance;
 
     [Header("Current Resources")]
     [SerializeField] private float currentHealth;
@@ -67,16 +106,22 @@ public class PlayerStats : MonoBehaviour
     [Min(0f)] public float moveSpeed = 1.2f;
     [Min(0f)] public float sprintSpeed = 1.8f;
 
+    [Header("Effective Movement Values (Runtime)")]
+    [SerializeField] private float effectiveMoveSpeed;
+    [SerializeField] private float effectiveSprintSpeed;
+
     [Header("Dash")]
     [Min(0f)] public float dashSpeed = 2f;
     [Min(0f)] public float dashDuration = 0.2f;
     [Min(0)] public int dashCost = 20;
 
+    [SerializeField] private float effectiveDashSpeed;
+
     [Header("Sprint")]
     [Min(0f)]
     [SerializeField] private float sprintCostPerSecond = 4f;
 
-    [Range(0f, 1f)]
+    [Range(0f, 2f)]
     [SerializeField] private float exhaustedSpeedMultiplier = 0.35f;
 
     [Header("Regeneration Settings (per second)")]
@@ -92,6 +137,11 @@ public class PlayerStats : MonoBehaviour
 
     [SerializeField]
     private float staminaRegen = 3f;
+
+    [Header("Effective Regeneration (Runtime)")]
+    [SerializeField] private float effectiveHealthRegen;
+    [SerializeField] private float effectiveManaRegen;
+    [SerializeField] private float effectiveStaminaRegen;
 
     [Header("Death Visual")]
     [Range(0f, 1f)]
@@ -257,6 +307,7 @@ public class PlayerStats : MonoBehaviour
             attributes = GetComponent<PlayerAttributesNTraits>();
 
         InitializeDamageDefaults();
+        UpdateEffectiveRuntimeValues();
         ResetToFull();
     }
 
@@ -324,12 +375,61 @@ public class PlayerStats : MonoBehaviour
 
     private void HandleAttributesChanged(PlayerAttributesNTraits source)
     {
+        UpdateEffectiveRuntimeValues();
         NotifyChanged();
     }
 
     public void NotifyStatsChanged()
     {
+        UpdateEffectiveRuntimeValues();
         NotifyChanged();
+    }
+
+    private void UpdateEffectiveRuntimeValues()
+    {
+        effectiveMaxHealth = MaxHealth;
+        effectiveMaxMana = MaxMana;
+        effectiveMaxStamina = MaxStamina;
+
+        effectiveMoveSpeed = MoveSpeed;
+        effectiveSprintSpeed = SprintSpeed;
+        effectiveDashSpeed = DashSpeed;
+
+        effectivePierceDamage = PierceDamage;
+        effectiveStabDamage = StabDamage;
+        effectiveSlashDamage = SlashDamage;
+        effectiveBluntDamage = BluntDamage;
+        effectiveBurningDamage = BurningDamage;
+        effectiveFrostDamage = FrostDamage;
+        effectivePoisonDamage = PoisonDamage;
+        effectiveLightningDamage = LightningDamage;
+        effectivePsychicDamage = PsychicDamage;
+        effectiveNecrosisDamage = NecrosisDamage;
+        effectiveWaterDamage = WaterDamage;
+        effectiveEarthDamage = EarthDamage;
+        effectiveFireDamage = FireDamage;
+        effectiveAirDamage = AirDamage;
+        effectivePhysicalDamage = PhysicalDamage;
+
+        effectivePierceResistance = PierceResistance;
+        effectiveStabResistance = StabResistance;
+        effectiveSlashResistance = SlashResistance;
+        effectiveBluntResistance = BluntResistance;
+        effectiveBurningResistance = BurningResistance;
+        effectiveFrostResistance = FrostResistance;
+        effectivePoisonResistance = PoisonResistance;
+        effectiveLightningResistance = LightningResistance;
+        effectivePsychicResistance = PsychicResistance;
+        effectiveNecrosisResistance = NecrosisResistance;
+        effectiveWaterResistance = WaterResistance;
+        effectiveEarthResistance = EarthResistance;
+        effectiveFireResistance = FireResistance;
+        effectiveAirResistance = AirResistance;
+        effectivePhysicalResistance = PhysicalResistance;
+
+        effectiveHealthRegen = HealthRegen;
+        effectiveManaRegen = ManaRegen;
+        effectiveStaminaRegen = StaminaRegen;
     }
 
     // -------------------------------------------------
