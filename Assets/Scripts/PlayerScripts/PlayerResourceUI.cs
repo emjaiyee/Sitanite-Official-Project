@@ -3,57 +3,88 @@ using UnityEngine.UI;
 
 public class PlayerResourceUI : MonoBehaviour
 {
-    [Header("Source")]
-    [SerializeField] private PlayerStats playerStats;
-
     [Header("UI References")]
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider staminaSlider;
-    [SerializeField] private Image[] manaCrystals = new Image[3];
+    [Tooltip("Assign the mana fill Images in left-to-right order. Each Image must use vertical Filled mode.")]
+    [SerializeField] private Image[] manaBars = new Image[5];
 
-    [Header("Mana Crystal Display")]
-    [Range(0f, 1f)][SerializeField] private float emptyOpacity = 0.23f;
-    [SerializeField] private float manaReactivationDuration = 0.35f;
+    private PlayerStats playerStats;
+    private bool isSubscribed;
 
     private void Awake()
     {
-        if (playerStats == null) playerStats = FindFirstObjectByType<PlayerStats>();
-        if (staminaSlider == null) staminaSlider = FindSlider("Stamina_Slider");
-        if (healthSlider == null) healthSlider = FindSlider("Health_Slider");
-        if (manaCrystals == null || manaCrystals.Length != 3) manaCrystals = new Image[3];
-        for (int i = 0; i < manaCrystals.Length; i++)
-            if (manaCrystals[i] == null) manaCrystals[i] = FindImage(i == 0 ? "1stMana" : i == 1 ? "2ndMana " : "3rdMana");
+        if (staminaSlider == null)
+            staminaSlider = FindSlider("Stamina_Slider");
+
+        if (healthSlider == null)
+            healthSlider = FindSlider("Health_Slider");
+
+        if (manaBars == null || manaBars.Length < 5)
+            System.Array.Resize(ref manaBars, 5);
     }
 
     private void OnEnable()
     {
-        if (playerStats != null) playerStats.Changed += Refresh;
+        TryBindToPlayer();
     }
 
     private void Start()
     {
-        if (playerStats != null) Refresh(playerStats);
+        TryBindToPlayer();
+    }
+
+    private void Update()
+    {
+        if (!isSubscribed)
+            TryBindToPlayer();
     }
 
     private void OnDisable()
     {
-        if (playerStats != null) playerStats.Changed -= Refresh;
+        if (isSubscribed && playerStats != null)
+            playerStats.Changed -= Refresh;
+
+        isSubscribed = false;
+    }
+
+    private void TryBindToPlayer()
+    {
+        if (isSubscribed || Player.Instance == null)
+            return;
+
+        playerStats = Player.Instance.GetComponent<PlayerStats>();
+        if (playerStats == null)
+        {
+            Debug.LogWarning("[PlayerResourceUI] Player.Instance has no PlayerStats component.");
+            return;
+        }
+
+        playerStats.Changed += Refresh;
+        isSubscribed = true;
+        Refresh(playerStats);
     }
 
     private void Refresh(PlayerStats stats)
     {
         SetSlider(healthSlider, stats.CurrentHealth, stats.MaxHealth);
         SetSlider(staminaSlider, stats.CurrentStamina, stats.MaxStamina);
-        float manaPerCrystal = Mathf.Max(1f, stats.MaxMana / 3f);
-        for (int i = 0; i < manaCrystals.Length; i++)
+
+        float manaUnits = stats.MaxMana <= 0f
+            ? 0f
+            : Mathf.Clamp01(stats.CurrentMana / stats.MaxMana) * manaBars.Length;
+
+        for (int i = 0; i < manaBars.Length; i++)
         {
-            if (manaCrystals[i] == null) continue;
-            float threshold = stats.MaxMana - (i + 1) * manaPerCrystal;
-            bool active = stats.CurrentMana > threshold;
-            Color color = manaCrystals[i].color;
-            color.a = active ? 1f : emptyOpacity;
-            manaCrystals[i].CrossFadeAlpha(color.a, manaReactivationDuration, true);
-            manaCrystals[i].color = color;
+            if (manaBars[i] == null)
+                continue;
+
+            manaBars[i].type = Image.Type.Filled;
+            manaBars[i].fillMethod = Image.FillMethod.Vertical;
+            manaBars[i].fillOrigin = (int)Image.OriginVertical.Bottom;
+
+            int rightToLeftIndex = manaBars.Length - 1 - i;
+            manaBars[i].fillAmount = Mathf.Clamp01(manaUnits - rightToLeftIndex);
         }
     }
 
@@ -69,12 +100,6 @@ public class PlayerResourceUI : MonoBehaviour
     {
         Transform target = FindDeepChild(transform, objectName);
         return target == null ? null : target.GetComponent<Slider>();
-    }
-
-    private Image FindImage(string objectName)
-    {
-        Transform target = FindDeepChild(transform, objectName);
-        return target == null ? null : target.GetComponent<Image>();
     }
 
     private static Transform FindDeepChild(Transform root, string objectName)

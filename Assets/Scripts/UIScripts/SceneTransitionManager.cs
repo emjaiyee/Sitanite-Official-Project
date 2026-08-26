@@ -4,9 +4,13 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransitionManager : MonoBehaviour
 {
+    [Header("Scene")]
+    [SerializeField] private string sceneName;
+
     [Header("Fade")]
     [SerializeField] private CanvasGroup fadeCanvas;
     [SerializeField] private float fadeToBlackDuration = 0.5f;
+    [SerializeField] private float fadeToBlackSpeed = 2f;
 
     private bool isTransitioning;
 
@@ -18,6 +22,11 @@ public class SceneTransitionManager : MonoBehaviour
         {
             fadeCanvas.alpha = 0f;
         }
+    }
+
+    public void TransitionToScene()
+    {
+        TransitionToScene(sceneName);
     }
 
     public void TransitionToScene(string sceneName)
@@ -50,6 +59,14 @@ public class SceneTransitionManager : MonoBehaviour
         );
     }
 
+    public void QuitGame()
+    {
+        if (isTransitioning)
+            return;
+
+        StartCoroutine(QuitRoutine());
+    }
+
     private IEnumerator TransitionRoutine(string sceneName)
     {
         isTransitioning = true;
@@ -68,6 +85,19 @@ public class SceneTransitionManager : MonoBehaviour
         SceneManager.LoadScene(sceneBuildIndex);
     }
 
+    private IEnumerator QuitRoutine()
+    {
+        isTransitioning = true;
+
+        yield return FadeToBlack();
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
+
     private IEnumerator FadeToBlack()
     {
         if (fadeCanvas == null)
@@ -83,7 +113,7 @@ public class SceneTransitionManager : MonoBehaviour
         float startAlpha = fadeCanvas.alpha;
         float elapsed = 0f;
 
-        if (fadeToBlackDuration <= 0f)
+        if (fadeToBlackDuration <= 0f || fadeToBlackSpeed <= 0f)
         {
             fadeCanvas.alpha = 1f;
             yield break;
@@ -93,15 +123,14 @@ public class SceneTransitionManager : MonoBehaviour
         {
             elapsed += Time.unscaledDeltaTime;
 
-            float t = Mathf.Clamp01(
-                elapsed / fadeToBlackDuration
+            fadeCanvas.alpha = Mathf.MoveTowards(
+                fadeCanvas.alpha,
+                1f,
+                fadeToBlackSpeed * Time.unscaledDeltaTime
             );
 
-            fadeCanvas.alpha = Mathf.Lerp(
-                startAlpha,
-                1f,
-                t
-            );
+            if (fadeCanvas.alpha >= 1f)
+                break;
 
             yield return null;
         }

@@ -254,7 +254,7 @@ public class PlayerAttributesNTraits : MonoBehaviour
             modifier += arcane - 1;
 
         if ((damageType & (DamageType.Water | DamageType.Earth | DamageType.Fire | DamageType.Air)) != 0)
-            modifier += elemental - 1;
+            modifier += elemental - 2;
 
         return modifier;
     }

@@ -11,11 +11,35 @@ public class CharacterPortrait : MonoBehaviour
     [SerializeField] private Image headwearPortrait;
     [SerializeField] private Image weaponPortrait;
     [SerializeField] private Image shieldPortrait;
+    [SerializeField] private Image classPortrait;
+
+    [Header("Class Icons")]
+    [SerializeField] private Sprite warriorIcon;
+    [SerializeField] private Sprite rangerIcon;
+    [SerializeField] private Sprite mageIcon;
+
+    [Header("Portrait Buttons")]
+    [SerializeField] private Button inventoryButton;
+    [SerializeField] private Button statsButton;
+
+    [Header("Class Tooltip")]
+    [SerializeField] private UIHoverTooltip classTooltip;
+    [TextArea(2, 6)]
+    [SerializeField] private string warriorDescription;
+    [TextArea(2, 6)]
+    [SerializeField] private string rangerDescription;
+    [TextArea(2, 6)]
+    [SerializeField] private string mageDescription;
 
     private CharacterCustomizationController customizationController;
+    private PlayerInventory playerInventory;
+    private PlayerStatsUI playerStatsUI;
 
     private void Start()
     {
+        if (classTooltip == null && classPortrait != null)
+            classTooltip = classPortrait.GetComponent<UIHoverTooltip>();
+
         FindCustomizationController();
 
         if (customizationController == null)
@@ -29,6 +53,8 @@ public class CharacterPortrait : MonoBehaviour
         }
 
         customizationController.OnAppearanceChanged += Refresh;
+        FindPlayerUIReferences();
+        BindButtons();
 
         Refresh();
     }
@@ -39,6 +65,8 @@ public class CharacterPortrait : MonoBehaviour
         {
             customizationController.OnAppearanceChanged -= Refresh;
         }
+
+        UnbindButtons();
     }
 
     private void FindCustomizationController()
@@ -65,6 +93,35 @@ public class CharacterPortrait : MonoBehaviour
         }
     }
 
+    private void FindPlayerUIReferences()
+    {
+        if (Player.Instance == null)
+            return;
+
+        playerInventory = Player.Instance.GetComponent<PlayerInventory>();
+        playerStatsUI = FindFirstObjectByType<PlayerStatsUI>(
+            FindObjectsInactive.Include
+        );
+    }
+
+    private void BindButtons()
+    {
+        if (inventoryButton != null && playerInventory != null)
+            inventoryButton.onClick.AddListener(playerInventory.ToggleInventory);
+
+        if (statsButton != null && playerStatsUI != null)
+            statsButton.onClick.AddListener(playerStatsUI.ToggleStatsWindow);
+    }
+
+    private void UnbindButtons()
+    {
+        if (inventoryButton != null && playerInventory != null)
+            inventoryButton.onClick.RemoveListener(playerInventory.ToggleInventory);
+
+        if (statsButton != null && playerStatsUI != null)
+            statsButton.onClick.RemoveListener(playerStatsUI.ToggleStatsWindow);
+    }
+
     public void Refresh()
     {
         if (customizationController == null)
@@ -78,9 +135,53 @@ public class CharacterPortrait : MonoBehaviour
         SetPortrait(torsoPortrait, appearance.torso);
         SetPortrait(weaponPortrait, appearance.weapon);
         SetPortrait(shieldPortrait, appearance.shield);
+        UpdateClassPortrait(appearance.playerClass);
+        UpdateClassTooltip(appearance.playerClass);
 
         UpdateHairPortrait(appearance);
         UpdateHeadwearPortrait(appearance);
+    }
+
+    private void UpdateClassPortrait(PlayerClass playerClass)
+    {
+        if (classPortrait == null)
+            return;
+
+        Sprite icon = null;
+
+        switch (playerClass)
+        {
+            case PlayerClass.Warrior:
+                icon = warriorIcon;
+                break;
+
+            case PlayerClass.Ranger:
+                icon = rangerIcon;
+                break;
+
+            case PlayerClass.Mage:
+                icon = mageIcon;
+                break;
+        }
+
+        classPortrait.sprite = icon;
+        classPortrait.enabled = icon != null;
+    }
+
+    private void UpdateClassTooltip(PlayerClass playerClass)
+    {
+        if (classTooltip == null)
+            return;
+
+        string classDescription = playerClass switch
+        {
+            PlayerClass.Warrior => warriorDescription,
+            PlayerClass.Ranger => rangerDescription,
+            PlayerClass.Mage => mageDescription,
+            _ => string.Empty
+        };
+
+        classTooltip.SetDescription(classDescription);
     }
 
     private void SetHairPortrait(CharacterAppearance appearance)

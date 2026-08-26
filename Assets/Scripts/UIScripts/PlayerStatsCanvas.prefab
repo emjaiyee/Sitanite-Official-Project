@@ -1460,7 +1460,7 @@ GameObject:
   - component: {fileID: 71423353911883936}
   - component: {fileID: 1080933093170549754}
   m_Layer: 5
-  m_Name: Window
+  m_Name: TraitsNAttributesWindow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1475,7 +1475,7 @@ RectTransform:
   m_GameObject: {fileID: 1072767123670065551}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1.8812286, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7817853457770523898}
@@ -1489,7 +1489,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -449, y: 0}
   m_SizeDelta: {x: 800, y: 660}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &71423353911883936
@@ -3332,7 +3332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Willpower increases <color=green>Poison, Lightning, Frost, Psychic,
-    Necrosis, Water, Earth, Fire,</color> and <color=green>air</color> damage resistance
+    Necrosis, Water, Earth, Fire,</color> and <color=green>Air</color> damage resistance
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &2574734875041008569
@@ -7497,7 +7497,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3733976e157dff94f8002ac59fa8b9d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
-  description: Intelligence increases Burning, <color=green>Frost, Poison, Lightning,
+  description: Intelligence increases <color=green>Burning, Frost, Poison, Lightning,
     Psychic, Necrosis, Water, Earth, Fire,</color> and <color=green>Air</color> base
     damage, plus <color=green>Max Mana</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
@@ -8452,8 +8452,8 @@ Transform:
   m_GameObject: {fileID: 6238128213056227487}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -146.74524, y: 111.3443, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -587.03, y: 111.3443, z: 0}
+  m_LocalScale: {x: 0.9406143, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8070360421880987705}
@@ -10416,7 +10416,7 @@ GameObject:
   - component: {fileID: 6501643499244025366}
   - component: {fileID: 4196167760381886041}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: MainPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

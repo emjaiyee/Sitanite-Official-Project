@@ -496,13 +496,15 @@ public class PlayerStats : MonoBehaviour
 
     public void Heal(int amount)
     {
+        Heal((float)amount);
+    }
+
+    public void Heal(float amount)
+    {
         if (amount <= 0 || IsDead || currentHealth <= 0)
             return;
 
-        currentHealth = Mathf.Min(
-            MaxHealth,
-            currentHealth + amount
-        );
+        currentHealth = Mathf.Min(MaxHealth, currentHealth + amount);
 
         NotifyChanged();
     }
@@ -513,10 +515,17 @@ public class PlayerStats : MonoBehaviour
 
     public bool UseMana(int amount)
     {
+        return UseMana((float)amount);
+    }
+
+    public bool UseMana(float amount)
+    {
         if (amount <= 0 || currentMana < amount)
             return false;
 
-        currentMana -= amount;
+        currentMana = amount >= currentMana
+            ? 0f
+            : currentMana - amount;
 
         manaRegenCooldown = regenerationCooldown;
         manaRegenAccumulator = 0f;
@@ -528,13 +537,15 @@ public class PlayerStats : MonoBehaviour
 
     public void RestoreMana(int amount)
     {
+        RestoreMana((float)amount);
+    }
+
+    public void RestoreMana(float amount)
+    {
         if (amount <= 0)
             return;
 
-        currentMana = Mathf.Min(
-            MaxMana,
-            currentMana + amount
-        );
+        currentMana = Mathf.Min(MaxMana, currentMana + amount);
 
         NotifyChanged();
     }
@@ -545,10 +556,17 @@ public class PlayerStats : MonoBehaviour
 
     public bool UseStamina(int amount)
     {
+        return UseStamina((float)amount);
+    }
+
+    public bool UseStamina(float amount)
+    {
         if (amount <= 0 || currentStamina < amount)
             return false;
 
-        currentStamina -= amount;
+        currentStamina = amount >= currentStamina
+            ? 0f
+            : currentStamina - amount;
 
         staminaRegenCooldown = regenerationCooldown;
         staminaRegenAccumulator = 0f;
@@ -560,13 +578,15 @@ public class PlayerStats : MonoBehaviour
 
     public void RestoreStamina(int amount)
     {
+        RestoreStamina((float)amount);
+    }
+
+    public void RestoreStamina(float amount)
+    {
         if (amount <= 0)
             return;
 
-        currentStamina = Mathf.Min(
-            MaxStamina,
-            currentStamina + amount
-        );
+        currentStamina = Mathf.Min(MaxStamina, currentStamina + amount);
 
         NotifyChanged();
     }
@@ -623,14 +643,17 @@ public class PlayerStats : MonoBehaviour
         sprintDrainAccumulator +=
             sprintCostPerSecond * Time.deltaTime;
 
-        if (sprintDrainAccumulator >= 1f)
+        if (sprintDrainAccumulator > 0f)
         {
-            int drainAmount =
-                Mathf.FloorToInt(sprintDrainAccumulator);
+            float drainAmount =
+                Mathf.Min(sprintDrainAccumulator, currentStamina);
 
             sprintDrainAccumulator -= drainAmount;
 
             UseStamina(drainAmount);
+
+            if (currentStamina <= 0f)
+                sprintDrainAccumulator = 0f;
         }
     }
 

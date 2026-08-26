@@ -30,11 +30,16 @@ public class UIHoverTooltipWindow : MonoBehaviour, IPointerEnterHandler, IPointe
     {
         owner = tooltipOwner;
 
-        if (descriptionText != null)
+            SetDescription(description);
+        }
+
+        public void SetDescription(string description)
         {
+            if (descriptionText == null)
+                return;
+
             descriptionText.text = description;
             ResizeToDescription();
-        }
     }
 
     private void ResizeToDescription()
