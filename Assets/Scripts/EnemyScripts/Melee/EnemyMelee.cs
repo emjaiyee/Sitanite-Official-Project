@@ -388,12 +388,7 @@ public class EnemyMelee : MonoBehaviour
         Vector3 target =
             currentPath[currentPathIndex];
 
-        Debug.Log(
-            $"[PATH] {name} moving toward " +
-            $"index {currentPathIndex}/{currentPath.Count} " +
-            $"target={target} " +
-            $"current={transform.position}"
-        );
+       
 
         transform.position =
             Vector3.MoveTowards(

@@ -987,10 +987,10 @@ MonoBehaviour:
   damageType: 256
   hittableLayers:
     serializedVersion: 2
-    m_Bits: 0
-  chargeVisualPrefab: {fileID: 0}
-  maxChargeVisualScale: 1.5
-  chargedArrowPrefab: {fileID: 0}
+    m_Bits: 64
+  chargeVisualPrefab: {fileID: 7490205082740138893, guid: f2a5ccda1b5334d4ca1a0104dedbb01b, type: 3}
+  maxChargeVisualScale: 0.3
+  chargedArrowPrefab: {fileID: 6899047163829395373, guid: 0d89ecf568603b84f9be88c223d5e4ac, type: 3}
   skillRange: 14
   maxChargeTime: 2
   minimumSkillDamage: 30
@@ -1108,15 +1108,15 @@ MonoBehaviour:
   damageType: 256
   hittableLayers:
     serializedVersion: 2
-    m_Bits: 0
-  skillRange: 8
-  skillRadius: 2.5
-  arrowCount: 12
+    m_Bits: 64
+  skillRange: 6
+  skillRadius: 0.2
+  arrowCount: 10
   skillDamage: 15
-  rainDuration: 0.6
+  rainDuration: 1
   visualDuration: 0.8
-  skillVisualPrefab: {fileID: 0}
-  skillArrowPrefab: {fileID: 0}
+  skillVisualPrefab: {fileID: 7490205082740138893, guid: f2a5ccda1b5334d4ca1a0104dedbb01b, type: 3}
+  skillArrowPrefab: {fileID: 6809414520090564090, guid: 73ee39d8e8a89c448ae21ddfbfaf588a, type: 3}
 --- !u!212 &1032694272
 SpriteRenderer:
   serializedVersion: 2

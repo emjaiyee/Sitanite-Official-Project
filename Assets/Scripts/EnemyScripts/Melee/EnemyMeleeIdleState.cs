@@ -178,10 +178,7 @@ public class EnemyMeleeIdleState : EnemyMeleeState
         }
 
 
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            $"Destination found at {destination.Value}"
-        );
+       
 
 
         // =====================================================

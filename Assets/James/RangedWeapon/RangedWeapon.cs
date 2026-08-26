@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public abstract class RangedWeapon : MonoBehaviour, IWeapon
 {
     [Header("Attack Settings")]
@@ -13,8 +14,14 @@ public abstract class RangedWeapon : MonoBehaviour, IWeapon
 
     [Header("Damage")]
     [SerializeField] protected DamageType damageType = DamageType.Physical;
+    [Header("Layers")]
+[SerializeField] protected LayerMask hittableLayers;
 
     public abstract string WeaponId { get; }
+
+    // =========================================================
+    // NORMAL ATTACK
+    // =========================================================
 
     public virtual void Attack()
     {
@@ -23,6 +30,7 @@ public abstract class RangedWeapon : MonoBehaviour, IWeapon
             Debug.LogWarning(
                 $"{WeaponId}: Arrow prefab is not assigned."
             );
+
             return;
         }
 
@@ -31,6 +39,25 @@ public abstract class RangedWeapon : MonoBehaviour, IWeapon
             Debug.LogWarning(
                 $"{WeaponId}: Fire Point is not assigned."
             );
+
+            return;
+        }
+
+        if (Mouse.current == null)
+        {
+            Debug.LogWarning(
+                $"{WeaponId}: Mouse input is not available."
+            );
+
+            return;
+        }
+
+        if (Camera.main == null)
+        {
+            Debug.LogWarning(
+                $"{WeaponId}: Main Camera could not be found."
+            );
+
             return;
         }
 
@@ -43,16 +70,38 @@ public abstract class RangedWeapon : MonoBehaviour, IWeapon
                 mouseScreenPosition
             );
 
-        mouseWorldPosition.z = firePoint.position.z;
+        mouseWorldPosition.z =
+            firePoint.position.z;
+
+        // Check weapon range.
+        float distanceToMouse =
+            Vector2.Distance(
+                transform.root.position,
+                mouseWorldPosition
+            );
+
+        if (distanceToMouse > attackRange)
+        {
+            Debug.Log(
+                $"{WeaponId}: Target is out of range. " +
+                $"Distance: {distanceToMouse:F2} / " +
+                $"Range: {attackRange:F2}"
+            );
+
+            return;
+        }
 
         // Calculate direction from fire point to mouse.
         Vector2 direction =
-            (mouseWorldPosition - firePoint.position).normalized;
+            (
+                mouseWorldPosition -
+                firePoint.position
+            ).normalized;
 
         if (direction == Vector2.zero)
             return;
 
-        // Calculate the angle needed to aim at the mouse.
+        // Calculate rotation toward mouse.
         float angle =
             Mathf.Atan2(
                 direction.y,
@@ -80,7 +129,8 @@ public abstract class RangedWeapon : MonoBehaviour, IWeapon
         if (arrow == null)
         {
             Debug.LogError(
-                $"{WeaponId}: Arrow prefab does not contain an Arrow component."
+                $"{WeaponId}: Arrow prefab does not contain " +
+                "an Arrow component."
             );
 
             Destroy(projectile);
@@ -96,6 +146,19 @@ public abstract class RangedWeapon : MonoBehaviour, IWeapon
 
         Debug.Log(
             $"{WeaponId} fired toward mouse."
+        );
+    }
+
+    // =========================================================
+    // WEAPON SKILL
+    // =========================================================
+
+    // Temporary default skill.
+    // ShortBow and LongBow will override this later.
+    public virtual void UseSkill()
+    {
+        Debug.LogWarning(
+            $"{WeaponId}: No ranged skill has been implemented yet."
         );
     }
 }

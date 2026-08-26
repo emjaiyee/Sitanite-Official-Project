@@ -1,0 +1,115 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &347989773492102961
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4228098754787595622, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3.2118814
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 4.989575
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 4.066608
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.7999916
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.10749665
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.008659667
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.9999625
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5638106821906043117, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -180.992
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587103849947904156, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_Name
+      value: ChargedArrowVisual Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794595097472665392, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4948774720719412629, guid: 944519e796efabe4d98b4de6463e6fc8, type: 3}
+    - target: {fileID: 6794595097472665392, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794595097472665392, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6794595097472665392, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8914728
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: -6324610790295538386, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6587103849947904156, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3783240159738249052}
+  m_SourcePrefab: {fileID: 100100000, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+--- !u!1 &6899047163829395373 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6587103849947904156, guid: 37c64ed222341a846b82a5941cac60aa, type: 3}
+  m_PrefabInstance: {fileID: 347989773492102961}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3783240159738249052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6899047163829395373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc23765e11fc121479fc2ee485dd46d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Arrow
+  hittableLayers:
+    serializedVersion: 2
+    m_Bits: 64

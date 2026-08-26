@@ -30,7 +30,7 @@ public class PlayerEquipment : MonoBehaviour
     private void Start()
     {
         // Default weapon.
-        EquipWeapon("ShortBow");
+        EquipWeapon("LongBow");
     }
 
     /// <summary>
