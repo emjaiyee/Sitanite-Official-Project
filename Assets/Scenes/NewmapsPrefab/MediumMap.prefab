@@ -1,5 +1,99 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &118290714509368748
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1268907030266202661}
+  - component: {fileID: 4288134496947358459}
+  - component: {fileID: 1029522110094616937}
+  m_Layer: 0
+  m_Name: GatewayMM4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1268907030266202661
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118290714509368748}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.25881952, w: 0.96592575}
+  m_LocalPosition: {x: 25.907, y: 3.211, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1191851061097168123}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -30}
+--- !u!114 &4288134496947358459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118290714509368748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bb3588d9ba5b424ca72519196df093d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gateway
+  direction: 0
+  flow: 0
+  destination: {fileID: 0}
+--- !u!61 &1029522110094616937
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118290714509368748}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.32, y: 0.22}
+  m_EdgeRadius: 0
 --- !u!1 &198038377868164932
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,6 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5981207639694602142}
   - component: {fileID: 7894271926695008087}
+  - component: {fileID: 4387441707550171814}
   m_Layer: 0
   m_Name: Floor4
   m_TagString: Untagged
@@ -78,6 +173,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.6129706, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &4387441707550171814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198038377868164932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1cc7b5bb0aa6044cb64d0f90e874162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampElevationTrigger
+  targetLevel: -1
 --- !u!1 &504738298215771005
 GameObject:
   m_ObjectHideFlags: 0
@@ -88,6 +196,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1422518972042726858}
   - component: {fileID: 5788693010086968491}
+  - component: {fileID: 6221968544045973175}
   m_Layer: 0
   m_Name: Floor1
   m_TagString: Untagged
@@ -156,6 +265,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &6221968544045973175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504738298215771005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1cc7b5bb0aa6044cb64d0f90e874162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampElevationTrigger
+  targetLevel: 1
 --- !u!1 &931002136868150107
 GameObject:
   m_ObjectHideFlags: 0
@@ -166,6 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2521891583502847477}
   - component: {fileID: 5488722900304079800}
+  - component: {fileID: 8023202620757208321}
   m_Layer: 0
   m_Name: MMRamp3
   m_TagString: Untagged
@@ -236,6 +359,20 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3.7317338, y: 3.6798768}
   m_EdgeRadius: 0
+--- !u!114 &8023202620757208321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931002136868150107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a327081f1018184ba72a2fbe956bbce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampMovementTrigger
+  enableRampMovement: 1
+  rampForward: {x: -0.34, y: 0.5}
 --- !u!1 &1383879034263787002
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,6 +417,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3431265390959861789}
   - component: {fileID: 2297309066426794859}
+  - component: {fileID: 4133168341430276399}
   m_Layer: 0
   m_Name: MMRamp3
   m_TagString: Untagged
@@ -338,7 +476,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.22289085, y: 1.791261}
+  m_Offset: {x: -0.37704587, y: 2.501548}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -348,8 +486,22 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 5.876542, y: 2.4078074}
+  m_Size: {x: 5.568232, y: 3.828384}
   m_EdgeRadius: 0
+--- !u!114 &4133168341430276399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1405500347767887063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a327081f1018184ba72a2fbe956bbce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampMovementTrigger
+  enableRampMovement: 1
+  rampForward: {x: -0.38, y: 0.5}
 --- !u!1 &2038574639540477746
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,6 +512,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1921023044780986685}
   - component: {fileID: 3657435854895533165}
+  - component: {fileID: 3461913262850598948}
   m_Layer: 0
   m_Name: MMRamp0
   m_TagString: Untagged
@@ -430,6 +583,20 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3.4604263, y: 0.95003134}
   m_EdgeRadius: 0
+--- !u!114 &3461913262850598948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2038574639540477746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a327081f1018184ba72a2fbe956bbce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampMovementTrigger
+  enableRampMovement: 1
+  rampForward: {x: 0.49, y: 0.5}
 --- !u!1 &2207856021546038034
 GameObject:
   m_ObjectHideFlags: 0
@@ -627,6 +794,53 @@ MonoBehaviour:
   tilemap: {fileID: 2723353398192263476}
   tilemapCollider: {fileID: 0}
   compositeCollider: {fileID: 0}
+--- !u!1 &2589398138520279753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3641242089223580841}
+  - component: {fileID: 970505493373188015}
+  m_Layer: 0
+  m_Name: DestinationMM0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3641242089223580841
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2589398138520279753}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 14.193, y: 2.498, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6091167461561307969}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &970505493373188015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2589398138520279753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99846ce2d4bbb0c4bb2fa2530a2b3369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElevationDestination
+  direction: 0
+  flow: 1
+  elevationLevel: 2
 --- !u!1 &2943870452228419502
 GameObject:
   m_ObjectHideFlags: 0
@@ -641,6 +855,7 @@ GameObject:
   - component: {fileID: 8319032843235649386}
   - component: {fileID: 4341409842379825487}
   - component: {fileID: 2113334556725990242}
+  - component: {fileID: 8879513230643311064}
   m_Layer: 0
   m_Name: MMCollider2
   m_TagString: Untagged
@@ -5641,6 +5856,26 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 2943870452228419502}
+--- !u!114 &8879513230643311064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2943870452228419502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 5144397094635220027}
+  tilemapCollider: {fileID: 8319032843235649386}
+  compositeCollider: {fileID: 2113334556725990242}
 --- !u!1 &3354851161163321188
 GameObject:
   m_ObjectHideFlags: 0
@@ -5700,6 +5935,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3358548600365335842}
   - component: {fileID: 6160840169343510218}
+  - component: {fileID: 7215934274368714763}
   m_Layer: 0
   m_Name: Bottom
   m_TagString: Untagged
@@ -5768,6 +6004,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7215934274368714763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3442143516800244672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1cc7b5bb0aa6044cb64d0f90e874162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampElevationTrigger
+  targetLevel: 0
 --- !u!1 &3636905729438028315
 GameObject:
   m_ObjectHideFlags: 0
@@ -5779,6 +6028,7 @@ GameObject:
   - component: {fileID: 2765871844113262605}
   - component: {fileID: 5746133729715298696}
   - component: {fileID: 8902074547517336222}
+  - component: {fileID: 1944364041527249085}
   m_Layer: 0
   m_Name: MMElevation3
   m_TagString: Untagged
@@ -6005,6 +6255,26 @@ TilemapRenderer:
   m_SortOrder: 3
   m_Mode: 1
   m_DetectChunkCullingBounds: 0
+--- !u!114 &1944364041527249085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3636905729438028315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 5746133729715298696}
+  tilemapCollider: {fileID: 0}
+  compositeCollider: {fileID: 0}
 --- !u!1 &3728222205323384159
 GameObject:
   m_ObjectHideFlags: 0
@@ -6016,6 +6286,7 @@ GameObject:
   - component: {fileID: 4277621911137235218}
   - component: {fileID: 4131230959079604787}
   - component: {fileID: 1969726697865950759}
+  - component: {fileID: 8338629663928823139}
   m_Layer: 0
   m_Name: MMFloor1
   m_TagString: Untagged
@@ -12944,6 +13215,71 @@ TilemapRenderer:
   m_SortOrder: 3
   m_Mode: 1
   m_DetectChunkCullingBounds: 0
+--- !u!114 &8338629663928823139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3728222205323384159}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 4131230959079604787}
+  tilemapCollider: {fileID: 0}
+  compositeCollider: {fileID: 0}
+--- !u!1 &4026817269876555610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5075060007417290907}
+  - component: {fileID: 4405970690807173806}
+  m_Layer: 0
+  m_Name: SpawnpointMM0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5075060007417290907
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026817269876555610}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.083, y: 2.511, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6091167461561307969}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4405970690807173806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4026817269876555610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b33c325354d2f454d9d27edadea7800f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomSpawnPoint
+  elevationLevel: 0
 --- !u!1 &4498647779512675286
 GameObject:
   m_ObjectHideFlags: 0
@@ -12954,6 +13290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6256148357678516197}
   - component: {fileID: 2626599678041586814}
+  - component: {fileID: 301203556109506785}
   m_Layer: 0
   m_Name: Top
   m_TagString: Untagged
@@ -13022,6 +13359,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &301203556109506785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4498647779512675286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1cc7b5bb0aa6044cb64d0f90e874162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampElevationTrigger
+  targetLevel: 1
 --- !u!1 &4595010226240678828
 GameObject:
   m_ObjectHideFlags: 0
@@ -13033,6 +13383,7 @@ GameObject:
   - component: {fileID: 7579141381178755287}
   - component: {fileID: 452934131844493279}
   - component: {fileID: 7974006466318411920}
+  - component: {fileID: 3172004792283923200}
   m_Layer: 0
   m_Name: MMFloor2
   m_TagString: Untagged
@@ -20119,6 +20470,120 @@ TilemapRenderer:
   m_SortOrder: 3
   m_Mode: 1
   m_DetectChunkCullingBounds: 0
+--- !u!114 &3172004792283923200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4595010226240678828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 452934131844493279}
+  tilemapCollider: {fileID: 0}
+  compositeCollider: {fileID: 0}
+--- !u!1 &4699902846822088214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6738587105025162964}
+  - component: {fileID: 8213322730836199526}
+  - component: {fileID: 753189532313647527}
+  m_Layer: 0
+  m_Name: GatewayMM0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6738587105025162964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699902846822088214}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0.25881952, w: 0.96592575}
+  m_LocalPosition: {x: 13.612, y: 2.122, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6091167461561307969}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -30}
+--- !u!114 &8213322730836199526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699902846822088214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bb3588d9ba5b424ca72519196df093d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gateway
+  direction: 2
+  flow: 1
+  destination: {fileID: 0}
+--- !u!61 &753189532313647527
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4699902846822088214}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.32, y: 0.22}
+  m_EdgeRadius: 0
 --- !u!1 &4960889233934319002
 GameObject:
   m_ObjectHideFlags: 0
@@ -20129,6 +20594,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4971515375761745472}
   - component: {fileID: 6845612834773269709}
+  - component: {fileID: 5587514134170093394}
   m_Layer: 0
   m_Name: MMRamp3
   m_TagString: Untagged
@@ -20199,6 +20665,20 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 3.4604263, y: 0.95003134}
   m_EdgeRadius: 0
+--- !u!114 &5587514134170093394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4960889233934319002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a327081f1018184ba72a2fbe956bbce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampMovementTrigger
+  enableRampMovement: 1
+  rampForward: {x: 0.79, y: 0.5}
 --- !u!1 &4972767593859350862
 GameObject:
   m_ObjectHideFlags: 0
@@ -20210,6 +20690,7 @@ GameObject:
   - component: {fileID: 6483589675199886013}
   - component: {fileID: 1185185466204678487}
   - component: {fileID: 8779557047369952515}
+  - component: {fileID: 7411743925955141637}
   m_Layer: 0
   m_Name: MMElevation1
   m_TagString: Untagged
@@ -20434,6 +20915,26 @@ TilemapRenderer:
   m_SortOrder: 3
   m_Mode: 1
   m_DetectChunkCullingBounds: 0
+--- !u!114 &7411743925955141637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4972767593859350862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 1185185466204678487}
+  tilemapCollider: {fileID: 0}
+  compositeCollider: {fileID: 0}
 --- !u!1 &5261763032370386038
 GameObject:
   m_ObjectHideFlags: 0
@@ -20444,6 +20945,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7629792736845519873}
   - component: {fileID: 4045445675199756222}
+  - component: {fileID: 5320945876022652747}
   m_Layer: 0
   m_Name: Floor3
   m_TagString: Untagged
@@ -20512,6 +21014,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &5320945876022652747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5261763032370386038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1cc7b5bb0aa6044cb64d0f90e874162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampElevationTrigger
+  targetLevel: -2
 --- !u!1 &5753387530879628535
 GameObject:
   m_ObjectHideFlags: 0
@@ -20526,6 +21041,7 @@ GameObject:
   - component: {fileID: 1704725970278792894}
   - component: {fileID: 5475485795071966204}
   - component: {fileID: 3437146161205171519}
+  - component: {fileID: 6134364861368951717}
   m_Layer: 0
   m_Name: MMCollider1
   m_TagString: Untagged
@@ -25480,6 +25996,26 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 5753387530879628535}
+--- !u!114 &6134364861368951717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5753387530879628535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 4800435173116763315}
+  tilemapCollider: {fileID: 1704725970278792894}
+  compositeCollider: {fileID: 3437146161205171519}
 --- !u!1 &5916398353143739544
 GameObject:
   m_ObjectHideFlags: 0
@@ -25521,6 +26057,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1019907069858955227}
   - component: {fileID: 5025543074277819028}
+  - component: {fileID: 2403373794974541973}
   m_Layer: 0
   m_Name: Bottom
   m_TagString: Untagged
@@ -25589,6 +26126,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2403373794974541973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035840657472762286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1cc7b5bb0aa6044cb64d0f90e874162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampElevationTrigger
+  targetLevel: -2
 --- !u!1 &6500801940387321912
 GameObject:
   m_ObjectHideFlags: 0
@@ -25633,6 +26183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8605699267344431358}
   - component: {fileID: 7480816178094826956}
+  - component: {fileID: 3753550334432897370}
   m_Layer: 0
   m_Name: Floor2
   m_TagString: Untagged
@@ -25689,7 +26240,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.14417717, y: 0}
+  m_Offset: {x: -0.24, y: 3.7}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -25701,6 +26252,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.7397771, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &3753550334432897370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6613433684309188333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1cc7b5bb0aa6044cb64d0f90e874162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampElevationTrigger
+  targetLevel: 1
 --- !u!1 &6750201607835496144
 GameObject:
   m_ObjectHideFlags: 0
@@ -25715,6 +26279,7 @@ GameObject:
   - component: {fileID: 771638969991292178}
   - component: {fileID: 3336875989538004009}
   - component: {fileID: 5632227698182899938}
+  - component: {fileID: 7244969821164934033}
   m_Layer: 0
   m_Name: MMCollider0
   m_TagString: Untagged
@@ -26658,6 +27223,26 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 6750201607835496144}
+--- !u!114 &7244969821164934033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6750201607835496144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 4422890641668555336}
+  tilemapCollider: {fileID: 771638969991292178}
+  compositeCollider: {fileID: 5632227698182899938}
 --- !u!1 &6831360365602378498
 GameObject:
   m_ObjectHideFlags: 0
@@ -26669,6 +27254,7 @@ GameObject:
   - component: {fileID: 7687252180701282832}
   - component: {fileID: 1801884608255030560}
   - component: {fileID: 4584969792677747933}
+  - component: {fileID: 8894237975728727850}
   m_Layer: 0
   m_Name: MMFloor3
   m_TagString: Untagged
@@ -35070,16 +35656,6 @@ Tilemap:
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
       m_AllTileFlags: 1073741825
-  - first: {x: 83, y: -33, z: -1}
-    second:
-      serializedVersion: 2
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_TileObjectToInstantiateIndex: 65535
-      dummyAlignment: 0
-      m_AllTileFlags: 1073741825
   - first: {x: 82, y: -32, z: -1}
     second:
       serializedVersion: 2
@@ -35104,7 +35680,7 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: 34bd1f2f32d5cf64692779ecc8b92df7, type: 2}
-  - m_RefCount: 649
+  - m_RefCount: 648
     m_Data: {fileID: 11400000, guid: e75313eba3a8ae245941ee3db79921ab, type: 2}
   - m_RefCount: 74
     m_Data: {fileID: 11400000, guid: 9ccdce0f57c48ee489f93d7cceed8326, type: 2}
@@ -35123,7 +35699,7 @@ Tilemap:
   m_TileSpriteArray:
   - m_RefCount: 1
     m_Data: {fileID: -8180437400112260788, guid: bbadda283514d88469cd86dd375d181f, type: 3}
-  - m_RefCount: 649
+  - m_RefCount: 648
     m_Data: {fileID: -1506316883221211439, guid: 9f546d705f044d94c86bc3a7b2870286, type: 3}
   - m_RefCount: 74
     m_Data: {fileID: 1616970594, guid: 9f546d705f044d94c86bc3a7b2870286, type: 3}
@@ -35140,7 +35716,7 @@ Tilemap:
   - m_RefCount: 3
     m_Data: {fileID: -1321736501, guid: 9f546d705f044d94c86bc3a7b2870286, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 840
+  - m_RefCount: 839
     m_Data:
       e00: 1
       e01: 0
@@ -35159,7 +35735,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 840
+  - m_RefCount: 839
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_TileObjectToInstantiateArray: []
   m_AnimationFrameRate: 1
@@ -35241,6 +35817,26 @@ TilemapRenderer:
   m_SortOrder: 3
   m_Mode: 1
   m_DetectChunkCullingBounds: 0
+--- !u!114 &8894237975728727850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6831360365602378498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 1801884608255030560}
+  tilemapCollider: {fileID: 0}
+  compositeCollider: {fileID: 0}
 --- !u!1 &7101340223145626932
 GameObject:
   m_ObjectHideFlags: 0
@@ -35255,6 +35851,7 @@ GameObject:
   - component: {fileID: 7674632225416377694}
   - component: {fileID: 2238380198990699707}
   - component: {fileID: 2113452414219187380}
+  - component: {fileID: 9012805297419015701}
   m_Layer: 0
   m_Name: MMCollider4
   m_TagString: Untagged
@@ -36517,6 +37114,26 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 7101340223145626932}
+--- !u!114 &9012805297419015701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7101340223145626932}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 741834914777811708}
+  tilemapCollider: {fileID: 7674632225416377694}
+  compositeCollider: {fileID: 2113452414219187380}
 --- !u!1 &7130269891295807067
 GameObject:
   m_ObjectHideFlags: 0
@@ -37214,6 +37831,8 @@ Transform:
   m_Children:
   - {fileID: 8227824083313920371}
   - {fileID: 8095763430968284891}
+  - {fileID: 6138100296254971099}
+  - {fileID: 1268907030266202661}
   m_Father: {fileID: 3349464385978153241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7500675559560491021
@@ -42705,6 +43324,53 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 7504012894947766730}
+--- !u!1 &7773277457606000054
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6138100296254971099}
+  - component: {fileID: 2531025462929739360}
+  m_Layer: 0
+  m_Name: DestinationMM4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6138100296254971099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773277457606000054}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 25.234, y: 2.915, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1191851061097168123}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2531025462929739360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7773277457606000054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99846ce2d4bbb0c4bb2fa2530a2b3369, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ElevationDestination
+  direction: 0
+  flow: 1
+  elevationLevel: -1
 --- !u!1 &7780708228589313230
 GameObject:
   m_ObjectHideFlags: 0
@@ -42715,6 +43381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2752404892526699288}
   - component: {fileID: 529992314768729402}
+  - component: {fileID: 7997275876179804322}
   m_Layer: 0
   m_Name: Top
   m_TagString: Untagged
@@ -42783,6 +43450,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &7997275876179804322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7780708228589313230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1cc7b5bb0aa6044cb64d0f90e874162, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RampElevationTrigger
+  targetLevel: -1
 --- !u!1 &7846506377985379086
 GameObject:
   m_ObjectHideFlags: 0
@@ -42816,6 +43496,9 @@ Transform:
   - {fileID: 4344074647011317643}
   - {fileID: 8119125536413449172}
   - {fileID: 7912483904684414348}
+  - {fileID: 3641242089223580841}
+  - {fileID: 6738587105025162964}
+  - {fileID: 5075060007417290907}
   m_Father: {fileID: 3349464385978153241}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8685582224802616234
@@ -42829,6 +43512,7 @@ GameObject:
   - component: {fileID: 5329591904852203702}
   - component: {fileID: 3252057556996990163}
   - component: {fileID: 5546608711016592637}
+  - component: {fileID: 3256264120126069054}
   m_Layer: 0
   m_Name: MMElevation2
   m_TagString: Untagged
@@ -43043,6 +43727,26 @@ TilemapRenderer:
   m_SortOrder: 3
   m_Mode: 1
   m_DetectChunkCullingBounds: 0
+--- !u!114 &3256264120126069054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8685582224802616234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 3252057556996990163}
+  tilemapCollider: {fileID: 0}
+  compositeCollider: {fileID: 0}
 --- !u!1 &8892019822638297556
 GameObject:
   m_ObjectHideFlags: 0
@@ -43054,6 +43758,7 @@ GameObject:
   - component: {fileID: 8227824083313920371}
   - component: {fileID: 9013974511938393257}
   - component: {fileID: 8391883148266239406}
+  - component: {fileID: 5175889328022928588}
   m_Layer: 0
   m_Name: MMFloor4
   m_TagString: Untagged
@@ -44104,3 +44809,23 @@ TilemapRenderer:
   m_SortOrder: 3
   m_Mode: 1
   m_DetectChunkCullingBounds: 0
+--- !u!114 &5175889328022928588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8892019822638297556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0911e632b64ccf54b811d8def5def1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TilemapElevationVisibility
+  tilemapLevel: 0
+  disableAtThreshold: 1
+  disableThreshold: 3
+  smoothFade: 1
+  fadeDuration: 0.2
+  tilemap: {fileID: 9013974511938393257}
+  tilemapCollider: {fileID: 0}
+  compositeCollider: {fileID: 0}
