@@ -4,6 +4,9 @@ using UnityEngine;
 public class Beam : MonoBehaviour
 {
     private const float TickInterval = 1f;
+    private const float AppearDuration = 0.12f;
+    private const float PulseFrequency = 8f;
+    private const float PulseAmount = 0.12f;
 
     private readonly Dictionary<IDamageable, float> nextDamageTimes =
         new Dictionary<IDamageable, float>();
@@ -20,6 +23,9 @@ public class Beam : MonoBehaviour
     private LayerMask hittableLayers;
     private float endTime;
     private bool initialized;
+    private Transform visualTransform;
+    private Vector3 visualScale;
+    private float startTime;
 
     public void Initialize(
         int primaryDamage,
@@ -43,6 +49,14 @@ public class Beam : MonoBehaviour
         this.width = Mathf.Max(0.01f, width);
         this.duration = Mathf.Max(0f, duration);
         this.hittableLayers = hittableLayers;
+        visualTransform = GetComponentInChildren<SpriteRenderer>()?.transform;
+        if (visualTransform != null)
+        {
+            visualScale = visualTransform.localScale;
+            visualTransform.localScale = new Vector3(0f, visualScale.y, visualScale.z);
+        }
+
+        startTime = Time.time;
         endTime = Time.time + this.duration;
         initialized = true;
     }
@@ -57,6 +71,8 @@ public class Beam : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        AnimateVisual();
 
         Collider2D[] hits = Physics2D.OverlapCapsuleAll(
             transform.position + transform.right * (range * 0.5f),
@@ -79,6 +95,21 @@ public class Beam : MonoBehaviour
                 nextDamageTimes[target] = Time.time + TickInterval;
             }
         }
+    }
+
+    private void AnimateVisual()
+    {
+        if (visualTransform == null)
+            return;
+
+        float elapsed = Time.time - startTime;
+        float appearPercent = Mathf.Clamp01(elapsed / AppearDuration);
+        float pulse = 1f + Mathf.Sin(elapsed * PulseFrequency) * PulseAmount;
+        visualTransform.localScale = new Vector3(
+            visualScale.x * appearPercent,
+            visualScale.y * pulse,
+            visualScale.z
+        );
     }
 
     private void ApplyDamage(IDamageable target)
