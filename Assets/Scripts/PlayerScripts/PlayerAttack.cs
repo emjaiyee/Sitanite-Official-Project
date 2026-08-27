@@ -9,6 +9,7 @@ public class PlayerAttack : MonoBehaviour
     private PlayerEquipment equipment;
     private PlayerWASD movement;
     private PlayerDash dash;
+    private PlayerStats stats;
 
     private bool attackActive;
 
@@ -17,6 +18,7 @@ public class PlayerAttack : MonoBehaviour
         equipment = GetComponent<PlayerEquipment>();
         movement = GetComponent<PlayerWASD>();
         dash = GetComponent<PlayerDash>();
+        stats = GetComponent<PlayerStats>();
 
         if (equipment == null)
         {
@@ -94,6 +96,23 @@ public class PlayerAttack : MonoBehaviour
 
         if (movement == null)
             return;
+
+        ItemData weaponData = equipment.CurrentWeaponData;
+
+        if (weaponData.AttackResourceType != ResourceType.None &&
+            weaponData.AttackCost > 0 &&
+            (stats == null ||
+             !stats.UseResource(
+                 weaponData.AttackCost,
+                 weaponData.AttackResourceType)))
+        {
+            Debug.Log(
+                $"[PlayerAttack] Not enough " +
+                $"{weaponData.AttackResourceType} to attack."
+            );
+
+            return;
+        }
 
         Vector2 attackDirection = GetMouseDirection();
 

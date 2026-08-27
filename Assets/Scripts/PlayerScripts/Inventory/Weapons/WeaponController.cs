@@ -30,6 +30,11 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     public bool CanAttack => data != null && Time.time >= nextAttackTime;
     public bool CanUseSkill => data != null && Time.time >= nextSkillTime;
 
+    public float ChargePercent =>
+        isCharging && data != null
+            ? Mathf.Clamp01((Time.time - chargeStartTime) / data.MaxChargeTime)
+            : 0f;
+
     private void Awake()
     {
         playerStats = GetComponentInParent<PlayerStats>();
@@ -168,18 +173,20 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     private void ApplyMeleeDamage(IDamageable target, int primaryDamage)
     {
+        Vector3 source = transform.root.position;
+
         if (primaryDamage > 0 && data.PrimaryDamageType != DamageType.None)
-            target.TakeDamage(primaryDamage, data.PrimaryDamageType);
+            target.TakeDamage(primaryDamage, data.PrimaryDamageType, source);
 
         int secondaryDamage = data.GetDamage(DamageSlot.Secondary);
         DamageType secondaryDamageType = data.GetDamageType(DamageSlot.Secondary);
         if (secondaryDamage > 0 && secondaryDamageType != DamageType.None)
-            target.TakeDamage(secondaryDamage, secondaryDamageType);
+            target.TakeDamage(secondaryDamage, secondaryDamageType, source);
 
         int tertiaryDamage = data.GetDamage(DamageSlot.Tertiary);
         DamageType tertiaryDamageType = data.GetDamageType(DamageSlot.Tertiary);
         if (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)
-            target.TakeDamage(tertiaryDamage, tertiaryDamageType);
+            target.TakeDamage(tertiaryDamage, tertiaryDamageType, source);
     }
 
     // =========================================================
@@ -367,21 +374,55 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     }
 
     // =========================================================
-    // RELEASE CHARGED SKILL
+    // AIM WHILE CHARGING
     // =========================================================
 
-    public void ReleaseSkill()
+    /// <summary>
+    /// Re-aims the charging skill toward a new direction.
+    /// Called every frame while the skill button is held so the
+    /// projectile/beam fires toward the cursor, not the initial press.
+    /// </summary>
+    public void UpdateSkillDirection(Vector2 direction)
     {
         if (!isCharging || data == null)
             return;
 
-        float chargePercent =
-            Mathf.Clamp01(
-                (Time.time - chargeStartTime) /
-                data.MaxChargeTime
-            );
+        if (direction.sqrMagnitude <= 0.0001f)
+            return;
 
-        int damage =
+        skillDirection = direction.normalized;
+
+        if (activeChargeVisual != null)
+        {
+            activeChargeVisual.transform.rotation =
+                Quaternion.Euler(
+                    0f,
+                    0f,
+                    Mathf.Atan2(
+                        skillDirection.y,
+                        skillDirection.x
+                    ) * Mathf.Rad2Deg
+                );
+        }
+    }
+
+    // =========================================================
+    // RELEASE CHARGED SKILL
+    // =========================================================
+
+    public void ReleaseSkill(bool fullyCharged)
+    {
+        if (!isCharging || data == null)
+            return;
+
+        // A max-charge release that couldn't pay the extra cost
+        // fires just below maximum instead.
+        float chargePercent =
+            fullyCharged
+                ? 1f
+                : Mathf.Min(ChargePercent, 0.99f);
+
+        int rawDamage =
             Mathf.RoundToInt(
                 Mathf.Lerp(
                     data.MinimumSkillDamage,
@@ -389,6 +430,16 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
                     chargePercent
                 )
             );
+
+        int damage = CalculateChargedSkillDamage(rawDamage);
+
+        Debug.Log(
+            $"[WeaponController] {WeaponId} skill released: " +
+            $"charge={chargePercent:P0} raw={rawDamage} " +
+            $"bonus={damage - rawDamage} final={damage} " +
+            $"(min={data.MinimumSkillDamage} max={data.MaximumSkillDamage} " +
+            $"ticksPerSec={data.DamageTicksPerSecond})"
+        );
 
         if (data.WeaponSkillType == WeaponSkillType.Beam)
         {
@@ -642,7 +693,10 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         DamageSlot slot)
     {
         int damage =
-            data.GetSkillDamage(slot);
+            data.GetSkillDamage(
+                slot,
+                CalculateSkillDamage(data.SkillDamage)
+            );
 
         DamageType damageType =
             data.GetDamageType(slot);
@@ -652,7 +706,8 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         {
             target.TakeDamage(
                 damage,
-                damageType
+                damageType,
+                transform.root.position
             );
         }
     }
@@ -660,6 +715,60 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     // =========================================================
     // DAMAGE CALCULATION
     // =========================================================
+
+    /// <summary>
+    /// Skill damage = raw skill damage
+    ///              + the weapon's primary damage modifier
+    ///              + 20% of the player's runtime base damage of the
+    ///                primary type (base + attribute/trait scaling,
+    ///                before equipment).
+    /// The skill's damage type comes from that primary modifier.
+    /// </summary>
+    private int CalculateSkillDamage(int rawDamage)
+    {
+        int damage = rawDamage + data.GetDamage(DamageSlot.Primary);
+
+        if (playerStats != null)
+        {
+            damage += Mathf.RoundToInt(
+                playerStats.GetPreEquipmentDamage(data.PrimaryDamageType) * 0.2f
+            );
+        }
+
+        return damage;
+    }
+
+    /// <summary>
+    /// Charged skill damage = raw charge damage
+    ///                      + the weapon's primary damage modifier
+    ///                      + 50% of the player's runtime base damage
+    ///                        (base + attribute/trait scaling)
+    ///                      + damage modifiers from other equipped gear.
+    /// The weapon's own modifier is excluded from the gear pass since
+    /// it is already added explicitly.
+    /// </summary>
+    private int CalculateChargedSkillDamage(int rawDamage)
+    {
+        int damage = rawDamage + data.GetDamage(DamageSlot.Primary);
+
+        if (playerStats == null)
+            return damage;
+
+        float runtimeBase =
+            playerStats.GetPreEquipmentDamage(data.PrimaryDamageType);
+
+        if (EquipmentManager.Instance != null)
+        {
+            runtimeBase = EquipmentManager.Instance.GetModifiedStatExcluding(
+                runtimeBase,
+                StatType.Damage,
+                data.PrimaryDamageType,
+                data
+            );
+        }
+
+        return damage + Mathf.RoundToInt(runtimeBase * 0.5f);
+    }
 
     private int GetPrimaryDamage()
     {

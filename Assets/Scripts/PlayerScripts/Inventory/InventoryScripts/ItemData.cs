@@ -11,6 +11,10 @@ public enum StatType
 {
     Health,
     Mana,
+    Stamina,
+    HealthRegen,
+    ManaRegen,
+    StaminaRegen,
     MoveSpeed,
     BaseDamageResistance,
     DamageResistance,
@@ -138,6 +142,18 @@ public class ItemData : ScriptableObject
 
     [SerializeField] private ResourceType skillResourceType = ResourceType.Stamina;
 
+    [Tooltip("Total resource cost when a chargeable skill is released at FULL charge. Must be >= Skill Cost.")]
+    [Min(0)]
+    [SerializeField] private int maxChargeSkillCost = 50;
+
+    [Header("Attack Cost")]
+    [Tooltip("Resource consumed per regular attack. 0 = free attacks.")]
+    [Min(0)]
+    [SerializeField] private int attackCost;
+
+    [Tooltip("Resource spent by regular attacks. None = free attacks.")]
+    [SerializeField] private ResourceType attackResourceType = ResourceType.None;
+
     [Header("Weapon Settings")]
     [Tooltip("Stable identifier used by gameplay systems.")]
     [SerializeField] private string weaponId;
@@ -240,6 +256,9 @@ public class ItemData : ScriptableObject
     public float DamageTicksPerSecond => damageTicksPerSecond;
     public int SkillCost => skillCost;
     public ResourceType SkillResourceType => skillResourceType;
+    public int MaxChargeSkillCost => maxChargeSkillCost;
+    public int AttackCost => attackCost;
+    public ResourceType AttackResourceType => attackResourceType;
 
     public int PrimaryDamage => GetDamageValue(DamageSlot.Primary, 0);
     public DamageType PrimaryDamageType => GetDamageType(DamageSlot.Primary, DamageType.Physical);
@@ -353,6 +372,8 @@ public class ItemData : ScriptableObject
         {
             maxStackSize = Mathf.Max(1, maxStackSize);
         }
+
+        maxChargeSkillCost = Mathf.Max(skillCost, maxChargeSkillCost);
 
         int damageModifierCount = 0;
         bool hasPrimaryDamage = false;

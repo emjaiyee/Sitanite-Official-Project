@@ -18,6 +18,15 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
     private Vector3 startPosition;
     private bool initialized;
 
+    /// <summary>Time.time when this projectile was initialized.</summary>
+    protected float StartTime { get; private set; }
+
+    /// <summary>Called at the end of Initialize. Use to cache visual components.</summary>
+    protected virtual void OnInitialized() { }
+
+    /// <summary>Called every Update after movement, while initialized.</summary>
+    protected virtual void OnUpdate() { }
+
     public void Initialize(
         int damage,
         DamageType damageType,
@@ -33,9 +42,11 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         this.homing = homing;
         this.hittableLayers = hittableLayers;
         startPosition = transform.position;
+        StartTime = Time.time;
         if (homing)
             homingTarget = FindNearestTarget();
         initialized = true;
+        OnInitialized();
     }
 
     public void InitializeSkill(
@@ -79,7 +90,12 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         transform.position += transform.right * speed * Time.deltaTime;
 
         if (Vector3.Distance(startPosition, transform.position) >= maxDistance)
+        {
             Destroy(gameObject);
+            return;
+        }
+
+        OnUpdate();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -95,13 +111,13 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
                 (target as MonoBehaviour)?.transform))
             return;
 
-        target.TakeDamage(damage, damageType);
+        target.TakeDamage(damage, damageType, startPosition);
 
         if (secondaryDamage > 0 && secondaryDamageType != DamageType.None)
-            target.TakeDamage(secondaryDamage, secondaryDamageType);
+            target.TakeDamage(secondaryDamage, secondaryDamageType, startPosition);
 
         if (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)
-            target.TakeDamage(tertiaryDamage, tertiaryDamageType);
+            target.TakeDamage(tertiaryDamage, tertiaryDamageType, startPosition);
 
         Destroy(gameObject);
     }

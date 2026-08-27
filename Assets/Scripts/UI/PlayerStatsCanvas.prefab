@@ -1537,6 +1537,7 @@ MonoBehaviour:
 
 '
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &709732262109825129
 GameObject:
@@ -1629,6 +1630,7 @@ MonoBehaviour:
   description: Mundane increases <color=green>Slash, Blunt, Stab,</color> and <color=green>Physical</color>
     base damages
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &732689117414273409
 GameObject:
@@ -2271,6 +2273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Precision increases <color=green>Pierce</color> base damage
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &910043013548678142
 GameObject:
@@ -2576,7 +2579,7 @@ RectTransform:
   m_GameObject: {fileID: 1072767123670065551}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1.71718, y: 1.71718, z: 0.85859}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7817853457770523898}
@@ -2590,7 +2593,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -443, y: 0.000015259}
+  m_AnchoredPosition: {x: -380.45, y: 0.000015259}
   m_SizeDelta: {x: 800, y: 660}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &71423353911883936
@@ -2860,6 +2863,7 @@ MonoBehaviour:
   description: Fortitude increases <color=green>Slash, Blunt, Pierce, Stab</color>
     and <color=green>Physical</color> damage resistance
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &1260947997664329067
 GameObject:
@@ -3977,7 +3981,7 @@ RectTransform:
   m_GameObject: {fileID: 1910490442659181709}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.99998456, y: 0.99998456, z: 0.99998456}
+  m_LocalScale: {x: 0.8585768, y: 0.8585768, z: 0.8585768}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1694141192495921203}
@@ -3988,7 +3992,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 819, y: 0}
+  m_AnchoredPosition: {x: 703.08, y: 0}
   m_SizeDelta: {x: 845.189, y: 1332.296}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6502036756073141996
@@ -4804,6 +4808,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Agility increases <color=green>Max Stamina</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &2209553057396042929
 GameObject:
@@ -5612,6 +5617,7 @@ MonoBehaviour:
   description: Willpower increases <color=green>Poison, Lightning, Frost, Psychic,
     Necrosis, Water, Earth, Fire,</color> and <color=green>air</color> damage resistance
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &2574734875041008569
 GameObject:
@@ -6405,8 +6411,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4282694379
+  m_fontColor: {r: 0.92156863, g: 0.7294118, b: 0.26666668, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7734,6 +7740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Focus increases <color=green>Max Mana</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &3524551466632814458
 GameObject:
@@ -8513,6 +8520,7 @@ MonoBehaviour:
   description: Elemental increases <color=green>Water, Earth, Fire,</color> and <color=green>Air</color>
     base damages
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &3821578316271277284
 GameObject:
@@ -8907,8 +8915,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3733976e157dff94f8002ac59fa8b9d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
-  description: Haste increases <color=green>Movement Speed</color>
+  description: Haste increases <color=green>Movement Speed</color> and <color=green>Attack
+    Speed</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &4080015406459007755
 GameObject:
@@ -9121,8 +9131,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4282694379
+  m_fontColor: {r: 0.92156863, g: 0.7294118, b: 0.26666668, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -9146,7 +9156,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 3
-  m_HorizontalAlignment: 1
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
@@ -9178,7 +9188,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -15.713623, y: 0, z: -377.12585, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -9441,6 +9451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Vitality increases <color=green>Max Health</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &4226223225438889482
 GameObject:
@@ -9845,6 +9856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Endurance increases <color=green>Stamina Regen</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &4531566082684642777
 GameObject:
@@ -11096,10 +11108,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3733976e157dff94f8002ac59fa8b9d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
-  description: Intelligence increases Burning, <color=green>Frost, Poison, Lightning,
-    Psychic, Necrosis, Water, Earth, Fire,</color> and <color=green>Air</color> base
-    damage, plus <color=green>Max Mana</color>
+  description: Intelligence increases <color=green>Frost, Poison, Lightning, Psychic,
+    Necrosis, Water, Earth, Fire,</color> and <color=green>Air</color> base damage,
+    plus <color=green>Max Mana</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &5234693761561320933
 GameObject:
@@ -12847,6 +12860,7 @@ MonoBehaviour:
   description: Strength increases <color=green>Blunt, Slash, Physical</color> base
     damages plus <color=green>Max Health</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &6177598098544964889
 GameObject:
@@ -13010,8 +13024,8 @@ Transform:
   m_GameObject: {fileID: 6238128213056227487}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -146.74524, y: 111.3443, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -501.51, y: 95.599, z: 0}
+  m_LocalScale: {x: 0.85859, y: 0.85859, z: 0.85859}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8070360421880987705}
@@ -13400,6 +13414,7 @@ MonoBehaviour:
   description: Arcane increases <color=green>Poison, Lightning, Frost, Psychic</color>
     and <color=green>Necrosis</color> base damages
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &6388361851912645023
 GameObject:
@@ -14209,6 +14224,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Vigor increases <color=green>Health Regen</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &6933273162055133911
 GameObject:
@@ -15988,8 +16004,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4282694379
+  m_fontColor: {r: 0.92156863, g: 0.7294118, b: 0.26666668, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -17198,6 +17214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Attunement increases <color=green>Mana Regen</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &8662758749159579491
 GameObject:
@@ -17871,7 +17888,6 @@ MonoBehaviour:
   slashDamageText: {fileID: 2155310856575599444}
   bluntDamageText: {fileID: 4940407130273247265}
   physicalDamageText: {fileID: 8156132768977161544}
-  burningDamageText: {fileID: 7777344922237249545}
   frostDamageText: {fileID: 8285981226371106577}
   poisonDamageText: {fileID: 7420766485138635102}
   lightningDamageText: {fileID: 2157016197730928900}
@@ -17886,7 +17902,6 @@ MonoBehaviour:
   slashResistanceText: {fileID: 7428218153665766905}
   bluntResistanceText: {fileID: 3862643350245610446}
   physicalResistanceText: {fileID: 1675555205125975866}
-  burningResistanceText: {fileID: 1446889705116369581}
   frostResistanceText: {fileID: 4814896838862364793}
   poisonResistanceText: {fileID: 3174469692663210870}
   lightningResistanceText: {fileID: 3146202923515541720}

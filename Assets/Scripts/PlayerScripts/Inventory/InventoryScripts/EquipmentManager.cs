@@ -170,6 +170,42 @@ public class EquipmentManager : MonoBehaviour
         return (baseValue + flat) * (1f + percent / 100f);
     }
 
+    /// <summary>
+    /// Same as GetModifiedStat, but skips the given item's modifiers.
+    /// Used by charged skills so the weapon's own damage modifier
+    /// (added separately) isn't double-counted while other equipped
+    /// gear still contributes.
+    /// </summary>
+    public float GetModifiedStatExcluding(float baseValue, StatType statType, DamageType damageType, ItemData excluded)
+    {
+        float flat = 0f;
+        float percent = 0f;
+
+        foreach (InventoryItem item in currentEquipment.Values)
+        {
+            if (item == null || item.Data == null || item.Data == excluded)
+                continue;
+
+            foreach (EquipmentStat modifier in item.Data.StatModifiers)
+            {
+                if (modifier.statType != statType)
+                    continue;
+
+                if (statType != StatType.MoveSpeed &&
+                    modifier.damageType != DamageType.None &&
+                    (modifier.damageType & damageType) == 0)
+                    continue;
+
+                if (modifier.modifierType == StatModifierType.Percent)
+                    percent += modifier.value;
+                else
+                    flat += modifier.value;
+            }
+        }
+
+        return (baseValue + flat) * (1f + percent / 100f);
+    }
+
     public float GetAttributeReduction(PrimaryAttribute attribute, float baseValue)
     {
         return ApplyReduction(baseValue, StatType.AttributeReduction, modifier => modifier.reducedAttribute == attribute);

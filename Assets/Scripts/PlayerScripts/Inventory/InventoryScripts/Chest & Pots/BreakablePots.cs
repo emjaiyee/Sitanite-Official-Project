@@ -50,7 +50,7 @@ public class BreakablePot : MonoBehaviour, IDamageable
     /// <summary>
     /// IDamageable implementation. Allows MeleeWeapon.cs to break the pot via interface.
     /// </summary>
-    public void TakeDamage(int amount, DamageType damageType = DamageType.Slash)
+    public void TakeDamage(int amount, DamageType damageType = DamageType.Slash, Vector3? damageSource = null)
     {
         if ((damageType & breakableDamageTypes) == 0)
             return;

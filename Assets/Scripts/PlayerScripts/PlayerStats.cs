@@ -159,15 +159,31 @@ public class PlayerStats : MonoBehaviour
     public float CurrentMana => currentMana;
     public float CurrentStamina => currentStamina;
 
-    public float MaxHealth => Mathf.Max(1f, maxHealth + MaxHealthModifier);
-    public float MaxMana => Mathf.Max(1f, maxMana + MaxManaModifier);
-    public float MaxStamina => Mathf.Max(1f, maxStamina + MaxStaminaModifier);
+    public float MaxHealth => Mathf.Max(1f, ApplyEquipmentModifier(maxHealth + MaxHealthModifier, StatType.Health));
+    public float MaxMana => Mathf.Max(1f, ApplyEquipmentModifier(maxMana + MaxManaModifier, StatType.Mana));
+    public float MaxStamina => Mathf.Max(1f, ApplyEquipmentModifier(maxStamina + MaxStaminaModifier, StatType.Stamina));
     public float MoveSpeed => Mathf.Max(0f, ApplyEquipmentModifier(moveSpeed + MovementSpeedModifier, StatType.MoveSpeed));
     public float SprintSpeed => Mathf.Max(0f, ApplyEquipmentModifier(sprintSpeed + MovementSpeedModifier, StatType.MoveSpeed));
     public float DashSpeed => Mathf.Max(0f, ApplyEquipmentModifier(dashSpeed + MovementSpeedModifier, StatType.MoveSpeed));
-    public float HealthRegen => healthRegen + HealthRegenModifier;
-    public float ManaRegen => manaRegen + ManaRegenModifier;
-    public float StaminaRegen => staminaRegen + StaminaRegenModifier;
+    public float HealthRegen => ApplyEquipmentModifier(healthRegen + HealthRegenModifier, StatType.HealthRegen);
+    public float ManaRegen => ApplyEquipmentModifier(manaRegen + ManaRegenModifier, StatType.ManaRegen);
+    public float StaminaRegen => ApplyEquipmentModifier(staminaRegen + StaminaRegenModifier, StatType.StaminaRegen);
+
+    // -------------------------------------------------
+    // PRE-EQUIPMENT VALUES (base + attribute/trait modifiers).
+    // The UI shows these as the main number; the colored
+    // suffix is the equipment (ItemData) contribution only.
+    // -------------------------------------------------
+
+    public float PreEquipmentMaxHealth => Mathf.Max(1f, maxHealth + MaxHealthModifier);
+    public float PreEquipmentMaxMana => Mathf.Max(1f, maxMana + MaxManaModifier);
+    public float PreEquipmentMaxStamina => Mathf.Max(1f, maxStamina + MaxStaminaModifier);
+    public float PreEquipmentMoveSpeed => Mathf.Max(0f, moveSpeed + MovementSpeedModifier);
+    public float PreEquipmentSprintSpeed => Mathf.Max(0f, sprintSpeed + MovementSpeedModifier);
+    public float PreEquipmentDashSpeed => Mathf.Max(0f, dashSpeed + MovementSpeedModifier);
+    public float PreEquipmentHealthRegen => healthRegen + HealthRegenModifier;
+    public float PreEquipmentManaRegen => manaRegen + ManaRegenModifier;
+    public float PreEquipmentStaminaRegen => staminaRegen + StaminaRegenModifier;
 
     public float PierceDamage => EffectiveDamage(basePierceDamage, DamageType.Pierce);
     public float StabDamage => EffectiveDamage(baseStabDamage, DamageType.Stab);
@@ -198,6 +214,34 @@ public class PlayerStats : MonoBehaviour
     public float FireResistance => ApplyEquipmentResistances(baseFireResistance + ResistanceModifier(DamageType.Fire), DamageType.Fire);
     public float AirResistance => ApplyEquipmentResistances(baseAirResistance + ResistanceModifier(DamageType.Air), DamageType.Air);
     public float PhysicalResistance => ApplyEquipmentResistances(basePhysicalResistance + ResistanceModifier(DamageType.Physical), DamageType.Physical);
+
+    public float GetBaseResistance(DamageType damageType)
+    {
+        return damageType switch
+        {
+            DamageType.Pierce => basePierceResistance,
+            DamageType.Stab => baseStabResistance,
+            DamageType.Slash => baseSlashResistance,
+            DamageType.Blunt => baseBluntResistance,
+            DamageType.Frost => baseFrostResistance,
+            DamageType.Poison => basePoisonResistance,
+            DamageType.Lightning => baseLightningResistance,
+            DamageType.Psychic => basePsychicResistance,
+            DamageType.Necrosis => baseNecrosisResistance,
+            DamageType.Water => baseWaterResistance,
+            DamageType.Earth => baseEarthResistance,
+            DamageType.Fire => baseFireResistance,
+            DamageType.Air => baseAirResistance,
+            DamageType.Physical => basePhysicalResistance,
+            _ => 0f
+        };
+    }
+
+    /// <summary>Base resistance + attribute/trait modifier, before equipment.</summary>
+    public float GetPreEquipmentResistance(DamageType damageType)
+    {
+        return GetBaseResistance(damageType) + ResistanceModifier(damageType);
+    }
 
     public float GetEffectiveDamage(DamageType damageType)
     {
@@ -366,6 +410,12 @@ public class PlayerStats : MonoBehaviour
             DamageType.Physical => basePhysicalDamage,
             _ => 0f
         };
+    }
+
+    /// <summary>Base damage + attribute/trait modifier, before equipment.</summary>
+    public float GetPreEquipmentDamage(DamageType damageType)
+    {
+        return GetBaseDamage(damageType) + GetDamageModifier(damageType);
     }
 
     private float ResistanceModifier(DamageType damageType)
@@ -551,10 +601,16 @@ public class PlayerStats : MonoBehaviour
 
         amount = Mathf.Max(0f, amount - GetDamageResistance(damageType));
 
+        if (amount <= 0)
+            return;
+
         currentHealth = Mathf.Max(
             0,
             currentHealth - amount
         );
+
+        // Show the damage number above the player, colored by type.
+        DamagePopupSpawner.Spawn(transform, amount, damageType, 1f);
 
         healthRegenCooldown = regenerationCooldown;
         healthRegenAccumulator = 0f;

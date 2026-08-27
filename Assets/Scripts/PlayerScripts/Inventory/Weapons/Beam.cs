@@ -167,12 +167,12 @@ public class Beam : MonoBehaviour
         int tertiary = Mathf.RoundToInt(tertiaryDamage * damageScale);
 
         if (primary > 0 && primaryDamageType != DamageType.None)
-            target.TakeDamage(primary, primaryDamageType);
+            target.TakeDamage(primary, primaryDamageType, transform.position);
 
         if (secondary > 0 && secondaryDamageType != DamageType.None)
-            target.TakeDamage(secondary, secondaryDamageType);
+            target.TakeDamage(secondary, secondaryDamageType, transform.position);
 
         if (tertiary > 0 && tertiaryDamageType != DamageType.None)
-            target.TakeDamage(tertiary, tertiaryDamageType);
+            target.TakeDamage(tertiary, tertiaryDamageType, transform.position);
     }
 }

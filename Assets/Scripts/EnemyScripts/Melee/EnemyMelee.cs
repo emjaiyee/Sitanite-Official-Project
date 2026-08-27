@@ -14,6 +14,7 @@ public class EnemyMelee : MonoBehaviour
         Idle,
         Chase,
         Search,
+        Locate,
         Death
     }
 
@@ -93,6 +94,40 @@ public class EnemyMelee : MonoBehaviour
 
     public int IdleWanderRadius =>
         idleWanderRadius;
+
+    // =========================================================
+    // LOCATE (damage origin)
+    // =========================================================
+
+    [Header("Locate")]
+    [Tooltip("How long the enemy lingers at the damage origin before giving up.")]
+    [Min(0f)] [SerializeField] private float locateWaitDuration = 2.5f;
+
+    public float LocateWaitDuration => locateWaitDuration;
+
+    // Last known position that damage came from.
+    public Vector3? DamageSourcePosition { get; private set; }
+
+    /// <summary>
+    /// Called by EnemyHealth when this enemy takes damage.
+    /// Moves the FSM to Locate unless already chasing or dead.
+    /// </summary>
+    public void NotifyDamaged(Vector3? damageSource)
+    {
+        if (!damageSource.HasValue)
+            return;
+
+        if (CurrentState == EnemyState.Death)
+            return;
+
+        // Already chasing the player: no need to investigate.
+        if (CurrentState == EnemyState.Chase)
+            return;
+
+        DamageSourcePosition = damageSource.Value;
+
+        ChangeState(EnemyState.Locate);
+    }
 
 
     // =========================================================
@@ -202,6 +237,7 @@ public class EnemyMelee : MonoBehaviour
         if (enemyHealth != null)
         {
             enemyHealth.OnEnemyDied += HandleEnemyDied;
+            enemyHealth.OnDamaged += HandleDamaged;
         }
     }
 
@@ -252,6 +288,7 @@ public class EnemyMelee : MonoBehaviour
         if (enemyHealth != null)
         {
             enemyHealth.OnEnemyDied -= HandleEnemyDied;
+            enemyHealth.OnDamaged -= HandleDamaged;
         }
     }
 
@@ -373,6 +410,13 @@ public class EnemyMelee : MonoBehaviour
         );
     }
 
+    private void HandleDamaged(
+        EnemyHealth source,
+        Vector3? damageSource)
+    {
+        NotifyDamaged(damageSource);
+    }
+
 
     public void ChangeState(
     EnemyState newState)
@@ -448,6 +492,9 @@ public class EnemyMelee : MonoBehaviour
 
             case EnemyState.Search:
                 return new EnemyMeleeSearchState(this);
+
+            case EnemyState.Locate:
+                return new EnemyMeleeLocateState(this);
 
             case EnemyState.Death:
                 return new EnemyMeleeDeathState(this);

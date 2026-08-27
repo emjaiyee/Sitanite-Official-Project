@@ -55,7 +55,6 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private TMP_Text slashDamageText;
     [SerializeField] private TMP_Text bluntDamageText;
     [SerializeField] private TMP_Text physicalDamageText;
-    [SerializeField] private TMP_Text burningDamageText;
     [SerializeField] private TMP_Text frostDamageText;
     [SerializeField] private TMP_Text poisonDamageText;
     [SerializeField] private TMP_Text lightningDamageText;
@@ -72,7 +71,6 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private TMP_Text slashResistanceText;
     [SerializeField] private TMP_Text bluntResistanceText;
     [SerializeField] private TMP_Text physicalResistanceText;
-    [SerializeField] private TMP_Text burningResistanceText;
     [SerializeField] private TMP_Text frostResistanceText;
     [SerializeField] private TMP_Text poisonResistanceText;
     [SerializeField] private TMP_Text lightningResistanceText;
@@ -415,53 +413,96 @@ public class PlayerStatsUI : MonoBehaviour
             return;
 
         // Resources
-        SetText(healthText, $"Health: {Mathf.CeilToInt(playerStats.CurrentHealth)} / {Mathf.CeilToInt(playerStats.MaxHealth)}");
-        SetText(manaText, $"Mana: {Mathf.CeilToInt(playerStats.CurrentMana)} / {Mathf.CeilToInt(playerStats.MaxMana)}");
-        SetText(staminaText, $"Stamina: {Mathf.CeilToInt(playerStats.CurrentStamina)} / {Mathf.CeilToInt(playerStats.MaxStamina)}");
+        SetText(healthText, "Health", playerStats.MaxHealth, playerStats.PreEquipmentMaxHealth, $"{Mathf.CeilToInt(playerStats.CurrentHealth)} / ");
+        SetText(manaText, "Mana", playerStats.MaxMana, playerStats.PreEquipmentMaxMana, $"{Mathf.CeilToInt(playerStats.CurrentMana)} / ");
+        SetText(staminaText, "Stamina", playerStats.MaxStamina, playerStats.PreEquipmentMaxStamina, $"{Mathf.CeilToInt(playerStats.CurrentStamina)} / ");
 
         // Movement
-        SetText(moveSpeedText, $"MoveSpeed: {playerStats.MoveSpeed.ToString("F1")}");
-        SetText(sprintSpeedText, $"SprintSpeed: {playerStats.SprintSpeed.ToString("F1")}");
-        SetText(dashSpeedText, $"DashSpeed: {playerStats.DashSpeed.ToString("F1")}");
+        SetText(moveSpeedText, "MoveSpeed", playerStats.MoveSpeed, playerStats.PreEquipmentMoveSpeed, "F1");
+        SetText(sprintSpeedText, "SprintSpeed", playerStats.SprintSpeed, playerStats.PreEquipmentSprintSpeed, "F1");
+        SetText(dashSpeedText, "DashSpeed", playerStats.DashSpeed, playerStats.PreEquipmentDashSpeed, "F1");
 
         // Regeneration
-        SetText(healthRegenText, $"HealthRegen: {playerStats.HealthRegen:F1}/s");
-        SetText(manaRegenText, $"ManaRegen: {playerStats.ManaRegen:F1}/s");
-        SetText(staminaRegenText, $"StaminaRegen: {playerStats.StaminaRegen:F1}/s");
+        SetText(healthRegenText, "HealthRegen", playerStats.HealthRegen, playerStats.PreEquipmentHealthRegen, "F1", "/s");
+        SetText(manaRegenText, "ManaRegen", playerStats.ManaRegen, playerStats.PreEquipmentManaRegen, "F1", "/s");
+        SetText(staminaRegenText, "StaminaRegen", playerStats.StaminaRegen, playerStats.PreEquipmentStaminaRegen, "F1", "/s");
 
         // Base/Effective Damage
-        SetText(pierceDamageText, $"Pierce: {playerStats.PierceDamage:F0}");
-        SetText(stabDamageText, $"Stab: {playerStats.StabDamage:F0}");
-        SetText(slashDamageText, $"Slash: {playerStats.SlashDamage:F0}");
-        SetText(bluntDamageText, $"Blunt: {playerStats.BluntDamage:F0}");
-        SetText(physicalDamageText, $"Physical: {playerStats.PhysicalDamage:F0}");
-        SetText(burningDamageText, $"Burning: {playerStats.BurningDamage:F0}");
-        SetText(frostDamageText, $"Frost: {playerStats.FrostDamage:F0}");
-        SetText(poisonDamageText, $"Poison: {playerStats.PoisonDamage:F0}");
-        SetText(lightningDamageText, $"Lightning: {playerStats.LightningDamage:F0}");
-        SetText(psychicDamageText, $"Psychic: {playerStats.PsychicDamage:F0}");
-        SetText(necrosisDamageText, $"Necrosis: {playerStats.NecrosisDamage:F0}");
-        SetText(waterDamageText, $"Water: {playerStats.WaterDamage:F0}");
-        SetText(earthDamageText, $"Earth: {playerStats.EarthDamage:F0}");
-        SetText(fireDamageText, $"Fire: {playerStats.FireDamage:F0}");
-        SetText(airDamageText, $"Air: {playerStats.AirDamage:F0}");
+        SetDamage(pierceDamageText, "Pierce", playerStats.PierceDamage, playerStats.GetPreEquipmentDamage(DamageType.Pierce));
+        SetDamage(stabDamageText, "Stab", playerStats.StabDamage, playerStats.GetPreEquipmentDamage(DamageType.Stab));
+        SetDamage(slashDamageText, "Slash", playerStats.SlashDamage, playerStats.GetPreEquipmentDamage(DamageType.Slash));
+        SetDamage(bluntDamageText, "Blunt", playerStats.BluntDamage, playerStats.GetPreEquipmentDamage(DamageType.Blunt));
+        SetDamage(physicalDamageText, "Physical", playerStats.PhysicalDamage, playerStats.GetPreEquipmentDamage(DamageType.Physical));
+        SetDamage(frostDamageText, "Frost", playerStats.FrostDamage, playerStats.GetPreEquipmentDamage(DamageType.Frost));
+        SetDamage(poisonDamageText, "Poison", playerStats.PoisonDamage, playerStats.GetPreEquipmentDamage(DamageType.Poison));
+        SetDamage(lightningDamageText, "Lightning", playerStats.LightningDamage, playerStats.GetPreEquipmentDamage(DamageType.Lightning));
+        SetDamage(psychicDamageText, "Psychic", playerStats.PsychicDamage, playerStats.GetPreEquipmentDamage(DamageType.Psychic));
+        SetDamage(necrosisDamageText, "Necrosis", playerStats.NecrosisDamage, playerStats.GetPreEquipmentDamage(DamageType.Necrosis));
+        SetDamage(waterDamageText, "Water", playerStats.WaterDamage, playerStats.GetPreEquipmentDamage(DamageType.Water));
+        SetDamage(earthDamageText, "Earth", playerStats.EarthDamage, playerStats.GetPreEquipmentDamage(DamageType.Earth));
+        SetDamage(fireDamageText, "Fire", playerStats.FireDamage, playerStats.GetPreEquipmentDamage(DamageType.Fire));
+        SetDamage(airDamageText, "Air", playerStats.AirDamage, playerStats.GetPreEquipmentDamage(DamageType.Air));
 
         // Resistance
-        SetText(pierceResistanceText, $"Pierce Res: {playerStats.PierceResistance:F0}");
-        SetText(stabResistanceText, $"Stab Res: {playerStats.StabResistance:F0}");
-        SetText(slashResistanceText, $"Slash Res: {playerStats.SlashResistance:F0}");
-        SetText(bluntResistanceText, $"Blunt Res: {playerStats.BluntResistance:F0}");
-        SetText(physicalResistanceText, $"Physical Res: {playerStats.PhysicalResistance:F0}");
-        SetText(burningResistanceText, $"Burning Res: {playerStats.BurningResistance:F0}");
-        SetText(frostResistanceText, $"Frost Res: {playerStats.FrostResistance:F0}");
-        SetText(poisonResistanceText, $"Poison Res: {playerStats.PoisonResistance:F0}");
-        SetText(lightningResistanceText, $"Lightning Res: {playerStats.LightningResistance:F0}");
-        SetText(psychicResistanceText, $"Psychic Res: {playerStats.PsychicResistance:F0}");
-        SetText(necrosisResistanceText, $"Necrosis Res: {playerStats.NecrosisResistance:F0}");
-        SetText(waterResistanceText, $"Water Res: {playerStats.WaterResistance:F0}");
-        SetText(earthResistanceText, $"Earth Res: {playerStats.EarthResistance:F0}");
-        SetText(fireResistanceText, $"Fire Res: {playerStats.FireResistance:F0}");
-        SetText(airResistanceText, $"Air Res: {playerStats.AirResistance:F0}");
+        SetDamage(pierceResistanceText, "Pierce Res", playerStats.PierceResistance, playerStats.GetPreEquipmentResistance(DamageType.Pierce));
+        SetDamage(stabResistanceText, "Stab Res", playerStats.StabResistance, playerStats.GetPreEquipmentResistance(DamageType.Stab));
+        SetDamage(slashResistanceText, "Slash Res", playerStats.SlashResistance, playerStats.GetPreEquipmentResistance(DamageType.Slash));
+        SetDamage(bluntResistanceText, "Blunt Res", playerStats.BluntResistance, playerStats.GetPreEquipmentResistance(DamageType.Blunt));
+        SetDamage(physicalResistanceText, "Physical Res", playerStats.PhysicalResistance, playerStats.GetPreEquipmentResistance(DamageType.Physical));
+        SetDamage(frostResistanceText, "Frost Res", playerStats.FrostResistance, playerStats.GetPreEquipmentResistance(DamageType.Frost));
+        SetDamage(poisonResistanceText, "Poison Res", playerStats.PoisonResistance, playerStats.GetPreEquipmentResistance(DamageType.Poison));
+        SetDamage(lightningResistanceText, "Lightning Res", playerStats.LightningResistance, playerStats.GetPreEquipmentResistance(DamageType.Lightning));
+        SetDamage(psychicResistanceText, "Psychic Res", playerStats.PsychicResistance, playerStats.GetPreEquipmentResistance(DamageType.Psychic));
+        SetDamage(necrosisResistanceText, "Necrosis Res", playerStats.NecrosisResistance, playerStats.GetPreEquipmentResistance(DamageType.Necrosis));
+        SetDamage(waterResistanceText, "Water Res", playerStats.WaterResistance, playerStats.GetPreEquipmentResistance(DamageType.Water));
+        SetDamage(earthResistanceText, "Earth Res", playerStats.EarthResistance, playerStats.GetPreEquipmentResistance(DamageType.Earth));
+        SetDamage(fireResistanceText, "Fire Res", playerStats.FireResistance, playerStats.GetPreEquipmentResistance(DamageType.Fire));
+        SetDamage(airResistanceText, "Air Res", playerStats.AirResistance, playerStats.GetPreEquipmentResistance(DamageType.Air));
+    }
+
+    // Main number includes base + attribute/trait modifiers; the colored
+    // suffix is the equipment (ItemData) contribution only, e.g.
+    // "Slash: 12 <color=green>(+5)</color>" or "Slash: 12 <color=red>(-3)</color>".
+    private static void SetDamage(TMP_Text target, string label, float effective, float baseValue)
+    {
+        if (target == null)
+            return;
+
+        target.text = $"{label}: {baseValue:F0}{ModifierSuffix(effective, baseValue, "F0")}";
+    }
+
+    // For movement/regen where a format/suffix string is needed.
+    private static void SetText(TMP_Text target, string label, float effective, float baseValue, string format, string suffix = "")
+    {
+        if (target == null)
+            return;
+
+        target.text = $"{label}: {baseValue.ToString(format)}{ModifierSuffix(effective, baseValue, format)}{suffix}";
+    }
+
+    // For resource lines that show "current / max".
+    private static void SetText(TMP_Text target, string label, float effectiveMax, float baseMax, string currentPrefix)
+    {
+        if (target == null)
+            return;
+
+        target.text = $"{label}: {currentPrefix}{Mathf.CeilToInt(baseMax)}{ModifierSuffix(effectiveMax, baseMax, "F0")}";
+    }
+
+    // Builds the colored "(+N)" / "(-N)" combined-modifier suffix.
+    // Returns empty when there is no meaningful difference.
+    private static string ModifierSuffix(float effective, float baseValue, string format)
+    {
+        float delta = effective - baseValue;
+
+        if (Mathf.Abs(delta) < 0.05f)
+            return string.Empty;
+
+        string magnitude = Mathf.Abs(delta).ToString(format);
+
+        return delta > 0f
+            ? $" <color=green>(+{magnitude})</color>"
+            : $" <color=red>(-{magnitude})</color>";
     }
 
     private static void SetValue(TMP_Text target, int currentValue, int allocatedValue)

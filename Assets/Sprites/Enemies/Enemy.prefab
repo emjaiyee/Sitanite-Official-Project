@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8ab9ceee96b684593ff9daf9b2dc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 40
+  maxHealth: 80
   basePierceResistance: 0
   baseStabResistance: 0
   baseSlashResistance: 0
@@ -177,7 +177,7 @@ MonoBehaviour:
   moveSpeed: 1
   attackRange: 0.8
   attackDamageType: 2
-  damage: 25
+  damage: 15
   attackCooldown: 1.5
   useChargedAttack: 0
   chargedAttackRange: 1.2
@@ -187,6 +187,7 @@ MonoBehaviour:
   chargedAttackTime: 0.75
   chargedAttackMultiplier: 2
   idleWanderRadius: 4
+  locateWaitDuration: 2.5
   deathAnimationDelay: 1
   deathFadeDuration: 0.75
 --- !u!114 &5575200063884600762

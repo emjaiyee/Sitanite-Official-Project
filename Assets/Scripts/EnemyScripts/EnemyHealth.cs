@@ -31,6 +31,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public event Action<GameObject> OnEnemyDied;
     public event Action<EnemyHealth> OnHealthChanged;
+    /// <summary>Fired after damage is applied. Second arg is the damage origin, if known.</summary>
+    public event Action<EnemyHealth, Vector3?> OnDamaged;
 
     private bool hasDied;
 
@@ -67,7 +69,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public void TakeDamage(
         int amount,
-        DamageType damageType = DamageType.Slash)
+        DamageType damageType = DamageType.Slash,
+        Vector3? damageSource = null)
     {
         if (amount <= 0)
             return;
@@ -88,7 +91,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
         runtimeCurrentHealth = CurrentHealth;
+
+        // Show the damage number above the enemy, colored by type.
+        DamagePopupSpawner.Spawn(transform, amount, damageType, 0.8f);
+
         OnHealthChanged?.Invoke(this);
+        OnDamaged?.Invoke(this, damageSource);
 
 
         Debug.Log(
