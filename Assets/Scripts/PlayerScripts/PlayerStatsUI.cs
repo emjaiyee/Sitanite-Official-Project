@@ -34,10 +34,10 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private TMP_Text fortitudeText;
     [SerializeField] private TMP_Text willpowerText;
 
-    [Header("Player Character Info UI")]
-    [SerializeField] private TMP_Text characterNameText;
-    [SerializeField] private TMP_Text genderText;
-    [SerializeField] private TMP_Text classText;
+    // [Header("Player Character Info UI")]
+    // [SerializeField] private TMP_Text characterNameText;
+    // [SerializeField] private TMP_Text genderText;
+    // [SerializeField] private TMP_Text classText;
 
     [Header("Player Resources UI")]
     [SerializeField] private TMP_Text healthText;
@@ -419,25 +419,25 @@ public class PlayerStatsUI : MonoBehaviour
         if (playerStats == null)
             return;
 
-        // Character Details
-        SetText(characterNameText, playerStats.CharacterName);
-        SetText(genderText, playerStats.Gender.ToString());
-        SetText(classText, playerStats.PlayerClass.ToString());
+        // // Character Details
+        // SetText(characterNameText, playerStats.CharacterName);
+        // SetText(genderText, playerStats.Gender.ToString());
+        // SetText(classText, playerStats.PlayerClass.ToString());
 
         // Resources
-        SetText(healthText, $"{Mathf.CeilToInt(playerStats.CurrentHealth)} / {Mathf.CeilToInt(playerStats.MaxHealth)}");
-        SetText(manaText, $"{Mathf.CeilToInt(playerStats.CurrentMana)} / {Mathf.CeilToInt(playerStats.MaxMana)}");
-        SetText(staminaText, $"{Mathf.CeilToInt(playerStats.CurrentStamina)} / {Mathf.CeilToInt(playerStats.MaxStamina)}");
+        SetText(healthText, $"Health: {Mathf.CeilToInt(playerStats.CurrentHealth)} / {Mathf.CeilToInt(playerStats.MaxHealth)}");
+        SetText(manaText, $"Mana: {Mathf.CeilToInt(playerStats.CurrentMana)} / {Mathf.CeilToInt(playerStats.MaxMana)}");
+        SetText(staminaText, $"Stamina: {Mathf.CeilToInt(playerStats.CurrentStamina)} / {Mathf.CeilToInt(playerStats.MaxStamina)}");
 
         // Movement
-        SetText(moveSpeedText, playerStats.MoveSpeed.ToString("F1"));
-        SetText(sprintSpeedText, playerStats.SprintSpeed.ToString("F1"));
-        SetText(dashSpeedText, playerStats.DashSpeed.ToString("F1"));
+        SetText(moveSpeedText, $"MoveSpeed: {playerStats.MoveSpeed.ToString("F1")}");
+        SetText(sprintSpeedText, $"SprintSpeed: {playerStats.SprintSpeed.ToString("F1")}");
+        SetText(dashSpeedText, $"DashSpeed: {playerStats.DashSpeed.ToString("F1")}");
 
         // Regeneration
-        SetText(healthRegenText, $"{playerStats.HealthRegen:F1}/s");
-        SetText(manaRegenText, $"{playerStats.ManaRegen:F1}/s");
-        SetText(staminaRegenText, $"{playerStats.StaminaRegen:F1}/s");
+        SetText(healthRegenText, $"HealthRegen: {playerStats.HealthRegen:F1}/s");
+        SetText(manaRegenText, $"ManaRegen: {playerStats.ManaRegen:F1}/s");
+        SetText(staminaRegenText, $"StaminaRegen: {playerStats.StaminaRegen:F1}/s");
 
         // Base/Effective Damage
         SetText(pierceDamageText, playerStats.PierceDamage.ToString("F0"));
