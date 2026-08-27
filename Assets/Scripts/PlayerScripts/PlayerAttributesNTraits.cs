@@ -8,7 +8,7 @@ public class AttributeTraitDefaults
     [Min(0)] public int strength = 5;
     [Tooltip("Increases Pierce and Stab damage, plus maximum stamina.")]
     [Min(0)] public int dexterity = 5;
-    [Tooltip("Increases maximum mana by 7 per point above 5, and magical damage, including Burning, Frost, Poison, Lightning, Psychic, Necrosis, Water, Earth, Fire, and Air, by 3.")]
+    [Tooltip("Increases maximum mana by 7 per point above 5, and magical damage, including Frost, Poison, Lightning, Psychic, Necrosis, Water, Earth, Fire, and Air, by 3.")]
     [Min(0)] public int intelligence = 5;
 
     [Tooltip("Increases maximum health by 2 per point above 1.")]
@@ -101,36 +101,81 @@ public class PlayerAttributesNTraits : MonoBehaviour
         willpower = 2
     };
 
-    public int Strength => strength;
-    public int Dexterity => dexterity;
-    public int Intelligence => intelligence;
-    public int Vitality => vitality;
-    public int Focus => focus;
-    public int Endurance => endurance;
-    public int Agility => agility;
-    public int Vigor => vigor;
-    public int Haste => haste;
-    public int Attunement => attunement;
-    public int Mundane => mundane;
-    public int Arcane => arcane;
-    public int Elemental => elemental;
-    public int Precision => precision;
-    public int Fortitude => fortitude;
-    public int Willpower => willpower;
+    public int Strength => GetAttributeValue(PrimaryAttribute.Strength);
+    public int Dexterity => GetAttributeValue(PrimaryAttribute.Dexterity);
+    public int Intelligence => GetAttributeValue(PrimaryAttribute.Intelligence);
+    public int Vitality => GetTraitValue(SecondaryTrait.Vitality);
+    public int Focus => GetTraitValue(SecondaryTrait.Focus);
+    public int Endurance => GetTraitValue(SecondaryTrait.Endurance);
+    public int Agility => GetTraitValue(SecondaryTrait.Agility);
+    public int Vigor => GetTraitValue(SecondaryTrait.Vigor);
+    public int Haste => GetTraitValue(SecondaryTrait.Haste);
+    public int Attunement => GetTraitValue(SecondaryTrait.Attunement);
+    public int Mundane => GetTraitValue(SecondaryTrait.Mundane);
+    public int Arcane => GetTraitValue(SecondaryTrait.Arcane);
+    public int Elemental => GetTraitValue(SecondaryTrait.Elemental);
+    public int Precision => GetTraitValue(SecondaryTrait.Precision);
+    public int Fortitude => GetTraitValue(SecondaryTrait.Fortitude);
+    public int Willpower => GetTraitValue(SecondaryTrait.Willpower);
     public int AvailableAttributePoints => availableAttributePoints;
     public int AvailableTraitPoints => availableTraitPoints;
 
     public event Action<PlayerAttributesNTraits> Changed;
 
-    public float MaxHealthModifier => (strength - 5) * 7f + (vitality - 1) * 2f;
-    public float MaxManaModifier => (intelligence - 5) * 7f + (focus - 1) * 2f;
-    public float MaxStaminaModifier => (dexterity - 5) * 7f + (agility - 1) * 2f;
-    public float HealthRegenModifier => (vigor - 1) * 0.2f;
-    public float ManaRegenModifier => (attunement - 1) * 0.2f;
-    public float StaminaRegenModifier => (endurance - 1) * 0.2f;
-    public float MovementSpeedModifier => (haste - 1) * 0.02f;
-    public float DamageResistanceModifier => (fortitude - 1) * 0.5f;
-    public float MagicalResistanceModifier => (willpower - 1) * 0.5f;
+    public float MaxHealthModifier => (Strength - 5) * 7f + (Vitality - 1) * 2f;
+    public float MaxManaModifier => (Intelligence - 5) * 7f + (Focus - 1) * 2f;
+    public float MaxStaminaModifier => (Dexterity - 5) * 7f + (Agility - 1) * 2f;
+    public float HealthRegenModifier => (Vigor - 1) * 0.2f;
+    public float ManaRegenModifier => (Attunement - 1) * 0.2f;
+    public float StaminaRegenModifier => (Endurance - 1) * 0.2f;
+    public float MovementSpeedModifier => (Haste - 1) * 0.02f;
+    public float DamageResistanceModifier => (Fortitude - 1) * 0.5f;
+    public float MagicalResistanceModifier => (Willpower - 1) * 0.5f;
+
+    public void NotifyEquipmentChanged()
+    {
+        Changed?.Invoke(this);
+    }
+
+    public int GetAttributeValue(PrimaryAttribute attribute)
+    {
+        int value = attribute switch
+        {
+            PrimaryAttribute.Strength => strength,
+            PrimaryAttribute.Dexterity => dexterity,
+            PrimaryAttribute.Intelligence => intelligence,
+            _ => 0
+        };
+
+        return Mathf.FloorToInt(EquipmentManager.Instance == null
+            ? value
+            : EquipmentManager.Instance.GetAttributeReduction(attribute, value));
+    }
+
+    public int GetTraitValue(SecondaryTrait trait)
+    {
+        int value = trait switch
+        {
+            SecondaryTrait.Vitality => vitality,
+            SecondaryTrait.Focus => focus,
+            SecondaryTrait.Endurance => endurance,
+            SecondaryTrait.Agility => agility,
+            SecondaryTrait.Vigor => vigor,
+            SecondaryTrait.Haste => haste,
+            SecondaryTrait.Attunement => attunement,
+            SecondaryTrait.Mundane => mundane,
+            SecondaryTrait.Arcane => arcane,
+            SecondaryTrait.Elemental => elemental,
+            SecondaryTrait.Precision => precision,
+            SecondaryTrait.Fortitude => fortitude,
+            SecondaryTrait.Willpower => willpower,
+            _ => 1
+        };
+
+        return Mathf.Max(1, Mathf.FloorToInt(EquipmentManager.Instance == null
+            ? value
+            : EquipmentManager.Instance.GetTraitReduction(trait, value)));
+    }
 
     private void Awake()
     {
@@ -227,9 +272,9 @@ public class PlayerAttributesNTraits : MonoBehaviour
 
     public float GetDamageModifier(DamageType damageType)
     {
-        float strengthModifier = strength - 5;
-        float dexterityModifier = dexterity - 5;
-        float intelligenceModifier = intelligence - 5;
+        float strengthModifier = Strength - 5;
+        float dexterityModifier = Dexterity - 5;
+        float intelligenceModifier = Intelligence - 5;
         float modifier = 0f;
 
         if ((damageType & (DamageType.Slash | DamageType.Blunt | DamageType.Physical)) != 0)
@@ -239,22 +284,22 @@ public class PlayerAttributesNTraits : MonoBehaviour
             modifier += dexterityModifier * 5f;
 
         if ((damageType & (DamageType.Slash | DamageType.Blunt | DamageType.Stab | DamageType.Physical)) != 0)
-            modifier += mundane - 1;
+            modifier += Mundane - 1;
 
         if ((damageType & DamageType.Pierce) != 0)
-            modifier += precision - 1;
+            modifier += Precision - 1;
 
-        if ((damageType & (DamageType.Burning | DamageType.Frost | DamageType.Poison |
+        if ((damageType & (DamageType.Frost | DamageType.Poison |
                            DamageType.Lightning | DamageType.Psychic | DamageType.Necrosis |
                            DamageType.Water | DamageType.Earth | DamageType.Fire | DamageType.Air)) != 0)
             modifier += intelligenceModifier * 3f;
 
         if ((damageType & (DamageType.Poison | DamageType.Lightning | DamageType.Frost |
                            DamageType.Psychic | DamageType.Necrosis)) != 0)
-            modifier += arcane - 1;
+            modifier += Arcane - 1;
 
         if ((damageType & (DamageType.Water | DamageType.Earth | DamageType.Fire | DamageType.Air)) != 0)
-            modifier += elemental - 2;
+            modifier += Elemental - 2;
 
         return modifier;
     }

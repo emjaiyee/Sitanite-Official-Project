@@ -81,9 +81,24 @@ public class EquipmentManager : MonoBehaviour
             return false;
         }
 
+        if (!CanEquip(newItem.Data))
+        {
+            return false;
+        }
+
         currentEquipment[type] = newItem;
         OnEquipmentChanged?.Invoke(type, newItem);
+        NotifyPlayerStatsChanged();
         return true;
+    }
+
+    public bool CanEquip(ItemData itemData)
+    {
+        if (itemData == null)
+            return false;
+
+        PlayerAttributesNTraits attributes = FindFirstObjectByType<PlayerAttributesNTraits>();
+        return itemData.MeetsStatCap(attributes);
     }
 
     /// <summary>
@@ -97,10 +112,21 @@ public class EquipmentManager : MonoBehaviour
         {
             currentEquipment.Remove(type);
             OnEquipmentChanged?.Invoke(type, null);
+            NotifyPlayerStatsChanged();
             return item;
         }
 
         return null;
+    }
+
+    private void NotifyPlayerStatsChanged()
+    {
+        PlayerAttributesNTraits attributes = FindFirstObjectByType<PlayerAttributesNTraits>();
+        attributes?.NotifyEquipmentChanged();
+
+        PlayerStats playerStats = FindFirstObjectByType<PlayerStats>();
+        if (playerStats != null && attributes == null)
+            playerStats.NotifyStatsChanged();
     }
 
     /// <summary>
@@ -113,5 +139,71 @@ public class EquipmentManager : MonoBehaviour
         if (item == null) return false;
         return currentEquipment.ContainsValue(item);
     }
+
+    public float GetModifiedStat(float baseValue, StatType statType, DamageType damageType = DamageType.None)
+    {
+        float flat = 0f;
+        float percent = 0f;
+
+        foreach (InventoryItem item in currentEquipment.Values)
+        {
+            if (item == null || item.Data == null)
+                continue;
+
+            foreach (EquipmentStat modifier in item.Data.StatModifiers)
+            {
+                if (modifier.statType != statType)
+                    continue;
+
+                if (statType != StatType.MoveSpeed &&
+                    modifier.damageType != DamageType.None &&
+                    (modifier.damageType & damageType) == 0)
+                    continue;
+
+                if (modifier.modifierType == StatModifierType.Percent)
+                    percent += modifier.value;
+                else
+                    flat += modifier.value;
+            }
+        }
+
+        return (baseValue + flat) * (1f + percent / 100f);
+    }
+
+    public float GetAttributeReduction(PrimaryAttribute attribute, float baseValue)
+    {
+        return ApplyReduction(baseValue, StatType.AttributeReduction, modifier => modifier.reducedAttribute == attribute);
+    }
+
+    public float GetTraitReduction(SecondaryTrait trait, float baseValue)
+    {
+        return ApplyReduction(baseValue, StatType.TraitReduction, modifier => modifier.reducedTrait == trait);
+    }
+
+    private float ApplyReduction(float baseValue, StatType statType, Func<EquipmentStat, bool> targetFilter)
+    {
+        float flat = 0f;
+        float percent = 0f;
+
+        foreach (InventoryItem item in currentEquipment.Values)
+        {
+            if (item == null || item.Data == null)
+                continue;
+
+            foreach (EquipmentStat modifier in item.Data.StatModifiers)
+            {
+                if (modifier.statType != statType || !targetFilter(modifier))
+                    continue;
+
+                if (modifier.modifierType == StatModifierType.Percent)
+                    percent += modifier.value;
+                else
+                    flat += modifier.value;
+            }
+        }
+
+        return Mathf.Max(0f, (baseValue - flat) * (1f - percent / 100f));
+    }
+
     #endregion
 }

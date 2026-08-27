@@ -19,7 +19,6 @@ public class PlayerStatsEditor : Editor
         "effectiveStabDamage",
         "effectiveSlashDamage",
         "effectiveBluntDamage",
-        "effectiveBurningDamage",
         "effectiveFrostDamage",
         "effectivePoisonDamage",
         "effectiveLightningDamage",
@@ -34,7 +33,6 @@ public class PlayerStatsEditor : Editor
         "effectiveStabResistance",
         "effectiveSlashResistance",
         "effectiveBluntResistance",
-        "effectiveBurningResistance",
         "effectiveFrostResistance",
         "effectivePoisonResistance",
         "effectiveLightningResistance",
@@ -77,7 +75,7 @@ public class PlayerStatsEditor : Editor
         if (showEffectiveDamage)
             DrawFields(
                 "effectivePierceDamage", "effectiveStabDamage", "effectiveSlashDamage",
-                "effectiveBluntDamage", "effectiveBurningDamage", "effectiveFrostDamage",
+                "effectiveBluntDamage", "effectiveFrostDamage",
                 "effectivePoisonDamage", "effectiveLightningDamage", "effectivePsychicDamage",
                 "effectiveNecrosisDamage", "effectiveWaterDamage", "effectiveEarthDamage",
                 "effectiveFireDamage", "effectiveAirDamage", "effectivePhysicalDamage"
@@ -91,7 +89,7 @@ public class PlayerStatsEditor : Editor
         if (showEffectiveResistance)
             DrawFields(
                 "effectivePierceResistance", "effectiveStabResistance", "effectiveSlashResistance",
-                "effectiveBluntResistance", "effectiveBurningResistance", "effectiveFrostResistance",
+                "effectiveBluntResistance", "effectiveFrostResistance",
                 "effectivePoisonResistance", "effectiveLightningResistance", "effectivePsychicResistance",
                 "effectiveNecrosisResistance", "effectiveWaterResistance", "effectiveEarthResistance",
                 "effectiveFireResistance", "effectiveAirResistance", "effectivePhysicalResistance"

@@ -11,8 +11,18 @@ public enum StatType
     Health,
     Mana,
     MoveSpeed,
-    Defense,
-    Attack
+    BaseDamageResistance,
+    DamageResistance,
+    Damage,
+    AttributeReduction,
+    TraitReduction
+}
+
+public enum StatCapType
+{
+    None,
+    PrimaryAttribute,
+    SecondaryTrait
 }
 
 /// <summary>
@@ -21,7 +31,14 @@ public enum StatType
 public enum StatModifierType
 {
     Flat,       
-    Percent     
+    Percent
+}
+
+public enum DamageSlot
+{
+    Primary,
+    Secondary,
+    Tertiary
 }
 
 /// <summary>
@@ -31,6 +48,10 @@ public enum StatModifierType
 public struct EquipmentStat
 {
     public StatType statType;
+    public DamageType damageType;
+    public DamageSlot damageSlot;
+    public PrimaryAttribute reducedAttribute;
+    public SecondaryTrait reducedTrait;
     public StatModifierType modifierType;
     public float value;
 }
@@ -46,6 +67,22 @@ public enum EquipmentType
     Chestplate,
     Legging,
     Shield
+}
+
+public enum WeaponAttackType
+{
+    None,
+    Melee,
+    Ranged
+}
+
+public enum WeaponSkillType
+{
+    None,
+    AreaDamage,
+    ArrowRain,
+    ChargedArrow,
+    Beam
 }
 
 /// <summary>
@@ -77,6 +114,40 @@ public class ItemData : ScriptableObject
     [Tooltip("Character definition applied while this item is equipped.")]
     [SerializeField] private CharacterPartDefinition characterDefinition;
 
+    [Header("Stat Cap")]
+    [SerializeField] private StatCapType statCapType = StatCapType.None;
+    [SerializeField] private PrimaryAttribute statCapAttribute;
+    [SerializeField] private SecondaryTrait statCapTrait;
+    [Min(0)] [SerializeField] private int statCapValue;
+
+    [Header("Weapon Settings")]
+    [Tooltip("Stable identifier used by gameplay systems.")]
+    [SerializeField] private string weaponId;
+
+    [SerializeField] private WeaponAttackType weaponAttackType = WeaponAttackType.None;
+    [SerializeField] private WeaponSkillType weaponSkillType = WeaponSkillType.None;
+    [SerializeField] private float attackRange = 1f;
+    [SerializeField] private LayerMask hittableLayers;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private float projectileSpeed = 12f;
+    [SerializeField] private int skillDamage = 50;
+    [SerializeField] private float skillRadius = 2f;
+    [SerializeField] private float skillRadiusMultiplier = 1f;
+    [SerializeField] private LayerMask skillHittableLayers;
+    [SerializeField] private GameObject skillVisualPrefab;
+    [SerializeField] private float skillRange = 8f;
+    [SerializeField] private int skillProjectileCount = 12;
+    [SerializeField] private float skillDuration = 0.6f;
+    [SerializeField] private float skillVisualDuration = 0.8f;
+    [SerializeField] private GameObject skillProjectilePrefab;
+    [SerializeField] private GameObject chargeVisualPrefab;
+    [SerializeField] private float maxChargeVisualScale = 1.5f;
+    [SerializeField] private float maxChargeTime = 2f;
+    [SerializeField] private int minimumSkillDamage = 30;
+    [SerializeField] private int maximumSkillDamage = 150;
+    [SerializeField] private float beamDuration = 2f;
+    [SerializeField] private float beamWidth = 1f;
+
     [Header("Stat Modifiers")]
     [Tooltip("Attributes added or multiplied when this item is equipped.")]
     [SerializeField] private List<EquipmentStat> statModifiers = new List<EquipmentStat>();
@@ -105,9 +176,101 @@ public class ItemData : ScriptableObject
 
     /// <summary>Get the character definition applied by this item.</summary>
     public CharacterPartDefinition CharacterDefinition => characterDefinition;
+    public StatCapType StatCapType => statCapType;
+    public PrimaryAttribute StatCapAttribute => statCapAttribute;
+    public SecondaryTrait StatCapTrait => statCapTrait;
+    public int StatCapValue => statCapValue;
+
+    public string WeaponId => string.IsNullOrWhiteSpace(weaponId) ? itemName : weaponId;
+    public WeaponAttackType WeaponAttackType => weaponAttackType;
+    public WeaponSkillType WeaponSkillType => weaponSkillType;
+    public float AttackRange => attackRange;
+    public LayerMask HittableLayers => hittableLayers;
+    public GameObject ProjectilePrefab => projectilePrefab;
+    public float ProjectileSpeed => projectileSpeed;
+    public int SkillDamage => skillDamage;
+    public float SkillRadius => skillRadius;
+    public float SkillRadiusMultiplier => skillRadiusMultiplier;
+    public LayerMask SkillHittableLayers => skillHittableLayers;
+    public GameObject SkillVisualPrefab => skillVisualPrefab;
+    public float SkillRange => skillRange;
+    public int SkillProjectileCount => skillProjectileCount;
+    public float SkillDuration => skillDuration;
+    public float SkillVisualDuration => skillVisualDuration;
+    public GameObject SkillProjectilePrefab => skillProjectilePrefab;
+    public GameObject ChargeVisualPrefab => chargeVisualPrefab;
+    public float MaxChargeVisualScale => maxChargeVisualScale;
+    public float MaxChargeTime => maxChargeTime;
+    public int MinimumSkillDamage => minimumSkillDamage;
+    public int MaximumSkillDamage => maximumSkillDamage;
+    public float BeamDuration => beamDuration;
+    public float BeamWidth => beamWidth;
+
+    public int PrimaryDamage => GetDamageValue(DamageSlot.Primary, 0);
+    public DamageType PrimaryDamageType => GetDamageType(DamageSlot.Primary, DamageType.Physical);
+
+    public int GetSkillDamage(DamageSlot slot)
+    {
+        return GetSkillDamage(slot, skillDamage);
+    }
+
+    public int GetSkillDamage(DamageSlot slot, int baseDamage)
+    {
+        float multiplier = slot switch
+        {
+            DamageSlot.Primary => 1f,
+            DamageSlot.Secondary => 0.3f,
+            DamageSlot.Tertiary => 0.1f,
+            _ => 0f
+        };
+
+        return Mathf.RoundToInt(baseDamage * multiplier);
+    }
+
+    public DamageType GetDamageType(DamageSlot slot)
+    {
+        return GetDamageType(slot, DamageType.None);
+    }
+
+    private int GetDamageValue(DamageSlot slot, int fallback)
+    {
+        foreach (EquipmentStat modifier in statModifiers)
+        {
+            if (modifier.statType == StatType.Damage &&
+                modifier.damageSlot == slot &&
+                modifier.damageType != DamageType.None)
+                return Mathf.RoundToInt(modifier.value);
+        }
+
+        return fallback;
+    }
+
+    private DamageType GetDamageType(DamageSlot slot, DamageType fallback)
+    {
+        foreach (EquipmentStat modifier in statModifiers)
+        {
+            if (modifier.statType == StatType.Damage && modifier.damageSlot == slot)
+                return modifier.damageType;
+        }
+
+        return fallback;
+    }
 
     /// <summary>Read-only collection of stat modifiers</summary>
     public IReadOnlyList<EquipmentStat> StatModifiers => statModifiers;
+
+    public bool MeetsStatCap(PlayerAttributesNTraits attributes)
+    {
+        if (statCapType == StatCapType.None)
+            return true;
+
+        if (attributes == null)
+            return false;
+
+        return statCapType == StatCapType.PrimaryAttribute
+            ? attributes.GetAttributeValue(statCapAttribute) >= statCapValue
+            : attributes.GetTraitValue(statCapTrait) >= statCapValue;
+    }
     #endregion
 
     #region Lifecycle
@@ -129,6 +292,33 @@ public class ItemData : ScriptableObject
         else
         {
             maxStackSize = Mathf.Max(1, maxStackSize);
+        }
+
+        int damageModifierCount = 0;
+        bool hasPrimaryDamage = false;
+        foreach (EquipmentStat modifier in statModifiers)
+        {
+            if (modifier.statType != StatType.Damage)
+                continue;
+
+            damageModifierCount++;
+            if (modifier.damageSlot == DamageSlot.Primary && modifier.damageType != DamageType.None)
+                hasPrimaryDamage = true;
+        }
+
+        if (damageModifierCount > 3)
+            Debug.LogWarning("An item can have at most three Damage modifiers.", this);
+
+        if (equipmentType == EquipmentType.Weapon && !hasPrimaryDamage)
+        {
+            statModifiers.Add(new EquipmentStat
+            {
+                statType = StatType.Damage,
+                damageType = DamageType.Physical,
+                damageSlot = DamageSlot.Primary,
+                modifierType = StatModifierType.Flat,
+                value = 0f
+            });
         }
 
         if (characterDefinition != null && equipmentType == EquipmentType.Helmet &&

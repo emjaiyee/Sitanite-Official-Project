@@ -132,7 +132,11 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
     public bool CanEquip(InventoryItem item)
     {
         if (item == null || item.Data == null) return false;
-        return item.Data.EquipmentType == slotType;
+        if (item.Data.EquipmentType != slotType)
+            return false;
+
+        return EquipmentManager.Instance == null ||
+               EquipmentManager.Instance.CanEquip(item.Data);
     }
 
     /// <summary>

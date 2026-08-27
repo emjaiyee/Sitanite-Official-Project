@@ -185,4 +185,60 @@ public class PlayerWASD : MonoBehaviour
     {
         overrideMovement = false;
     }
+
+    // -------------------------------------------------
+    // DIRECTION
+    // -------------------------------------------------
+
+    private CharacterDirection lastDirection = CharacterDirection.South;
+
+    public CharacterDirection GetCurrentDirection()
+    {
+        if (movement == Vector2.zero)
+        {
+            // Return the last direction if no movement
+            return lastDirection;
+        }
+
+        float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
+        if (angle < 0)
+        {
+            angle += 360;
+        }
+
+        if (angle >= 22.5 && angle < 67.5)
+        {
+            lastDirection = CharacterDirection.NorthEast;
+        }
+        else if (angle >= 67.5 && angle < 112.5)
+        {
+            lastDirection = CharacterDirection.North;
+        }
+        else if (angle >= 112.5 && angle < 157.5)
+        {
+            lastDirection = CharacterDirection.NorthWest;
+        }
+        else if (angle >= 157.5 && angle < 202.5)
+        {
+            lastDirection = CharacterDirection.West;
+        }
+        else if (angle >= 202.5 && angle < 247.5)
+        {
+            lastDirection = CharacterDirection.SouthWest;
+        }
+        else if (angle >= 247.5 && angle < 292.5)
+        {
+            lastDirection = CharacterDirection.South;
+        }
+        else if (angle >= 292.5 && angle < 337.5)
+        {
+            lastDirection = CharacterDirection.SouthEast;
+        }
+        else
+        {
+            lastDirection = CharacterDirection.East;
+        }
+
+        return lastDirection;
+    }
 }

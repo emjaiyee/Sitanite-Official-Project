@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 3295805022774948036}
   - component: {fileID: 6336363618804992140}
   - component: {fileID: 1118555475574115747}
+  - component: {fileID: 1118555475574115748}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -150,6 +151,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1118555475574115748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6784890185240663423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3733976e157dff94f8002ac59fa8b9d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
+  description: 
+  tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
+  pointerOffset: {x: 0, y: 0}
 --- !u!1 &7280740310313003861
 GameObject:
   m_ObjectHideFlags: 0

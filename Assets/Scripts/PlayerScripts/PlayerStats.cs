@@ -24,7 +24,6 @@ public class PlayerStats : MonoBehaviour
     [Min(0)] public float baseStabDamage = 0f;
     [Min(0)] public float baseSlashDamage = 0f;
     [Min(0)] public float baseBluntDamage = 0f;
-    [Min(0)] public float baseBurningDamage = 0f;
     [Min(0)] public float baseFrostDamage = 0f;
     [Min(0)] public float basePoisonDamage = 0f;
     [Min(0)] public float baseLightningDamage = 0f;
@@ -41,7 +40,6 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float effectiveStabDamage;
     [SerializeField] private float effectiveSlashDamage;
     [SerializeField] private float effectiveBluntDamage;
-    [SerializeField] private float effectiveBurningDamage;
     [SerializeField] private float effectiveFrostDamage;
     [SerializeField] private float effectivePoisonDamage;
     [SerializeField] private float effectiveLightningDamage;
@@ -58,7 +56,6 @@ public class PlayerStats : MonoBehaviour
     [Min(0)] public float baseStabResistance = 0f;
     [Min(0)] public float baseSlashResistance = 0f;
     [Min(0)] public float baseBluntResistance = 0f;
-    [Min(0)] public float baseBurningResistance = 0f;
     [Min(0)] public float baseFrostResistance = 0f;
     [Min(0)] public float basePoisonResistance = 0f;
     [Min(0)] public float baseLightningResistance = 0f;
@@ -75,7 +72,6 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float effectiveStabResistance;
     [SerializeField] private float effectiveSlashResistance;
     [SerializeField] private float effectiveBluntResistance;
-    [SerializeField] private float effectiveBurningResistance;
     [SerializeField] private float effectiveFrostResistance;
     [SerializeField] private float effectivePoisonResistance;
     [SerializeField] private float effectiveLightningResistance;
@@ -166,9 +162,9 @@ public class PlayerStats : MonoBehaviour
     public float MaxHealth => Mathf.Max(1f, maxHealth + MaxHealthModifier);
     public float MaxMana => Mathf.Max(1f, maxMana + MaxManaModifier);
     public float MaxStamina => Mathf.Max(1f, maxStamina + MaxStaminaModifier);
-    public float MoveSpeed => Mathf.Max(0f, moveSpeed + MovementSpeedModifier);
-    public float SprintSpeed => Mathf.Max(0f, sprintSpeed + MovementSpeedModifier);
-    public float DashSpeed => Mathf.Max(0f, dashSpeed + MovementSpeedModifier);
+    public float MoveSpeed => Mathf.Max(0f, ApplyEquipmentModifier(moveSpeed + MovementSpeedModifier, StatType.MoveSpeed));
+    public float SprintSpeed => Mathf.Max(0f, ApplyEquipmentModifier(sprintSpeed + MovementSpeedModifier, StatType.MoveSpeed));
+    public float DashSpeed => Mathf.Max(0f, ApplyEquipmentModifier(dashSpeed + MovementSpeedModifier, StatType.MoveSpeed));
     public float HealthRegen => healthRegen + HealthRegenModifier;
     public float ManaRegen => manaRegen + ManaRegenModifier;
     public float StaminaRegen => staminaRegen + StaminaRegenModifier;
@@ -177,7 +173,6 @@ public class PlayerStats : MonoBehaviour
     public float StabDamage => EffectiveDamage(baseStabDamage, DamageType.Stab);
     public float SlashDamage => EffectiveDamage(baseSlashDamage, DamageType.Slash);
     public float BluntDamage => EffectiveDamage(baseBluntDamage, DamageType.Blunt);
-    public float BurningDamage => EffectiveDamage(baseBurningDamage, DamageType.Burning);
     public float FrostDamage => EffectiveDamage(baseFrostDamage, DamageType.Frost);
     public float PoisonDamage => EffectiveDamage(basePoisonDamage, DamageType.Poison);
     public float LightningDamage => EffectiveDamage(baseLightningDamage, DamageType.Lightning);
@@ -189,21 +184,42 @@ public class PlayerStats : MonoBehaviour
     public float AirDamage => EffectiveDamage(baseAirDamage, DamageType.Air);
     public float PhysicalDamage => EffectiveDamage(basePhysicalDamage, DamageType.Physical);
 
-    public float PierceResistance => basePierceResistance + ResistanceModifier(DamageType.Pierce);
-    public float StabResistance => baseStabResistance + ResistanceModifier(DamageType.Stab);
-    public float SlashResistance => baseSlashResistance + ResistanceModifier(DamageType.Slash);
-    public float BluntResistance => baseBluntResistance + ResistanceModifier(DamageType.Blunt);
-    public float BurningResistance => baseBurningResistance + ResistanceModifier(DamageType.Burning);
-    public float FrostResistance => baseFrostResistance + ResistanceModifier(DamageType.Frost);
-    public float PoisonResistance => basePoisonResistance + ResistanceModifier(DamageType.Poison);
-    public float LightningResistance => baseLightningResistance + ResistanceModifier(DamageType.Lightning);
-    public float PsychicResistance => basePsychicResistance + ResistanceModifier(DamageType.Psychic);
-    public float NecrosisResistance => baseNecrosisResistance + ResistanceModifier(DamageType.Necrosis);
-    public float WaterResistance => baseWaterResistance + ResistanceModifier(DamageType.Water);
-    public float EarthResistance => baseEarthResistance + ResistanceModifier(DamageType.Earth);
-    public float FireResistance => baseFireResistance + ResistanceModifier(DamageType.Fire);
-    public float AirResistance => baseAirResistance + ResistanceModifier(DamageType.Air);
-    public float PhysicalResistance => basePhysicalResistance + ResistanceModifier(DamageType.Physical);
+    public float PierceResistance => ApplyEquipmentResistances(basePierceResistance + ResistanceModifier(DamageType.Pierce), DamageType.Pierce);
+    public float StabResistance => ApplyEquipmentResistances(baseStabResistance + ResistanceModifier(DamageType.Stab), DamageType.Stab);
+    public float SlashResistance => ApplyEquipmentResistances(baseSlashResistance + ResistanceModifier(DamageType.Slash), DamageType.Slash);
+    public float BluntResistance => ApplyEquipmentResistances(baseBluntResistance + ResistanceModifier(DamageType.Blunt), DamageType.Blunt);
+    public float FrostResistance => ApplyEquipmentResistances(baseFrostResistance + ResistanceModifier(DamageType.Frost), DamageType.Frost);
+    public float PoisonResistance => ApplyEquipmentResistances(basePoisonResistance + ResistanceModifier(DamageType.Poison), DamageType.Poison);
+    public float LightningResistance => ApplyEquipmentResistances(baseLightningResistance + ResistanceModifier(DamageType.Lightning), DamageType.Lightning);
+    public float PsychicResistance => ApplyEquipmentResistances(basePsychicResistance + ResistanceModifier(DamageType.Psychic), DamageType.Psychic);
+    public float NecrosisResistance => ApplyEquipmentResistances(baseNecrosisResistance + ResistanceModifier(DamageType.Necrosis), DamageType.Necrosis);
+    public float WaterResistance => ApplyEquipmentResistances(baseWaterResistance + ResistanceModifier(DamageType.Water), DamageType.Water);
+    public float EarthResistance => ApplyEquipmentResistances(baseEarthResistance + ResistanceModifier(DamageType.Earth), DamageType.Earth);
+    public float FireResistance => ApplyEquipmentResistances(baseFireResistance + ResistanceModifier(DamageType.Fire), DamageType.Fire);
+    public float AirResistance => ApplyEquipmentResistances(baseAirResistance + ResistanceModifier(DamageType.Air), DamageType.Air);
+    public float PhysicalResistance => ApplyEquipmentResistances(basePhysicalResistance + ResistanceModifier(DamageType.Physical), DamageType.Physical);
+
+    public float GetEffectiveDamage(DamageType damageType)
+    {
+        return damageType switch
+        {
+            DamageType.Pierce => PierceDamage,
+            DamageType.Stab => StabDamage,
+            DamageType.Slash => SlashDamage,
+            DamageType.Blunt => BluntDamage,
+            DamageType.Frost => FrostDamage,
+            DamageType.Poison => PoisonDamage,
+            DamageType.Lightning => LightningDamage,
+            DamageType.Psychic => PsychicDamage,
+            DamageType.Necrosis => NecrosisDamage,
+            DamageType.Water => WaterDamage,
+            DamageType.Earth => EarthDamage,
+            DamageType.Fire => FireDamage,
+            DamageType.Air => AirDamage,
+            DamageType.Physical => PhysicalDamage,
+            _ => 0f
+        };
+    }
 
     public float GetDamageResistance(DamageType damageType)
     {
@@ -215,8 +231,6 @@ public class PlayerStats : MonoBehaviour
             return SlashResistance;
         if ((damageType & DamageType.Blunt) != 0)
             return BluntResistance;
-        if ((damageType & DamageType.Burning) != 0)
-            return BurningResistance;
         if ((damageType & DamageType.Frost) != 0)
             return FrostResistance;
         if ((damageType & DamageType.Poison) != 0)
@@ -239,6 +253,21 @@ public class PlayerStats : MonoBehaviour
             return PhysicalResistance;
 
         return 0;
+    }
+
+    private float ApplyEquipmentResistances(float baseResistance, DamageType damageType)
+    {
+        float resistance = ApplyEquipmentModifier(
+            baseResistance,
+            StatType.BaseDamageResistance,
+            damageType
+        );
+
+        return ApplyEquipmentModifier(
+            resistance,
+            StatType.DamageResistance,
+            damageType
+        );
     }
 
     public bool IsDead { get; private set; }
@@ -275,6 +304,13 @@ public class PlayerStats : MonoBehaviour
     private float StaminaRegenModifier => attributes != null ? attributes.StaminaRegenModifier : 0f;
     private float MovementSpeedModifier => attributes != null ? attributes.MovementSpeedModifier : 0f;
 
+    private float ApplyEquipmentModifier(float baseValue, StatType statType, DamageType damageType = DamageType.None)
+    {
+        return EquipmentManager.Instance == null
+            ? baseValue
+            : EquipmentManager.Instance.GetModifiedStat(baseValue, statType, damageType);
+    }
+
     private float GetDamageModifier(DamageType damageType)
     {
         return attributes != null ? attributes.GetDamageModifier(damageType) : 0;
@@ -282,7 +318,14 @@ public class PlayerStats : MonoBehaviour
 
     private float EffectiveDamage(float baseDamage, DamageType damageType)
     {
-        return Mathf.Max(0, baseDamage + GetDamageModifier(damageType));
+        return Mathf.Max(
+            0,
+            ApplyEquipmentModifier(
+                baseDamage + GetDamageModifier(damageType),
+                StatType.Damage,
+                damageType
+            )
+        );
     }
 
     private float ResistanceModifier(DamageType damageType)
@@ -319,7 +362,6 @@ public class PlayerStats : MonoBehaviour
         baseBluntDamage = 5;
         basePhysicalDamage = 5;
 
-        baseBurningDamage = 3;
         baseFrostDamage = 3;
         basePoisonDamage = 3;
         baseLightningDamage = 3;
@@ -336,7 +378,6 @@ public class PlayerStats : MonoBehaviour
         baseBluntResistance = 5;
         basePhysicalResistance = 5;
 
-        baseBurningResistance = 3;
         baseFrostResistance = 3;
         basePoisonResistance = 3;
         baseLightningResistance = 3;
@@ -399,7 +440,6 @@ public class PlayerStats : MonoBehaviour
         effectiveStabDamage = StabDamage;
         effectiveSlashDamage = SlashDamage;
         effectiveBluntDamage = BluntDamage;
-        effectiveBurningDamage = BurningDamage;
         effectiveFrostDamage = FrostDamage;
         effectivePoisonDamage = PoisonDamage;
         effectiveLightningDamage = LightningDamage;
@@ -415,7 +455,6 @@ public class PlayerStats : MonoBehaviour
         effectiveStabResistance = StabResistance;
         effectiveSlashResistance = SlashResistance;
         effectiveBluntResistance = BluntResistance;
-        effectiveBurningResistance = BurningResistance;
         effectiveFrostResistance = FrostResistance;
         effectivePoisonResistance = PoisonResistance;
         effectiveLightningResistance = LightningResistance;

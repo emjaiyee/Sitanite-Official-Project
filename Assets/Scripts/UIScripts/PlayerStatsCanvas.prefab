@@ -984,6 +984,7 @@ MonoBehaviour:
 
 '
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &709732262109825129
 GameObject:
@@ -1076,6 +1077,7 @@ MonoBehaviour:
   description: Mundane increases <color=green>Slash, Blunt, Stab,</color> and <color=green>Physical</color>
     base damages
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &732689117414273409
 GameObject:
@@ -1307,6 +1309,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Precision increases <color=green>Pierce</color> base damage
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &910043013548678142
 GameObject:
@@ -1759,6 +1762,7 @@ MonoBehaviour:
   description: Fortitude increases <color=green>Slash, Blunt, Pierce, Stab</color>
     and <color=green>Physical</color> damage resistance
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &1260947997664329067
 GameObject:
@@ -2937,6 +2941,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Agility increases <color=green>Max Stamina</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &2271605735376552102
 GameObject:
@@ -3334,6 +3339,7 @@ MonoBehaviour:
   description: Willpower increases <color=green>Poison, Lightning, Frost, Psychic,
     Necrosis, Water, Earth, Fire,</color> and <color=green>Air</color> damage resistance
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &2574734875041008569
 GameObject:
@@ -4721,6 +4727,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Focus increases <color=green>Max Mana</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &3524551466632814458
 GameObject:
@@ -5226,6 +5233,7 @@ MonoBehaviour:
   description: Elemental increases <color=green>Water, Earth, Fire,</color> and <color=green>Air</color>
     base damages
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &3821578316271277284
 GameObject:
@@ -5622,6 +5630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Haste increases <color=green>Movement Speed</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &4080015406459007755
 GameObject:
@@ -6154,6 +6163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Vitality increases <color=green>Max Health</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &4438047776562196577
 GameObject:
@@ -6383,6 +6393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Endurance increases <color=green>Stamina Regen</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &4531566082684642777
 GameObject:
@@ -7497,10 +7508,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3733976e157dff94f8002ac59fa8b9d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
-  description: Intelligence increases <color=green>Burning, Frost, Poison, Lightning,
-    Psychic, Necrosis, Water, Earth, Fire,</color> and <color=green>Air</color> base
-    damage, plus <color=green>Max Mana</color>
+  description: Intelligence increases <color=green>Frost, Poison, Lightning, Psychic,
+    Necrosis, Water, Earth, Fire,</color> and <color=green>Air</color> base damage,
+    plus <color=green>Max Mana</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &5234693761561320933
 GameObject:
@@ -8426,6 +8438,7 @@ MonoBehaviour:
   description: Strength increases <color=green>Blunt, Slash, Physical</color> base
     damages plus <color=green>Max Health</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &6238128213056227487
 GameObject:
@@ -8705,6 +8718,7 @@ MonoBehaviour:
   description: Arcane increases <color=green>Poison, Lightning, Frost, Psychic</color>
     and <color=green>Necrosis</color> base damages
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &6388361851912645023
 GameObject:
@@ -9238,6 +9252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Vigor increases <color=green>Health Regen</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &7084457090176302869
 GameObject:
@@ -11179,6 +11194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltip
   description: Attunement increases <color=green>Mana Regen</color>
   tooltipPrefab: {fileID: 1666295983187340662, guid: 4328c1f7b02c63c4e844679d13c44805, type: 3}
+  showDelay: 0.25
   pointerOffset: {x: 0, y: 0}
 --- !u!1 &8831871196521091367
 GameObject:

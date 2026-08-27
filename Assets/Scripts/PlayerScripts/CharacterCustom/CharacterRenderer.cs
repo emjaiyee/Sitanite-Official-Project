@@ -20,6 +20,16 @@ public class CharacterRenderer : MonoBehaviour
 
     private CharacterDirection currentDirection = CharacterDirection.SouthWest;
 
+    public CharacterDirection CurrentDirection
+    {
+        get => currentDirection;
+        set
+        {
+            currentDirection = value;
+            UpdateAppearance();
+        }
+    }
+
     private void Awake()
     {
         Debug.Log("CharacterRenderer Awake!");
@@ -125,6 +135,7 @@ public class CharacterRenderer : MonoBehaviour
         renderer.enabled = true;
         renderer.sprite = definition.GetSprite(currentDirection);
     }
+
     public void Refresh()
     {
         UpdateAppearance();

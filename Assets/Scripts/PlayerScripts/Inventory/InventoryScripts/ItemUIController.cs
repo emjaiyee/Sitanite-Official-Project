@@ -1,3 +1,4 @@
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -25,6 +26,8 @@ public class ItemUIController : MonoBehaviour
 
     [Tooltip("RectTransform of the prefab")]
     [SerializeField] private RectTransform rectTransform;
+
+    private UIHoverTooltip hoverTooltip;
     #endregion
 
     #region Lifecycle
@@ -32,6 +35,12 @@ public class ItemUIController : MonoBehaviour
     {
         if (rectTransform == null)
             rectTransform = GetComponent<RectTransform>();
+
+        if (iconImage != null)
+            hoverTooltip = iconImage.GetComponent<UIHoverTooltip>();
+
+        if (hoverTooltip == null)
+            hoverTooltip = GetComponent<UIHoverTooltip>();
     }
     #endregion
 
@@ -46,6 +55,7 @@ public class ItemUIController : MonoBehaviour
         if (item == null || item.Data == null) return;
 
         UpdateIconSprite(item);
+        UpdateTooltip(item);
         UpdateGridBackground(item, cellSize);
         UpdateStackText(item);
         UpdateLayout(item, cellSize);
@@ -61,6 +71,7 @@ public class ItemUIController : MonoBehaviour
         if (item == null || item.Data == null) return;
 
         rectTransform.sizeDelta = new Vector2(slotSize, slotSize);
+        UpdateTooltip(item);
         if (gridBackgroundImage != null)
             gridBackgroundImage.enabled = false;
 
@@ -123,6 +134,116 @@ public class ItemUIController : MonoBehaviour
         if (iconImage == null || item?.Data == null) return;
 
         iconImage.sprite = item.Data.inventoryIcon;
+    }
+
+    private void UpdateTooltip(InventoryItem item)
+    {
+        if (hoverTooltip == null || item == null || item.Data == null)
+            return;
+
+        hoverTooltip.SetDescription(BuildTooltipText(item.Data));
+    }
+
+    private string BuildTooltipText(ItemData data)
+    {
+        StringBuilder text = new StringBuilder();
+        text.AppendLine($"<color=#FFFF00>{data.itemName}</color>");
+
+        if (!string.IsNullOrWhiteSpace(data.itemDescription))
+            text.AppendLine(data.itemDescription);
+
+        if (data.EquipmentType != EquipmentType.None)
+        {
+            text.AppendLine($"Equipment Type: {FormatEnum(data.EquipmentType)}");
+
+            if (data.StatCapType != StatCapType.None)
+            {
+                string capName = data.StatCapType == StatCapType.PrimaryAttribute
+                    ? FormatEnum(data.StatCapAttribute)
+                    : FormatEnum(data.StatCapTrait);
+                text.AppendLine($"Stat Cap: {capName} {data.StatCapValue}");
+            }
+        }
+
+        int modifierNumber = 1;
+        foreach (EquipmentStat modifier in data.StatModifiers)
+        {
+            text.AppendLine();
+            text.AppendLine($"Modifier {modifierNumber}:");
+            text.AppendLine(FormatModifier(modifier));
+            modifierNumber++;
+        }
+
+        return text.ToString().TrimEnd();
+    }
+
+    private string FormatModifier(EquipmentStat modifier)
+    {
+        StringBuilder text = new StringBuilder(FormatEnum(modifier.statType));
+
+        switch (modifier.statType)
+        {
+            case StatType.Damage:
+                bool hasDamageDetails = modifier.damageType != DamageType.None ||
+                                        modifier.damageSlot != DamageSlot.Primary;
+                if (hasDamageDetails)
+                    text.Append(" (");
+                if (modifier.damageType != DamageType.None)
+                    text.Append(FormatDamageType(modifier.damageType));
+                if (modifier.damageType != DamageType.None && modifier.damageSlot != DamageSlot.Primary)
+                    text.Append(", ");
+                if (modifier.damageSlot != DamageSlot.Primary)
+                    text.Append(FormatEnum(modifier.damageSlot));
+                if (hasDamageDetails)
+                    text.Append(")");
+                break;
+            case StatType.BaseDamageResistance:
+            case StatType.DamageResistance:
+                if (modifier.damageType != DamageType.None)
+                    text.Append($" ({FormatDamageType(modifier.damageType)})");
+                break;
+            case StatType.AttributeReduction:
+                text.Append($" ({FormatEnum(modifier.reducedAttribute)})");
+                break;
+            case StatType.TraitReduction:
+                text.Append($" ({FormatEnum(modifier.reducedTrait)})");
+                break;
+        }
+
+        bool isReduction = modifier.statType == StatType.AttributeReduction ||
+                           modifier.statType == StatType.TraitReduction;
+        float displayValue = isReduction ? -Mathf.Abs(modifier.value) : modifier.value;
+        string sign = displayValue > 0f ? "+" : string.Empty;
+        string suffix = modifier.modifierType == StatModifierType.Percent ? "%" : string.Empty;
+        text.Append($": {sign}{displayValue:0.##}{suffix}");
+
+        string color = displayValue > 0f
+            ? "#00FF00"
+            : displayValue < 0f
+                ? "#FF0000"
+                : "#FFFFFF";
+
+        return $"<color={color}>{text}</color>";
+    }
+
+    private string FormatDamageType(DamageType damageType)
+    {
+        return FormatEnum(damageType);
+    }
+
+    private string FormatEnum<T>(T value) where T : System.Enum
+    {
+        string name = value.ToString();
+        StringBuilder result = new StringBuilder();
+
+        for (int index = 0; index < name.Length; index++)
+        {
+            if (index > 0 && char.IsUpper(name[index]))
+                result.Append(' ');
+            result.Append(name[index]);
+        }
+
+        return result.ToString();
     }
 
     private void UpdateGridBackground(InventoryItem item, float cellSize)
