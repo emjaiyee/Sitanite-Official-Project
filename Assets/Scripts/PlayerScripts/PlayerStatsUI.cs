@@ -16,7 +16,7 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private TMP_Text attributePointsText;
     [SerializeField] private TMP_Text traitPointsText;
 
-    [Header("Value Text")]
+    [Header("Attributes & Traits Value Text")]
     [SerializeField] private TMP_Text strengthText;
     [SerializeField] private TMP_Text dexterityText;
     [SerializeField] private TMP_Text intelligenceText;
@@ -34,19 +34,67 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private TMP_Text fortitudeText;
     [SerializeField] private TMP_Text willpowerText;
 
+    [Header("Player Resources UI")]
+    [SerializeField] private TMP_Text healthText;
+    [SerializeField] private TMP_Text manaText;
+    [SerializeField] private TMP_Text staminaText;
+
+    [Header("Player Movement UI")]
+    [SerializeField] private TMP_Text moveSpeedText;
+    [SerializeField] private TMP_Text sprintSpeedText;
+    [SerializeField] private TMP_Text dashSpeedText;
+
+    [Header("Player Regen UI")]
+    [SerializeField] private TMP_Text healthRegenText;
+    [SerializeField] private TMP_Text manaRegenText;
+    [SerializeField] private TMP_Text staminaRegenText;
+
+    [Header("Player Damage UI")]
+    [SerializeField] private TMP_Text pierceDamageText;
+    [SerializeField] private TMP_Text stabDamageText;
+    [SerializeField] private TMP_Text slashDamageText;
+    [SerializeField] private TMP_Text bluntDamageText;
+    [SerializeField] private TMP_Text physicalDamageText;
+    [SerializeField] private TMP_Text burningDamageText;
+    [SerializeField] private TMP_Text frostDamageText;
+    [SerializeField] private TMP_Text poisonDamageText;
+    [SerializeField] private TMP_Text lightningDamageText;
+    [SerializeField] private TMP_Text psychicDamageText;
+    [SerializeField] private TMP_Text necrosisDamageText;
+    [SerializeField] private TMP_Text waterDamageText;
+    [SerializeField] private TMP_Text earthDamageText;
+    [SerializeField] private TMP_Text fireDamageText;
+    [SerializeField] private TMP_Text airDamageText;
+
+    [Header("Player Resistance UI")]
+    [SerializeField] private TMP_Text pierceResistanceText;
+    [SerializeField] private TMP_Text stabResistanceText;
+    [SerializeField] private TMP_Text slashResistanceText;
+    [SerializeField] private TMP_Text bluntResistanceText;
+    [SerializeField] private TMP_Text physicalResistanceText;
+    [SerializeField] private TMP_Text burningResistanceText;
+    [SerializeField] private TMP_Text frostResistanceText;
+    [SerializeField] private TMP_Text poisonResistanceText;
+    [SerializeField] private TMP_Text lightningResistanceText;
+    [SerializeField] private TMP_Text psychicResistanceText;
+    [SerializeField] private TMP_Text necrosisResistanceText;
+    [SerializeField] private TMP_Text waterResistanceText;
+    [SerializeField] private TMP_Text earthResistanceText;
+    [SerializeField] private TMP_Text fireResistanceText;
+    [SerializeField] private TMP_Text airResistanceText;
+
     [Header("UI Suppression")]
     [SerializeField] private UISuppressor[] suppressedUIs;
     [Tooltip("GameObjects with UISuppressor components that must remain unsuppressed.")]
     [SerializeField] private GameObject[] exceptions;
 
     private PlayerAttributesNTraits attributes;
+    private PlayerStats playerStats;
     private PlayerInventory inventory;
     private bool subscribed;
     public event Action PendingAllocationsChanged;
-    private readonly Dictionary<PrimaryAttribute, int> pendingAttributes =
-        new Dictionary<PrimaryAttribute, int>();
-    private readonly Dictionary<SecondaryTrait, int> pendingTraits =
-        new Dictionary<SecondaryTrait, int>();
+    private readonly Dictionary<PrimaryAttribute, int> pendingAttributes = new Dictionary<PrimaryAttribute, int>();
+    private readonly Dictionary<SecondaryTrait, int> pendingTraits = new Dictionary<SecondaryTrait, int>();
 
     private void Awake()
     {
@@ -63,16 +111,16 @@ public class PlayerStatsUI : MonoBehaviour
             statsAction.action.performed += OnStatsPerformed;
         }
 
-        SubscribeToAttributes();
+        SubscribeToPlayerEvents();
     }
 
     private void Start()
     {
         ResolvePlayerReferences();
         ResolveInventoryReference();
-        SubscribeToAttributes();
+        SubscribeToPlayerEvents();
         SetStatsWindowState(startOpen);
-        Refresh(attributes);
+        RefreshAllUI();
     }
 
     private void OnDisable()
@@ -83,10 +131,7 @@ public class PlayerStatsUI : MonoBehaviour
             statsAction.action.Disable();
         }
 
-        if (subscribed && attributes != null)
-            attributes.Changed -= Refresh;
-
-        subscribed = false;
+        UnsubscribeFromPlayerEvents();
     }
 
     private void OnStatsPerformed(InputAction.CallbackContext context)
@@ -109,6 +154,9 @@ public class PlayerStatsUI : MonoBehaviour
 
         statsWindow.SetActive(isOpen);
         SetSuppressedUIState(isOpen);
+
+        if (isOpen)
+            RefreshAllUI();
     }
 
     public bool IsOpen => statsWindow != null && statsWindow.activeSelf;
@@ -190,13 +238,9 @@ public class PlayerStatsUI : MonoBehaviour
                 attributes.TryAllocate(allocation.Key);
         }
 
-
-        PlayerStats playerStats = Player.Instance != null
-            ? Player.Instance.GetComponent<PlayerStats>()
-            : null;
-
         if (playerStats != null)
             playerStats.NotifyStatsChanged();
+
         ClearPendingAllocations();
     }
 
@@ -214,12 +258,13 @@ public class PlayerStatsUI : MonoBehaviour
 
     private void NotifyPendingAllocationsChanged()
     {
-        Refresh(attributes);
+        RefreshAllUI();
         PendingAllocationsChanged?.Invoke();
     }
 
     private int GetRemainingAttributePoints()
     {
+        if (attributes == null) return 0;
         int pending = 0;
         foreach (int value in pendingAttributes.Values)
             pending += value;
@@ -229,6 +274,7 @@ public class PlayerStatsUI : MonoBehaviour
 
     private int GetRemainingTraitPoints()
     {
+        if (attributes == null) return 0;
         int pending = 0;
         foreach (int value in pendingTraits.Values)
             pending += value;
@@ -252,6 +298,7 @@ public class PlayerStatsUI : MonoBehaviour
             return;
 
         attributes = Player.Instance.GetComponent<PlayerAttributesNTraits>();
+        playerStats = Player.Instance.GetComponent<PlayerStats>();
     }
 
     private void ResolveInventoryReference()
@@ -291,18 +338,51 @@ public class PlayerStatsUI : MonoBehaviour
         return false;
     }
 
-    private void SubscribeToAttributes()
+    private void SubscribeToPlayerEvents()
     {
-        if (!subscribed && attributes != null)
-        {
-            attributes.Changed += Refresh;
-            subscribed = true;
-        }
+        if (subscribed) return;
+
+        if (attributes != null)
+            attributes.Changed += OnAttributesChanged;
+
+        if (playerStats != null)
+            playerStats.Changed += OnPlayerStatsChanged;
+
+        subscribed = true;
     }
 
-    private void Refresh(PlayerAttributesNTraits source)
+    private void UnsubscribeFromPlayerEvents()
     {
-        if (source == null)
+        if (!subscribed) return;
+
+        if (attributes != null)
+            attributes.Changed -= OnAttributesChanged;
+
+        if (playerStats != null)
+            playerStats.Changed -= OnPlayerStatsChanged;
+
+        subscribed = false;
+    }
+
+    private void OnAttributesChanged(PlayerAttributesNTraits source)
+    {
+        RefreshAllUI();
+    }
+
+    private void OnPlayerStatsChanged(PlayerStats source)
+    {
+        RefreshAllUI();
+    }
+
+    private void RefreshAllUI()
+    {
+        RefreshAttributesAndTraits();
+        RefreshPlayerStats();
+    }
+
+    private void RefreshAttributesAndTraits()
+    {
+        if (attributes == null)
             return;
 
         if (attributePointsText != null)
@@ -311,22 +391,77 @@ public class PlayerStatsUI : MonoBehaviour
         if (traitPointsText != null)
             traitPointsText.text = $"Trait Points: {GetRemainingTraitPoints()}";
 
-        SetValue(strengthText, source.Strength, GetPendingAttribute(PrimaryAttribute.Strength));
-        SetValue(dexterityText, source.Dexterity, GetPendingAttribute(PrimaryAttribute.Dexterity));
-        SetValue(intelligenceText, source.Intelligence, GetPendingAttribute(PrimaryAttribute.Intelligence));
-        SetValue(vitalityText, source.Vitality, GetPendingTrait(SecondaryTrait.Vitality));
-        SetValue(focusText, source.Focus, GetPendingTrait(SecondaryTrait.Focus));
-        SetValue(enduranceText, source.Endurance, GetPendingTrait(SecondaryTrait.Endurance));
-        SetValue(agilityText, source.Agility, GetPendingTrait(SecondaryTrait.Agility));
-        SetValue(vigorText, source.Vigor, GetPendingTrait(SecondaryTrait.Vigor));
-        SetValue(hasteText, source.Haste, GetPendingTrait(SecondaryTrait.Haste));
-        SetValue(attunementText, source.Attunement, GetPendingTrait(SecondaryTrait.Attunement));
-        SetValue(mundaneText, source.Mundane, GetPendingTrait(SecondaryTrait.Mundane));
-        SetValue(arcaneText, source.Arcane, GetPendingTrait(SecondaryTrait.Arcane));
-        SetValue(elementalText, source.Elemental, GetPendingTrait(SecondaryTrait.Elemental));
-        SetValue(precisionText, source.Precision, GetPendingTrait(SecondaryTrait.Precision));
-        SetValue(fortitudeText, source.Fortitude, GetPendingTrait(SecondaryTrait.Fortitude));
-        SetValue(willpowerText, source.Willpower, GetPendingTrait(SecondaryTrait.Willpower));
+        SetValue(strengthText, attributes.Strength, GetPendingAttribute(PrimaryAttribute.Strength));
+        SetValue(dexterityText, attributes.Dexterity, GetPendingAttribute(PrimaryAttribute.Dexterity));
+        SetValue(intelligenceText, attributes.Intelligence, GetPendingAttribute(PrimaryAttribute.Intelligence));
+        SetValue(vitalityText, attributes.Vitality, GetPendingTrait(SecondaryTrait.Vitality));
+        SetValue(focusText, attributes.Focus, GetPendingTrait(SecondaryTrait.Focus));
+        SetValue(enduranceText, attributes.Endurance, GetPendingTrait(SecondaryTrait.Endurance));
+        SetValue(agilityText, attributes.Agility, GetPendingTrait(SecondaryTrait.Agility));
+        SetValue(vigorText, attributes.Vigor, GetPendingTrait(SecondaryTrait.Vigor));
+        SetValue(hasteText, attributes.Haste, GetPendingTrait(SecondaryTrait.Haste));
+        SetValue(attunementText, attributes.Attunement, GetPendingTrait(SecondaryTrait.Attunement));
+        SetValue(mundaneText, attributes.Mundane, GetPendingTrait(SecondaryTrait.Mundane));
+        SetValue(arcaneText, attributes.Arcane, GetPendingTrait(SecondaryTrait.Arcane));
+        SetValue(elementalText, attributes.Elemental, GetPendingTrait(SecondaryTrait.Elemental));
+        SetValue(precisionText, attributes.Precision, GetPendingTrait(SecondaryTrait.Precision));
+        SetValue(fortitudeText, attributes.Fortitude, GetPendingTrait(SecondaryTrait.Fortitude));
+        SetValue(willpowerText, attributes.Willpower, GetPendingTrait(SecondaryTrait.Willpower));
+    }
+
+    private void RefreshPlayerStats()
+    {
+        if (playerStats == null)
+            return;
+
+        // Resources
+        SetText(healthText, $"Health: {Mathf.CeilToInt(playerStats.CurrentHealth)} / {Mathf.CeilToInt(playerStats.MaxHealth)}");
+        SetText(manaText, $"Mana: {Mathf.CeilToInt(playerStats.CurrentMana)} / {Mathf.CeilToInt(playerStats.MaxMana)}");
+        SetText(staminaText, $"Stamina: {Mathf.CeilToInt(playerStats.CurrentStamina)} / {Mathf.CeilToInt(playerStats.MaxStamina)}");
+
+        // Movement
+        SetText(moveSpeedText, $"MoveSpeed: {playerStats.MoveSpeed.ToString("F1")}");
+        SetText(sprintSpeedText, $"SprintSpeed: {playerStats.SprintSpeed.ToString("F1")}");
+        SetText(dashSpeedText, $"DashSpeed: {playerStats.DashSpeed.ToString("F1")}");
+
+        // Regeneration
+        SetText(healthRegenText, $"HealthRegen: {playerStats.HealthRegen:F1}/s");
+        SetText(manaRegenText, $"ManaRegen: {playerStats.ManaRegen:F1}/s");
+        SetText(staminaRegenText, $"StaminaRegen: {playerStats.StaminaRegen:F1}/s");
+
+        // Base/Effective Damage
+        SetText(pierceDamageText, $"Pierce: {playerStats.PierceDamage:F0}");
+        SetText(stabDamageText, $"Stab: {playerStats.StabDamage:F0}");
+        SetText(slashDamageText, $"Slash: {playerStats.SlashDamage:F0}");
+        SetText(bluntDamageText, $"Blunt: {playerStats.BluntDamage:F0}");
+        SetText(physicalDamageText, $"Physical: {playerStats.PhysicalDamage:F0}");
+        SetText(burningDamageText, $"Burning: {playerStats.BurningDamage:F0}");
+        SetText(frostDamageText, $"Frost: {playerStats.FrostDamage:F0}");
+        SetText(poisonDamageText, $"Poison: {playerStats.PoisonDamage:F0}");
+        SetText(lightningDamageText, $"Lightning: {playerStats.LightningDamage:F0}");
+        SetText(psychicDamageText, $"Psychic: {playerStats.PsychicDamage:F0}");
+        SetText(necrosisDamageText, $"Necrosis: {playerStats.NecrosisDamage:F0}");
+        SetText(waterDamageText, $"Water: {playerStats.WaterDamage:F0}");
+        SetText(earthDamageText, $"Earth: {playerStats.EarthDamage:F0}");
+        SetText(fireDamageText, $"Fire: {playerStats.FireDamage:F0}");
+        SetText(airDamageText, $"Air: {playerStats.AirDamage:F0}");
+
+        // Resistance
+        SetText(pierceResistanceText, $"Pierce Res: {playerStats.PierceResistance:F0}");
+        SetText(stabResistanceText, $"Stab Res: {playerStats.StabResistance:F0}");
+        SetText(slashResistanceText, $"Slash Res: {playerStats.SlashResistance:F0}");
+        SetText(bluntResistanceText, $"Blunt Res: {playerStats.BluntResistance:F0}");
+        SetText(physicalResistanceText, $"Physical Res: {playerStats.PhysicalResistance:F0}");
+        SetText(burningResistanceText, $"Burning Res: {playerStats.BurningResistance:F0}");
+        SetText(frostResistanceText, $"Frost Res: {playerStats.FrostResistance:F0}");
+        SetText(poisonResistanceText, $"Poison Res: {playerStats.PoisonResistance:F0}");
+        SetText(lightningResistanceText, $"Lightning Res: {playerStats.LightningResistance:F0}");
+        SetText(psychicResistanceText, $"Psychic Res: {playerStats.PsychicResistance:F0}");
+        SetText(necrosisResistanceText, $"Necrosis Res: {playerStats.NecrosisResistance:F0}");
+        SetText(waterResistanceText, $"Water Res: {playerStats.WaterResistance:F0}");
+        SetText(earthResistanceText, $"Earth Res: {playerStats.EarthResistance:F0}");
+        SetText(fireResistanceText, $"Fire Res: {playerStats.FireResistance:F0}");
+        SetText(airResistanceText, $"Air Res: {playerStats.AirResistance:F0}");
     }
 
     private static void SetValue(TMP_Text target, int currentValue, int allocatedValue)
@@ -335,6 +470,12 @@ public class PlayerStatsUI : MonoBehaviour
             target.text = allocatedValue > 0
                 ? $"{currentValue} <color=green>+ {allocatedValue}</color>"
                 : currentValue.ToString();
+    }
+
+    private static void SetText(TMP_Text target, string text)
+    {
+        if (target != null)
+            target.text = text;
     }
 
     private void SetSuppressedUIState(bool statsOpen)
@@ -353,5 +494,4 @@ public class PlayerStatsUI : MonoBehaviour
                 suppressor.Restore();
         }
     }
-
 }
