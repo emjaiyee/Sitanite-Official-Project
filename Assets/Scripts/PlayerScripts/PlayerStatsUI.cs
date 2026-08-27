@@ -34,11 +34,6 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private TMP_Text fortitudeText;
     [SerializeField] private TMP_Text willpowerText;
 
-    // [Header("Player Character Info UI")]
-    // [SerializeField] private TMP_Text characterNameText;
-    // [SerializeField] private TMP_Text genderText;
-    // [SerializeField] private TMP_Text classText;
-
     [Header("Player Resources UI")]
     [SerializeField] private TMP_Text healthText;
     [SerializeField] private TMP_Text manaText;
@@ -419,11 +414,6 @@ public class PlayerStatsUI : MonoBehaviour
         if (playerStats == null)
             return;
 
-        // // Character Details
-        // SetText(characterNameText, playerStats.CharacterName);
-        // SetText(genderText, playerStats.Gender.ToString());
-        // SetText(classText, playerStats.PlayerClass.ToString());
-
         // Resources
         SetText(healthText, $"Health: {Mathf.CeilToInt(playerStats.CurrentHealth)} / {Mathf.CeilToInt(playerStats.MaxHealth)}");
         SetText(manaText, $"Mana: {Mathf.CeilToInt(playerStats.CurrentMana)} / {Mathf.CeilToInt(playerStats.MaxMana)}");
@@ -440,38 +430,38 @@ public class PlayerStatsUI : MonoBehaviour
         SetText(staminaRegenText, $"StaminaRegen: {playerStats.StaminaRegen:F1}/s");
 
         // Base/Effective Damage
-        SetText(pierceDamageText, playerStats.PierceDamage.ToString("F0"));
-        SetText(stabDamageText, playerStats.StabDamage.ToString("F0"));
-        SetText(slashDamageText, playerStats.SlashDamage.ToString("F0"));
-        SetText(bluntDamageText, playerStats.BluntDamage.ToString("F0"));
-        SetText(physicalDamageText, playerStats.PhysicalDamage.ToString("F0"));
-        SetText(burningDamageText, playerStats.BurningDamage.ToString("F0"));
-        SetText(frostDamageText, playerStats.FrostDamage.ToString("F0"));
-        SetText(poisonDamageText, playerStats.PoisonDamage.ToString("F0"));
-        SetText(lightningDamageText, playerStats.LightningDamage.ToString("F0"));
-        SetText(psychicDamageText, playerStats.PsychicDamage.ToString("F0"));
-        SetText(necrosisDamageText, playerStats.NecrosisDamage.ToString("F0"));
-        SetText(waterDamageText, playerStats.WaterDamage.ToString("F0"));
-        SetText(earthDamageText, playerStats.EarthDamage.ToString("F0"));
-        SetText(fireDamageText, playerStats.FireDamage.ToString("F0"));
-        SetText(airDamageText, playerStats.AirDamage.ToString("F0"));
+        SetText(pierceDamageText, $"Pierce: {playerStats.PierceDamage:F0}");
+        SetText(stabDamageText, $"Stab: {playerStats.StabDamage:F0}");
+        SetText(slashDamageText, $"Slash: {playerStats.SlashDamage:F0}");
+        SetText(bluntDamageText, $"Blunt: {playerStats.BluntDamage:F0}");
+        SetText(physicalDamageText, $"Physical: {playerStats.PhysicalDamage:F0}");
+        SetText(burningDamageText, $"Burning: {playerStats.BurningDamage:F0}");
+        SetText(frostDamageText, $"Frost: {playerStats.FrostDamage:F0}");
+        SetText(poisonDamageText, $"Poison: {playerStats.PoisonDamage:F0}");
+        SetText(lightningDamageText, $"Lightning: {playerStats.LightningDamage:F0}");
+        SetText(psychicDamageText, $"Psychic: {playerStats.PsychicDamage:F0}");
+        SetText(necrosisDamageText, $"Necrosis: {playerStats.NecrosisDamage:F0}");
+        SetText(waterDamageText, $"Water: {playerStats.WaterDamage:F0}");
+        SetText(earthDamageText, $"Earth: {playerStats.EarthDamage:F0}");
+        SetText(fireDamageText, $"Fire: {playerStats.FireDamage:F0}");
+        SetText(airDamageText, $"Air: {playerStats.AirDamage:F0}");
 
         // Resistance
-        SetText(pierceResistanceText, playerStats.PierceResistance.ToString("F0"));
-        SetText(stabResistanceText, playerStats.StabResistance.ToString("F0"));
-        SetText(slashResistanceText, playerStats.SlashResistance.ToString("F0"));
-        SetText(bluntResistanceText, playerStats.BluntResistance.ToString("F0"));
-        SetText(physicalResistanceText, playerStats.PhysicalResistance.ToString("F0"));
-        SetText(burningResistanceText, playerStats.BurningResistance.ToString("F0"));
-        SetText(frostResistanceText, playerStats.FrostResistance.ToString("F0"));
-        SetText(poisonResistanceText, playerStats.PoisonResistance.ToString("F0"));
-        SetText(lightningResistanceText, playerStats.LightningResistance.ToString("F0"));
-        SetText(psychicResistanceText, playerStats.PsychicResistance.ToString("F0"));
-        SetText(necrosisResistanceText, playerStats.NecrosisResistance.ToString("F0"));
-        SetText(waterResistanceText, playerStats.WaterResistance.ToString("F0"));
-        SetText(earthResistanceText, playerStats.EarthResistance.ToString("F0"));
-        SetText(fireResistanceText, playerStats.FireResistance.ToString("F0"));
-        SetText(airResistanceText, playerStats.AirResistance.ToString("F0"));
+        SetText(pierceResistanceText, $"Pierce Res: {playerStats.PierceResistance:F0}");
+        SetText(stabResistanceText, $"Stab Res: {playerStats.StabResistance:F0}");
+        SetText(slashResistanceText, $"Slash Res: {playerStats.SlashResistance:F0}");
+        SetText(bluntResistanceText, $"Blunt Res: {playerStats.BluntResistance:F0}");
+        SetText(physicalResistanceText, $"Physical Res: {playerStats.PhysicalResistance:F0}");
+        SetText(burningResistanceText, $"Burning Res: {playerStats.BurningResistance:F0}");
+        SetText(frostResistanceText, $"Frost Res: {playerStats.FrostResistance:F0}");
+        SetText(poisonResistanceText, $"Poison Res: {playerStats.PoisonResistance:F0}");
+        SetText(lightningResistanceText, $"Lightning Res: {playerStats.LightningResistance:F0}");
+        SetText(psychicResistanceText, $"Psychic Res: {playerStats.PsychicResistance:F0}");
+        SetText(necrosisResistanceText, $"Necrosis Res: {playerStats.NecrosisResistance:F0}");
+        SetText(waterResistanceText, $"Water Res: {playerStats.WaterResistance:F0}");
+        SetText(earthResistanceText, $"Earth Res: {playerStats.EarthResistance:F0}");
+        SetText(fireResistanceText, $"Fire Res: {playerStats.FireResistance:F0}");
+        SetText(airResistanceText, $"Air Res: {playerStats.AirResistance:F0}");
     }
 
     private static void SetValue(TMP_Text target, int currentValue, int allocatedValue)
