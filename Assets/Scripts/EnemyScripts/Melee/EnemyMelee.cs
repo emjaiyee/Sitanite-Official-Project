@@ -61,6 +61,34 @@ public class EnemyMelee : MonoBehaviour
         moveSpeed;
 
 
+    // =========================================================
+    // ATTACK
+    // =========================================================
+
+    [Header("Attack")]
+    [SerializeField] private float attackRange = 0.8f;
+    [SerializeField] private DamageType attackDamageType = DamageType.Slash;
+    [Min(0f)] [SerializeField] private float damage = 5f;
+    [Min(0.01f)] [SerializeField] private float attackCooldown = 1.5f;
+    [SerializeField] private bool useChargedAttack;
+
+    [Header("Charged Attack")]
+    [Min(0f)] [SerializeField] private float chargedAttackRange = 1.2f;
+    [SerializeField] private DamageType chargedAttackDamageType = DamageType.Blunt;
+    [Min(0f)] [SerializeField] private float chargedDamage = 10f;
+    [Min(0.01f)] [SerializeField] private float chargedAttackCooldown = 2.5f;
+    [Min(0f)] [SerializeField] private float chargedAttackTime = 0.75f;
+    [Min(0f)] [SerializeField] private float chargedAttackMultiplier = 2f;
+
+    private float nextAttackTime;
+    private float chargedAttackTimer;
+    private bool chargingAttack;
+
+    public float AttackRange => useChargedAttack ? chargedAttackRange : attackRange;
+    public float AttackCooldown => attackCooldown;
+    public bool UseChargedAttack => useChargedAttack;
+
+
     [SerializeField] private int idleWanderRadius = 4;
 
     public int IdleWanderRadius =>
@@ -99,6 +127,7 @@ public class EnemyMelee : MonoBehaviour
 
     private EnemyHealth enemyHealth;
     private Transform player;
+    private PlayerStats playerStats;
 
     private Vector3 spawnPosition;
 
@@ -135,6 +164,11 @@ public class EnemyMelee : MonoBehaviour
         enemyHealth =
             GetComponent<EnemyHealth>();
 
+        EnemyAttackScript legacyContactDamage =
+            GetComponent<EnemyAttackScript>();
+        if (legacyContactDamage != null)
+            legacyContactDamage.enabled = false;
+
         spawnPosition =
             transform.position;
 
@@ -150,6 +184,8 @@ public class EnemyMelee : MonoBehaviour
         {
             player =
                 playerObject.transform;
+            playerStats =
+                FindPlayerStats(playerObject);
         }
         else
         {
@@ -172,31 +208,32 @@ public class EnemyMelee : MonoBehaviour
 
     private void Start()
     {
+        EnemyAttackScript legacyContactDamage =
+            GetComponent<EnemyAttackScript>();
+        if (legacyContactDamage != null)
+            legacyContactDamage.enabled = false;
+
         // -----------------------------------------------------
         // CHECK A* SPAWN TILE
         // -----------------------------------------------------
 
         if (AStarManager.Instance == null)
         {
-            Debug.LogError(
+            Debug.LogWarning(
                 $"[EnemyMelee] {name} could not find " +
-                "an AStarManager."
+                "an AStarManager. Starting FSM without pathfinding."
             );
-
-            return;
         }
 
-
-        if (!AStarManager.Instance.IsPositionWalkable(
+        if (AStarManager.Instance != null &&
+            !AStarManager.Instance.IsPositionWalkable(
                 transform.position))
         {
-            Debug.LogError(
+            Debug.LogWarning(
                 $"[EnemyMelee] {name} spawned on a " +
-                $"NON-WALKABLE A* tile at " +
-                $"{transform.position}."
+                $"NON-WALKABLE A* tile at {transform.position}. " +
+                "Starting FSM anyway."
             );
-
-            return;
         }
 
 
@@ -221,10 +258,106 @@ public class EnemyMelee : MonoBehaviour
 
     private void Update()
     {
+        if (player == null)
+        {
+            GameObject playerObject =
+                GameObject.FindGameObjectWithTag("Player");
+
+            if (playerObject != null)
+            {
+                player = playerObject.transform;
+                playerStats = FindPlayerStats(playerObject);
+            }
+        }
+
+        Diagnose();
+
         if (currentState == null)
             return;
 
+        if (chargingAttack)
+        {
+            chargedAttackTimer += Time.deltaTime;
+            if (chargedAttackTimer >= chargedAttackTime)
+                CompleteAttack();
+
+            return;
+        }
+
+        if (CurrentState != EnemyState.Death &&
+            IsPlayerWithinAttackRange())
+        {
+            StopMoving();
+            TryAttack();
+            return;
+        }
+
         currentState.Tick();
+    }
+
+
+    // =========================================================
+    // PLAYER STATS LOOKUP
+    // =========================================================
+
+    /// <summary>
+    /// Finds PlayerStats whether it sits on the tagged root,
+    /// a parent, or a child object.
+    /// </summary>
+    private PlayerStats FindPlayerStats(GameObject playerObject)
+    {
+        if (playerObject == null)
+            return null;
+
+        PlayerStats stats =
+            playerObject.GetComponentInParent<PlayerStats>();
+
+        if (stats == null)
+            stats = playerObject.GetComponentInChildren<PlayerStats>();
+
+        return stats;
+    }
+
+    // =========================================================
+    // TEMP DIAGNOSTIC — remove after fixing
+    // =========================================================
+
+    private float nextDiagTime;
+
+    private void Diagnose()
+    {
+        if (Time.time < nextDiagTime)
+            return;
+
+        nextDiagTime = Time.time + 2f;
+
+        if (player == null)
+        {
+            Debug.LogWarning($"[Diag] {name}: player is NULL (no object tagged 'Player').");
+            return;
+        }
+
+        float dist = Vector2.Distance(player.position, transform.position);
+        string msg =
+            $"[Diag] {name}: state={CurrentState} " +
+            $"playerStats={(playerStats == null ? "NULL" : "ok")} " +
+            $"dist={dist:F2} attackRange={AttackRange:F2} " +
+            $"detected={IsPlayerDetected()} " +
+            $"aStar={(AStarManager.Instance == null ? "NULL" : "ok")}";
+
+        if (IsPlayerWithinAttackRange())
+        {
+            if (playerStats == null)
+                Debug.LogWarning(msg + "  <-- IN RANGE but playerStats NULL (no damage)");
+            else if (Time.time < nextAttackTime)
+                Debug.Log(msg + "  <-- IN RANGE, on cooldown");
+            else
+                Debug.Log(msg + "  <-- IN RANGE, should attack");
+        }
+        else
+        {
+            Debug.Log(msg);
+        }
     }
 
 
@@ -266,6 +399,10 @@ public class EnemyMelee : MonoBehaviour
             currentState.Exit();
         }
 
+        // Cancel any pending charged attack when the state changes
+        // (e.g. the enemy dies mid-charge).
+        chargingAttack = false;
+        chargedAttackTimer = 0f;
 
         // -----------------------------------------------------
         // SET NEW STATE
@@ -345,6 +482,90 @@ public class EnemyMelee : MonoBehaviour
                 player.position,
                 detectionRadius
             );
+    }
+
+    public bool IsPlayerWithinAttackRange()
+    {
+        if (player == null)
+            return false;
+
+        float range = useChargedAttack ? chargedAttackRange : attackRange;
+        return ((Vector2)player.position - (Vector2)transform.position)
+            .sqrMagnitude <= range * range;
+    }
+
+    public void TryAttack()
+    {
+        if (player == null || Time.time < nextAttackTime)
+            return;
+
+        if (playerStats == null)
+            playerStats = FindPlayerStats(player.gameObject);
+
+        if (playerStats == null)
+        {
+            Debug.LogWarning(
+                $"[EnemyMelee] {name}: PlayerStats NOT FOUND on player " +
+                "hierarchy. Enemy cannot deal damage. " +
+                "Put PlayerStats on the object tagged 'Player' or a child."
+            );
+
+            // Don't spam: push the next attempt out by the cooldown.
+            nextAttackTime = Time.time + attackCooldown;
+            return;
+        }
+
+        if (useChargedAttack)
+        {
+            chargingAttack = true;
+            chargedAttackTimer = 0f;
+            StopMoving();
+            return;
+        }
+
+        CompleteAttack();
+    }
+
+    private void CompleteAttack()
+    {
+        chargingAttack = false;
+        chargedAttackTimer = 0f;
+
+        if (player == null || !IsPlayerWithinAttackRange())
+            return;
+
+        if (playerStats == null)
+            playerStats = FindPlayerStats(player.gameObject);
+
+        if (playerStats == null)
+        {
+            Debug.LogWarning(
+                $"[EnemyMelee] {name} could not find PlayerStats " +
+                "on the player. Attack deals no damage."
+            );
+            return;
+        }
+
+        DamageType damageType = useChargedAttack
+            ? chargedAttackDamageType
+            : attackDamageType;
+        float damageAmount = useChargedAttack
+            ? chargedDamage
+            : damage;
+        if (useChargedAttack)
+            damageAmount *= chargedAttackMultiplier;
+
+        if (damageAmount <= 0f)
+            return;
+
+        float cooldown = useChargedAttack
+            ? chargedAttackCooldown
+            : attackCooldown;
+        nextAttackTime = Time.time + cooldown;
+        playerStats.TakeDamage(
+            damageAmount,
+            damageType
+        );
     }
 
 

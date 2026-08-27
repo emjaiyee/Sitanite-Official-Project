@@ -48,6 +48,14 @@ public class EnemyMeleeChaseState : EnemyMeleeState
         }
 
 
+        // Attack range is a direct combat check and does not depend on A*.
+        if (Enemy.IsPlayerWithinAttackRange())
+        {
+            Enemy.StopMoving();
+            Enemy.TryAttack();
+            return;
+        }
+
         // -----------------------------------------------------
         // PLAYER STILL DETECTED?
         // -----------------------------------------------------

@@ -221,6 +221,23 @@ public class PlayerStats : MonoBehaviour
         };
     }
 
+    public bool UseResource(int amount, ResourceType resourceType)
+    {
+        if (amount <= 0)
+            return true;
+
+        switch (resourceType)
+        {
+            case ResourceType.Stamina:
+                return UseStamina(amount);
+            case ResourceType.Mana:
+                return UseMana(amount);
+            default:
+                Debug.LogWarning($"Unsupported resource type: {resourceType}");
+                return false;
+        }
+    }
+
     public float GetDamageResistance(DamageType damageType)
     {
         if ((damageType & DamageType.Pierce) != 0)
@@ -303,6 +320,7 @@ public class PlayerStats : MonoBehaviour
     private float ManaRegenModifier => attributes != null ? attributes.ManaRegenModifier : 0f;
     private float StaminaRegenModifier => attributes != null ? attributes.StaminaRegenModifier : 0f;
     private float MovementSpeedModifier => attributes != null ? attributes.MovementSpeedModifier : 0f;
+    public float CooldownReduction => attributes != null ? attributes.CooldownReduction : 0f;
 
     private float ApplyEquipmentModifier(float baseValue, StatType statType, DamageType damageType = DamageType.None)
     {
@@ -326,6 +344,28 @@ public class PlayerStats : MonoBehaviour
                 damageType
             )
         );
+    }
+
+    public float GetBaseDamage(DamageType damageType)
+    {
+        return damageType switch
+        {
+            DamageType.Pierce => basePierceDamage,
+            DamageType.Stab => baseStabDamage,
+            DamageType.Slash => baseSlashDamage,
+            DamageType.Blunt => baseBluntDamage,
+            DamageType.Frost => baseFrostDamage,
+            DamageType.Poison => basePoisonDamage,
+            DamageType.Lightning => baseLightningDamage,
+            DamageType.Psychic => basePsychicDamage,
+            DamageType.Necrosis => baseNecrosisDamage,
+            DamageType.Water => baseWaterDamage,
+            DamageType.Earth => baseEarthDamage,
+            DamageType.Fire => baseFireDamage,
+            DamageType.Air => baseAirDamage,
+            DamageType.Physical => basePhysicalDamage,
+            _ => 0f
+        };
     }
 
     private float ResistanceModifier(DamageType damageType)

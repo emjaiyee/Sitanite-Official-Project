@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 /// <summary>
@@ -50,10 +51,20 @@ public struct EquipmentStat
     public StatType statType;
     public DamageType damageType;
     public DamageSlot damageSlot;
+    public bool lingeringDamage;
+    [Min(0f)] public float lingeringBaseValue;
     public PrimaryAttribute reducedAttribute;
     public SecondaryTrait reducedTrait;
     public StatModifierType modifierType;
     public float value;
+}
+
+[System.Serializable]
+public enum ResourceType
+{
+    None,
+    Stamina,
+    Mana
 }
 
 /// <summary>
@@ -73,7 +84,8 @@ public enum WeaponAttackType
 {
     None,
     Melee,
-    Ranged
+    Ranged,
+    Spell
 }
 
 public enum WeaponSkillType
@@ -120,6 +132,12 @@ public class ItemData : ScriptableObject
     [SerializeField] private SecondaryTrait statCapTrait;
     [Min(0)] [SerializeField] private int statCapValue;
 
+    [Header("Skill")]
+    [Min(0)]
+    [SerializeField] private int skillCost = 25;
+
+    [SerializeField] private ResourceType skillResourceType = ResourceType.Stamina;
+
     [Header("Weapon Settings")]
     [Tooltip("Stable identifier used by gameplay systems.")]
     [SerializeField] private string weaponId;
@@ -128,12 +146,17 @@ public class ItemData : ScriptableObject
     [SerializeField] private WeaponSkillType weaponSkillType = WeaponSkillType.None;
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private LayerMask hittableLayers;
+    [Tooltip("Makes projectile attacks steer toward the nearest valid target within Attack Range.")]
+    [SerializeField] private bool homing;
+    [Min(0f)] [SerializeField] private float attackCooldown = 0.25f;
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float projectileSpeed = 12f;
+    [SerializeField] private float spellProjectileSpeed = 4f;
     [SerializeField] private int skillDamage = 50;
     [SerializeField] private float skillRadius = 2f;
     [SerializeField] private float skillRadiusMultiplier = 1f;
     [SerializeField] private LayerMask skillHittableLayers;
+    [Min(0f)] [SerializeField] private float skillCooldown = 1f;
     [SerializeField] private GameObject skillVisualPrefab;
     [SerializeField] private float skillRange = 8f;
     [SerializeField] private int skillProjectileCount = 12;
@@ -141,12 +164,16 @@ public class ItemData : ScriptableObject
     [SerializeField] private float skillVisualDuration = 0.8f;
     [SerializeField] private GameObject skillProjectilePrefab;
     [SerializeField] private GameObject chargeVisualPrefab;
-    [SerializeField] private float maxChargeVisualScale = 1.5f;
+    [FormerlySerializedAs("maxChargeVisualScale")]
+    [Min(0f)] [SerializeField] private float startChargeVisualScale = 1.5f;
+    [Min(0f)] [SerializeField] private float endChargeVisualScale = 1f;
     [SerializeField] private float maxChargeTime = 2f;
     [SerializeField] private int minimumSkillDamage = 30;
     [SerializeField] private int maximumSkillDamage = 150;
     [SerializeField] private float beamDuration = 2f;
     [SerializeField] private float beamWidth = 1f;
+    [Tooltip("How many times per second ticking damage (beam/lingering) is applied.")]
+    [Min(0.1f)] [SerializeField] private float damageTicksPerSecond = 1f;
 
     [Header("Stat Modifiers")]
     [Tooltip("Attributes added or multiplied when this item is equipped.")]
@@ -186,12 +213,16 @@ public class ItemData : ScriptableObject
     public WeaponSkillType WeaponSkillType => weaponSkillType;
     public float AttackRange => attackRange;
     public LayerMask HittableLayers => hittableLayers;
+    public bool Homing => homing;
+    public float AttackCooldown => attackCooldown;
     public GameObject ProjectilePrefab => projectilePrefab;
     public float ProjectileSpeed => projectileSpeed;
+    public float SpellProjectileSpeed => spellProjectileSpeed;
     public int SkillDamage => skillDamage;
     public float SkillRadius => skillRadius;
     public float SkillRadiusMultiplier => skillRadiusMultiplier;
     public LayerMask SkillHittableLayers => skillHittableLayers;
+    public float SkillCooldown => skillCooldown;
     public GameObject SkillVisualPrefab => skillVisualPrefab;
     public float SkillRange => skillRange;
     public int SkillProjectileCount => skillProjectileCount;
@@ -199,15 +230,44 @@ public class ItemData : ScriptableObject
     public float SkillVisualDuration => skillVisualDuration;
     public GameObject SkillProjectilePrefab => skillProjectilePrefab;
     public GameObject ChargeVisualPrefab => chargeVisualPrefab;
-    public float MaxChargeVisualScale => maxChargeVisualScale;
+    public float StartChargeVisualScale => startChargeVisualScale;
+    public float EndChargeVisualScale => endChargeVisualScale;
     public float MaxChargeTime => maxChargeTime;
     public int MinimumSkillDamage => minimumSkillDamage;
     public int MaximumSkillDamage => maximumSkillDamage;
     public float BeamDuration => beamDuration;
     public float BeamWidth => beamWidth;
+    public float DamageTicksPerSecond => damageTicksPerSecond;
+    public int SkillCost => skillCost;
+    public ResourceType SkillResourceType => skillResourceType;
 
     public int PrimaryDamage => GetDamageValue(DamageSlot.Primary, 0);
     public DamageType PrimaryDamageType => GetDamageType(DamageSlot.Primary, DamageType.Physical);
+
+    /// <summary>Gets the configured damage value for the given damage slot.</summary>
+    public int GetDamage(DamageSlot slot)
+    {
+        return GetDamageValue(slot, 0);
+    }
+
+    public float GetLingeringDamage(DamageSlot slot, PlayerStats playerStats)
+    {
+        foreach (EquipmentStat modifier in statModifiers)
+        {
+            if (modifier.statType != StatType.Damage ||
+                modifier.damageSlot != slot ||
+                !modifier.lingeringDamage)
+                continue;
+
+            float baseDamage = playerStats == null
+                ? 0f
+                : playerStats.GetBaseDamage(modifier.damageType);
+
+            return baseDamage * 0.2f + modifier.lingeringBaseValue;
+        }
+
+        return 0f;
+    }
 
     public int GetSkillDamage(DamageSlot slot)
     {

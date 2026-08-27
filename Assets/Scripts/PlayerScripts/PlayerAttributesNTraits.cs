@@ -129,6 +129,7 @@ public class PlayerAttributesNTraits : MonoBehaviour
     public float ManaRegenModifier => (Attunement - 1) * 0.2f;
     public float StaminaRegenModifier => (Endurance - 1) * 0.2f;
     public float MovementSpeedModifier => (Haste - 1) * 0.02f;
+    public float CooldownReduction => (Haste - 1) * 0.002f;
     public float DamageResistanceModifier => (Fortitude - 1) * 0.5f;
     public float MagicalResistanceModifier => (Willpower - 1) * 0.5f;
 

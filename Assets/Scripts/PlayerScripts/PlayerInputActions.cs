@@ -163,6 +163,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Skill"",
+                    ""type"": ""Button"",
+                    ""id"": ""f6d325ff-ea64-4ff4-902a-51c6517b5133"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -297,6 +306,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Stats"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bcf6966d-851c-4885-a089-417122636045"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Skill"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -313,6 +333,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_Stats = m_Player.FindAction("Stats", throwIfNotFound: true);
+        m_Player_Skill = m_Player.FindAction("Skill", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -401,6 +422,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_Stats;
+    private readonly InputAction m_Player_Skill;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -444,6 +466,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Stats".
         /// </summary>
         public InputAction @Stats => m_Wrapper.m_Player_Stats;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Skill".
+        /// </summary>
+        public InputAction @Skill => m_Wrapper.m_Player_Skill;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -494,6 +520,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Stats.started += instance.OnStats;
             @Stats.performed += instance.OnStats;
             @Stats.canceled += instance.OnStats;
+            @Skill.started += instance.OnSkill;
+            @Skill.performed += instance.OnSkill;
+            @Skill.canceled += instance.OnSkill;
         }
 
         /// <summary>
@@ -529,6 +558,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Stats.started -= instance.OnStats;
             @Stats.performed -= instance.OnStats;
             @Stats.canceled -= instance.OnStats;
+            @Skill.started -= instance.OnSkill;
+            @Skill.performed -= instance.OnSkill;
+            @Skill.canceled -= instance.OnSkill;
         }
 
         /// <summary>
@@ -625,5 +657,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnStats(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Skill" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSkill(InputAction.CallbackContext context);
     }
 }

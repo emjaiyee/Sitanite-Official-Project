@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6321468513215944697}
   - component: {fileID: 6327804949105923776}
+  - component: {fileID: 7834190264512389670}
   - component: {fileID: 5447968335082929364}
   - component: {fileID: -3398895361798373728}
   - component: {fileID: 5575200063884600762}
@@ -95,6 +96,42 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!58 &7834190264512389670
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3586115904521672654}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.16
 --- !u!114 &5447968335082929364
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107,7 +144,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8ab9ceee96b684593ff9daf9b2dc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 10
+  maxHealth: 40
+  basePierceResistance: 0
+  baseStabResistance: 0
+  baseSlashResistance: 0
+  baseBluntResistance: 0
+  baseFrostResistance: 0
+  basePoisonResistance: 0
+  baseLightningResistance: 0
+  basePsychicResistance: 0
+  baseNecrosisResistance: 0
+  baseWaterResistance: 0
+  baseEarthResistance: 0
+  baseFireResistance: 0
+  baseAirResistance: 0
+  basePhysicalResistance: 0
+  runtimeCurrentHealth: 0
 --- !u!114 &-3398895361798373728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,8 +173,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMelee
   startingState: 0
-  detectionRadius: 6
+  detectionRadius: 8
   moveSpeed: 1
+  attackRange: 0.8
+  attackDamageType: 2
+  damage: 25
+  attackCooldown: 1.5
+  useChargedAttack: 0
+  chargedAttackRange: 1.2
+  chargedAttackDamageType: 4
+  chargedDamage: 10
+  chargedAttackCooldown: 2.5
+  chargedAttackTime: 0.75
+  chargedAttackMultiplier: 2
   idleWanderRadius: 4
   deathAnimationDelay: 1
   deathFadeDuration: 0.75
@@ -156,4 +219,4 @@ MonoBehaviour:
   smoothFade: 1
   fadeDuration: 0.2
   spriteRenderer: {fileID: 6327804949105923776}
-  enemyCollider: {fileID: 0}
+  enemyCollider: {fileID: 7834190264512389670}

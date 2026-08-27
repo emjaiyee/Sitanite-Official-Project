@@ -11,6 +11,20 @@ public class PlayerElevationLevel : MonoBehaviour
 
     public static event Action<int> OnElevationChanged;
 
+    public static bool CanAffectTarget(Transform target)
+    {
+        if (target == null || Instance == null)
+            return true;
+
+        EnemyElevationLevel enemyElevation =
+            target.GetComponentInParent<EnemyElevationLevel>();
+
+        if (enemyElevation == null)
+            return true;
+
+        return Mathf.Abs(Instance.CurrentLevel - enemyElevation.CurrentLevel) <= 1;
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
