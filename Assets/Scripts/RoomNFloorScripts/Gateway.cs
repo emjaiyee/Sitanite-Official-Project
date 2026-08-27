@@ -18,26 +18,15 @@ public class Gateway : MonoBehaviour
         destination = newDestination;
     }
 
-    public void SetGatewayEnabled(bool enabled)
-    {
-        Collider2D gatewayCollider =
-            GetComponent<Collider2D>();
-
-        if (gatewayCollider != null)
-        {
-            gatewayCollider.enabled = enabled;
-        }
-        else
-        {
-            Debug.LogWarning(
-                $"Gateway '{name}' does not have a Collider2D."
-            );
-        }
-    }
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player"))
+            return;
+
+        RoomManager roomManager =
+            GetComponentInParent<RoomManager>();
+
+        if (roomManager != null && roomManager.HandleGatewayEntered(this))
             return;
 
         if (destination == null)

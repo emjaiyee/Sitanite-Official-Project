@@ -9,7 +9,8 @@ public class Player : MonoBehaviour
         if (Instance != null && Instance != this)
         {
             Debug.LogWarning(
-                "Multiple Player instances found!"
+                "Multiple Player instances found! Destroying duplicate.",
+                this
             );
 
             Destroy(gameObject);
@@ -17,6 +18,18 @@ public class Player : MonoBehaviour
         }
 
         Instance = this;
+
+        if (GetComponent<EquipmentCharacterVisualSync>() == null)
+        {
+            gameObject.AddComponent<EquipmentCharacterVisualSync>();
+        }
+
+        DontDestroyOnLoad(gameObject);
+
+        Debug.Log(
+            "PLAYER AWAKE — Player.Instance has been assigned.",
+            this
+        );
     }
 
     private void OnDestroy()

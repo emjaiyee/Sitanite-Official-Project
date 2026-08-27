@@ -11,13 +11,18 @@ public class RoomTransitionManager : MonoBehaviour
     [Tooltip("How long it takes to fade TO black.")]
     [SerializeField] private float fadeToBlackDuration = 0.25f;
 
-    [Tooltip("How long to wait AFTER reaching black and BEFORE teleporting.")]
-    [SerializeField] private float waitBeforeTeleportDuration = 0f;
+    [Tooltip("How long the screen stays completely black AFTER teleporting.")]
+    [SerializeField] private float keepFadeAfterTeleportDuration = 1f;
 
-    [Tooltip("How long it takes to fade FROM black after teleporting.")]
+    [Tooltip("How long it takes to fade FROM black after the teleport.")]
     [SerializeField] private float fadeFromBlackDuration = 0.25f;
 
     private bool isTransitioning;
+
+
+    // =========================================================
+    // UNITY
+    // =========================================================
 
     private void Awake()
     {
@@ -30,12 +35,18 @@ public class RoomTransitionManager : MonoBehaviour
         Instance = this;
     }
 
+
+    // =========================================================
+    // TRANSITION
+    // =========================================================
+
     public void TransitionPlayer(
         Transform player,
         Transform destination)
     {
         if (isTransitioning)
             return;
+
 
         if (player == null)
         {
@@ -46,6 +57,7 @@ public class RoomTransitionManager : MonoBehaviour
             return;
         }
 
+
         if (destination == null)
         {
             Debug.LogError(
@@ -55,6 +67,7 @@ public class RoomTransitionManager : MonoBehaviour
             return;
         }
 
+
         StartCoroutine(
             TransitionRoutine(
                 player,
@@ -63,55 +76,55 @@ public class RoomTransitionManager : MonoBehaviour
         );
     }
 
+
+    // =========================================================
+    // TRANSITION ROUTINE
+    // =========================================================
+
     private IEnumerator TransitionRoutine(
         Transform player,
         Transform destination)
     {
         isTransitioning = true;
 
-        // =============================================
+
+        // =====================================================
         // 1. FADE TO BLACK
-        // =============================================
+        // =====================================================
 
         yield return Fade(
             1f,
             fadeToBlackDuration
         );
 
-        // The screen is now COMPLETELY BLACK.
+
+        // Screen is now completely black.
         fadeCanvas.alpha = 1f;
 
-        // =============================================
-        // 2. OPTIONAL WAIT BEFORE TELEPORT
-        // =============================================
 
-        if (waitBeforeTeleportDuration > 0f)
-        {
-            yield return new WaitForSeconds(
-                waitBeforeTeleportDuration
-            );
-        }
-
-        // =============================================
-        // 3. TELEPORT
-        // =============================================
+        // =====================================================
+        // 2. TELEPORT IMMEDIATELY
+        // =====================================================
         //
-        // IMPORTANT:
-        // The screen is STILL completely black here.
+        // No waiting here.
         //
-        // We teleport BEFORE starting the fade-out.
-        // =============================================
+        // The player is teleported while the screen
+        // is already completely black.
+        // =====================================================
 
-        player.position = destination.position;
+        player.position =
+            destination.position;
 
-        // =============================================
-        // 4. UPDATE PLAYER ELEVATION
-        // =============================================
+
+        // =====================================================
+        // 3. UPDATE PLAYER ELEVATION
+        // =====================================================
 
         ElevationDestination elevationDestination =
             destination.GetComponent<
                 ElevationDestination
             >();
+
 
         if (elevationDestination != null)
         {
@@ -119,6 +132,7 @@ public class RoomTransitionManager : MonoBehaviour
                 player.GetComponent<
                     PlayerElevationLevel
                 >();
+
 
             if (playerElevation != null)
             {
@@ -143,39 +157,78 @@ public class RoomTransitionManager : MonoBehaviour
             );
         }
 
-        // =============================================
+
+        // =====================================================
+        // 4. KEEP SCREEN BLACK
+        // =====================================================
+        //
+        // The teleport has already happened.
+        //
+        // We simply remain black for the configured duration.
+        // =====================================================
+
+        if (keepFadeAfterTeleportDuration > 0f)
+        {
+            yield return new WaitForSeconds(
+                keepFadeAfterTeleportDuration
+            );
+        }
+
+
+        // =====================================================
         // 5. FADE FROM BLACK
-        // =============================================
+        // =====================================================
 
         yield return Fade(
             0f,
             fadeFromBlackDuration
         );
 
+
+        // =====================================================
+        // 6. FINISHED
+        // =====================================================
+
         isTransitioning = false;
     }
+
+
+    // =========================================================
+    // FADE
+    // =========================================================
 
     private IEnumerator Fade(
         float targetAlpha,
         float duration)
     {
-        float startAlpha = fadeCanvas.alpha;
+        float startAlpha =
+            fadeCanvas.alpha;
+
+
         float elapsed = 0f;
+
 
         if (duration <= 0f)
         {
-            fadeCanvas.alpha = targetAlpha;
+            fadeCanvas.alpha =
+                targetAlpha;
+
             yield break;
         }
 
+
         while (elapsed < duration)
         {
-            elapsed += Time.deltaTime;
+            elapsed +=
+                Time.deltaTime;
+
 
             float t =
                 Mathf.Clamp01(
-                    elapsed / duration
+                    elapsed /
+                    duration
                 );
+
 
             fadeCanvas.alpha =
                 Mathf.Lerp(
@@ -184,9 +237,12 @@ public class RoomTransitionManager : MonoBehaviour
                     t
                 );
 
+
             yield return null;
         }
 
-        fadeCanvas.alpha = targetAlpha;
+
+        fadeCanvas.alpha =
+            targetAlpha;
     }
 }
