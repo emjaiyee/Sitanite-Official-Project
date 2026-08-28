@@ -86,7 +86,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -177,7 +177,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -316,7 +316,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -383,97 +383,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5700263183971444938}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4599464093287306600
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7792249157809027056}
-  - component: {fileID: 8603285980291579413}
-  m_Layer: 0
-  m_Name: WeaponOver
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7792249157809027056
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4599464093287306600}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.17699999, y: 0.05399999, z: 0}
-  m_LocalScale: {x: 0.123191185, y: 0.47712684, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2826949009369197633}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &8603285980291579413
-SpriteRenderer:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4599464093287306600}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 12
-  m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 0}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
 --- !u!1 &5054948953897289759
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,7 +437,7 @@ Transform:
   - {fileID: 8329789945758800289}
   - {fileID: 2665722754575717680}
   - {fileID: 7690639867013062086}
-  - {fileID: 7792249157809027056}
+  - {fileID: 5536741838045283725}
   - {fileID: 5700263183971444938}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -752,6 +661,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   attackAction: {fileID: 4355990924167721325, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
+  attackMovementLockDuration: 0.2
 --- !u!114 &5043284147882130589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -783,20 +693,20 @@ MonoBehaviour:
   effectiveMaxHealth: 0
   effectiveMaxMana: 0
   effectiveMaxStamina: 0
-  basePierceDamage: 5
-  baseStabDamage: 5
-  baseSlashDamage: 5
-  baseBluntDamage: 5
-  baseFrostDamage: 4
-  basePoisonDamage: 4
-  baseLightningDamage: 4
-  basePsychicDamage: 4
-  baseNecrosisDamage: 4
-  baseWaterDamage: 4
-  baseEarthDamage: 4
-  baseFireDamage: 4
-  baseAirDamage: 4
-  basePhysicalDamage: 4
+  basePierceDamage: 1
+  baseStabDamage: 1
+  baseSlashDamage: 1
+  baseBluntDamage: 1
+  baseFrostDamage: 1
+  basePoisonDamage: 1
+  baseLightningDamage: 1
+  basePsychicDamage: 1
+  baseNecrosisDamage: 1
+  baseWaterDamage: 1
+  baseEarthDamage: 1
+  baseFireDamage: 1
+  baseAirDamage: 1
+  basePhysicalDamage: 1
   effectivePierceDamage: 0
   effectiveStabDamage: 0
   effectiveSlashDamage: 0
@@ -898,53 +808,53 @@ MonoBehaviour:
   fortitude: 1
   willpower: 1
   warriorDefaults:
-    strength: 13
-    dexterity: 9
+    strength: 10
+    dexterity: 7
     intelligence: 4
-    vitality: 5
+    vitality: 4
     focus: 1
     endurance: 2
-    agility: 2
-    vigor: 3
+    agility: 1
+    vigor: 2
     haste: 1
     attunement: 1
-    mundane: 5
+    mundane: 4
     arcane: 1
     elemental: 1
     precision: 1
     fortitude: 4
     willpower: 1
   rangerDefaults:
-    strength: 6
-    dexterity: 13
+    strength: 4
+    dexterity: 10
     intelligence: 6
     vitality: 3
     focus: 1
-    endurance: 4
-    agility: 4
+    endurance: 3
+    agility: 3
     vigor: 2
     haste: 2
     attunement: 1
-    mundane: 2
+    mundane: 1
     arcane: 1
     elemental: 1
-    precision: 3
+    precision: 2
     fortitude: 2
     willpower: 1
   mageDefaults:
     strength: 4
     dexterity: 6
-    intelligence: 15
+    intelligence: 10
     vitality: 1
-    focus: 4
+    focus: 3
     endurance: 2
     agility: 1
     vigor: 1
     haste: 1
-    attunement: 6
+    attunement: 5
     mundane: 1
-    arcane: 3
-    elemental: 3
+    arcane: 2
+    elemental: 2
     precision: 1
     fortitude: 1
     willpower: 3
@@ -979,7 +889,7 @@ MonoBehaviour:
   eyesRenderer: {fileID: 53923350455531113}
   hairRenderer: {fileID: 7586370554039716126}
   headwearRenderer: {fileID: 7266763579535133445}
-  weaponOverRenderer: {fileID: 8603285980291579413}
+  weaponOverRenderer: {fileID: 2491044693711779770}
   shieldRenderer: {fileID: 0}
 --- !u!114 &8044024218569010500
 MonoBehaviour:
@@ -1011,6 +921,9 @@ MonoBehaviour:
   rangerStartingGear: []
   mageStartingGear:
   - {fileID: 11400000, guid: 270df18fdaa71794091bf2e795e09db7, type: 2}
+  - {fileID: 11400000, guid: 12b486c90eeea3841a4f7554aefebdd0, type: 2}
+  - {fileID: 11400000, guid: d3ec1a675e1627b49a2bb7cd282e4739, type: 2}
+  - {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
   warriorStartingItems: []
   rangerStartingItems: []
   mageStartingItems: []
@@ -1058,6 +971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSkill
   skillAction: {fileID: 148672380357779987, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
+  skillMovementLockDuration: 0.2
 --- !u!114 &1731212550873553795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1129,7 +1043,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -1220,7 +1134,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -1311,7 +1225,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -1402,7 +1316,7 @@ SpriteRenderer:
   m_SmallMeshCulling: 1
   m_ForceMeshLod: -1
   m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
+  m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
@@ -1427,6 +1341,97 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 6
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_SpriteSortPoint: 0
+--- !u!1 &8752696719035123851
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5536741838045283725}
+  - component: {fileID: 2491044693711779770}
+  m_Layer: 0
+  m_Name: WeaponOver
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5536741838045283725
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8752696719035123851}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2826949009369197633}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &2491044693711779770
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8752696719035123851}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 4294967295
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 12
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

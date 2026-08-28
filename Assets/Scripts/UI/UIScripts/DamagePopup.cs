@@ -9,6 +9,9 @@ using UnityEngine;
 /// </summary>
 public class DamagePopup : MonoBehaviour
 {
+    private const string EffectsSortingLayer = "Effects";
+    private const int EffectsSortingOrder = 10000;
+
     [Header("Motion")]
     [Tooltip("Upward drift speed. Kept low so the number stays near the origin.")]
     [SerializeField] private float floatSpeed = 0.5f;
@@ -18,7 +21,6 @@ public class DamagePopup : MonoBehaviour
 
     [Header("Visual")]
     [SerializeField] private float fontSize = 3f;
-    [SerializeField] private int sortingOrder = 200;
     [Tooltip("Optional font. Leave empty to use the TMP default font asset.")]
     [SerializeField] private TMP_FontAsset font;
 
@@ -85,12 +87,14 @@ public class DamagePopup : MonoBehaviour
         if (font != null)
             textMesh.font = font;
 
-        MeshRenderer renderer = textMesh.GetComponent<MeshRenderer>();
-        if (renderer != null)
-            renderer.sortingOrder = sortingOrder;
-
         // Center the rect so it pops at the exact spawn point.
         RectTransform rect = textMesh.rectTransform;
         rect.sizeDelta = new Vector2(2f, 1f);
+        MeshRenderer renderer = textMesh.GetComponent<MeshRenderer>();
+        if (renderer != null)
+        {
+            renderer.sortingLayerName = EffectsSortingLayer;
+            renderer.sortingOrder = EffectsSortingOrder;
+        }
     }
 }

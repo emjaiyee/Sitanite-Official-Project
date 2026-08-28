@@ -25,6 +25,21 @@ public class EnemyMeleeLocateState : EnemyMeleeState
         waitTimer = 0f;
         waitingAtOrigin = false;
 
+        SetDestinationFromLatestDamage();
+    }
+
+    public void RefreshDestination()
+    {
+        waitTimer = 0f;
+        waitingAtOrigin = false;
+
+        SetDestinationFromLatestDamage();
+    }
+
+    private void SetDestinationFromLatestDamage()
+    {
+        Enemy.StopMoving();
+
         Debug.Log(
             $"[Locate] {Enemy.name}: investigating damage origin " +
             $"{Enemy.DamageSourcePosition}."

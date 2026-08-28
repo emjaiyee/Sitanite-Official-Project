@@ -41,6 +41,11 @@ public class EnemySpawnPoint : MonoBehaviour
     [SerializeField] private float spawnDelay = 0f;
     [SerializeField] private Transform spawnParent;
 
+    [Header("Elevation")]
+    [Tooltip("Elevation level assigned to each enemy spawned by this point.")]
+    [Min(0)]
+    [SerializeField] private int elevationLevel;
+
     [Header("Rendering (ensure visibility)")]
     [Tooltip("Sorting layer name to apply to spawned enemies.")]
     [SerializeField] private string sortingLayer = "Default";
@@ -306,6 +311,14 @@ public class EnemySpawnPoint : MonoBehaviour
 
         ApplyRenderingSettings(instance);
 
+        EnemyElevationLevel enemyElevation =
+            instance.GetComponent<EnemyElevationLevel>();
+
+        if (enemyElevation == null)
+            enemyElevation = instance.AddComponent<EnemyElevationLevel>();
+
+        enemyElevation.SetLevel(elevationLevel);
+
 
         // Preserve the health configured on the enemy prefab.
         var eh = instance.GetComponent<EnemyHealth>();
@@ -487,7 +500,6 @@ public class EnemySpawnPoint : MonoBehaviour
             sg.sortingLayerName = sortingLayer;
             sg.sortingOrder = sortingOrder;
         }
-
 
         if (Mathf.Abs(zOffset) > 0f)
         {

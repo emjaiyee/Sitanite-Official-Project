@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,12 +7,16 @@ public class PlayerAttack : MonoBehaviour
     [Header("Input")]
     [SerializeField] private InputActionReference attackAction;
 
+    [Header("Attack Recovery")]
+    [Min(0f)] [SerializeField] private float attackMovementLockDuration = 0.2f;
+
     private PlayerEquipment equipment;
     private PlayerWASD movement;
     private PlayerDash dash;
     private PlayerStats stats;
 
     private bool attackActive;
+    private Coroutine attackRecovery;
 
     private void Awake()
     {
@@ -133,7 +138,9 @@ public class PlayerAttack : MonoBehaviour
         equipment.CurrentWeapon.Attack(attackDirection);
 
         // Current attacks are instantaneous.
-        EndAttackMovementLock();
+        attackRecovery = StartCoroutine(
+            EndAttackMovementLockAfterDelay()
+        );
     }
 
     private Vector2 GetMouseDirection()
@@ -170,5 +177,13 @@ public class PlayerAttack : MonoBehaviour
 
         if (dash != null)
             dash.UnlockDash();
+    }
+
+    private IEnumerator EndAttackMovementLockAfterDelay()
+    {
+        yield return new WaitForSeconds(attackMovementLockDuration);
+
+        attackRecovery = null;
+        EndAttackMovementLock();
     }
 }

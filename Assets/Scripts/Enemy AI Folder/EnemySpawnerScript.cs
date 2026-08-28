@@ -488,7 +488,6 @@ public class EnemySpawnerScript : MonoBehaviour
             sg.sortingOrder = sortingOrder;
         }
 
-
         if (Mathf.Abs(zOffset) > 0f)
         {
             var p = root.transform.position;

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,9 @@ public class PlayerSkill : MonoBehaviour
     [Header("Input")]
     [SerializeField] private InputActionReference skillAction;
 
+    [Header("Skill Recovery")]
+    [Min(0f)] [SerializeField] private float skillMovementLockDuration = 0.2f;
+
     private PlayerStats stats;
     private PlayerEquipment equipment;
     private PlayerWASD movement;
@@ -13,6 +17,7 @@ public class PlayerSkill : MonoBehaviour
 
     private bool skillActive;
     private IChargeableWeapon activeChargeable;
+    private Coroutine skillRecovery;
 
     // -------------------------------------------------
     // UNITY
@@ -193,9 +198,18 @@ public class PlayerSkill : MonoBehaviour
         // ---------------------------------------------
 
         activeChargeable =
-            equipment.CurrentWeapon as IChargeableWeapon;
+            IsChargedSkill(weaponData)
+                ? equipment.CurrentWeapon as IChargeableWeapon
+                : null;
 
         equipment.CurrentWeapon.UseSkill(skillDirection);
+
+        if (activeChargeable == null)
+        {
+            skillRecovery = StartCoroutine(
+                EndSkillMovementLockAfterDelay()
+            );
+        }
     }
     // -------------------------------------------------
     // RELEASE F
@@ -248,11 +262,12 @@ public class PlayerSkill : MonoBehaviour
 
         activeChargeable = null;
 
-        // -------------------------------------------------
-        // RESTORE MOVEMENT
-        // -------------------------------------------------
-
-        EndSkillMovementLock();
+        if (skillRecovery == null)
+        {
+            skillRecovery = StartCoroutine(
+                EndSkillMovementLockAfterDelay()
+            );
+        }
     }
 
     // -------------------------------------------------
@@ -308,6 +323,20 @@ public class PlayerSkill : MonoBehaviour
         {
             dash.UnlockDash();
         }
+    }
+
+    private IEnumerator EndSkillMovementLockAfterDelay()
+    {
+        yield return new WaitForSeconds(skillMovementLockDuration);
+
+        skillRecovery = null;
+        EndSkillMovementLock();
+    }
+
+    private bool IsChargedSkill(ItemData weaponData)
+    {
+        return weaponData.WeaponSkillType == WeaponSkillType.ChargedArrow ||
+               weaponData.WeaponSkillType == WeaponSkillType.Beam;
     }
 
     private Vector2 GetMouseDirection()

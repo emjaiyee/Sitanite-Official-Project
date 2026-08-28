@@ -83,7 +83,9 @@ public class CombatInputGate : MonoBehaviour
             (statsUI != null && statsUI.IsOpen) ||
             (inventory != null && inventory.IsOpen);
 
-        SetCombatEnabled(!uiOpen);
+        bool hoveringUI = DisableCombatOnUIHover.IsHoveringUI;
+
+        SetCombatEnabled(!uiOpen && !hoveringUI);
     }
 
     private void SetCombatEnabled(bool enabled)

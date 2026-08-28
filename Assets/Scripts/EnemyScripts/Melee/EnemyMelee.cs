@@ -46,8 +46,16 @@ public class EnemyMelee : MonoBehaviour
     [Tooltip("Detection distance measured in A* grid cells.")]
     [SerializeField] private int detectionRadius = 6;
 
+    [Min(0f)] [SerializeField] private float alertedDuration = 15f;
+
+    public bool Alerted { get; private set; }
+
+    private float alertedUntilTime;
+
     public int DetectionRadius =>
-        detectionRadius;
+        Alerted
+            ? Mathf.CeilToInt(detectionRadius * 1.5f)
+            : detectionRadius;
 
 
     // =========================================================
@@ -125,6 +133,17 @@ public class EnemyMelee : MonoBehaviour
             return;
 
         DamageSourcePosition = damageSource.Value;
+
+        if (CurrentState == EnemyState.Locate)
+        {
+            EnemyMeleeLocateState locateState =
+                currentState as EnemyMeleeLocateState;
+
+            if (locateState != null)
+                locateState.RefreshDestination();
+
+            return;
+        }
 
         ChangeState(EnemyState.Locate);
     }
@@ -295,6 +314,9 @@ public class EnemyMelee : MonoBehaviour
 
     private void Update()
     {
+        if (Alerted && Time.time >= alertedUntilTime)
+            Alerted = false;
+
         if (player == null)
         {
             GameObject playerObject =
@@ -414,6 +436,8 @@ public class EnemyMelee : MonoBehaviour
         EnemyHealth source,
         Vector3? damageSource)
     {
+        Alerted = true;
+        alertedUntilTime = Time.time + alertedDuration;
         NotifyDamaged(damageSource);
     }
 
@@ -527,7 +551,7 @@ public class EnemyMelee : MonoBehaviour
             .IsPositionWithinDetectionRadius(
                 transform.position,
                 player.position,
-                detectionRadius
+                DetectionRadius
             );
     }
 
@@ -720,6 +744,9 @@ public class EnemyMelee : MonoBehaviour
         // DETECTION CELLS
         // -----------------------------------------------------
 
+        int effectiveDetectionRadius =
+            DetectionRadius;
+
         Gizmos.color =
             new Color(
                 1f,
@@ -729,12 +756,12 @@ public class EnemyMelee : MonoBehaviour
             );
 
 
-        for (int x = -detectionRadius;
-            x <= detectionRadius;
+        for (int x = -effectiveDetectionRadius;
+            x <= effectiveDetectionRadius;
             x++)
         {
-            for (int y = -detectionRadius;
-                y <= detectionRadius;
+            for (int y = -effectiveDetectionRadius;
+                y <= effectiveDetectionRadius;
                 y++)
             {
                 int squaredDistance =
@@ -743,8 +770,8 @@ public class EnemyMelee : MonoBehaviour
 
 
                 int squaredRadius =
-                    detectionRadius *
-                    detectionRadius;
+                    effectiveDetectionRadius *
+                    effectiveDetectionRadius;
 
 
                 if (squaredDistance >

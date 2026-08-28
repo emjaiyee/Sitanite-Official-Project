@@ -180,9 +180,15 @@ public class ItemData : ScriptableObject
     [SerializeField] private float skillVisualDuration = 0.8f;
     [SerializeField] private GameObject skillProjectilePrefab;
     [SerializeField] private GameObject chargeVisualPrefab;
+    [Tooltip("Sprites looped on the charge visual while the skill is fully charged.")]
+    [SerializeField] private Sprite[] maxChargeSprites;
+    [Tooltip("Animation speed for the max-charge sprites, in frames per second.")]
+    [Min(0f)] [SerializeField] private float maxChargeAnimationSpeed = 12f;
     [FormerlySerializedAs("maxChargeVisualScale")]
     [Min(0f)] [SerializeField] private float startChargeVisualScale = 1.5f;
     [Min(0f)] [SerializeField] private float endChargeVisualScale = 1f;
+    [Tooltip("Scale of the charge visual while the skill is fully charged.")]
+    [Min(0f)] [SerializeField] private float maxChargeVisualScale = 2f;
     [SerializeField] private float maxChargeTime = 2f;
     [SerializeField] private int minimumSkillDamage = 30;
     [SerializeField] private int maximumSkillDamage = 150;
@@ -246,8 +252,11 @@ public class ItemData : ScriptableObject
     public float SkillVisualDuration => skillVisualDuration;
     public GameObject SkillProjectilePrefab => skillProjectilePrefab;
     public GameObject ChargeVisualPrefab => chargeVisualPrefab;
+    public Sprite[] MaxChargeSprites => maxChargeSprites;
+    public float MaxChargeAnimationSpeed => maxChargeAnimationSpeed;
     public float StartChargeVisualScale => startChargeVisualScale;
     public float EndChargeVisualScale => endChargeVisualScale;
+    public float MaxChargeVisualScale => maxChargeVisualScale;
     public float MaxChargeTime => maxChargeTime;
     public int MinimumSkillDamage => minimumSkillDamage;
     public int MaximumSkillDamage => maximumSkillDamage;
@@ -406,6 +415,12 @@ public class ItemData : ScriptableObject
             characterDefinition is not HeadwearDefinition)
         {
             Debug.LogWarning("Helmet items must reference a HeadwearDefinition.", this);
+        }
+
+        if (characterDefinition != null && equipmentType == EquipmentType.Weapon &&
+            characterDefinition is not WeaponDefinition)
+        {
+            Debug.LogWarning("Weapon items must reference a WeaponDefinition.", this);
         }
     }
     #endregion

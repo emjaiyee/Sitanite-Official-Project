@@ -14,7 +14,7 @@ public class CharacterAppearance
     public CharacterPartDefinition eyes;
     public CharacterPartDefinition hair;
     public HeadwearDefinition headwear;
-    public CharacterPartDefinition weapon;
+    public WeaponDefinition weapon;
     public CharacterPartDefinition shield;
 
     [Header("Vanity")]

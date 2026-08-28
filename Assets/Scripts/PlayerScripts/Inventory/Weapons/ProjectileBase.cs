@@ -27,6 +27,10 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
     /// <summary>Called every Update after movement, while initialized.</summary>
     protected virtual void OnUpdate() { }
 
+    private void Awake()
+    {
+    }
+
     public void Initialize(
         int damage,
         DamageType damageType,

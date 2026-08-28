@@ -18,6 +18,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private float chargeStartTime;
     private bool isCharging;
     private GameObject activeChargeVisual;
+    private SpriteRenderer chargeVisualRenderer;
     private float nextAttackTime;
     private float nextSkillTime;
 
@@ -59,12 +60,30 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
         if (activeChargeVisual != null)
         {
-            activeChargeVisual.transform.localScale =
-                Vector3.one * Mathf.Lerp(
+            float visualScale = chargePercent >= 1f
+                ? data.MaxChargeVisualScale
+                : Mathf.Lerp(
                     data.StartChargeVisualScale,
                     data.EndChargeVisualScale,
                     chargePercent
                 );
+
+            activeChargeVisual.transform.localScale =
+                Vector3.one * visualScale;
+        }
+
+        if (chargePercent >= 1f &&
+            chargeVisualRenderer != null &&
+            data.MaxChargeSprites != null &&
+            data.MaxChargeSprites.Length > 0 &&
+            data.MaxChargeAnimationSpeed > 0f)
+        {
+            int frameIndex = Mathf.FloorToInt(
+                (Time.time - chargeStartTime - data.MaxChargeTime) *
+                data.MaxChargeAnimationSpeed
+            ) % data.MaxChargeSprites.Length;
+
+            chargeVisualRenderer.sprite = data.MaxChargeSprites[frameIndex];
         }
     }
 
@@ -86,7 +105,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         switch (data.WeaponAttackType)
         {
             case WeaponAttackType.Melee:
-                AttackMelee(direction);
+                AttackMelee();
                 break;
 
             case WeaponAttackType.Ranged:
@@ -115,7 +134,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         }
     }
 
-    private void AttackMelee(Vector2 direction)
+    private void AttackMelee()
     {
         if (attackPoint == null)
         {
@@ -134,10 +153,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             );
         }
 
-        // Place the melee hit area in front of the player.
-        Vector2 attackPosition =
-            (Vector2)transform.root.position +
-            direction * data.AttackRange;
+        Vector2 attackPosition = attackPoint.position;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             attackPosition,
@@ -202,7 +218,13 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             return;
 
         direction.Normalize();
-        nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+
+        bool isChargedSkill =
+            data.WeaponSkillType == WeaponSkillType.ChargedArrow ||
+            data.WeaponSkillType == WeaponSkillType.Beam;
+
+        if (!isChargedSkill)
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
 
         switch (data.WeaponSkillType)
         {
@@ -236,7 +258,9 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     private void UseAreaDamageSkill()
     {
-        Vector3 origin = transform.root.position;
+        Vector3 origin = attackPoint == null
+            ? transform.root.position
+            : attackPoint.position;
 
         float radius =
             data.SkillRadius *
@@ -265,7 +289,9 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     private void UseArrowRainSkill(Vector2 direction)
     {
-        Vector3 origin = transform.root.position;
+        Vector3 origin = attackPoint == null
+            ? transform.root.position
+            : attackPoint.position;
 
         Vector3 targetPosition =
             origin +
@@ -368,6 +394,9 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
                     )
                 );
 
+            chargeVisualRenderer =
+                activeChargeVisual.GetComponentInChildren<SpriteRenderer>(true);
+
             activeChargeVisual.transform.localScale =
                 Vector3.one * data.StartChargeVisualScale;
         }
@@ -431,7 +460,9 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
                 )
             );
 
-        int damage = CalculateChargedSkillDamage(rawDamage);
+        int damage = data.WeaponSkillType == WeaponSkillType.Beam
+            ? CalculateBeamDamage(rawDamage)
+            : CalculateChargedSkillDamage(rawDamage);
 
         Debug.Log(
             $"[WeaponController] {WeaponId} skill released: " +
@@ -464,6 +495,8 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
                 true
             );
         }
+
+        nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
 
         StopCharging();
     }
@@ -739,11 +772,11 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     }
 
     /// <summary>
-    /// Charged skill damage = raw charge damage
-    ///                      + the weapon's primary damage modifier
-    ///                      + 50% of the player's runtime base damage
-    ///                        (base + attribute/trait scaling)
-    ///                      + damage modifiers from other equipped gear.
+    /// Charged arrow skill damage = raw charge damage
+    ///                            + the weapon's primary damage modifier
+    ///                            + 50% of the player's runtime base damage
+    ///                              (base + attribute/trait scaling)
+    ///                            + damage modifiers from other equipped gear.
     /// The weapon's own modifier is excluded from the gear pass since
     /// it is already added explicitly.
     /// </summary>
@@ -768,6 +801,18 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         }
 
         return damage + Mathf.RoundToInt(runtimeBase * 0.5f);
+    }
+
+    private int CalculateBeamDamage(int rawDamage)
+    {
+        int damage = rawDamage + data.GetDamage(DamageSlot.Primary);
+
+        if (playerStats == null)
+            return damage;
+
+        return damage + Mathf.RoundToInt(
+            playerStats.GetPreEquipmentDamage(data.PrimaryDamageType)
+        );
     }
 
     private int GetPrimaryDamage()
@@ -853,6 +898,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             Destroy(activeChargeVisual);
 
         activeChargeVisual = null;
+        chargeVisualRenderer = null;
     }
 
     // =========================================================

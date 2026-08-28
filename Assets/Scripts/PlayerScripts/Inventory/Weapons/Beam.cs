@@ -35,6 +35,10 @@ public class Beam : MonoBehaviour
     private Vector3 visualScale;
     private float startTime;
 
+    private void Awake()
+    {
+    }
+
     public void Initialize(
         int primaryDamage,
         DamageType primaryDamageType,
