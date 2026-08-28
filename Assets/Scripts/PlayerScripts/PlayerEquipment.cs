@@ -2,36 +2,71 @@ using UnityEngine;
 
 // Handles the player's currently equipped weapon.
 //
-// Weapon GameObjects should be children of the player and contain
-// a component implementing IWeapon.
+// Weapon GameObjects should be children of the player
+// and contain a component implementing IWeapon.
 //
 // Example:
 // Player
 // ├── LongSword
-// │   └── Sword : MeleeWeapon
-// └── BattleAxe
-//     └── Axe : MeleeWeapon
+// │   └── LongSword : MeleeWeapon
+// ├── BattleAxe
+// │   └── BattleAxe : MeleeWeapon
+// ├── Dagger
+// │   └── Dagger : MeleeWeapon
+// ├── ShortBow
+// │   └── ShortBow : RangedWeapon
+// └── LongBow
+//     └── LongBow : RangedWeapon
+
 public class PlayerEquipment : MonoBehaviour
 {
-    [Header("Weapon Objects (children of the player)")]
+    [Header("Melee Weapons")]
 
     [SerializeField]
     private GameObject swordObject;
 
     [SerializeField]
     private GameObject battleAxeObject;
+
+    [SerializeField]
+    private GameObject daggerObject;
+
+
+    [Header("Ranged Weapons")]
+
     [SerializeField]
     private GameObject shortBowObject;
+
     [SerializeField]
     private GameObject longBowObject;
 
+
     public IWeapon CurrentWeapon { get; private set; }
 
+
+    // =========================================================
+    // UNITY
+    // =========================================================
+
     private void Start()
-    {
-        // Default weapon.
-        EquipWeapon("LongBow");
-    }
+{
+    Debug.Log("[PlayerEquipment] Starting...");
+
+    Debug.Log(
+        $"[PlayerEquipment] Dagger Object = {daggerObject}"
+    );
+
+    EquipWeapon("Dagger");
+
+    Debug.Log(
+        $"[PlayerEquipment] Current Weapon = {CurrentWeapon}"
+    );
+}
+
+
+    // =========================================================
+    // EQUIP WEAPON
+    // =========================================================
 
     /// <summary>
     /// Equips a weapon using its WeaponId.
@@ -47,12 +82,15 @@ public class PlayerEquipment : MonoBehaviour
             return;
         }
 
-        // Disable all currently equipped weapon objects.
+
+        // Disable currently equipped weapon.
         DisableAllWeapons();
 
-        // Find the requested weapon.
+
+        // Find requested weapon.
         GameObject weaponObject =
             GetWeaponObject(weaponId);
+
 
         if (weaponObject == null)
         {
@@ -61,12 +99,15 @@ public class PlayerEquipment : MonoBehaviour
             );
 
             CurrentWeapon = null;
+
             return;
         }
 
-        // Make sure the weapon actually implements IWeapon.
+
+        // Make sure the GameObject contains IWeapon.
         IWeapon weapon =
             weaponObject.GetComponent<IWeapon>();
+
 
         if (weapon == null)
         {
@@ -76,59 +117,73 @@ public class PlayerEquipment : MonoBehaviour
             );
 
             CurrentWeapon = null;
+
             return;
         }
 
+
+        // Enable weapon.
         weaponObject.SetActive(true);
 
+
+        // Store currently equipped weapon.
         CurrentWeapon = weapon;
+
 
         Debug.Log(
             $"PlayerEquipment: Equipped {weaponId}."
         );
     }
 
-    // -------------------------------------------------
+
+    // =========================================================
     // WEAPON LOOKUP
-    // -------------------------------------------------
+    // =========================================================
 
-   private GameObject GetWeaponObject(string weaponId)
-{
-    switch (weaponId)
+    private GameObject GetWeaponObject(string weaponId)
     {
-        case "LongSword":
-            return swordObject;
+        switch (weaponId)
+        {
+            case "LongSword":
+                return swordObject;
 
-        case "BattleAxe":
-            return battleAxeObject;
+            case "BattleAxe":
+                return battleAxeObject;
 
-        case "ShortBow":
-            return shortBowObject;
+            case "Dagger":
+                return daggerObject;
 
-        case "LongBow":
-            return longBowObject;
+            case "ShortBow":
+                return shortBowObject;
 
-        default:
-            return null;
+            case "LongBow":
+                return longBowObject;
+
+            default:
+                return null;
+        }
     }
-}
 
-    // -------------------------------------------------
-    // DISABLE WEAPONS
-    // -------------------------------------------------
+
+    // =========================================================
+    // DISABLE ALL WEAPONS
+    // =========================================================
 
     private void DisableAllWeapons()
-{
-    if (swordObject != null)
-        swordObject.SetActive(false);
+    {
+        if (swordObject != null)
+            swordObject.SetActive(false);
 
-    if (battleAxeObject != null)
-        battleAxeObject.SetActive(false);
+        if (battleAxeObject != null)
+            battleAxeObject.SetActive(false);
 
-    if (shortBowObject != null)
-        shortBowObject.SetActive(false);
+        if (daggerObject != null)
+            daggerObject.SetActive(false);
 
-    if (longBowObject != null)
-        longBowObject.SetActive(false);
-}
+        if (shortBowObject != null)
+            shortBowObject.SetActive(false);
+
+        if (longBowObject != null)
+            longBowObject.SetActive(false);
+    }
 }

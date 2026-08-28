@@ -220,11 +220,6 @@ public class EnemyMeleeIdleState : EnemyMeleeState
         }
 
 
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            $"A* path found! " +
-            $"Length = {path.Count}"
-        );
 
 
         // =====================================================
