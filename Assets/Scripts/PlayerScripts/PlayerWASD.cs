@@ -1,30 +1,47 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(PlayerStats))]
 public class PlayerWASD : MonoBehaviour
 {
     [Header("Movement")]
+    [Min(0f)]
     [SerializeField] private float moveSpeed = 5f;
+
+    [Min(0f)]
+    [SerializeField] private float sprintSpeed = 8f;
 
     [Header("Input")]
     [SerializeField] private InputActionReference moveAction;
+    [SerializeField] private InputActionReference sprintAction;
 
     [Header("Default Movement")]
     [SerializeField] private bool useIsometricMovement = true;
 
     private Rigidbody2D rb;
+    private PlayerStats stats;
+
     private Vector2 input;
     private Vector2 movement;
 
-    private bool overrideMovement = false;
+    private bool overrideMovement;
     private Vector2 rampForward = Vector2.right;
 
+    // PlayerDash can temporarily take control of the Rigidbody.
+    private bool movementLocked;
+
     public Vector2 MoveDirection => movement;
+
+    public float SpeedMultiplier { get; set; } = 1f;
+
+    public bool IsMovementLocked => movementLocked;
+
+    public bool IsSprinting { get; private set; }
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        stats = GetComponent<PlayerStats>();
 
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
@@ -34,16 +51,39 @@ public class PlayerWASD : MonoBehaviour
 
     private void OnEnable()
     {
-        moveAction.action.Enable();
+        if (moveAction != null)
+            moveAction.action.Enable();
+
+        if (sprintAction != null)
+            sprintAction.action.Enable();
     }
 
     private void OnDisable()
     {
-        moveAction.action.Disable();
+        if (moveAction != null)
+            moveAction.action.Disable();
+
+        if (sprintAction != null)
+            sprintAction.action.Disable();
+
+        IsSprinting = false;
     }
 
     private void Update()
     {
+        ReadMovementInput();
+        UpdateSprintState();
+    }
+
+    private void ReadMovementInput()
+    {
+        if (moveAction == null)
+        {
+            input = Vector2.zero;
+            movement = Vector2.zero;
+            return;
+        }
+
         input = moveAction.action.ReadValue<Vector2>();
         input = Vector2.ClampMagnitude(input, 1f);
 
@@ -54,7 +94,10 @@ public class PlayerWASD : MonoBehaviour
             desiredMovement = new Vector2(
                 input.x - input.y,
                 (input.x + input.y) * 0.5f
-            ).normalized;
+            );
+
+            if (desiredMovement.sqrMagnitude > 0.0001f)
+                desiredMovement.Normalize();
         }
         else
         {
@@ -65,8 +108,10 @@ public class PlayerWASD : MonoBehaviour
         {
             Vector2 forward = rampForward.normalized;
 
-            // Keep only the movement along the ramp.
-            float amount = Vector2.Dot(desiredMovement, forward);
+            float amount = Vector2.Dot(
+                desiredMovement,
+                forward
+            );
 
             movement = forward * amount;
         }
@@ -79,12 +124,63 @@ public class PlayerWASD : MonoBehaviour
             movement.Normalize();
     }
 
+    private void UpdateSprintState()
+    {
+        bool sprintHeld =
+            sprintAction != null &&
+            sprintAction.action.IsPressed();
+
+        bool isMoving =
+            movement.sqrMagnitude > 0.0001f;
+
+        bool hasStamina =
+            stats != null &&
+            stats.CurrentStamina > 0;
+
+        IsSprinting =
+            sprintHeld &&
+            isMoving &&
+            hasStamina;
+    }
+
     private void FixedUpdate()
     {
+        // PlayerDash currently controls the Rigidbody.
+        if (movementLocked)
+            return;
+
+        float currentSpeed =
+            IsSprinting
+                ? sprintSpeed
+                : moveSpeed;
+
         rb.MovePosition(
-            rb.position + movement * moveSpeed * Time.fixedDeltaTime
+            rb.position +
+            movement *
+            currentSpeed *
+            SpeedMultiplier *
+            Time.fixedDeltaTime
         );
     }
+
+    // -------------------------------------------------
+    // DASH CONTROL
+    // -------------------------------------------------
+
+    public void LockMovement()
+    {
+        movementLocked = true;
+        IsSprinting = false;
+    }
+
+    public void UnlockMovement()
+    {
+        movementLocked = false;
+    }
+
+    // -------------------------------------------------
+    // RAMP METHODS
+    // -------------------------------------------------
 
     public void EnterRamp(Vector2 forward)
     {
