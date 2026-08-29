@@ -3,16 +3,17 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
-    [Header("Health")]
-    [SerializeField] private int maxHealth = 10;
+    #region Variables Part
+
+    [SerializeField] private EnemyStats_Data enemyStats;
 
     public int CurrentHealth { get; private set; }
-    public int MaxHealth => maxHealth;
 
     public event Action<GameObject> OnEnemyDied;
 
     private bool hasDied;
 
+    #endregion
 
     // =========================================================
     // UNITY
@@ -20,19 +21,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void Awake()
     {
-        CurrentHealth = maxHealth;
-        hasDied = false;
-    }
-
-
-    // =========================================================
-    // INITIALIZATION
-    // =========================================================
-
-    public void Init(int max)
-    {
-        maxHealth = Mathf.Max(1, max);
-        CurrentHealth = maxHealth;
+        CurrentHealth = enemyStats.EnemyMaxHealth;
         hasDied = false;
     }
 
@@ -41,17 +30,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     // DAMAGE
     // =========================================================
 
-    public void TakeDamage(
-        int amount,
-        DamageType damageType = DamageType.Physical)
+    public void TakeDamage(int amount, DamageType damageType = DamageType.Physical)
     {
-        if (amount <= 0)
-            return;
-
-        if (hasDied)
-            return;
-
-        if (CurrentHealth <= 0)
+        if (amount <= 0 && hasDied && CurrentHealth <= 0)
             return;
 
 
@@ -65,7 +46,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         Debug.Log(
             $"[EnemyHealth] {gameObject.name} took " +
             $"{amount} {damageType} damage. " +
-            $"HP: {CurrentHealth}/{maxHealth}"
+            $"HP: {CurrentHealth}/{enemyStats.EnemyMaxHealth}"
         );
 
 
@@ -94,7 +75,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         CurrentHealth =
             Mathf.Min(
-                maxHealth,
+                enemyStats.EnemyMaxHealth,
                 CurrentHealth + amount
             );
     }

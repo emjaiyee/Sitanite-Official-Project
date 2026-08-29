@@ -3,6 +3,15 @@ using UnityEngine;
 
 public class EnemyMeleeChaseState : EnemyMeleeState
 {
+    #region Variable Part
+
+
+    private bool isAttacking = false;
+    private float attackAnimationDelay = 1.1f; //Delay can be change when animation is Given
+    private float attackAnimationTimer = 0f;
+
+    private CircleCollider2D attackCollider;
+
     private float repathTimer;
 
     private const float RepathInterval = 0.15f;
@@ -13,6 +22,7 @@ public class EnemyMeleeChaseState : EnemyMeleeState
         : base(enemy)
     {
     }
+    #endregion
 
 
     // =========================================================
@@ -28,6 +38,8 @@ public class EnemyMeleeChaseState : EnemyMeleeState
         );
 
         CalculatePath();
+
+        attackCollider = Enemy.GetComponentInChildren<CircleCollider2D>();
     }
 
 
@@ -37,6 +49,24 @@ public class EnemyMeleeChaseState : EnemyMeleeState
 
     public override void Tick()
     {
+
+        // -----------------------------------------------------
+        // ATTACK ANIMATION LOCK
+        // -----------------------------------------------------
+
+        if (isAttacking)
+        {
+            Enemy.StopMoving();
+
+            attackAnimationTimer -= Time.deltaTime;
+            if (attackAnimationTimer <= 0)
+            {
+                isAttacking = false;
+                attackCollider.enabled = false;
+            }
+            return;
+        }
+
         // -----------------------------------------------------
         // PLAYER EXISTS?
         // -----------------------------------------------------
@@ -66,6 +96,34 @@ public class EnemyMeleeChaseState : EnemyMeleeState
             return;
         }
 
+
+        // -----------------------------------------------------
+        // ATTACK 
+        // -----------------------------------------------------
+
+        if (Enemy.IsPlayerWithinAttackRange() && Enemy.IsPlayerRayCasted())
+        {
+
+
+            Debug.Log(
+                $"[Chase] {Enemy.name}: " +
+                "Player is within attack range. Entering Attack."
+            );
+
+            Enemy.StopMoving();
+
+            isAttacking = true;
+            attackAnimationTimer = attackAnimationDelay;
+            attackCollider.enabled = true;
+
+
+            Debug.Log(
+                  $"[Chase] {Enemy.name}: " +
+                  "Attacking player."
+            );
+
+            return;
+        }
 
         // -----------------------------------------------------
         // REPATH

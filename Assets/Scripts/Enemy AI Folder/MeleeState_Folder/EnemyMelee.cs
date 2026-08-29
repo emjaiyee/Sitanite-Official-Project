@@ -2,13 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyHealth))]
-public class EnemyMagic : MonoBehaviour
+public class EnemyMelee : MonoBehaviour
 {
-
-    #region Variables 
-    //==========================================================
-    // STATES 
-    //==========================================================
+    #region Variable Part
+    // =========================================================
+    // STATE
+    // =========================================================
 
 
     public enum EnemyState
@@ -21,12 +20,12 @@ public class EnemyMagic : MonoBehaviour
 
 
     [Header("State")]
-    [SerializeField]
-    private EnemyState startingState =
-            EnemyState.Idle;
+    [SerializeField] private EnemyState startingState =
+        EnemyState.Idle;
 
 
     public EnemyState? CurrentState { get; private set; }
+
 
 
 
@@ -34,45 +33,19 @@ public class EnemyMagic : MonoBehaviour
     // STATE INSTANCE
     // =========================================================
 
-    private EnemyMagicState currentState;
 
-
-
-    // =========================================================
-    // DETECTION
-    // =========================================================
-
-    [Header("Detection")]
-    [Tooltip("Detection distance measured in A* grid cells.")]
-    [SerializeField] private int detectionRadius = 12;
-
-    public int DetectionRadius =>
-        detectionRadius;
-
-    [Header("Attack Detection")]
-    [Tooltip("Attack Detection distance measured in A* grid cells.")]
-    [SerializeField] private int attackDetectionRadius = 10;
-
-    public int AttackDetectionRadius =>
-        attackDetectionRadius;
-
+    private EnemyMeleeState currentState;
 
     // =========================================================
     // MOVEMENT
     // =========================================================
 
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 3f;
-
-    public float MoveSpeed =>
-        moveSpeed;
-
 
     [SerializeField] private int idleWanderRadius = 4;
 
     public int IdleWanderRadius =>
         idleWanderRadius;
-
 
 
     // =========================================================
@@ -102,8 +75,10 @@ public class EnemyMagic : MonoBehaviour
 
 
     // =========================================================
-    // REFERENCES   
+    // REFERENCES
     // =========================================================
+    [Header("Scriptable Object")]
+    [SerializeField] private EnemyStats_Data enemyStats;
 
     private EnemyHealth enemyHealth;
     private Transform player;
@@ -120,6 +95,7 @@ public class EnemyMagic : MonoBehaviour
     public Vector3 SpawnPosition =>
         spawnPosition;
 
+
     // =========================================================
     // PATH
     // =========================================================
@@ -131,10 +107,9 @@ public class EnemyMagic : MonoBehaviour
     public bool HasPath =>
         currentPath != null &&
         currentPathIndex < currentPath.Count;
-
     #endregion
 
-    #region Unity Methods
+    #region Unity Method
 
     // =========================================================
     // UNITY
@@ -236,7 +211,6 @@ public class EnemyMagic : MonoBehaviour
 
         currentState.Tick();
     }
-
     #endregion
 
     #region State Management
@@ -252,6 +226,7 @@ public class EnemyMagic : MonoBehaviour
             EnemyState.Death
         );
     }
+
 
     public void ChangeState(
     EnemyState newState)
@@ -310,22 +285,22 @@ public class EnemyMagic : MonoBehaviour
         );
     }
 
-    private EnemyMagicState CreateState(
+    private EnemyMeleeState CreateState(
     EnemyState state)
     {
         switch (state)
         {
             case EnemyState.Idle:
-                return new EnemyMagicIdleState(this);
+                return new EnemyMeleeIdleState(this);
 
             case EnemyState.Chase:
-                return new EnemyMagicChaseState(this);
+                return new EnemyMeleeChaseState(this);
 
             case EnemyState.Search:
-                return new EnemyMagicSearchState(this);
+                return new EnemyMeleeSearchState(this);
 
             case EnemyState.Death:
-                return new EnemyMagicDeathState(this);
+                return new EnemyMeleeDeathState(this);
 
             default:
                 Debug.LogError(
@@ -336,9 +311,10 @@ public class EnemyMagic : MonoBehaviour
                 return null;
         }
     }
-    #endregion
 
-    #region Functions
+    #endregion  
+
+    #region Function
 
     // =========================================================
     // DETECTION
@@ -358,7 +334,7 @@ public class EnemyMagic : MonoBehaviour
             .IsPositionWithinDetectionRadius(
                 transform.position,
                 player.position,
-                detectionRadius
+                 enemyStats.DetectionRadius
             );
     }
 
@@ -376,9 +352,39 @@ public class EnemyMagic : MonoBehaviour
             .IsPositionWithinDetectionRadius(
                 transform.position,
                 player.position,
-                attackDetectionRadius
+                enemyStats.DetectionAttackRadius
             );
 
+    }
+
+    public bool IsPlayerRayCasted()
+    {
+        if (player == null)
+            return false;
+
+        int layerMask = LayerMask.GetMask("Player","Default");
+        Vector2 direction = player.position - transform.position;
+        float distance = direction.magnitude;
+
+        RaycastHit2D hit =
+                       Physics2D.Raycast(
+                transform.position,
+                direction.normalized,
+                distance,
+                layerMask
+            );
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.CompareTag("Player"))
+            {
+                Debug.Log($"[EnemyRayCast] {name} Raycast hit: {hit.collider.name}");
+                return true;
+            }
+            Debug.Log($"[EnemyRayCast] {name} Raycast hit: {hit.collider.name}");
+            return false;
+        }
+        return false;
     }
 
 
@@ -413,7 +419,6 @@ public class EnemyMagic : MonoBehaviour
         return true;
     }
 
-
     public void FollowCurrentPath()
     {
         if (!HasPath)
@@ -433,7 +438,7 @@ public class EnemyMagic : MonoBehaviour
             Vector3.MoveTowards(
                 transform.position,
                 target,
-                moveSpeed * Time.deltaTime
+                enemyStats.EnemyMaxSpeed * Time.deltaTime
             );
 
         if (Vector3.Distance(
@@ -486,8 +491,7 @@ public class EnemyMagic : MonoBehaviour
         // DETECTION CELLS
         // -----------------------------------------------------
 
-
-
+        Debug.DrawRay(transform.position, player.position - transform.position, Color.green);
 
         Gizmos.color =
             new Color(
@@ -509,12 +513,12 @@ public class EnemyMagic : MonoBehaviour
         }
 
 
-        for (int x = -detectionRadius;
-            x <= detectionRadius;
+        for (int x = -enemyStats.DetectionRadius;
+            x <= enemyStats.DetectionRadius;
             x++)
         {
-            for (int y = -detectionRadius;
-                y <= detectionRadius;
+            for (int y = -enemyStats.DetectionRadius;
+                y <= enemyStats.DetectionRadius;
                 y++)
             {
                 int squaredDistance =
@@ -523,8 +527,8 @@ public class EnemyMagic : MonoBehaviour
 
 
                 int squaredRadius =
-                    detectionRadius *
-                    detectionRadius;
+                    enemyStats.DetectionRadius *
+                    enemyStats.DetectionRadius;
 
 
                 if (squaredDistance >
@@ -562,7 +566,4 @@ public class EnemyMagic : MonoBehaviour
     }
     #endregion
 
-
 }
-  
-

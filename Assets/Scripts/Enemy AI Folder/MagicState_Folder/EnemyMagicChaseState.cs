@@ -5,6 +5,13 @@ public class EnemyMagicChaseState : EnemyMagicState
 {
     #region Variable Part
 
+
+    private bool isAttacking = false;
+    private float attackAnimationDelay = 1.1f; //Delay can be change when animation is Given
+    private float attackAnimationTimer = 0f;
+
+    private CircleCollider2D attackCollider;
+
     private float repathTimer;
 
     private const float RepathInterval = 0.15f;
@@ -25,11 +32,31 @@ public class EnemyMagicChaseState : EnemyMagicState
         );
 
         CalculatePath();
+
+        attackCollider = Enemy.GetComponentInChildren<CircleCollider2D>();
     }
 
 
     public override void Tick()
     {
+
+        // -----------------------------------------------------
+        // ATTACK ANIMATION LOCK
+        // -----------------------------------------------------
+
+        if (isAttacking)
+        {
+            Enemy.StopMoving();
+
+            attackAnimationTimer -= Time.deltaTime;
+            if (attackAnimationTimer <= 0)
+            {
+                isAttacking = false;
+                attackCollider.enabled = false;
+            }
+            return;
+        }
+
         // -----------------------------------------------------
         // PLAYER EXISTS?
         // -----------------------------------------------------
@@ -66,15 +93,29 @@ public class EnemyMagicChaseState : EnemyMagicState
 
         if (Enemy.IsPlayerWithinAttackRange())
         {
+
             Debug.Log(
                 $"[Chase] {Enemy.name}: " +
-                "Player is within attack range. Entering Attack."
+                "Player is within Casting range. Entering Attack."
             );
+
             Enemy.StopMoving();
 
+            if (Enemy.IsPlayerRayCasted())
+            {
+                isAttacking = true;
+                attackAnimationTimer = attackAnimationDelay;
+                Enemy.ShootProjectile();
+
+
+                Debug.Log(
+                      $"[Chase] {Enemy.name}: " +
+                      "Fire Magic to player."
+                );
+
+                return;
+            }
             return;
-
-
         }
 
         // -----------------------------------------------------

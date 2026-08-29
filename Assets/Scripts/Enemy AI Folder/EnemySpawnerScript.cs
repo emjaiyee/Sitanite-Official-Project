@@ -38,7 +38,7 @@ public class EnemySpawnerScript : MonoBehaviour
 
     [Header("Spawn Options")]
     [SerializeField] private bool spawnOnStart = true;
-    [SerializeField] private float spawnDelay = 0f;
+    [SerializeField] private float spawnDelay = 0.6f;
     [SerializeField] private Transform spawnParent;
 
     [Header("Rendering (ensure visibility)")]
@@ -61,23 +61,10 @@ public class EnemySpawnerScript : MonoBehaviour
     [SerializeField] private int maxPositionAttempts = 12;
 
     [Header("Enemy health & clear behavior")]
-    [Tooltip("Max health assigned to each spawned enemy.")]
-    [SerializeField] private int enemyMaxHealth = 10;
 
     [Tooltip("If true, this spawn point reports itself cleared when all enemies spawned by it have died.")]
     [SerializeField] private bool clearWhenAllDead = true;
 
-    [Tooltip("Damage dealt to the player while this enemy is touching them.")]
-    [Min(0)]
-    [SerializeField] private int enemyAttackDamage = 5;
-
-    [Tooltip("Maximum distance at which the enemy can deal contact damage.")]
-    [Min(0.01f)]
-    [SerializeField] private float enemyAttackRange = 0.7f;
-
-    [Tooltip("Time between contact damage hits.")]
-    [Min(0.01f)]
-    [SerializeField] private float enemyAttackCooldown = 1.5f;
 
 
     // Event invoked whenever an enemy is successfully spawned.
@@ -323,31 +310,8 @@ public class EnemySpawnerScript : MonoBehaviour
         ApplyRenderingSettings(instance);
 
 
-        // Ensure enemy has health component and set HP.
+        // Ensure enemy has health component and set HP. // Gets enemy HP script
         var eh = instance.GetComponent<EnemyHealth>();
-
-        if (eh == null)
-            eh = instance.AddComponent<EnemyHealth>();
-
-
-        // Always apply the spawn point's configured HP.
-        eh.Init(Mathf.Max(1, enemyMaxHealth));
-
-
-        var contactDamage =
-            instance.GetComponent<EnemyAttackScript>();
-
-        if (contactDamage == null)
-            contactDamage = instance.AddComponent<EnemyAttackScript>();
-
-        contactDamage.Configure(
-            enemyAttackDamage,
-            enemyAttackRange,
-            enemyAttackCooldown
-        );
-
-
-        EnsureEnemyPhysics(instance);
 
 
         // Subscribe to the enemy's death event.
@@ -535,44 +499,6 @@ public class EnemySpawnerScript : MonoBehaviour
         }
     }
 
-
-    private static void EnsureEnemyPhysics(GameObject instance)
-    {
-        if (instance == null)
-            return;
-
-
-        Rigidbody2D body =
-            instance.GetComponent<Rigidbody2D>();
-
-        if (body == null)
-            body = instance.AddComponent<Rigidbody2D>();
-
-
-        body.bodyType = RigidbodyType2D.Dynamic;
-        body.simulated = true;
-        body.gravityScale = 0f;
-        body.constraints = RigidbodyConstraints2D.FreezeAll;
-        body.collisionDetectionMode =
-            CollisionDetectionMode2D.Continuous;
-
-
-        Collider2D colliders =
-            instance.GetComponent<Collider2D>();
-
-
-        if (colliders == null)
-        {
-            BoxCollider2D fallbackCollider =
-                instance.AddComponent<BoxCollider2D>();
-
-            fallbackCollider.size =
-                new Vector2(0.5f, 0.5f);
-
-      
-        }
-       
-    }
 
 
 #if UNITY_EDITOR

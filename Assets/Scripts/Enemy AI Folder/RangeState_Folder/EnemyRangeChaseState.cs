@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.XR.Haptics;
+
 
 public class EnemyRangeChaseState : EnemyRangeState
 {
     #region Variable Part
-
 
     private bool isAttacking = false;
     private float attackAnimationDelay = 1.1f; //Delay can be change when animation is Given
@@ -91,27 +90,30 @@ public class EnemyRangeChaseState : EnemyRangeState
         // ATTACK 
         // -----------------------------------------------------
 
-        if (Enemy.IsPlayerWithinAttackRange() && Enemy.IsPlayerRayCasted())
+        if (Enemy.IsPlayerWithinAttackRange())
         {
-            
 
             Debug.Log(
                 $"[Chase] {Enemy.name}: " +
-                "Player is within attack range. Entering Attack."
+                "Player is within shooting range. Entering Attack."
             );
 
             Enemy.StopMoving();
 
-            isAttacking = true;
-            attackAnimationTimer = attackAnimationDelay;
-            attackCollider.enabled = true;
+            if (Enemy.IsPlayerRayCasted())
+            {
+                isAttacking = true;
+                attackAnimationTimer = attackAnimationDelay;
+                Enemy.ShootProjectile();
 
 
-            Debug.Log(
-                  $"[Chase] {Enemy.name}: " +
-                  "Attacking player."
-            );
+                Debug.Log(
+                      $"[Chase] {Enemy.name}: " +
+                      "Shooting player."
+                );
 
+                return;
+            }
             return;
         }
 

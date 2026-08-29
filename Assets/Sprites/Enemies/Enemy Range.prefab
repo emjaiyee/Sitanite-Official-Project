@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5112114375882320533}
   - component: {fileID: 7577087762323058429}
+  - component: {fileID: 7981904093991959510}
   - component: {fileID: 8108220175896036685}
-  - component: {fileID: 2328075298953031828}
+  - component: {fileID: 5300653341375035661}
   - component: {fileID: 1533890392601238758}
   - component: {fileID: 3502098331937166647}
   - component: {fileID: 7795151096777553942}
@@ -98,20 +99,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &8108220175896036685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3448337782947929249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af8ab9ceee96b684593ff9daf9b2dc08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 10
---- !u!114 &2328075298953031828
+--- !u!114 &7981904093991959510
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,12 +112,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRange
   startingState: 0
-  detectionRadius: 12
-  attackDetectionRadius: 10
-  moveSpeed: 3
-  idleWanderRadius: 4
   deathAnimationDelay: 0.5
   deathFadeDuration: 0.75
+  enemyStats: {fileID: 11400000, guid: bf1e93f641ba942409b3279bf5db8384, type: 2}
+--- !u!114 &8108220175896036685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3448337782947929249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af8ab9ceee96b684593ff9daf9b2dc08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
+  enemyStats: {fileID: 11400000, guid: bf1e93f641ba942409b3279bf5db8384, type: 2}
+--- !u!114 &5300653341375035661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3448337782947929249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eeedf13791377547bbb50a1da01609b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAttackScript
+  enemyStats: {fileID: 11400000, guid: bf1e93f641ba942409b3279bf5db8384, type: 2}
 --- !u!114 &1533890392601238758
 MonoBehaviour:
   m_ObjectHideFlags: 0

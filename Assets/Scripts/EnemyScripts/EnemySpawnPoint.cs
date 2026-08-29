@@ -330,7 +330,7 @@ public class EnemySpawnPoint : MonoBehaviour
 
 
         // Always apply the spawn point's configured HP.
-        eh.Init(Mathf.Max(1, enemyMaxHealth));
+       // eh.Init(Mathf.Max(1, enemyMaxHealth));
 
 
         var contactDamage =

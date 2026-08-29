@@ -2,51 +2,34 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyHealth))]
-public class EnemyMelee : MonoBehaviour
+public class EnemyRange : MonoBehaviour
 {
-    // =========================================================
-    // STATE
-    // =========================================================
-
+    #region Variables 
+    //==========================================================
+    // STATES 
+    //==========================================================
 
     public enum EnemyState
     {
         Idle,
         Chase,
-        Search,
+        Search, 
         Death
     }
 
-
     [Header("State")]
     [SerializeField] private EnemyState startingState =
-        EnemyState.Idle;
+            EnemyState.Idle;
 
 
     public EnemyState? CurrentState { get; private set; }
-
-
 
 
     // =========================================================
     // STATE INSTANCE
     // =========================================================
 
-
-    private EnemyMeleeState currentState;
-
-
-    // =========================================================
-    // DETECTION
-    // =========================================================
-
-    [Header("Detection")]
-
-    [Tooltip("Detection distance measured in A* grid cells.")]
-    [SerializeField] private int detectionRadius = 6;
-
-    public int DetectionRadius =>
-        detectionRadius;
+    private EnemyRangeState currentState;
 
 
     // =========================================================
@@ -54,14 +37,8 @@ public class EnemyMelee : MonoBehaviour
     // =========================================================
 
     [Header("Movement")]
-
-    [SerializeField] private float moveSpeed = 2f;
-
-    public float MoveSpeed =>
-        moveSpeed;
-
-
-    [SerializeField] private int idleWanderRadius = 4;
+ 
+    private int idleWanderRadius = 4;
 
     public int IdleWanderRadius =>
         idleWanderRadius;
@@ -94,14 +71,17 @@ public class EnemyMelee : MonoBehaviour
 
 
     // =========================================================
-    // REFERENCES
+    // REFERENCES   
     // =========================================================
+    [Header("Scriptable Objects")]
+    [SerializeField] private EnemyStats_Data enemyStats;
+
 
     private EnemyHealth enemyHealth;
     private Transform player;
 
-    private Vector3 spawnPosition;
 
+    private Vector3 spawnPosition;
 
     public EnemyHealth Health =>
         enemyHealth;
@@ -111,7 +91,6 @@ public class EnemyMelee : MonoBehaviour
 
     public Vector3 SpawnPosition =>
         spawnPosition;
-
 
     // =========================================================
     // PATH
@@ -125,6 +104,9 @@ public class EnemyMelee : MonoBehaviour
         currentPath != null &&
         currentPathIndex < currentPath.Count;
 
+    #endregion
+
+    #region Unity Methods
 
     // =========================================================
     // UNITY
@@ -132,6 +114,7 @@ public class EnemyMelee : MonoBehaviour
 
     private void Awake()
     {
+
         enemyHealth =
             GetComponent<EnemyHealth>();
 
@@ -221,12 +204,16 @@ public class EnemyMelee : MonoBehaviour
 
     private void Update()
     {
+       
         if (currentState == null)
             return;
 
         currentState.Tick();
     }
 
+    #endregion
+
+    #region State Management
 
     // =========================================================
     // ENEMY DEATH
@@ -239,7 +226,6 @@ public class EnemyMelee : MonoBehaviour
             EnemyState.Death
         );
     }
-
 
     public void ChangeState(
     EnemyState newState)
@@ -298,22 +284,22 @@ public class EnemyMelee : MonoBehaviour
         );
     }
 
-    private EnemyMeleeState CreateState(
+    private EnemyRangeState CreateState(
     EnemyState state)
     {
         switch (state)
         {
             case EnemyState.Idle:
-                return new EnemyMeleeIdleState(this);
+               return new EnemyRangeIdleState(this);
 
             case EnemyState.Chase:
-                return new EnemyMeleeChaseState(this);
+               return new EnemyRangeChaseState(this);
 
             case EnemyState.Search:
-                return new EnemyMeleeSearchState(this);
+               return new EnemyRangeSearchState(this);
 
             case EnemyState.Death:
-                return new EnemyMeleeDeathState(this);
+               return new EnemyRangeDeathState(this);
 
             default:
                 Debug.LogError(
@@ -324,7 +310,24 @@ public class EnemyMelee : MonoBehaviour
                 return null;
         }
     }
-    
+    #endregion
+
+    #region Functions
+
+    // =========================================================
+    // Instantiate 
+    // =========================================================
+
+    public void ShootProjectile()
+    {
+        Instantiate(
+            enemyStats.EnemyProjectilePrefab,
+            transform.position,
+            Quaternion.identity
+            );
+    }
+
+
     // =========================================================
     // DETECTION
     // =========================================================
@@ -343,8 +346,58 @@ public class EnemyMelee : MonoBehaviour
             .IsPositionWithinDetectionRadius(
                 transform.position,
                 player.position,
-                detectionRadius
+                enemyStats.DetectionRadius
             );
+    }
+
+    public bool IsPlayerWithinAttackRange()
+    {
+        if (player == null)
+            return false;
+
+
+        if (AStarManager.Instance == null)
+            return false;
+
+
+        return AStarManager.Instance
+            .IsPositionWithinDetectionRadius(
+                transform.position,
+                player.position,
+                enemyStats.DetectionAttackRadius
+            );
+
+    }
+
+    public bool IsPlayerRayCasted()
+    {
+        if (player == null)
+            return false;
+
+        int layerMask = LayerMask.GetMask("Player", "Default");
+        Vector2 direction = player.position - transform.position;
+        float distance = direction.magnitude;
+
+        RaycastHit2D hit =
+                       Physics2D.Raycast(
+                transform.position,
+                direction.normalized,
+                distance,
+                layerMask
+            );
+
+        if (hit.collider != null)
+        {
+            if (hit.collider.CompareTag("Player"))
+            {
+                Debug.Log($"[EnemyRayCast] {name} Raycast hit: {hit.collider.name}");
+                return true;
+            }
+            Debug.Log($"[EnemyRayCast] {name} Raycast hit: {hit.collider.name}");
+            return false;
+        }
+        return false;
+
     }
 
 
@@ -399,7 +452,7 @@ public class EnemyMelee : MonoBehaviour
             Vector3.MoveTowards(
                 transform.position,
                 target,
-                moveSpeed * Time.deltaTime
+                enemyStats.EnemyMaxSpeed * Time.deltaTime
             );
 
         if (Vector3.Distance(
@@ -452,6 +505,9 @@ public class EnemyMelee : MonoBehaviour
         // DETECTION CELLS
         // -----------------------------------------------------
 
+        Debug.DrawRay(transform.position, player.position - transform.position, Color.green);
+
+
         Gizmos.color =
             new Color(
                 1f,
@@ -460,13 +516,24 @@ public class EnemyMelee : MonoBehaviour
                 0.25f
             );
 
+        if (IsPlayerDetected() && IsPlayerRayCasted())
+        {
+            Gizmos.color =
+                new Color(
+                    1f,
+                    0f,
+                    0f,
+                    0.25f
+                    );
+        }
 
-        for (int x = -detectionRadius;
-            x <= detectionRadius;
+
+        for (int x = -enemyStats.DetectionRadius;
+            x <= enemyStats.DetectionRadius;
             x++)
         {
-            for (int y = -detectionRadius;
-                y <= detectionRadius;
+            for (int y = -enemyStats.DetectionRadius;
+                y <= enemyStats.DetectionRadius;
                 y++)
             {
                 int squaredDistance =
@@ -475,8 +542,8 @@ public class EnemyMelee : MonoBehaviour
 
 
                 int squaredRadius =
-                    detectionRadius *
-                    detectionRadius;
+                    enemyStats.DetectionRadius *
+                    enemyStats.DetectionRadius;
 
 
                 if (squaredDistance >
@@ -512,4 +579,7 @@ public class EnemyMelee : MonoBehaviour
             }
         }
     }
+    #endregion
+
+
 }

@@ -1,27 +1,27 @@
-using NUnit.Framework.Constraints;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyHealth))]
-public class EnemyRange : MonoBehaviour
+public class EnemyMagic : MonoBehaviour
 {
-    #region Variables 
+
+    #region Variables Part
     //==========================================================
     // STATES 
     //==========================================================
-
 
     public enum EnemyState
     {
         Idle,
         Chase,
-        Search, 
+        Search,
         Death
     }
 
 
     [Header("State")]
-    [SerializeField] private EnemyState startingState =
+    [SerializeField]
+    private EnemyState startingState =
             EnemyState.Idle;
 
 
@@ -33,39 +33,13 @@ public class EnemyRange : MonoBehaviour
     // STATE INSTANCE
     // =========================================================
 
-    private EnemyRangeState currentState;
-
-
-
-    // =========================================================
-    // DETECTION
-    // =========================================================
-
-    [Header("Detection")]
-    [Tooltip("Detection distance measured in A* grid cells.")]
-    [SerializeField] private int detectionRadius = 12;
-
-    public int DetectionRadius =>
-        detectionRadius;
-
-    [Header("Attack Detection")]
-    [Tooltip("Attack Detection distance measured in A* grid cells.")]
-    [SerializeField] private int attackDetectionRadius = 10;
-
-    public int AttackDetectionRadius =>
-        attackDetectionRadius;
+    private EnemyMagicState currentState;
 
 
     // =========================================================
     // MOVEMENT
     // =========================================================
-
     [Header("Movement")]
-    [SerializeField] private float moveSpeed = 3f;
-
-    public float MoveSpeed =>
-        moveSpeed;
-
 
     [SerializeField] private int idleWanderRadius = 4;
 
@@ -103,12 +77,14 @@ public class EnemyRange : MonoBehaviour
     // =========================================================
     // REFERENCES   
     // =========================================================
+    [Header("Scriptable Objects")]
+    [SerializeField] private EnemyStats_Data enemyStats;
 
     private EnemyHealth enemyHealth;
     private Transform player;
 
-
     private Vector3 spawnPosition;
+
 
     public EnemyHealth Health =>
         enemyHealth;
@@ -141,7 +117,6 @@ public class EnemyRange : MonoBehaviour
 
     private void Awake()
     {
-
         enemyHealth =
             GetComponent<EnemyHealth>();
 
@@ -231,7 +206,6 @@ public class EnemyRange : MonoBehaviour
 
     private void Update()
     {
-       
         if (currentState == null)
             return;
 
@@ -311,22 +285,22 @@ public class EnemyRange : MonoBehaviour
         );
     }
 
-    private EnemyRangeState CreateState(
+    private EnemyMagicState CreateState(
     EnemyState state)
     {
         switch (state)
         {
             case EnemyState.Idle:
-               return new EnemyRangeIdleState(this);
+                return new EnemyMagicIdleState(this);
 
             case EnemyState.Chase:
-               return new EnemyRangeChaseState(this);
+                return new EnemyMagicChaseState(this);
 
             case EnemyState.Search:
-               return new EnemyRangeSearchState(this);
+                return new EnemyMagicSearchState(this);
 
             case EnemyState.Death:
-               return new EnemyRangeDeathState(this);
+                return new EnemyMagicDeathState(this);
 
             default:
                 Debug.LogError(
@@ -340,6 +314,20 @@ public class EnemyRange : MonoBehaviour
     #endregion
 
     #region Functions
+
+    // =========================================================
+    // Instantiate 
+    // =========================================================
+
+    public void ShootProjectile()
+    {
+        Instantiate(
+            enemyStats.EnemyProjectilePrefab,
+            transform.position,
+            Quaternion.identity
+            );
+    }
+
 
     // =========================================================
     // DETECTION
@@ -359,7 +347,7 @@ public class EnemyRange : MonoBehaviour
             .IsPositionWithinDetectionRadius(
                 transform.position,
                 player.position,
-                detectionRadius
+                 enemyStats.DetectionRadius
             );
     }
 
@@ -377,7 +365,7 @@ public class EnemyRange : MonoBehaviour
             .IsPositionWithinDetectionRadius(
                 transform.position,
                 player.position,
-                attackDetectionRadius
+                enemyStats.DetectionAttackRadius
             );
 
     }
@@ -387,20 +375,27 @@ public class EnemyRange : MonoBehaviour
         if (player == null)
             return false;
 
-        int layerMask = LayerMask.GetMask("Default");
+        int layerMask = LayerMask.GetMask("Player", "Default");
+        Vector2 direction = player.position - transform.position;
+        float distance = direction.magnitude;
 
         RaycastHit2D hit =
                        Physics2D.Raycast(
                 transform.position,
-                player.position - transform.position,
-                Mathf.Infinity,
+                direction.normalized,
+                distance,
                 layerMask
             );
 
-        if (hit.collider.CompareTag("Player"))
+        if (hit.collider != null)
         {
+            if (hit.collider.CompareTag("Player"))
+            {
+                Debug.Log($"[EnemyRayCast] {name} Raycast hit: {hit.collider.name}");
+                return true;
+            }
             Debug.Log($"[EnemyRayCast] {name} Raycast hit: {hit.collider.name}");
-            return true;
+            return false;
         }
         return false;
 
@@ -458,7 +453,7 @@ public class EnemyRange : MonoBehaviour
             Vector3.MoveTowards(
                 transform.position,
                 target,
-                moveSpeed * Time.deltaTime
+                enemyStats.EnemyMaxSpeed * Time.deltaTime
             );
 
         if (Vector3.Distance(
@@ -522,7 +517,7 @@ public class EnemyRange : MonoBehaviour
                 0.25f
             );
 
-        if (IsPlayerRayCasted())
+        if (IsPlayerWithinAttackRange())
         {
             Gizmos.color =
                 new Color(
@@ -534,12 +529,12 @@ public class EnemyRange : MonoBehaviour
         }
 
 
-        for (int x = -detectionRadius;
-            x <= detectionRadius;
+        for (int x = -enemyStats.DetectionRadius;
+            x <= enemyStats.DetectionRadius;
             x++)
         {
-            for (int y = -detectionRadius;
-                y <= detectionRadius;
+            for (int y = -enemyStats.DetectionRadius;
+                y <= enemyStats.DetectionRadius;
                 y++)
             {
                 int squaredDistance =
@@ -548,8 +543,8 @@ public class EnemyRange : MonoBehaviour
 
 
                 int squaredRadius =
-                    detectionRadius *
-                    detectionRadius;
+                    enemyStats.DetectionRadius *
+                    enemyStats.DetectionRadius;
 
 
                 if (squaredDistance >
@@ -589,3 +584,5 @@ public class EnemyRange : MonoBehaviour
 
 
 }
+  
+
