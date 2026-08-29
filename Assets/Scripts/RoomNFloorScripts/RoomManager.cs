@@ -714,7 +714,7 @@ public class RoomManager : MonoBehaviour
         foreach (Gateway gateway in eligibleSecretGateways)
         {
             if (FindCompatibleSecretRoomPrefab(gateway) != null &&
-                GetRoomsAfter(gateway).Count > 0)
+                GetRoomsAtOrAfter(gateway).Count > 0)
                 gatewaysWithSecretRooms.Add(gateway);
         }
 
@@ -723,7 +723,7 @@ public class RoomManager : MonoBehaviour
             Debug.LogWarning(
                 "No secret room prefab is compatible with the " +
                 "available Secret gateways, or no selected gateway has a " +
-                "regular room after it."
+                "regular room at or after it."
             );
 
             return;
@@ -767,7 +767,7 @@ public class RoomManager : MonoBehaviour
         validSecretGateway.SetDestination(secretDestination.transform);
 
         List<RoomInstance> unlockRooms =
-            GetRoomsAfter(validSecretGateway);
+            GetRoomsAtOrAfter(validSecretGateway);
 
         if (unlockRooms.Count == 0)
         {
@@ -825,27 +825,27 @@ public class RoomManager : MonoBehaviour
         }
     }
 
-    private List<RoomInstance> GetRoomsAfter(Gateway gateway)
+    private List<RoomInstance> GetRoomsAtOrAfter(Gateway gateway)
     {
-        List<RoomInstance> roomsAfterGateway =
+        List<RoomInstance> roomsAtOrAfterGateway =
             new List<RoomInstance>();
 
         if (gateway == null)
-            return roomsAfterGateway;
+            return roomsAtOrAfterGateway;
 
         RoomInstance gatewayRoom =
             gateway.GetComponentInParent<RoomInstance>();
 
         if (gatewayRoom == null)
-            return roomsAfterGateway;
+            return roomsAtOrAfterGateway;
 
         foreach (RoomInstance room in generatedRooms)
         {
-            if (room != null && room.RoomNumber > gatewayRoom.RoomNumber)
-                roomsAfterGateway.Add(room);
+            if (room != null && room.RoomNumber >= gatewayRoom.RoomNumber)
+                roomsAtOrAfterGateway.Add(room);
         }
 
-        return roomsAfterGateway;
+        return roomsAtOrAfterGateway;
     }
 
     private GatewayFlow GetMatchingSecretFlow(

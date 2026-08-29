@@ -125,6 +125,12 @@ public class EnemyRange : MonoBehaviour
 
     private List<Vector3> currentPath;
     private int currentPathIndex;
+    private bool movementPaused;
+
+    public bool IsOnStairLink =>
+        AStarManager.Instance != null &&
+        AStarManager.Instance.GetStairLinkAtPosition(
+            transform.position) != null;
 
 
     public bool HasPath =>
@@ -415,6 +421,13 @@ public class EnemyRange : MonoBehaviour
     {
         currentPath = null;
         currentPathIndex = 0;
+        movementPaused = false;
+    }
+
+
+    public void PauseMovement(bool paused)
+    {
+        movementPaused = paused;
     }
 
 
@@ -441,6 +454,9 @@ public class EnemyRange : MonoBehaviour
 
     public void FollowCurrentPath()
     {
+        if (movementPaused)
+            return;
+
         if (!HasPath)
             return;
 

@@ -21,7 +21,8 @@ public class EnemyMagicSearchState : EnemyMagicState
         // STOP AT LAST KNOWN POSITION
         // -----------------------------------------------------
 
-        Enemy.StopMoving();
+        if (!Enemy.IsOnStairLink)
+            Enemy.StopMoving();
 
         searchTimer = 0f;
 
@@ -34,6 +35,12 @@ public class EnemyMagicSearchState : EnemyMagicState
 
     public override void Tick()
     {
+        if (Enemy.IsOnStairLink && Enemy.HasPath)
+        {
+            Enemy.FollowCurrentPath();
+            return;
+        }
+
         // -----------------------------------------------------
         // PLAYER EXISTS?
         // -----------------------------------------------------
@@ -93,7 +100,8 @@ public class EnemyMagicSearchState : EnemyMagicState
 
     public override void Exit()
     {
-        Enemy.StopMoving();
+        if (!Enemy.IsOnStairLink)
+            Enemy.StopMoving();
 
         Debug.Log(
             $"[Search] {Enemy.name}: " +

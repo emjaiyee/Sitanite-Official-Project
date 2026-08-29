@@ -70,12 +70,14 @@ public class EnemyMagicChaseState : EnemyMagicState
                 $"[Chase] {Enemy.name}: " +
                 "Player is within attack range. Entering Attack."
             );
-            Enemy.StopMoving();
+            Enemy.PauseMovement(true);
 
             return;
 
 
         }
+
+        Enemy.PauseMovement(false);
 
         // -----------------------------------------------------
         // REPATH

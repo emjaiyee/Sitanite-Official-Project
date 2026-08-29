@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using System;
 using TMPro;
 using UnityEngine;
@@ -15,6 +16,22 @@ public class PlayerStatsUI : MonoBehaviour
     [Header("Point Text")]
     [SerializeField] private TMP_Text attributePointsText;
     [SerializeField] private TMP_Text traitPointsText;
+    [SerializeField] private TMP_Text levelText;
+
+    [Header("Experience UI")]
+    [SerializeField] private TMP_Text experienceText;
+    [SerializeField] private Slider experienceSlider;
+    [SerializeField, Min(0f)] private float experienceSliderAnimationDuration = 0.2f;
+
+    [Header("Experience Fill Animation")]
+    [SerializeField] private Image experienceFillImage;
+    [SerializeField] private Sprite[] experienceFillSprites;
+    [SerializeField, Min(0.01f)] private float experienceFillSpriteFrameDuration = 0.08f;
+
+    [Header("Experience Handle Animation")]
+    [SerializeField] private Image experienceHandleImage;
+    [SerializeField] private Sprite[] experienceHandleSprites;
+    [SerializeField, Min(0.01f)] private float experienceHandleSpriteFrameDuration = 0.08f;
 
     [Header("Attributes & Traits Value Text")]
     [SerializeField] private TMP_Text strengthText;
@@ -90,6 +107,9 @@ public class PlayerStatsUI : MonoBehaviour
     private PlayerStats playerStats;
     private PlayerInventory inventory;
     private bool subscribed;
+    private Coroutine experienceSliderRoutine;
+    private Coroutine experienceFillSpriteRoutine;
+    private Coroutine experienceHandleSpriteRoutine;
     public event Action PendingAllocationsChanged;
     private readonly Dictionary<PrimaryAttribute, int> pendingAttributes = new Dictionary<PrimaryAttribute, int>();
     private readonly Dictionary<SecondaryTrait, int> pendingTraits = new Dictionary<SecondaryTrait, int>();
@@ -99,6 +119,8 @@ public class PlayerStatsUI : MonoBehaviour
         ResolvePlayerReferences();
         ResolveInventoryReference();
         AssignSuppressedUIs();
+        ResolveExperienceFillImage();
+        ResolveExperienceHandleImage();
     }
 
     private void OnEnable()
@@ -110,6 +132,8 @@ public class PlayerStatsUI : MonoBehaviour
         }
 
         SubscribeToPlayerEvents();
+        StartExperienceFillAnimation();
+        StartExperienceHandleAnimation();
     }
 
     private void Start()
@@ -119,10 +143,30 @@ public class PlayerStatsUI : MonoBehaviour
         SubscribeToPlayerEvents();
         SetStatsWindowState(startOpen);
         RefreshAllUI();
+        StartExperienceFillAnimation();
+        StartExperienceHandleAnimation();
     }
 
     private void OnDisable()
     {
+        if (experienceSliderRoutine != null)
+        {
+            StopCoroutine(experienceSliderRoutine);
+            experienceSliderRoutine = null;
+        }
+
+        if (experienceFillSpriteRoutine != null)
+        {
+            StopCoroutine(experienceFillSpriteRoutine);
+            experienceFillSpriteRoutine = null;
+        }
+
+        if (experienceHandleSpriteRoutine != null)
+        {
+            StopCoroutine(experienceHandleSpriteRoutine);
+            experienceHandleSpriteRoutine = null;
+        }
+
         if (statsAction != null)
         {
             statsAction.action.performed -= OnStatsPerformed;
@@ -412,6 +456,24 @@ public class PlayerStatsUI : MonoBehaviour
         if (playerStats == null)
             return;
 
+        if (levelText != null)
+            levelText.text = $"Level: {playerStats.Level}";
+
+        if (experienceText != null)
+        {
+            experienceText.text =
+                $"XP Points: {Mathf.FloorToInt(playerStats.ExperiencePoints)}" +
+                $"/{Mathf.FloorToInt(playerStats.ExperienceToNextLevel)}";
+        }
+
+        if (experienceSlider != null)
+            AnimateExperienceSlider(playerStats.ExperienceToNextLevel <= 0f
+                ? 0f
+                : Mathf.Clamp01(
+                    playerStats.ExperiencePoints /
+                    playerStats.ExperienceToNextLevel
+                ));
+
         // Resources
         SetText(healthText, "Health", playerStats.MaxHealth, playerStats.PreEquipmentMaxHealth, $"{Mathf.CeilToInt(playerStats.CurrentHealth)} / ");
         SetText(manaText, "Mana", playerStats.MaxMana, playerStats.PreEquipmentMaxMana, $"{Mathf.CeilToInt(playerStats.CurrentMana)} / ");
@@ -519,6 +581,44 @@ public class PlayerStatsUI : MonoBehaviour
             target.text = text;
     }
 
+    private void AnimateExperienceSlider(float targetValue)
+    {
+        if (experienceSlider == null)
+            return;
+
+        if (experienceSliderRoutine != null)
+            StopCoroutine(experienceSliderRoutine);
+
+        experienceSliderRoutine = StartCoroutine(AnimateExperienceSliderRoutine(targetValue));
+    }
+
+    private IEnumerator AnimateExperienceSliderRoutine(float targetValue)
+    {
+        float startValue = experienceSlider.value;
+        float duration = Mathf.Max(0f, experienceSliderAnimationDuration);
+
+        if (duration <= 0f)
+        {
+            experienceSlider.SetValueWithoutNotify(targetValue);
+            experienceSliderRoutine = null;
+            yield break;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+
+            float t = Mathf.Clamp01(elapsed / duration);
+            experienceSlider.SetValueWithoutNotify(Mathf.Lerp(startValue, targetValue, t));
+
+            yield return null;
+        }
+
+        experienceSlider.SetValueWithoutNotify(targetValue);
+        experienceSliderRoutine = null;
+    }
+
     private void SetSuppressedUIState(bool statsOpen)
     {
         if (suppressedUIs == null)
@@ -533,6 +633,104 @@ public class PlayerStatsUI : MonoBehaviour
                 suppressor.Suppress();
             else
                 suppressor.Restore();
+        }
+    }
+
+    private void ResolveExperienceFillImage()
+    {
+        if (experienceFillImage != null)
+            return;
+
+        if (experienceSlider == null || experienceSlider.fillRect == null)
+            return;
+
+        experienceFillImage = experienceSlider.fillRect.GetComponent<Image>();
+    }
+
+    private void ResolveExperienceHandleImage()
+    {
+        if (experienceHandleImage != null)
+            return;
+
+        if (experienceSlider == null || experienceSlider.handleRect == null)
+            return;
+
+        experienceHandleImage = experienceSlider.handleRect.GetComponent<Image>();
+    }
+
+    private void StartExperienceFillAnimation()
+    {
+        ResolveExperienceFillImage();
+
+        if (experienceFillSpriteRoutine != null)
+        {
+            StopCoroutine(experienceFillSpriteRoutine);
+            experienceFillSpriteRoutine = null;
+        }
+
+        if (experienceFillImage == null || experienceFillSprites == null || experienceFillSprites.Length == 0)
+            return;
+
+        experienceFillSpriteRoutine = StartCoroutine(AnimateExperienceFillSprites());
+    }
+
+    private void StartExperienceHandleAnimation()
+    {
+        ResolveExperienceHandleImage();
+
+        if (experienceHandleSpriteRoutine != null)
+        {
+            StopCoroutine(experienceHandleSpriteRoutine);
+            experienceHandleSpriteRoutine = null;
+        }
+
+        if (experienceHandleImage == null || experienceHandleSprites == null || experienceHandleSprites.Length == 0)
+            return;
+
+        experienceHandleSpriteRoutine = StartCoroutine(AnimateExperienceHandleSprites());
+    }
+
+    private IEnumerator AnimateExperienceFillSprites()
+    {
+        int frameIndex = 0;
+
+        while (true)
+        {
+            if (experienceFillImage == null || experienceFillSprites == null || experienceFillSprites.Length == 0)
+            {
+                experienceFillSpriteRoutine = null;
+                yield break;
+            }
+
+            Sprite sprite = experienceFillSprites[frameIndex];
+            if (sprite != null)
+                experienceFillImage.sprite = sprite;
+
+            frameIndex = (frameIndex + 1) % experienceFillSprites.Length;
+
+            yield return new WaitForSecondsRealtime(experienceFillSpriteFrameDuration);
+        }
+    }
+
+    private IEnumerator AnimateExperienceHandleSprites()
+    {
+        int frameIndex = 0;
+
+        while (true)
+        {
+            if (experienceHandleImage == null || experienceHandleSprites == null || experienceHandleSprites.Length == 0)
+            {
+                experienceHandleSpriteRoutine = null;
+                yield break;
+            }
+
+            Sprite sprite = experienceHandleSprites[frameIndex];
+            if (sprite != null)
+                experienceHandleImage.sprite = sprite;
+
+            frameIndex = (frameIndex + 1) % experienceHandleSprites.Length;
+
+            yield return new WaitForSecondsRealtime(experienceHandleSpriteFrameDuration);
         }
     }
 }

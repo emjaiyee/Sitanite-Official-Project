@@ -11,6 +11,10 @@ public class PlayerWASD : MonoBehaviour
     [Header("Default Movement")]
     [SerializeField] private bool useIsometricMovement = true;
 
+    [Header("Diagonal Input")]
+    [Min(0f)]
+    [SerializeField] private float diagonalAxisScale = 0.5f;
+
     private Rigidbody2D rb;
     private PlayerStats stats;
 
@@ -95,24 +99,17 @@ public class PlayerWASD : MonoBehaviour
         input = moveAction.action.ReadValue<Vector2>();
         input = Vector2.ClampMagnitude(input, 1f);
 
-        Vector2 desiredMovement;
+        bool diagonalInput = HasDiagonalInput(input);
 
-        if (useIsometricMovement)
-        {
-            desiredMovement = new Vector2(
-                input.x - input.y,
-                (input.x + input.y) * 0.5f
-            );
+        Vector2 desiredMovement =
+            useIsometricMovement && diagonalInput
+                ? GetGridDiagonalMovement(input)
+                : input;
 
-            if (desiredMovement.sqrMagnitude > 0.0001f)
-            {
-                desiredMovement.Normalize();
-            }
-        }
-        else
-        {
-            desiredMovement = input;
-        }
+        Vector2 rampMovement =
+            useIsometricMovement
+                ? GetIsometricMovement(input)
+                : input;
 
         if (overrideMovement)
         {
@@ -121,7 +118,7 @@ public class PlayerWASD : MonoBehaviour
 
             float amount =
                 Vector2.Dot(
-                    desiredMovement,
+                    rampMovement,
                     forward
                 );
 
@@ -141,6 +138,42 @@ public class PlayerWASD : MonoBehaviour
             if (!facingLocked)
                 facingDirection = movement;
         }
+    }
+
+    private Vector2 GetGridDiagonalMovement(Vector2 rawInput)
+    {
+        Vector2 desiredMovement = new Vector2(
+            rawInput.x,
+            rawInput.y * diagonalAxisScale
+        );
+
+        if (desiredMovement.sqrMagnitude > 0.0001f)
+        {
+            desiredMovement.Normalize();
+        }
+
+        return desiredMovement;
+    }
+
+    private bool HasDiagonalInput(Vector2 rawInput)
+    {
+        return Mathf.Abs(rawInput.x) > 0.0001f &&
+            Mathf.Abs(rawInput.y) > 0.0001f;
+    }
+
+    private Vector2 GetIsometricMovement(Vector2 rawInput)
+    {
+        Vector2 desiredMovement = new Vector2(
+            rawInput.x - rawInput.y,
+            (rawInput.x + rawInput.y) * 0.5f
+        );
+
+        if (desiredMovement.sqrMagnitude > 0.0001f)
+        {
+            desiredMovement.Normalize();
+        }
+
+        return desiredMovement;
     }
 
     // -------------------------------------------------

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyLevelXP))]
 [RequireComponent(typeof(EnemyHealth))]
 public class EnemyMelee : MonoBehaviour
 {
@@ -92,6 +93,9 @@ public class EnemyMelee : MonoBehaviour
     private float nextAttackTime;
     private float chargedAttackTimer;
     private bool chargingAttack;
+    private bool baseStatsCached;
+    private float baseDamage;
+    private float baseChargedDamage;
 
     public float AttackRange => useChargedAttack ? chargedAttackRange : attackRange;
     public float AttackCooldown => attackCooldown;
@@ -202,6 +206,12 @@ public class EnemyMelee : MonoBehaviour
 
     private List<Vector3> currentPath;
     private int currentPathIndex;
+    private bool movementPaused;
+
+    public bool IsOnStairLink =>
+        AStarManager.Instance != null &&
+        AStarManager.Instance.GetStairLinkAtPosition(
+            transform.position) != null;
 
 
     public bool HasPath =>
@@ -215,6 +225,8 @@ public class EnemyMelee : MonoBehaviour
 
     private void Awake()
     {
+        CacheBaseStats();
+
         enemyHealth =
             GetComponent<EnemyHealth>();
 
@@ -248,6 +260,16 @@ public class EnemyMelee : MonoBehaviour
                 "a GameObject tagged 'Player'."
             );
         }
+    }
+
+    public void ApplyLevelScaling(int level)
+    {
+        CacheBaseStats();
+
+        level = Mathf.Max(1, level);
+
+        damage = baseDamage + GetScaledBonus(level, 5f);
+        chargedDamage = baseChargedDamage + GetScaledBonus(level, 5f);
     }
 
 
@@ -346,10 +368,12 @@ public class EnemyMelee : MonoBehaviour
         if (CurrentState != EnemyState.Death &&
             IsPlayerWithinAttackRange())
         {
-            StopMoving();
+            PauseMovement(true);
             TryAttack();
             return;
         }
+
+        PauseMovement(false);
 
         currentState.Tick();
     }
@@ -648,6 +672,13 @@ public class EnemyMelee : MonoBehaviour
     {
         currentPath = null;
         currentPathIndex = 0;
+        movementPaused = false;
+    }
+
+
+    public void PauseMovement(bool paused)
+    {
+        movementPaused = paused;
     }
 
 
@@ -674,6 +705,9 @@ public class EnemyMelee : MonoBehaviour
 
     public void FollowCurrentPath()
     {
+        if (movementPaused)
+            return;
+
         if (!HasPath)
             return;
 
@@ -807,4 +841,49 @@ public class EnemyMelee : MonoBehaviour
             }
         }
     }
+
+    private void CacheBaseStats()
+    {
+        if (baseStatsCached)
+            return;
+
+        baseStatsCached = true;
+        baseDamage = damage;
+        baseChargedDamage = chargedDamage;
+    }
+
+    private static float GetScaledBonus(int level, float perLevelBonus)
+    {
+        if (level <= 1)
+            return 0f;
+
+        float bonus = 0f;
+        float specialBonus = perLevelBonus * 2f;
+        float followUpBonus = Mathf.Ceil(specialBonus * 0.75f);
+
+        for (int currentLevel = 2; currentLevel <= level; currentLevel++)
+        {
+            int levelInCycle = currentLevel % 5;
+
+            if (levelInCycle == 0)
+            {
+                bonus += specialBonus;
+                continue;
+            }
+
+            if (levelInCycle == 1)
+            {
+                bonus += followUpBonus;
+
+                specialBonus = followUpBonus * 2f;
+                followUpBonus = Mathf.Ceil(specialBonus * 0.75f);
+                continue;
+            }
+
+            bonus += perLevelBonus;
+        }
+
+        return bonus;
+    }
+
 }

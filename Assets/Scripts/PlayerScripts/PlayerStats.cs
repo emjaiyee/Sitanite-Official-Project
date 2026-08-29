@@ -88,6 +88,11 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float currentMana;
     [SerializeField] private float currentStamina;
 
+    [Header("Experience and Level")]
+    [Min(1)] [SerializeField] private int level = 1;
+    [Min(0f)] [SerializeField] private float experiencePoints;
+    [Min(100f)] [SerializeField] private float experienceToNextLevel = 100f;
+
     [Header("Character")]
     [SerializeField] private string characterName;
     [SerializeField] private CharacterGender gender;
@@ -158,6 +163,10 @@ public class PlayerStats : MonoBehaviour
     public float CurrentHealth => currentHealth;
     public float CurrentMana => currentMana;
     public float CurrentStamina => currentStamina;
+
+    public int Level => level;
+    public float ExperiencePoints => experiencePoints;
+    public float ExperienceToNextLevel => experienceToNextLevel;
 
     public float MaxHealth => Mathf.Max(1f, ApplyEquipmentModifier(maxHealth + MaxHealthModifier, StatType.Health));
     public float MaxMana => Mathf.Max(1f, ApplyEquipmentModifier(maxMana + MaxManaModifier, StatType.Mana));
@@ -333,6 +342,32 @@ public class PlayerStats : MonoBehaviour
 
     public bool IsDead { get; private set; }
 
+    public void AddExperience(float amount)
+    {
+        if (amount <= 0f)
+            return;
+
+        experiencePoints += amount;
+
+        experienceToNextLevel = GetExperienceRequiredForLevel(level);
+
+        while (experiencePoints >= experienceToNextLevel)
+        {
+            experiencePoints -= experienceToNextLevel;
+            level++;
+            if (attributes != null)
+                attributes.AddAllocationPoints(1, 3);
+            experienceToNextLevel = GetExperienceRequiredForLevel(level);
+        }
+
+        NotifyChanged();
+    }
+
+    private static float GetExperienceRequiredForLevel(int targetLevel)
+    {
+        return targetLevel * 100f + targetLevel / 5 * 50f;
+    }
+
     // -------------------------------------------------
     // EVENTS
     // -------------------------------------------------
@@ -438,6 +473,10 @@ public class PlayerStats : MonoBehaviour
 
         if (attributes == null)
             attributes = GetComponent<PlayerAttributesNTraits>();
+
+        level = Mathf.Max(1, level);
+        experiencePoints = Mathf.Max(0f, experiencePoints);
+        experienceToNextLevel = GetExperienceRequiredForLevel(level);
 
         InitializeDamageDefaults();
         UpdateEffectiveRuntimeValues();

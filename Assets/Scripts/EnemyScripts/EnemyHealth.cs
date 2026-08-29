@@ -35,6 +35,22 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public event Action<EnemyHealth, Vector3?> OnDamaged;
 
     private bool hasDied;
+    private bool baseStatsCached;
+    private int baseMaxHealth;
+    private float basePierceResistanceValue;
+    private float baseStabResistanceValue;
+    private float baseSlashResistanceValue;
+    private float baseBluntResistanceValue;
+    private float baseFrostResistanceValue;
+    private float basePoisonResistanceValue;
+    private float baseLightningResistanceValue;
+    private float basePsychicResistanceValue;
+    private float baseNecrosisResistanceValue;
+    private float baseWaterResistanceValue;
+    private float baseEarthResistanceValue;
+    private float baseFireResistanceValue;
+    private float baseAirResistanceValue;
+    private float basePhysicalResistanceValue;
 
 
     // =========================================================
@@ -43,9 +59,49 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private void Awake()
     {
+        CacheBaseStats();
         CurrentHealth = maxHealth;
         runtimeCurrentHealth = CurrentHealth;
         hasDied = false;
+    }
+
+    public void ApplyLevelScaling(int level)
+    {
+        CacheBaseStats();
+
+        level = Mathf.Max(1, level);
+
+        float currentHealthRatio = maxHealth > 0
+            ? (float)CurrentHealth / maxHealth
+            : 1f;
+
+        maxHealth = Mathf.Max(1, Mathf.CeilToInt(baseMaxHealth + GetScaledBonus(level, 15)));
+
+        basePierceResistance = ScaleResistance(basePierceResistanceValue, level);
+        baseStabResistance = ScaleResistance(baseStabResistanceValue, level);
+        baseSlashResistance = ScaleResistance(baseSlashResistanceValue, level);
+        baseBluntResistance = ScaleResistance(baseBluntResistanceValue, level);
+        baseFrostResistance = ScaleResistance(baseFrostResistanceValue, level);
+        basePoisonResistance = ScaleResistance(basePoisonResistanceValue, level);
+        baseLightningResistance = ScaleResistance(baseLightningResistanceValue, level);
+        basePsychicResistance = ScaleResistance(basePsychicResistanceValue, level);
+        baseNecrosisResistance = ScaleResistance(baseNecrosisResistanceValue, level);
+        baseWaterResistance = ScaleResistance(baseWaterResistanceValue, level);
+        baseEarthResistance = ScaleResistance(baseEarthResistanceValue, level);
+        baseFireResistance = ScaleResistance(baseFireResistanceValue, level);
+        baseAirResistance = ScaleResistance(baseAirResistanceValue, level);
+        basePhysicalResistance = ScaleResistance(basePhysicalResistanceValue, level);
+
+        if (CurrentHealth > 0)
+        {
+            CurrentHealth = Mathf.Clamp(
+                Mathf.RoundToInt(currentHealthRatio * maxHealth),
+                1,
+                maxHealth
+            );
+        }
+
+        runtimeCurrentHealth = CurrentHealth;
     }
 
 
@@ -56,6 +112,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public void Init(int max)
     {
         maxHealth = Mathf.Max(1, max);
+        CacheBaseStats();
         CurrentHealth = maxHealth;
         runtimeCurrentHealth = CurrentHealth;
         hasDied = false;
@@ -145,6 +202,74 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         return 0f;
     }
+
+    private void CacheBaseStats()
+    {
+        if (baseStatsCached)
+            return;
+
+        baseStatsCached = true;
+
+        baseMaxHealth = maxHealth;
+
+        basePierceResistanceValue = basePierceResistance;
+        baseStabResistanceValue = baseStabResistance;
+        baseSlashResistanceValue = baseSlashResistance;
+        baseBluntResistanceValue = baseBluntResistance;
+        baseFrostResistanceValue = baseFrostResistance;
+        basePoisonResistanceValue = basePoisonResistance;
+        baseLightningResistanceValue = baseLightningResistance;
+        basePsychicResistanceValue = basePsychicResistance;
+        baseNecrosisResistanceValue = baseNecrosisResistance;
+        baseWaterResistanceValue = baseWaterResistance;
+        baseEarthResistanceValue = baseEarthResistance;
+        baseFireResistanceValue = baseFireResistance;
+        baseAirResistanceValue = baseAirResistance;
+        basePhysicalResistanceValue = basePhysicalResistance;
+    }
+
+    private static float GetScaledBonus(int level, float perLevelBonus)
+    {
+        if (level <= 1)
+            return 0f;
+
+        float bonus = 0f;
+        float specialBonus = perLevelBonus * 2f;
+        float followUpBonus = Mathf.Ceil(specialBonus * 0.75f);
+
+        for (int currentLevel = 2; currentLevel <= level; currentLevel++)
+        {
+            int levelInCycle = currentLevel % 5;
+
+            if (levelInCycle == 0)
+            {
+                bonus += specialBonus;
+                continue;
+            }
+
+            if (levelInCycle == 1)
+            {
+                bonus += followUpBonus;
+
+                specialBonus = followUpBonus * 2f;
+                followUpBonus = Mathf.Ceil(specialBonus * 0.75f);
+                continue;
+            }
+
+            bonus += perLevelBonus;
+        }
+
+        return bonus;
+    }
+
+    private static float ScaleResistance(float baseValue, int level)
+    {
+        if (baseValue <= 0f)
+            return 0f;
+
+        return baseValue + GetScaledBonus(level, 3f);
+    }
+
 
 
     // =========================================================

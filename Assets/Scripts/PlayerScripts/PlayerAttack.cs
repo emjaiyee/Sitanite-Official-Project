@@ -130,6 +130,7 @@ public class PlayerAttack : MonoBehaviour
         // Lock movement during the attack.
         attackActive = true;
         movement.LockMovement();
+        movement.LockFacingDirection();
 
         if (dash != null)
             dash.LockDash();
@@ -173,7 +174,10 @@ public class PlayerAttack : MonoBehaviour
         attackActive = false;
 
         if (movement != null)
+        {
             movement.UnlockMovement();
+            movement.UnlockFacingDirection();
+        }
 
         if (dash != null)
             dash.UnlockDash();

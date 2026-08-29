@@ -46,7 +46,7 @@ public class EnemyRangeChaseState : EnemyRangeState
 
         if (isAttacking)
         { 
-            Enemy.StopMoving();
+            Enemy.PauseMovement(true);
 
             attackAnimationTimer -= Time.deltaTime;
             if (attackAnimationTimer <= 0)
@@ -100,7 +100,7 @@ public class EnemyRangeChaseState : EnemyRangeState
                 "Player is within attack range. Entering Attack."
             );
 
-            Enemy.StopMoving();
+            Enemy.PauseMovement(true);
 
             isAttacking = true;
             attackAnimationTimer = attackAnimationDelay;
@@ -114,6 +114,8 @@ public class EnemyRangeChaseState : EnemyRangeState
 
             return;
         }
+
+        Enemy.PauseMovement(false);
 
         // -----------------------------------------------------
         // REPATH

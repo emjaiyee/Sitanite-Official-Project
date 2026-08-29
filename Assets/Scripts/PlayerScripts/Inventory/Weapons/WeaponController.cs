@@ -12,13 +12,25 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform firePoint;
 
+    [Header("Full Charge Indicator")]
+    [SerializeField] private GameObject fullyChargedIndicatorPrefab;
+    [SerializeField] private float indicatorRotationSpeed = 180f;
+    [SerializeField] private float indicatorPulseSpeed = 3f;
+    [SerializeField] private float indicatorPulseMin = 0.9f;
+    [SerializeField] private float indicatorPulseMax = 1.1f;
+    [SerializeField] private bool rotateIndicator = true;
+    [SerializeField] private bool pulseIndicator = true;
+
     private ItemData data;
     private PlayerStats playerStats;
 
     private float chargeStartTime;
     private bool isCharging;
     private GameObject activeChargeVisual;
-    private SpriteRenderer chargeVisualRenderer;
+    private GameObject activeFullChargeIndicator;
+    private SpriteRenderer[] indicatorSprites;
+    private bool hasReachedFullCharge;
+    private float indicatorPulseTimer;
     private float nextAttackTime;
     private float nextSkillTime;
 
@@ -60,30 +72,25 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
         if (activeChargeVisual != null)
         {
-            float visualScale = chargePercent >= 1f
-                ? data.MaxChargeVisualScale
-                : Mathf.Lerp(
+            activeChargeVisual.transform.localScale =
+                Vector3.one * Mathf.Lerp(
                     data.StartChargeVisualScale,
                     data.EndChargeVisualScale,
                     chargePercent
                 );
-
-            activeChargeVisual.transform.localScale =
-                Vector3.one * visualScale;
         }
 
-        if (chargePercent >= 1f &&
-            chargeVisualRenderer != null &&
-            data.MaxChargeSprites != null &&
-            data.MaxChargeSprites.Length > 0 &&
-            data.MaxChargeAnimationSpeed > 0f)
+        // Spawn the full charge indicator when reaching 100%
+        if (chargePercent >= 1f && !hasReachedFullCharge)
         {
-            int frameIndex = Mathf.FloorToInt(
-                (Time.time - chargeStartTime - data.MaxChargeTime) *
-                data.MaxChargeAnimationSpeed
-            ) % data.MaxChargeSprites.Length;
+            hasReachedFullCharge = true;
+            SpawnFullChargeIndicator();
+        }
 
-            chargeVisualRenderer.sprite = data.MaxChargeSprites[frameIndex];
+        // Animate the full charge indicator
+        if (hasReachedFullCharge && activeFullChargeIndicator != null)
+        {
+            AnimateFullChargeIndicator();
         }
     }
 
@@ -105,7 +112,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         switch (data.WeaponAttackType)
         {
             case WeaponAttackType.Melee:
-                AttackMelee();
+                AttackMelee(direction);
                 break;
 
             case WeaponAttackType.Ranged:
@@ -134,7 +141,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         }
     }
 
-    private void AttackMelee()
+    private void AttackMelee(Vector2 direction)
     {
         if (attackPoint == null)
         {
@@ -153,7 +160,10 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             );
         }
 
-        Vector2 attackPosition = attackPoint.position;
+        // Place the melee hit area in front of the player.
+        Vector2 attackPosition =
+            (Vector2)transform.root.position +
+            direction * data.AttackRange;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             attackPosition,
@@ -218,13 +228,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             return;
 
         direction.Normalize();
-
-        bool isChargedSkill =
-            data.WeaponSkillType == WeaponSkillType.ChargedArrow ||
-            data.WeaponSkillType == WeaponSkillType.Beam;
-
-        if (!isChargedSkill)
-            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+        nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
 
         switch (data.WeaponSkillType)
         {
@@ -258,9 +262,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     private void UseAreaDamageSkill()
     {
-        Vector3 origin = attackPoint == null
-            ? transform.root.position
-            : attackPoint.position;
+        Vector3 origin = transform.root.position;
 
         float radius =
             data.SkillRadius *
@@ -289,9 +291,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     private void UseArrowRainSkill(Vector2 direction)
     {
-        Vector3 origin = attackPoint == null
-            ? transform.root.position
-            : attackPoint.position;
+        Vector3 origin = transform.root.position;
 
         Vector3 targetPosition =
             origin +
@@ -371,6 +371,8 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             return;
 
         isCharging = true;
+        hasReachedFullCharge = false;
+        indicatorPulseTimer = 0f;
 
         chargeStartTime = Time.time;
 
@@ -393,9 +395,6 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
                         ) * Mathf.Rad2Deg
                     )
                 );
-
-            chargeVisualRenderer =
-                activeChargeVisual.GetComponentInChildren<SpriteRenderer>(true);
 
             activeChargeVisual.transform.localScale =
                 Vector3.one * data.StartChargeVisualScale;
@@ -433,6 +432,12 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
                     ) * Mathf.Rad2Deg
                 );
         }
+
+        // Update full charge indicator position if it's parented to root instead of firePoint
+        if (activeFullChargeIndicator != null && firePoint == null)
+        {
+            activeFullChargeIndicator.transform.position = transform.root.position;
+        }
     }
 
     // =========================================================
@@ -460,9 +465,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
                 )
             );
 
-        int damage = data.WeaponSkillType == WeaponSkillType.Beam
-            ? CalculateBeamDamage(rawDamage)
-            : CalculateChargedSkillDamage(rawDamage);
+        int damage = CalculateChargedSkillDamage(rawDamage);
 
         Debug.Log(
             $"[WeaponController] {WeaponId} skill released: " +
@@ -495,8 +498,6 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
                 true
             );
         }
-
-        nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
 
         StopCharging();
     }
@@ -772,11 +773,11 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     }
 
     /// <summary>
-    /// Charged arrow skill damage = raw charge damage
-    ///                            + the weapon's primary damage modifier
-    ///                            + 50% of the player's runtime base damage
-    ///                              (base + attribute/trait scaling)
-    ///                            + damage modifiers from other equipped gear.
+    /// Charged skill damage = raw charge damage
+    ///                      + the weapon's primary damage modifier
+    ///                      + 50% of the player's runtime base damage
+    ///                        (base + attribute/trait scaling)
+    ///                      + damage modifiers from other equipped gear.
     /// The weapon's own modifier is excluded from the gear pass since
     /// it is already added explicitly.
     /// </summary>
@@ -801,18 +802,6 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         }
 
         return damage + Mathf.RoundToInt(runtimeBase * 0.5f);
-    }
-
-    private int CalculateBeamDamage(int rawDamage)
-    {
-        int damage = rawDamage + data.GetDamage(DamageSlot.Primary);
-
-        if (playerStats == null)
-            return damage;
-
-        return damage + Mathf.RoundToInt(
-            playerStats.GetPreEquipmentDamage(data.PrimaryDamageType)
-        );
     }
 
     private int GetPrimaryDamage()
@@ -890,15 +879,82 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     // CHARGE CLEANUP
     // =========================================================
 
+    private void SpawnFullChargeIndicator()
+    {
+        if (fullyChargedIndicatorPrefab == null)
+            return;
+
+        Vector3 spawnPosition = firePoint == null
+            ? transform.root.position
+            : firePoint.position;
+
+        activeFullChargeIndicator = Instantiate(
+            fullyChargedIndicatorPrefab,
+            spawnPosition,
+            Quaternion.identity,
+            firePoint == null ? transform.root : firePoint
+        );
+
+        // Gather all sprite renderers for animation
+        indicatorSprites = activeFullChargeIndicator.GetComponentsInChildren<SpriteRenderer>();
+
+        Debug.Log($"[WeaponController] {WeaponId} fully charged! Indicator spawned with {indicatorSprites.Length} sprite renderers.");
+    }
+
+    private void AnimateFullChargeIndicator()
+    {
+        if (activeFullChargeIndicator == null)
+            return;
+
+        // Rotation animation
+        if (rotateIndicator)
+        {
+            activeFullChargeIndicator.transform.Rotate(
+                0f,
+                0f,
+                indicatorRotationSpeed * Time.deltaTime
+            );
+        }
+
+        // Pulse animation
+        if (pulseIndicator && indicatorSprites != null && indicatorSprites.Length > 0)
+        {
+            indicatorPulseTimer += Time.deltaTime * indicatorPulseSpeed;
+            float scale = Mathf.Lerp(
+                indicatorPulseMin,
+                indicatorPulseMax,
+                (Mathf.Sin(indicatorPulseTimer) + 1f) * 0.5f
+            );
+
+            foreach (SpriteRenderer sprite in indicatorSprites)
+            {
+                if (sprite != null)
+                {
+                    sprite.transform.localScale = Vector3.one * scale;
+                }
+            }
+        }
+    }
+
+    // =========================================================
+    // CHARGE CLEANUP
+    // =========================================================
+
     private void StopCharging()
     {
         isCharging = false;
+        hasReachedFullCharge = false;
 
         if (activeChargeVisual != null)
             Destroy(activeChargeVisual);
 
         activeChargeVisual = null;
-        chargeVisualRenderer = null;
+
+        if (activeFullChargeIndicator != null)
+            Destroy(activeFullChargeIndicator);
+
+        activeFullChargeIndicator = null;
+        indicatorSprites = null;
     }
 
     // =========================================================

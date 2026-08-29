@@ -27244,6 +27244,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RampMovementTrigger
   enableRampMovement: 1
+  rampForwardPreset: 1
   rampForward: {x: 1, y: 1.6}
 --- !u!1 &3215088846491270378
 GameObject:
@@ -55582,7 +55583,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RampMovementTrigger
   enableRampMovement: 1
-  rampForward: {x: -1, y: 1.5}
+  rampForwardPreset: 0
+  rampForward: {x: -7, y: 12}
 --- !u!1 &6773651944304653801
 GameObject:
   m_ObjectHideFlags: 0
@@ -125946,7 +125948,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RampMovementTrigger
   enableRampMovement: 1
-  rampForward: {x: -1, y: 1.7}
+  rampForwardPreset: 0
+  rampForward: {x: -7, y: 12}
 --- !u!1 &7557204882214378305
 GameObject:
   m_ObjectHideFlags: 0
@@ -126223,7 +126226,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RampMovementTrigger
   enableRampMovement: 1
-  rampForward: {x: -1, y: 1.5}
+  rampForwardPreset: 0
+  rampForward: {x: -7, y: 12}
 --- !u!1 &7906133889756596180
 GameObject:
   m_ObjectHideFlags: 0

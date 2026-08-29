@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: -3398895361798373728}
   - component: {fileID: 5575200063884600762}
   - component: {fileID: -4023933733267841764}
+  - component: {fileID: 3758117477663185051}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -144,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8ab9ceee96b684593ff9daf9b2dc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 80
+  maxHealth: 40
   basePierceResistance: 0
   baseStabResistance: 0
   baseSlashResistance: 0
@@ -174,6 +175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMelee
   startingState: 0
   detectionRadius: 8
+  alertedDuration: 20
   moveSpeed: 1
   attackRange: 0.8
   attackDamageType: 2
@@ -215,9 +217,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6c583c6c5f4524d83f8c186f29e00d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyElevationVisibility
-  disableAtThreshold: 1
+  disableAtThreshold: 0
   disableThreshold: 4
   smoothFade: 1
   fadeDuration: 0.2
   spriteRenderer: {fileID: 6327804949105923776}
   enemyCollider: {fileID: 7834190264512389670}
+--- !u!114 &3758117477663185051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3586115904521672654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbee959f63926f5429a9ef96f381c85d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyLevelXP
+  level: 1
+  experienceReward: 15
+  grantExperienceOnDeath: 1

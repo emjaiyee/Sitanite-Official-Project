@@ -661,7 +661,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   attackAction: {fileID: 4355990924167721325, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
-  attackMovementLockDuration: 0.2
+  attackMovementLockDuration: 0.4
 --- !u!114 &5043284147882130589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,6 +752,9 @@ MonoBehaviour:
   currentHealth: 0
   currentMana: 0
   currentStamina: 0
+  level: 1
+  experiencePoints: 0
+  experienceToNextLevel: 100
   characterName: 
   gender: 0
   playerClass: 0
@@ -767,10 +770,10 @@ MonoBehaviour:
   effectiveDashSpeed: 0
   sprintCostPerSecond: 4
   exhaustedSpeedMultiplier: 1
-  regenerationCooldown: 0.5
+  regenerationCooldown: 0.8
   healthRegen: 1
   manaRegen: 0
-  staminaRegen: 3
+  staminaRegen: 1.5
   effectiveHealthRegen: 0
   effectiveManaRegen: 0
   effectiveStaminaRegen: 0
@@ -787,8 +790,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c79c9ef22d437a04989cd472afb4ae57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttributesNTraits
-  starterAttributePoints: 3
-  starterTraitPoints: 8
+  starterAttributePoints: 1
+  starterTraitPoints: 3
   availableAttributePoints: 0
   availableTraitPoints: 0
   strength: 5
