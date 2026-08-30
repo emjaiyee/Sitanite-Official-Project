@@ -414,33 +414,6 @@ public class EnemyMelee : MonoBehaviour
 
         nextDiagTime = Time.time + 2f;
 
-        if (player == null)
-        {
-            Debug.LogWarning($"[Diag] {name}: player is NULL (no object tagged 'Player').");
-            return;
-        }
-
-        float dist = Vector2.Distance(player.position, transform.position);
-        string msg =
-            $"[Diag] {name}: state={CurrentState} " +
-            $"playerStats={(playerStats == null ? "NULL" : "ok")} " +
-            $"dist={dist:F2} attackRange={AttackRange:F2} " +
-            $"detected={IsPlayerDetected()} " +
-            $"aStar={(AStarManager.Instance == null ? "NULL" : "ok")}";
-
-        if (IsPlayerWithinAttackRange())
-        {
-            if (playerStats == null)
-                Debug.LogWarning(msg + "  <-- IN RANGE but playerStats NULL (no damage)");
-            else if (Time.time < nextAttackTime)
-                Debug.Log(msg + "  <-- IN RANGE, on cooldown");
-            else
-                Debug.Log(msg + "  <-- IN RANGE, should attack");
-        }
-        else
-        {
-            Debug.Log(msg);
-        }
     }
 
 
@@ -714,13 +687,6 @@ public class EnemyMelee : MonoBehaviour
         Vector3 target =
             currentPath[currentPathIndex];
 
-        Debug.Log(
-            $"[PATH] {name} moving toward " +
-            $"index {currentPathIndex}/{currentPath.Count} " +
-            $"target={target} " +
-            $"current={transform.position}"
-        );
-
         transform.position =
             Vector3.MoveTowards(
                 transform.position,
@@ -734,11 +700,6 @@ public class EnemyMelee : MonoBehaviour
         {
             transform.position = target;
             currentPathIndex++;
-
-            Debug.Log(
-                $"[PATH] {name} reached waypoint. " +
-                $"Next index = {currentPathIndex}"
-            );
         }
     }
 
