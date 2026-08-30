@@ -225,10 +225,10 @@ public class EnemyMelee : MonoBehaviour
 
     private void Awake()
     {
-        CacheBaseStats();
-
         enemyHealth =
             GetComponent<EnemyHealth>();
+
+        CacheBaseStats();
 
         EnemyAttackScript legacyContactDamage =
             GetComponent<EnemyAttackScript>();

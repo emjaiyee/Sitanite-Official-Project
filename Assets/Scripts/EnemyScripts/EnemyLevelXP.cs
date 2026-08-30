@@ -16,6 +16,7 @@ public class EnemyLevelXP : MonoBehaviour
 
     private EnemyHealth enemyHealth;
     private EnemyMelee enemyMelee;
+    private EnemyRange enemyRange;
     private bool subscribed;
 
     public int Level => level;
@@ -83,6 +84,9 @@ public class EnemyLevelXP : MonoBehaviour
 
         if (enemyMelee == null)
             enemyMelee = GetComponent<EnemyMelee>();
+
+        if (enemyRange == null)
+            enemyRange = GetComponent<EnemyRange>();
     }
 
     private void ApplyLevelScaling()
@@ -94,6 +98,9 @@ public class EnemyLevelXP : MonoBehaviour
 
         if (enemyMelee != null)
             enemyMelee.ApplyLevelScaling(level);
+
+        if (enemyRange != null)
+            enemyRange.ApplyLevelScaling(level);
     }
 
     private void HandleEnemyDied(GameObject deadEnemy)
