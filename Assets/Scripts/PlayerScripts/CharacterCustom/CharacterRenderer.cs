@@ -105,12 +105,21 @@ public class CharacterRenderer : MonoBehaviour
 
     private void UpdateWeapon()
     {
-        bool weaponIsUnder = currentDirection == CharacterDirection.North ||
-            currentDirection == CharacterDirection.NorthEast ||
-            currentDirection == CharacterDirection.NorthWest;
+        bool weaponIsUnder = currentDirection == CharacterDirection.SouthWest ||
+            currentDirection == CharacterDirection.South ||
+            currentDirection == CharacterDirection.SouthEast ||
+            currentDirection == CharacterDirection.East ||
+            currentDirection == CharacterDirection.West;
 
-        SetSprite(weaponUnderRenderer, weaponIsUnder ? appearance.weapon : null);
-        SetSprite(weaponOverRenderer, weaponIsUnder ? null : appearance.weapon);
+        SetSprite(
+            weaponUnderRenderer,
+            weaponIsUnder ? appearance.weapon : null
+        );
+
+        SetSprite(
+            weaponOverRenderer,
+            weaponIsUnder ? null : appearance.weapon
+        );
     }
 
     private void UpdateShield()

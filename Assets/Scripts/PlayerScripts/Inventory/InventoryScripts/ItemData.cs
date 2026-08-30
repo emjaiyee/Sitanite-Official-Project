@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 /// <summary>
@@ -10,6 +11,10 @@ public enum StatType
 {
     Health,
     Mana,
+    Stamina,
+    HealthRegen,
+    ManaRegen,
+    StaminaRegen,
     MoveSpeed,
     BaseDamageResistance,
     DamageResistance,
@@ -50,10 +55,20 @@ public struct EquipmentStat
     public StatType statType;
     public DamageType damageType;
     public DamageSlot damageSlot;
+    public bool lingeringDamage;
+    [Min(0f)] public float lingeringBaseValue;
     public PrimaryAttribute reducedAttribute;
     public SecondaryTrait reducedTrait;
     public StatModifierType modifierType;
     public float value;
+}
+
+[System.Serializable]
+public enum ResourceType
+{
+    None,
+    Stamina,
+    Mana
 }
 
 /// <summary>
@@ -73,7 +88,8 @@ public enum WeaponAttackType
 {
     None,
     Melee,
-    Ranged
+    Ranged,
+    Spell
 }
 
 public enum WeaponSkillType
@@ -120,6 +136,24 @@ public class ItemData : ScriptableObject
     [SerializeField] private SecondaryTrait statCapTrait;
     [Min(0)] [SerializeField] private int statCapValue;
 
+    [Header("Skill")]
+    [Min(0)]
+    [SerializeField] private int skillCost = 25;
+
+    [SerializeField] private ResourceType skillResourceType = ResourceType.Stamina;
+
+    [Tooltip("Total resource cost when a chargeable skill is released at FULL charge. Must be >= Skill Cost.")]
+    [Min(0)]
+    [SerializeField] private int maxChargeSkillCost = 50;
+
+    [Header("Attack Cost")]
+    [Tooltip("Resource consumed per regular attack. 0 = free attacks.")]
+    [Min(0)]
+    [SerializeField] private int attackCost;
+
+    [Tooltip("Resource spent by regular attacks. None = free attacks.")]
+    [SerializeField] private ResourceType attackResourceType = ResourceType.None;
+
     [Header("Weapon Settings")]
     [Tooltip("Stable identifier used by gameplay systems.")]
     [SerializeField] private string weaponId;
@@ -128,12 +162,17 @@ public class ItemData : ScriptableObject
     [SerializeField] private WeaponSkillType weaponSkillType = WeaponSkillType.None;
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private LayerMask hittableLayers;
+    [Tooltip("Makes projectile attacks steer toward the nearest valid target within Attack Range.")]
+    [SerializeField] private bool homing;
+    [Min(0f)] [SerializeField] private float attackCooldown = 0.25f;
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float projectileSpeed = 12f;
+    [SerializeField] private float spellProjectileSpeed = 4f;
     [SerializeField] private int skillDamage = 50;
     [SerializeField] private float skillRadius = 2f;
     [SerializeField] private float skillRadiusMultiplier = 1f;
     [SerializeField] private LayerMask skillHittableLayers;
+    [Min(0f)] [SerializeField] private float skillCooldown = 1f;
     [SerializeField] private GameObject skillVisualPrefab;
     [SerializeField] private float skillRange = 8f;
     [SerializeField] private int skillProjectileCount = 12;
@@ -141,12 +180,22 @@ public class ItemData : ScriptableObject
     [SerializeField] private float skillVisualDuration = 0.8f;
     [SerializeField] private GameObject skillProjectilePrefab;
     [SerializeField] private GameObject chargeVisualPrefab;
-    [SerializeField] private float maxChargeVisualScale = 1.5f;
+    [Tooltip("Sprites looped on the charge visual while the skill is fully charged.")]
+    [SerializeField] private Sprite[] maxChargeSprites;
+    [Tooltip("Animation speed for the max-charge sprites, in frames per second.")]
+    [Min(0f)] [SerializeField] private float maxChargeAnimationSpeed = 12f;
+    [FormerlySerializedAs("maxChargeVisualScale")]
+    [Min(0f)] [SerializeField] private float startChargeVisualScale = 1.5f;
+    [Min(0f)] [SerializeField] private float endChargeVisualScale = 1f;
+    [Tooltip("Scale of the charge visual while the skill is fully charged.")]
+    [Min(0f)] [SerializeField] private float maxChargeVisualScale = 2f;
     [SerializeField] private float maxChargeTime = 2f;
     [SerializeField] private int minimumSkillDamage = 30;
     [SerializeField] private int maximumSkillDamage = 150;
     [SerializeField] private float beamDuration = 2f;
     [SerializeField] private float beamWidth = 1f;
+    [Tooltip("How many times per second ticking damage (beam/lingering) is applied.")]
+    [Min(0.1f)] [SerializeField] private float damageTicksPerSecond = 1f;
 
     [Header("Stat Modifiers")]
     [Tooltip("Attributes added or multiplied when this item is equipped.")]
@@ -186,12 +235,16 @@ public class ItemData : ScriptableObject
     public WeaponSkillType WeaponSkillType => weaponSkillType;
     public float AttackRange => attackRange;
     public LayerMask HittableLayers => hittableLayers;
+    public bool Homing => homing;
+    public float AttackCooldown => attackCooldown;
     public GameObject ProjectilePrefab => projectilePrefab;
     public float ProjectileSpeed => projectileSpeed;
+    public float SpellProjectileSpeed => spellProjectileSpeed;
     public int SkillDamage => skillDamage;
     public float SkillRadius => skillRadius;
     public float SkillRadiusMultiplier => skillRadiusMultiplier;
     public LayerMask SkillHittableLayers => skillHittableLayers;
+    public float SkillCooldown => skillCooldown;
     public GameObject SkillVisualPrefab => skillVisualPrefab;
     public float SkillRange => skillRange;
     public int SkillProjectileCount => skillProjectileCount;
@@ -199,15 +252,50 @@ public class ItemData : ScriptableObject
     public float SkillVisualDuration => skillVisualDuration;
     public GameObject SkillProjectilePrefab => skillProjectilePrefab;
     public GameObject ChargeVisualPrefab => chargeVisualPrefab;
+    public Sprite[] MaxChargeSprites => maxChargeSprites;
+    public float MaxChargeAnimationSpeed => maxChargeAnimationSpeed;
+    public float StartChargeVisualScale => startChargeVisualScale;
+    public float EndChargeVisualScale => endChargeVisualScale;
     public float MaxChargeVisualScale => maxChargeVisualScale;
     public float MaxChargeTime => maxChargeTime;
     public int MinimumSkillDamage => minimumSkillDamage;
     public int MaximumSkillDamage => maximumSkillDamage;
     public float BeamDuration => beamDuration;
     public float BeamWidth => beamWidth;
+    public float DamageTicksPerSecond => damageTicksPerSecond;
+    public int SkillCost => skillCost;
+    public ResourceType SkillResourceType => skillResourceType;
+    public int MaxChargeSkillCost => maxChargeSkillCost;
+    public int AttackCost => attackCost;
+    public ResourceType AttackResourceType => attackResourceType;
 
     public int PrimaryDamage => GetDamageValue(DamageSlot.Primary, 0);
     public DamageType PrimaryDamageType => GetDamageType(DamageSlot.Primary, DamageType.Physical);
+
+    /// <summary>Gets the configured damage value for the given damage slot.</summary>
+    public int GetDamage(DamageSlot slot)
+    {
+        return GetDamageValue(slot, 0);
+    }
+
+    public float GetLingeringDamage(DamageSlot slot, PlayerStats playerStats)
+    {
+        foreach (EquipmentStat modifier in statModifiers)
+        {
+            if (modifier.statType != StatType.Damage ||
+                modifier.damageSlot != slot ||
+                !modifier.lingeringDamage)
+                continue;
+
+            float baseDamage = playerStats == null
+                ? 0f
+                : playerStats.GetBaseDamage(modifier.damageType);
+
+            return baseDamage * 0.2f + modifier.lingeringBaseValue;
+        }
+
+        return 0f;
+    }
 
     public int GetSkillDamage(DamageSlot slot)
     {
@@ -294,6 +382,8 @@ public class ItemData : ScriptableObject
             maxStackSize = Mathf.Max(1, maxStackSize);
         }
 
+        maxChargeSkillCost = Mathf.Max(skillCost, maxChargeSkillCost);
+
         int damageModifierCount = 0;
         bool hasPrimaryDamage = false;
         foreach (EquipmentStat modifier in statModifiers)
@@ -325,6 +415,12 @@ public class ItemData : ScriptableObject
             characterDefinition is not HeadwearDefinition)
         {
             Debug.LogWarning("Helmet items must reference a HeadwearDefinition.", this);
+        }
+
+        if (characterDefinition != null && equipmentType == EquipmentType.Weapon &&
+            characterDefinition is not WeaponDefinition)
+        {
+            Debug.LogWarning("Weapon items must reference a WeaponDefinition.", this);
         }
     }
     #endregion

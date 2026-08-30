@@ -196,6 +196,8 @@ public class ItemUIController : MonoBehaviour
                     text.Append(FormatEnum(modifier.damageSlot));
                 if (hasDamageDetails)
                     text.Append(")");
+                if (modifier.lingeringDamage)
+                    text.Append($" [Lingering: {modifier.lingeringBaseValue:0.##} base]");
                 break;
             case StatType.BaseDamageResistance:
             case StatType.DamageResistance:

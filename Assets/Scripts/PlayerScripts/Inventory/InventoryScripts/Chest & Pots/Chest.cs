@@ -46,7 +46,7 @@ public class Chest : MonoBehaviour, IDamageable
     /// <summary>
     /// IDamageable implementation. Allows weapon hits to trigger the chest open state.
     /// </summary>
-    public void TakeDamage(int amount, DamageType damageType = DamageType.Slash)
+    public void TakeDamage(int amount, DamageType damageType = DamageType.Slash, Vector3? damageSource = null)
     {
         if ((damageType & openableDamageTypes) == 0)
             return;

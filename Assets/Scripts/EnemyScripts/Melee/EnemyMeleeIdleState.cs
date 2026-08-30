@@ -21,7 +21,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
 
     public override void Enter()
     {
-        Enemy.StopMoving();
+        if (!Enemy.IsOnStairLink)
+            Enemy.StopMoving();
 
         Debug.Log(
             $"[IDLE] {Enemy.name} ENTERED IDLE."
@@ -43,8 +44,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
 
         hasValidSpawnTile =
             AStarManager.Instance.IsPositionWalkable(
-                Enemy.transform.position
-            );
+                Enemy.transform.position) ||
+            Enemy.IsOnStairLink;
 
 
         Debug.Log(

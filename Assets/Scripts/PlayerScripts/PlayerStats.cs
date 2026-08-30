@@ -88,6 +88,11 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float currentMana;
     [SerializeField] private float currentStamina;
 
+    [Header("Experience and Level")]
+    [Min(1)] [SerializeField] private int level = 1;
+    [Min(0f)] [SerializeField] private float experiencePoints;
+    [Min(100f)] [SerializeField] private float experienceToNextLevel = 100f;
+
     [Header("Character")]
     [SerializeField] private string characterName;
     [SerializeField] private CharacterGender gender;
@@ -159,15 +164,35 @@ public class PlayerStats : MonoBehaviour
     public float CurrentMana => currentMana;
     public float CurrentStamina => currentStamina;
 
-    public float MaxHealth => Mathf.Max(1f, maxHealth + MaxHealthModifier);
-    public float MaxMana => Mathf.Max(1f, maxMana + MaxManaModifier);
-    public float MaxStamina => Mathf.Max(1f, maxStamina + MaxStaminaModifier);
+    public int Level => level;
+    public float ExperiencePoints => experiencePoints;
+    public float ExperienceToNextLevel => experienceToNextLevel;
+
+    public float MaxHealth => Mathf.Max(1f, ApplyEquipmentModifier(maxHealth + MaxHealthModifier, StatType.Health));
+    public float MaxMana => Mathf.Max(1f, ApplyEquipmentModifier(maxMana + MaxManaModifier, StatType.Mana));
+    public float MaxStamina => Mathf.Max(1f, ApplyEquipmentModifier(maxStamina + MaxStaminaModifier, StatType.Stamina));
     public float MoveSpeed => Mathf.Max(0f, ApplyEquipmentModifier(moveSpeed + MovementSpeedModifier, StatType.MoveSpeed));
     public float SprintSpeed => Mathf.Max(0f, ApplyEquipmentModifier(sprintSpeed + MovementSpeedModifier, StatType.MoveSpeed));
     public float DashSpeed => Mathf.Max(0f, ApplyEquipmentModifier(dashSpeed + MovementSpeedModifier, StatType.MoveSpeed));
-    public float HealthRegen => healthRegen + HealthRegenModifier;
-    public float ManaRegen => manaRegen + ManaRegenModifier;
-    public float StaminaRegen => staminaRegen + StaminaRegenModifier;
+    public float HealthRegen => ApplyEquipmentModifier(healthRegen + HealthRegenModifier, StatType.HealthRegen);
+    public float ManaRegen => ApplyEquipmentModifier(manaRegen + ManaRegenModifier, StatType.ManaRegen);
+    public float StaminaRegen => ApplyEquipmentModifier(staminaRegen + StaminaRegenModifier, StatType.StaminaRegen);
+
+    // -------------------------------------------------
+    // PRE-EQUIPMENT VALUES (base + attribute/trait modifiers).
+    // The UI shows these as the main number; the colored
+    // suffix is the equipment (ItemData) contribution only.
+    // -------------------------------------------------
+
+    public float PreEquipmentMaxHealth => Mathf.Max(1f, maxHealth + MaxHealthModifier);
+    public float PreEquipmentMaxMana => Mathf.Max(1f, maxMana + MaxManaModifier);
+    public float PreEquipmentMaxStamina => Mathf.Max(1f, maxStamina + MaxStaminaModifier);
+    public float PreEquipmentMoveSpeed => Mathf.Max(0f, moveSpeed + MovementSpeedModifier);
+    public float PreEquipmentSprintSpeed => Mathf.Max(0f, sprintSpeed + MovementSpeedModifier);
+    public float PreEquipmentDashSpeed => Mathf.Max(0f, dashSpeed + MovementSpeedModifier);
+    public float PreEquipmentHealthRegen => healthRegen + HealthRegenModifier;
+    public float PreEquipmentManaRegen => manaRegen + ManaRegenModifier;
+    public float PreEquipmentStaminaRegen => staminaRegen + StaminaRegenModifier;
 
     public float PierceDamage => EffectiveDamage(basePierceDamage, DamageType.Pierce);
     public float StabDamage => EffectiveDamage(baseStabDamage, DamageType.Stab);
@@ -199,6 +224,34 @@ public class PlayerStats : MonoBehaviour
     public float AirResistance => ApplyEquipmentResistances(baseAirResistance + ResistanceModifier(DamageType.Air), DamageType.Air);
     public float PhysicalResistance => ApplyEquipmentResistances(basePhysicalResistance + ResistanceModifier(DamageType.Physical), DamageType.Physical);
 
+    public float GetBaseResistance(DamageType damageType)
+    {
+        return damageType switch
+        {
+            DamageType.Pierce => basePierceResistance,
+            DamageType.Stab => baseStabResistance,
+            DamageType.Slash => baseSlashResistance,
+            DamageType.Blunt => baseBluntResistance,
+            DamageType.Frost => baseFrostResistance,
+            DamageType.Poison => basePoisonResistance,
+            DamageType.Lightning => baseLightningResistance,
+            DamageType.Psychic => basePsychicResistance,
+            DamageType.Necrosis => baseNecrosisResistance,
+            DamageType.Water => baseWaterResistance,
+            DamageType.Earth => baseEarthResistance,
+            DamageType.Fire => baseFireResistance,
+            DamageType.Air => baseAirResistance,
+            DamageType.Physical => basePhysicalResistance,
+            _ => 0f
+        };
+    }
+
+    /// <summary>Base resistance + attribute/trait modifier, before equipment.</summary>
+    public float GetPreEquipmentResistance(DamageType damageType)
+    {
+        return GetBaseResistance(damageType) + ResistanceModifier(damageType);
+    }
+
     public float GetEffectiveDamage(DamageType damageType)
     {
         return damageType switch
@@ -219,6 +272,23 @@ public class PlayerStats : MonoBehaviour
             DamageType.Physical => PhysicalDamage,
             _ => 0f
         };
+    }
+
+    public bool UseResource(int amount, ResourceType resourceType)
+    {
+        if (amount <= 0)
+            return true;
+
+        switch (resourceType)
+        {
+            case ResourceType.Stamina:
+                return UseStamina(amount);
+            case ResourceType.Mana:
+                return UseMana(amount);
+            default:
+                Debug.LogWarning($"Unsupported resource type: {resourceType}");
+                return false;
+        }
     }
 
     public float GetDamageResistance(DamageType damageType)
@@ -272,6 +342,32 @@ public class PlayerStats : MonoBehaviour
 
     public bool IsDead { get; private set; }
 
+    public void AddExperience(float amount)
+    {
+        if (amount <= 0f)
+            return;
+
+        experiencePoints += amount;
+
+        experienceToNextLevel = GetExperienceRequiredForLevel(level);
+
+        while (experiencePoints >= experienceToNextLevel)
+        {
+            experiencePoints -= experienceToNextLevel;
+            level++;
+            if (attributes != null)
+                attributes.AddAllocationPoints(1, 3);
+            experienceToNextLevel = GetExperienceRequiredForLevel(level);
+        }
+
+        NotifyChanged();
+    }
+
+    private static float GetExperienceRequiredForLevel(int targetLevel)
+    {
+        return targetLevel * 100f + targetLevel / 5 * 50f;
+    }
+
     // -------------------------------------------------
     // EVENTS
     // -------------------------------------------------
@@ -303,6 +399,7 @@ public class PlayerStats : MonoBehaviour
     private float ManaRegenModifier => attributes != null ? attributes.ManaRegenModifier : 0f;
     private float StaminaRegenModifier => attributes != null ? attributes.StaminaRegenModifier : 0f;
     private float MovementSpeedModifier => attributes != null ? attributes.MovementSpeedModifier : 0f;
+    public float CooldownReduction => attributes != null ? attributes.CooldownReduction : 0f;
 
     private float ApplyEquipmentModifier(float baseValue, StatType statType, DamageType damageType = DamageType.None)
     {
@@ -328,6 +425,34 @@ public class PlayerStats : MonoBehaviour
         );
     }
 
+    public float GetBaseDamage(DamageType damageType)
+    {
+        return damageType switch
+        {
+            DamageType.Pierce => basePierceDamage,
+            DamageType.Stab => baseStabDamage,
+            DamageType.Slash => baseSlashDamage,
+            DamageType.Blunt => baseBluntDamage,
+            DamageType.Frost => baseFrostDamage,
+            DamageType.Poison => basePoisonDamage,
+            DamageType.Lightning => baseLightningDamage,
+            DamageType.Psychic => basePsychicDamage,
+            DamageType.Necrosis => baseNecrosisDamage,
+            DamageType.Water => baseWaterDamage,
+            DamageType.Earth => baseEarthDamage,
+            DamageType.Fire => baseFireDamage,
+            DamageType.Air => baseAirDamage,
+            DamageType.Physical => basePhysicalDamage,
+            _ => 0f
+        };
+    }
+
+    /// <summary>Base damage + attribute/trait modifier, before equipment.</summary>
+    public float GetPreEquipmentDamage(DamageType damageType)
+    {
+        return GetBaseDamage(damageType) + GetDamageModifier(damageType);
+    }
+
     private float ResistanceModifier(DamageType damageType)
     {
         if ((damageType & (DamageType.Pierce | DamageType.Stab | DamageType.Slash |
@@ -348,6 +473,10 @@ public class PlayerStats : MonoBehaviour
 
         if (attributes == null)
             attributes = GetComponent<PlayerAttributesNTraits>();
+
+        level = Mathf.Max(1, level);
+        experiencePoints = Mathf.Max(0f, experiencePoints);
+        experienceToNextLevel = GetExperienceRequiredForLevel(level);
 
         InitializeDamageDefaults();
         UpdateEffectiveRuntimeValues();
@@ -511,10 +640,16 @@ public class PlayerStats : MonoBehaviour
 
         amount = Mathf.Max(0f, amount - GetDamageResistance(damageType));
 
+        if (amount <= 0)
+            return;
+
         currentHealth = Mathf.Max(
             0,
             currentHealth - amount
         );
+
+        // Show the damage number above the player, colored by type.
+        DamagePopupSpawner.Spawn(transform, amount, damageType, 1f);
 
         healthRegenCooldown = regenerationCooldown;
         healthRegenAccumulator = 0f;

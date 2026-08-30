@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using System;
 using TMPro;
 using UnityEngine;
@@ -15,8 +16,24 @@ public class PlayerStatsUI : MonoBehaviour
     [Header("Point Text")]
     [SerializeField] private TMP_Text attributePointsText;
     [SerializeField] private TMP_Text traitPointsText;
+    [SerializeField] private TMP_Text levelText;
 
-    [Header("Value Text")]
+    [Header("Experience UI")]
+    [SerializeField] private TMP_Text experienceText;
+    [SerializeField] private Slider experienceSlider;
+    [SerializeField, Min(0f)] private float experienceSliderAnimationDuration = 0.2f;
+
+    [Header("Experience Fill Animation")]
+    [SerializeField] private Image experienceFillImage;
+    [SerializeField] private Sprite[] experienceFillSprites;
+    [SerializeField, Min(0.01f)] private float experienceFillSpriteFrameDuration = 0.08f;
+
+    [Header("Experience Handle Animation")]
+    [SerializeField] private Image experienceHandleImage;
+    [SerializeField] private Sprite[] experienceHandleSprites;
+    [SerializeField, Min(0.01f)] private float experienceHandleSpriteFrameDuration = 0.08f;
+
+    [Header("Attributes & Traits Value Text")]
     [SerializeField] private TMP_Text strengthText;
     [SerializeField] private TMP_Text dexterityText;
     [SerializeField] private TMP_Text intelligenceText;
@@ -34,25 +51,76 @@ public class PlayerStatsUI : MonoBehaviour
     [SerializeField] private TMP_Text fortitudeText;
     [SerializeField] private TMP_Text willpowerText;
 
+    [Header("Player Resources UI")]
+    [SerializeField] private TMP_Text healthText;
+    [SerializeField] private TMP_Text manaText;
+    [SerializeField] private TMP_Text staminaText;
+
+    [Header("Player Movement UI")]
+    [SerializeField] private TMP_Text moveSpeedText;
+    [SerializeField] private TMP_Text sprintSpeedText;
+    [SerializeField] private TMP_Text dashSpeedText;
+
+    [Header("Player Regen UI")]
+    [SerializeField] private TMP_Text healthRegenText;
+    [SerializeField] private TMP_Text manaRegenText;
+    [SerializeField] private TMP_Text staminaRegenText;
+
+    [Header("Player Damage UI")]
+    [SerializeField] private TMP_Text pierceDamageText;
+    [SerializeField] private TMP_Text stabDamageText;
+    [SerializeField] private TMP_Text slashDamageText;
+    [SerializeField] private TMP_Text bluntDamageText;
+    [SerializeField] private TMP_Text physicalDamageText;
+    [SerializeField] private TMP_Text frostDamageText;
+    [SerializeField] private TMP_Text poisonDamageText;
+    [SerializeField] private TMP_Text lightningDamageText;
+    [SerializeField] private TMP_Text psychicDamageText;
+    [SerializeField] private TMP_Text necrosisDamageText;
+    [SerializeField] private TMP_Text waterDamageText;
+    [SerializeField] private TMP_Text earthDamageText;
+    [SerializeField] private TMP_Text fireDamageText;
+    [SerializeField] private TMP_Text airDamageText;
+
+    [Header("Player Resistance UI")]
+    [SerializeField] private TMP_Text pierceResistanceText;
+    [SerializeField] private TMP_Text stabResistanceText;
+    [SerializeField] private TMP_Text slashResistanceText;
+    [SerializeField] private TMP_Text bluntResistanceText;
+    [SerializeField] private TMP_Text physicalResistanceText;
+    [SerializeField] private TMP_Text frostResistanceText;
+    [SerializeField] private TMP_Text poisonResistanceText;
+    [SerializeField] private TMP_Text lightningResistanceText;
+    [SerializeField] private TMP_Text psychicResistanceText;
+    [SerializeField] private TMP_Text necrosisResistanceText;
+    [SerializeField] private TMP_Text waterResistanceText;
+    [SerializeField] private TMP_Text earthResistanceText;
+    [SerializeField] private TMP_Text fireResistanceText;
+    [SerializeField] private TMP_Text airResistanceText;
+
     [Header("UI Suppression")]
     [SerializeField] private UISuppressor[] suppressedUIs;
     [Tooltip("GameObjects with UISuppressor components that must remain unsuppressed.")]
     [SerializeField] private GameObject[] exceptions;
 
     private PlayerAttributesNTraits attributes;
+    private PlayerStats playerStats;
     private PlayerInventory inventory;
     private bool subscribed;
+    private Coroutine experienceSliderRoutine;
+    private Coroutine experienceFillSpriteRoutine;
+    private Coroutine experienceHandleSpriteRoutine;
     public event Action PendingAllocationsChanged;
-    private readonly Dictionary<PrimaryAttribute, int> pendingAttributes =
-        new Dictionary<PrimaryAttribute, int>();
-    private readonly Dictionary<SecondaryTrait, int> pendingTraits =
-        new Dictionary<SecondaryTrait, int>();
+    private readonly Dictionary<PrimaryAttribute, int> pendingAttributes = new Dictionary<PrimaryAttribute, int>();
+    private readonly Dictionary<SecondaryTrait, int> pendingTraits = new Dictionary<SecondaryTrait, int>();
 
     private void Awake()
     {
         ResolvePlayerReferences();
         ResolveInventoryReference();
         AssignSuppressedUIs();
+        ResolveExperienceFillImage();
+        ResolveExperienceHandleImage();
     }
 
     private void OnEnable()
@@ -63,30 +131,49 @@ public class PlayerStatsUI : MonoBehaviour
             statsAction.action.performed += OnStatsPerformed;
         }
 
-        SubscribeToAttributes();
+        SubscribeToPlayerEvents();
+        StartExperienceFillAnimation();
+        StartExperienceHandleAnimation();
     }
 
     private void Start()
     {
         ResolvePlayerReferences();
         ResolveInventoryReference();
-        SubscribeToAttributes();
+        SubscribeToPlayerEvents();
         SetStatsWindowState(startOpen);
-        Refresh(attributes);
+        RefreshAllUI();
+        StartExperienceFillAnimation();
+        StartExperienceHandleAnimation();
     }
 
     private void OnDisable()
     {
+        if (experienceSliderRoutine != null)
+        {
+            StopCoroutine(experienceSliderRoutine);
+            experienceSliderRoutine = null;
+        }
+
+        if (experienceFillSpriteRoutine != null)
+        {
+            StopCoroutine(experienceFillSpriteRoutine);
+            experienceFillSpriteRoutine = null;
+        }
+
+        if (experienceHandleSpriteRoutine != null)
+        {
+            StopCoroutine(experienceHandleSpriteRoutine);
+            experienceHandleSpriteRoutine = null;
+        }
+
         if (statsAction != null)
         {
             statsAction.action.performed -= OnStatsPerformed;
             statsAction.action.Disable();
         }
 
-        if (subscribed && attributes != null)
-            attributes.Changed -= Refresh;
-
-        subscribed = false;
+        UnsubscribeFromPlayerEvents();
     }
 
     private void OnStatsPerformed(InputAction.CallbackContext context)
@@ -109,6 +196,9 @@ public class PlayerStatsUI : MonoBehaviour
 
         statsWindow.SetActive(isOpen);
         SetSuppressedUIState(isOpen);
+
+        if (isOpen)
+            RefreshAllUI();
     }
 
     public bool IsOpen => statsWindow != null && statsWindow.activeSelf;
@@ -190,13 +280,9 @@ public class PlayerStatsUI : MonoBehaviour
                 attributes.TryAllocate(allocation.Key);
         }
 
-
-        PlayerStats playerStats = Player.Instance != null
-            ? Player.Instance.GetComponent<PlayerStats>()
-            : null;
-
         if (playerStats != null)
             playerStats.NotifyStatsChanged();
+
         ClearPendingAllocations();
     }
 
@@ -214,12 +300,13 @@ public class PlayerStatsUI : MonoBehaviour
 
     private void NotifyPendingAllocationsChanged()
     {
-        Refresh(attributes);
+        RefreshAllUI();
         PendingAllocationsChanged?.Invoke();
     }
 
     private int GetRemainingAttributePoints()
     {
+        if (attributes == null) return 0;
         int pending = 0;
         foreach (int value in pendingAttributes.Values)
             pending += value;
@@ -229,6 +316,7 @@ public class PlayerStatsUI : MonoBehaviour
 
     private int GetRemainingTraitPoints()
     {
+        if (attributes == null) return 0;
         int pending = 0;
         foreach (int value in pendingTraits.Values)
             pending += value;
@@ -252,6 +340,7 @@ public class PlayerStatsUI : MonoBehaviour
             return;
 
         attributes = Player.Instance.GetComponent<PlayerAttributesNTraits>();
+        playerStats = Player.Instance.GetComponent<PlayerStats>();
     }
 
     private void ResolveInventoryReference()
@@ -291,18 +380,51 @@ public class PlayerStatsUI : MonoBehaviour
         return false;
     }
 
-    private void SubscribeToAttributes()
+    private void SubscribeToPlayerEvents()
     {
-        if (!subscribed && attributes != null)
-        {
-            attributes.Changed += Refresh;
-            subscribed = true;
-        }
+        if (subscribed) return;
+
+        if (attributes != null)
+            attributes.Changed += OnAttributesChanged;
+
+        if (playerStats != null)
+            playerStats.Changed += OnPlayerStatsChanged;
+
+        subscribed = true;
     }
 
-    private void Refresh(PlayerAttributesNTraits source)
+    private void UnsubscribeFromPlayerEvents()
     {
-        if (source == null)
+        if (!subscribed) return;
+
+        if (attributes != null)
+            attributes.Changed -= OnAttributesChanged;
+
+        if (playerStats != null)
+            playerStats.Changed -= OnPlayerStatsChanged;
+
+        subscribed = false;
+    }
+
+    private void OnAttributesChanged(PlayerAttributesNTraits source)
+    {
+        RefreshAllUI();
+    }
+
+    private void OnPlayerStatsChanged(PlayerStats source)
+    {
+        RefreshAllUI();
+    }
+
+    private void RefreshAllUI()
+    {
+        RefreshAttributesAndTraits();
+        RefreshPlayerStats();
+    }
+
+    private void RefreshAttributesAndTraits()
+    {
+        if (attributes == null)
             return;
 
         if (attributePointsText != null)
@@ -311,22 +433,138 @@ public class PlayerStatsUI : MonoBehaviour
         if (traitPointsText != null)
             traitPointsText.text = $"Trait Points: {GetRemainingTraitPoints()}";
 
-        SetValue(strengthText, source.Strength, GetPendingAttribute(PrimaryAttribute.Strength));
-        SetValue(dexterityText, source.Dexterity, GetPendingAttribute(PrimaryAttribute.Dexterity));
-        SetValue(intelligenceText, source.Intelligence, GetPendingAttribute(PrimaryAttribute.Intelligence));
-        SetValue(vitalityText, source.Vitality, GetPendingTrait(SecondaryTrait.Vitality));
-        SetValue(focusText, source.Focus, GetPendingTrait(SecondaryTrait.Focus));
-        SetValue(enduranceText, source.Endurance, GetPendingTrait(SecondaryTrait.Endurance));
-        SetValue(agilityText, source.Agility, GetPendingTrait(SecondaryTrait.Agility));
-        SetValue(vigorText, source.Vigor, GetPendingTrait(SecondaryTrait.Vigor));
-        SetValue(hasteText, source.Haste, GetPendingTrait(SecondaryTrait.Haste));
-        SetValue(attunementText, source.Attunement, GetPendingTrait(SecondaryTrait.Attunement));
-        SetValue(mundaneText, source.Mundane, GetPendingTrait(SecondaryTrait.Mundane));
-        SetValue(arcaneText, source.Arcane, GetPendingTrait(SecondaryTrait.Arcane));
-        SetValue(elementalText, source.Elemental, GetPendingTrait(SecondaryTrait.Elemental));
-        SetValue(precisionText, source.Precision, GetPendingTrait(SecondaryTrait.Precision));
-        SetValue(fortitudeText, source.Fortitude, GetPendingTrait(SecondaryTrait.Fortitude));
-        SetValue(willpowerText, source.Willpower, GetPendingTrait(SecondaryTrait.Willpower));
+        SetValue(strengthText, attributes.Strength, GetPendingAttribute(PrimaryAttribute.Strength));
+        SetValue(dexterityText, attributes.Dexterity, GetPendingAttribute(PrimaryAttribute.Dexterity));
+        SetValue(intelligenceText, attributes.Intelligence, GetPendingAttribute(PrimaryAttribute.Intelligence));
+        SetValue(vitalityText, attributes.Vitality, GetPendingTrait(SecondaryTrait.Vitality));
+        SetValue(focusText, attributes.Focus, GetPendingTrait(SecondaryTrait.Focus));
+        SetValue(enduranceText, attributes.Endurance, GetPendingTrait(SecondaryTrait.Endurance));
+        SetValue(agilityText, attributes.Agility, GetPendingTrait(SecondaryTrait.Agility));
+        SetValue(vigorText, attributes.Vigor, GetPendingTrait(SecondaryTrait.Vigor));
+        SetValue(hasteText, attributes.Haste, GetPendingTrait(SecondaryTrait.Haste));
+        SetValue(attunementText, attributes.Attunement, GetPendingTrait(SecondaryTrait.Attunement));
+        SetValue(mundaneText, attributes.Mundane, GetPendingTrait(SecondaryTrait.Mundane));
+        SetValue(arcaneText, attributes.Arcane, GetPendingTrait(SecondaryTrait.Arcane));
+        SetValue(elementalText, attributes.Elemental, GetPendingTrait(SecondaryTrait.Elemental));
+        SetValue(precisionText, attributes.Precision, GetPendingTrait(SecondaryTrait.Precision));
+        SetValue(fortitudeText, attributes.Fortitude, GetPendingTrait(SecondaryTrait.Fortitude));
+        SetValue(willpowerText, attributes.Willpower, GetPendingTrait(SecondaryTrait.Willpower));
+    }
+
+    private void RefreshPlayerStats()
+    {
+        if (playerStats == null)
+            return;
+
+        if (levelText != null)
+            levelText.text = $"Level: {playerStats.Level}";
+
+        if (experienceText != null)
+        {
+            experienceText.text =
+                $"XP Points: {Mathf.FloorToInt(playerStats.ExperiencePoints)}" +
+                $"/{Mathf.FloorToInt(playerStats.ExperienceToNextLevel)}";
+        }
+
+        if (experienceSlider != null)
+            AnimateExperienceSlider(playerStats.ExperienceToNextLevel <= 0f
+                ? 0f
+                : Mathf.Clamp01(
+                    playerStats.ExperiencePoints /
+                    playerStats.ExperienceToNextLevel
+                ));
+
+        // Resources
+        SetText(healthText, "Health", playerStats.MaxHealth, playerStats.PreEquipmentMaxHealth, $"{Mathf.CeilToInt(playerStats.CurrentHealth)} / ");
+        SetText(manaText, "Mana", playerStats.MaxMana, playerStats.PreEquipmentMaxMana, $"{Mathf.CeilToInt(playerStats.CurrentMana)} / ");
+        SetText(staminaText, "Stamina", playerStats.MaxStamina, playerStats.PreEquipmentMaxStamina, $"{Mathf.CeilToInt(playerStats.CurrentStamina)} / ");
+
+        // Movement
+        SetText(moveSpeedText, "MoveSpeed", playerStats.MoveSpeed, playerStats.PreEquipmentMoveSpeed, "F1");
+        SetText(sprintSpeedText, "SprintSpeed", playerStats.SprintSpeed, playerStats.PreEquipmentSprintSpeed, "F1");
+        SetText(dashSpeedText, "DashSpeed", playerStats.DashSpeed, playerStats.PreEquipmentDashSpeed, "F1");
+
+        // Regeneration
+        SetText(healthRegenText, "HealthRegen", playerStats.HealthRegen, playerStats.PreEquipmentHealthRegen, "F1", "/s");
+        SetText(manaRegenText, "ManaRegen", playerStats.ManaRegen, playerStats.PreEquipmentManaRegen, "F1", "/s");
+        SetText(staminaRegenText, "StaminaRegen", playerStats.StaminaRegen, playerStats.PreEquipmentStaminaRegen, "F1", "/s");
+
+        // Base/Effective Damage
+        SetDamage(pierceDamageText, "Pierce", playerStats.PierceDamage, playerStats.GetPreEquipmentDamage(DamageType.Pierce));
+        SetDamage(stabDamageText, "Stab", playerStats.StabDamage, playerStats.GetPreEquipmentDamage(DamageType.Stab));
+        SetDamage(slashDamageText, "Slash", playerStats.SlashDamage, playerStats.GetPreEquipmentDamage(DamageType.Slash));
+        SetDamage(bluntDamageText, "Blunt", playerStats.BluntDamage, playerStats.GetPreEquipmentDamage(DamageType.Blunt));
+        SetDamage(physicalDamageText, "Physical", playerStats.PhysicalDamage, playerStats.GetPreEquipmentDamage(DamageType.Physical));
+        SetDamage(frostDamageText, "Frost", playerStats.FrostDamage, playerStats.GetPreEquipmentDamage(DamageType.Frost));
+        SetDamage(poisonDamageText, "Poison", playerStats.PoisonDamage, playerStats.GetPreEquipmentDamage(DamageType.Poison));
+        SetDamage(lightningDamageText, "Lightning", playerStats.LightningDamage, playerStats.GetPreEquipmentDamage(DamageType.Lightning));
+        SetDamage(psychicDamageText, "Psychic", playerStats.PsychicDamage, playerStats.GetPreEquipmentDamage(DamageType.Psychic));
+        SetDamage(necrosisDamageText, "Necrosis", playerStats.NecrosisDamage, playerStats.GetPreEquipmentDamage(DamageType.Necrosis));
+        SetDamage(waterDamageText, "Water", playerStats.WaterDamage, playerStats.GetPreEquipmentDamage(DamageType.Water));
+        SetDamage(earthDamageText, "Earth", playerStats.EarthDamage, playerStats.GetPreEquipmentDamage(DamageType.Earth));
+        SetDamage(fireDamageText, "Fire", playerStats.FireDamage, playerStats.GetPreEquipmentDamage(DamageType.Fire));
+        SetDamage(airDamageText, "Air", playerStats.AirDamage, playerStats.GetPreEquipmentDamage(DamageType.Air));
+
+        // Resistance
+        SetDamage(pierceResistanceText, "Pierce Res", playerStats.PierceResistance, playerStats.GetPreEquipmentResistance(DamageType.Pierce));
+        SetDamage(stabResistanceText, "Stab Res", playerStats.StabResistance, playerStats.GetPreEquipmentResistance(DamageType.Stab));
+        SetDamage(slashResistanceText, "Slash Res", playerStats.SlashResistance, playerStats.GetPreEquipmentResistance(DamageType.Slash));
+        SetDamage(bluntResistanceText, "Blunt Res", playerStats.BluntResistance, playerStats.GetPreEquipmentResistance(DamageType.Blunt));
+        SetDamage(physicalResistanceText, "Physical Res", playerStats.PhysicalResistance, playerStats.GetPreEquipmentResistance(DamageType.Physical));
+        SetDamage(frostResistanceText, "Frost Res", playerStats.FrostResistance, playerStats.GetPreEquipmentResistance(DamageType.Frost));
+        SetDamage(poisonResistanceText, "Poison Res", playerStats.PoisonResistance, playerStats.GetPreEquipmentResistance(DamageType.Poison));
+        SetDamage(lightningResistanceText, "Lightning Res", playerStats.LightningResistance, playerStats.GetPreEquipmentResistance(DamageType.Lightning));
+        SetDamage(psychicResistanceText, "Psychic Res", playerStats.PsychicResistance, playerStats.GetPreEquipmentResistance(DamageType.Psychic));
+        SetDamage(necrosisResistanceText, "Necrosis Res", playerStats.NecrosisResistance, playerStats.GetPreEquipmentResistance(DamageType.Necrosis));
+        SetDamage(waterResistanceText, "Water Res", playerStats.WaterResistance, playerStats.GetPreEquipmentResistance(DamageType.Water));
+        SetDamage(earthResistanceText, "Earth Res", playerStats.EarthResistance, playerStats.GetPreEquipmentResistance(DamageType.Earth));
+        SetDamage(fireResistanceText, "Fire Res", playerStats.FireResistance, playerStats.GetPreEquipmentResistance(DamageType.Fire));
+        SetDamage(airResistanceText, "Air Res", playerStats.AirResistance, playerStats.GetPreEquipmentResistance(DamageType.Air));
+    }
+
+    // Main number includes base + attribute/trait modifiers; the colored
+    // suffix is the equipment (ItemData) contribution only, e.g.
+    // "Slash: 12 <color=green>(+5)</color>" or "Slash: 12 <color=red>(-3)</color>".
+    private static void SetDamage(TMP_Text target, string label, float effective, float baseValue)
+    {
+        if (target == null)
+            return;
+
+        target.text = $"{label}: {baseValue:F0}{ModifierSuffix(effective, baseValue, "F0")}";
+    }
+
+    // For movement/regen where a format/suffix string is needed.
+    private static void SetText(TMP_Text target, string label, float effective, float baseValue, string format, string suffix = "")
+    {
+        if (target == null)
+            return;
+
+        target.text = $"{label}: {baseValue.ToString(format)}{ModifierSuffix(effective, baseValue, format)}{suffix}";
+    }
+
+    // For resource lines that show "current / max".
+    private static void SetText(TMP_Text target, string label, float effectiveMax, float baseMax, string currentPrefix)
+    {
+        if (target == null)
+            return;
+
+        target.text = $"{label}: {currentPrefix}{Mathf.CeilToInt(baseMax)}{ModifierSuffix(effectiveMax, baseMax, "F0")}";
+    }
+
+    // Builds the colored "(+N)" / "(-N)" combined-modifier suffix.
+    // Returns empty when there is no meaningful difference.
+    private static string ModifierSuffix(float effective, float baseValue, string format)
+    {
+        float delta = effective - baseValue;
+
+        if (Mathf.Abs(delta) < 0.05f)
+            return string.Empty;
+
+        string magnitude = Mathf.Abs(delta).ToString(format);
+
+        return delta > 0f
+            ? $" <color=green>(+{magnitude})</color>"
+            : $" <color=red>(-{magnitude})</color>";
     }
 
     private static void SetValue(TMP_Text target, int currentValue, int allocatedValue)
@@ -335,6 +573,50 @@ public class PlayerStatsUI : MonoBehaviour
             target.text = allocatedValue > 0
                 ? $"{currentValue} <color=green>+ {allocatedValue}</color>"
                 : currentValue.ToString();
+    }
+
+    private static void SetText(TMP_Text target, string text)
+    {
+        if (target != null)
+            target.text = text;
+    }
+
+    private void AnimateExperienceSlider(float targetValue)
+    {
+        if (experienceSlider == null)
+            return;
+
+        if (experienceSliderRoutine != null)
+            StopCoroutine(experienceSliderRoutine);
+
+        experienceSliderRoutine = StartCoroutine(AnimateExperienceSliderRoutine(targetValue));
+    }
+
+    private IEnumerator AnimateExperienceSliderRoutine(float targetValue)
+    {
+        float startValue = experienceSlider.value;
+        float duration = Mathf.Max(0f, experienceSliderAnimationDuration);
+
+        if (duration <= 0f)
+        {
+            experienceSlider.SetValueWithoutNotify(targetValue);
+            experienceSliderRoutine = null;
+            yield break;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+
+            float t = Mathf.Clamp01(elapsed / duration);
+            experienceSlider.SetValueWithoutNotify(Mathf.Lerp(startValue, targetValue, t));
+
+            yield return null;
+        }
+
+        experienceSlider.SetValueWithoutNotify(targetValue);
+        experienceSliderRoutine = null;
     }
 
     private void SetSuppressedUIState(bool statsOpen)
@@ -354,4 +636,101 @@ public class PlayerStatsUI : MonoBehaviour
         }
     }
 
+    private void ResolveExperienceFillImage()
+    {
+        if (experienceFillImage != null)
+            return;
+
+        if (experienceSlider == null || experienceSlider.fillRect == null)
+            return;
+
+        experienceFillImage = experienceSlider.fillRect.GetComponent<Image>();
+    }
+
+    private void ResolveExperienceHandleImage()
+    {
+        if (experienceHandleImage != null)
+            return;
+
+        if (experienceSlider == null || experienceSlider.handleRect == null)
+            return;
+
+        experienceHandleImage = experienceSlider.handleRect.GetComponent<Image>();
+    }
+
+    private void StartExperienceFillAnimation()
+    {
+        ResolveExperienceFillImage();
+
+        if (experienceFillSpriteRoutine != null)
+        {
+            StopCoroutine(experienceFillSpriteRoutine);
+            experienceFillSpriteRoutine = null;
+        }
+
+        if (experienceFillImage == null || experienceFillSprites == null || experienceFillSprites.Length == 0)
+            return;
+
+        experienceFillSpriteRoutine = StartCoroutine(AnimateExperienceFillSprites());
+    }
+
+    private void StartExperienceHandleAnimation()
+    {
+        ResolveExperienceHandleImage();
+
+        if (experienceHandleSpriteRoutine != null)
+        {
+            StopCoroutine(experienceHandleSpriteRoutine);
+            experienceHandleSpriteRoutine = null;
+        }
+
+        if (experienceHandleImage == null || experienceHandleSprites == null || experienceHandleSprites.Length == 0)
+            return;
+
+        experienceHandleSpriteRoutine = StartCoroutine(AnimateExperienceHandleSprites());
+    }
+
+    private IEnumerator AnimateExperienceFillSprites()
+    {
+        int frameIndex = 0;
+
+        while (true)
+        {
+            if (experienceFillImage == null || experienceFillSprites == null || experienceFillSprites.Length == 0)
+            {
+                experienceFillSpriteRoutine = null;
+                yield break;
+            }
+
+            Sprite sprite = experienceFillSprites[frameIndex];
+            if (sprite != null)
+                experienceFillImage.sprite = sprite;
+
+            frameIndex = (frameIndex + 1) % experienceFillSprites.Length;
+
+            yield return new WaitForSecondsRealtime(experienceFillSpriteFrameDuration);
+        }
+    }
+
+    private IEnumerator AnimateExperienceHandleSprites()
+    {
+        int frameIndex = 0;
+
+        while (true)
+        {
+            if (experienceHandleImage == null || experienceHandleSprites == null || experienceHandleSprites.Length == 0)
+            {
+                experienceHandleSpriteRoutine = null;
+                yield break;
+            }
+
+            Sprite sprite = experienceHandleSprites[frameIndex];
+            if (sprite != null)
+                experienceHandleImage.sprite = sprite;
+
+            frameIndex = (frameIndex + 1) % experienceHandleSprites.Length;
+
+            yield return new WaitForSecondsRealtime(experienceHandleSpriteFrameDuration);
+        }
+    }
 }

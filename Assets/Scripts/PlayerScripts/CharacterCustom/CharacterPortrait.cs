@@ -22,6 +22,14 @@ public class CharacterPortrait : MonoBehaviour
     [SerializeField] private Button inventoryButton;
     [SerializeField] private Button statsButton;
 
+    [Header("Stats Button Highlight")]
+    [SerializeField] private Image statsButtonHighlight;
+    [SerializeField] private Color highlightColor = new Color(1f, 0.8f, 0f, 0.5f);
+    [SerializeField] private float pulseSpeed = 2f;
+    [SerializeField] private float pulseMin = 0.9f;
+    [SerializeField] private float pulseMax = 1.1f;
+    [SerializeField] private float restingSize = 1f;
+
     [Header("Class Tooltip")]
     [SerializeField] private UIHoverTooltip classTooltip;
     [TextArea(2, 6)]
@@ -34,6 +42,10 @@ public class CharacterPortrait : MonoBehaviour
     private CharacterCustomizationController customizationController;
     private PlayerInventory playerInventory;
     private PlayerStatsUI playerStatsUI;
+    private PlayerAttributesNTraits playerAttributes;
+
+    private bool shouldHighlightStats;
+    private float pulseTimer;
 
     private void Start()
     {
@@ -55,8 +67,16 @@ public class CharacterPortrait : MonoBehaviour
         customizationController.OnAppearanceChanged += Refresh;
         FindPlayerUIReferences();
         BindButtons();
+        SubscribeToAttributeChanges();
 
         Refresh();
+        UpdateStatsButtonHighlight();
+        
+        // Set initial resting size
+        if (statsButton != null && !shouldHighlightStats)
+        {
+            statsButton.transform.localScale = Vector3.one * restingSize;
+        }
     }
 
     private void OnDestroy()
@@ -66,7 +86,18 @@ public class CharacterPortrait : MonoBehaviour
             customizationController.OnAppearanceChanged -= Refresh;
         }
 
+        UnsubscribeFromAttributeChanges();
         UnbindButtons();
+    }
+
+    private void Update()
+    {
+        if (shouldHighlightStats && statsButton != null)
+        {
+            pulseTimer += Time.deltaTime * pulseSpeed;
+            float scale = Mathf.Lerp(pulseMin, pulseMax, (Mathf.Sin(pulseTimer) + 1f) * 0.5f);
+            statsButton.transform.localScale = Vector3.one * scale;
+        }
     }
 
     private void FindCustomizationController()
@@ -102,6 +133,7 @@ public class CharacterPortrait : MonoBehaviour
         playerStatsUI = FindFirstObjectByType<PlayerStatsUI>(
             FindObjectsInactive.Include
         );
+        playerAttributes = Player.Instance.GetComponent<PlayerAttributesNTraits>();
     }
 
     private void BindButtons()
@@ -251,5 +283,66 @@ public class CharacterPortrait : MonoBehaviour
             headwearPortrait,
             appearance.headwear
         );
+    }
+
+    private void SubscribeToAttributeChanges()
+    {
+        if (playerAttributes != null)
+        {
+            playerAttributes.Changed += OnAttributesChanged;
+        }
+    }
+
+    private void UnsubscribeFromAttributeChanges()
+    {
+        if (playerAttributes != null)
+        {
+            playerAttributes.Changed -= OnAttributesChanged;
+        }
+    }
+
+    private void OnAttributesChanged(PlayerAttributesNTraits source)
+    {
+        UpdateStatsButtonHighlight();
+    }
+
+    private void UpdateStatsButtonHighlight()
+    {
+        bool hasAvailablePoints = HasAvailablePoints();
+
+        if (hasAvailablePoints != shouldHighlightStats)
+        {
+            shouldHighlightStats = hasAvailablePoints;
+
+            if (statsButton != null)
+            {
+                if (shouldHighlightStats)
+                {
+                    pulseTimer = 0f;
+                }
+                else
+                {
+                    statsButton.transform.localScale = Vector3.one * restingSize;
+                }
+            }
+
+            if (statsButtonHighlight != null)
+            {
+                statsButtonHighlight.enabled = shouldHighlightStats;
+                if (shouldHighlightStats)
+                {
+                    statsButtonHighlight.color = highlightColor;
+                }
+            }
+        }
+    }
+
+    private bool HasAvailablePoints()
+    {
+        if (playerAttributes == null)
+            return false;
+
+        return playerAttributes.AvailableAttributePoints > 0 ||
+               playerAttributes.AvailableTraitPoints > 0;
     }
 }

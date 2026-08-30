@@ -199,7 +199,8 @@ public class CharacterCustomizationController : MonoBehaviour
                 SetLegs(definition);
                 break;
             case EquipmentType.Weapon:
-                characterRenderer.Appearance.weapon = definition;
+                characterRenderer.Appearance.weapon =
+                    definition as WeaponDefinition;
                 RefreshAppearance();
                 break;
             case EquipmentType.Shield:

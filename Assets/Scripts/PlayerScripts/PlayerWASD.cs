@@ -11,6 +11,10 @@ public class PlayerWASD : MonoBehaviour
     [Header("Default Movement")]
     [SerializeField] private bool useIsometricMovement = true;
 
+    [Header("Diagonal Input")]
+    [Min(0f)]
+    [SerializeField] private float diagonalAxisScale = 0.5f;
+
     private Rigidbody2D rb;
     private PlayerStats stats;
 
@@ -23,13 +27,23 @@ public class PlayerWASD : MonoBehaviour
     // PlayerDash can temporarily take control of the Rigidbody.
     private bool movementLocked;
 
+    // Current direction the player is facing.
+    private Vector2 facingDirection = Vector2.down;
+    private bool facingLocked;
+
     public Vector2 MoveDirection => movement;
+
+    public Vector2 FacingDirection => facingDirection;
 
     public float SpeedMultiplier { get; set; } = 1f;
 
     public bool IsMovementLocked => movementLocked;
 
     public bool IsSprinting { get; private set; }
+
+    // -------------------------------------------------
+    // UNITY
+    // -------------------------------------------------
 
     private void Awake()
     {
@@ -39,7 +53,8 @@ public class PlayerWASD : MonoBehaviour
         rb.gravityScale = 0f;
         rb.freezeRotation = true;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        rb.collisionDetectionMode =
+            CollisionDetectionMode2D.Continuous;
     }
 
     private void OnEnable()
@@ -68,6 +83,10 @@ public class PlayerWASD : MonoBehaviour
         UpdateSprintState();
     }
 
+    // -------------------------------------------------
+    // MOVEMENT INPUT
+    // -------------------------------------------------
+
     private void ReadMovementInput()
     {
         if (moveAction == null)
@@ -80,33 +99,31 @@ public class PlayerWASD : MonoBehaviour
         input = moveAction.action.ReadValue<Vector2>();
         input = Vector2.ClampMagnitude(input, 1f);
 
-        Vector2 desiredMovement;
+        bool diagonalInput = HasDiagonalInput(input);
 
-        if (useIsometricMovement)
-        {
-            desiredMovement = new Vector2(
-                input.x - input.y,
-                (input.x + input.y) * 0.5f
-            );
+        Vector2 desiredMovement =
+            useIsometricMovement && diagonalInput
+                ? GetGridDiagonalMovement(input)
+                : input;
 
-            if (desiredMovement.sqrMagnitude > 0.0001f)
-                desiredMovement.Normalize();
-        }
-        else
-        {
-            desiredMovement = input;
-        }
+        Vector2 rampMovement =
+            useIsometricMovement
+                ? GetIsometricMovement(input)
+                : input;
 
         if (overrideMovement)
         {
-            Vector2 forward = rampForward.normalized;
+            Vector2 forward =
+                rampForward.normalized;
 
-            float amount = Vector2.Dot(
-                desiredMovement,
-                forward
-            );
+            float amount =
+                Vector2.Dot(
+                    rampMovement,
+                    forward
+                );
 
-            movement = forward * amount;
+            movement =
+                forward * amount;
         }
         else
         {
@@ -114,8 +131,54 @@ public class PlayerWASD : MonoBehaviour
         }
 
         if (movement.sqrMagnitude > 0.0001f)
+        {
             movement.Normalize();
+
+            // Store the last direction the player moved.
+            if (!facingLocked)
+                facingDirection = movement;
+        }
     }
+
+    private Vector2 GetGridDiagonalMovement(Vector2 rawInput)
+    {
+        Vector2 desiredMovement = new Vector2(
+            rawInput.x,
+            rawInput.y * diagonalAxisScale
+        );
+
+        if (desiredMovement.sqrMagnitude > 0.0001f)
+        {
+            desiredMovement.Normalize();
+        }
+
+        return desiredMovement;
+    }
+
+    private bool HasDiagonalInput(Vector2 rawInput)
+    {
+        return Mathf.Abs(rawInput.x) > 0.0001f &&
+            Mathf.Abs(rawInput.y) > 0.0001f;
+    }
+
+    private Vector2 GetIsometricMovement(Vector2 rawInput)
+    {
+        Vector2 desiredMovement = new Vector2(
+            rawInput.x - rawInput.y,
+            (rawInput.x + rawInput.y) * 0.5f
+        );
+
+        if (desiredMovement.sqrMagnitude > 0.0001f)
+        {
+            desiredMovement.Normalize();
+        }
+
+        return desiredMovement;
+    }
+
+    // -------------------------------------------------
+    // SPRINT
+    // -------------------------------------------------
 
     private void UpdateSprintState()
     {
@@ -136,9 +199,14 @@ public class PlayerWASD : MonoBehaviour
             hasStamina;
     }
 
+    // -------------------------------------------------
+    // PHYSICS
+    // -------------------------------------------------
+
     private void FixedUpdate()
     {
-        // PlayerDash currently controls the Rigidbody.
+        // PlayerDash or another system currently controls
+        // the Rigidbody.
         if (movementLocked)
             return;
 
@@ -157,13 +225,17 @@ public class PlayerWASD : MonoBehaviour
     }
 
     // -------------------------------------------------
-    // DASH CONTROL
+    // MOVEMENT LOCK
     // -------------------------------------------------
 
     public void LockMovement()
     {
         movementLocked = true;
         IsSprinting = false;
+
+        // Clear active movement so the player doesn't
+        // continue moving after the skill starts.
+        movement = Vector2.zero;
     }
 
     public void UnlockMovement()
@@ -177,6 +249,9 @@ public class PlayerWASD : MonoBehaviour
 
     public void EnterRamp(Vector2 forward)
     {
+        if (forward.sqrMagnitude <= 0.0001f)
+            return;
+
         overrideMovement = true;
         rampForward = forward.normalized;
     }
@@ -190,55 +265,93 @@ public class PlayerWASD : MonoBehaviour
     // DIRECTION
     // -------------------------------------------------
 
-    private CharacterDirection lastDirection = CharacterDirection.South;
+    private CharacterDirection lastDirection =
+        CharacterDirection.South;
 
     public CharacterDirection GetCurrentDirection()
     {
-        if (movement == Vector2.zero)
-        {
-            // Return the last direction if no movement
+        // Use the persistent facing direction rather than
+        // the current movement input.
+        if (facingDirection.sqrMagnitude <= 0.0001f)
             return lastDirection;
-        }
 
-        float angle = Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg;
+        float angle =
+            Mathf.Atan2(
+                facingDirection.y,
+                facingDirection.x
+            ) * Mathf.Rad2Deg;
+
         if (angle < 0)
         {
             angle += 360;
         }
 
-        if (angle >= 22.5 && angle < 67.5)
+        if (angle >= 22.5f && angle < 67.5f)
         {
-            lastDirection = CharacterDirection.NorthEast;
+            lastDirection =
+                CharacterDirection.NorthEast;
         }
-        else if (angle >= 67.5 && angle < 112.5)
+        else if (angle >= 67.5f && angle < 112.5f)
         {
-            lastDirection = CharacterDirection.North;
+            lastDirection =
+                CharacterDirection.North;
         }
-        else if (angle >= 112.5 && angle < 157.5)
+        else if (angle >= 112.5f && angle < 157.5f)
         {
-            lastDirection = CharacterDirection.NorthWest;
+            lastDirection =
+                CharacterDirection.NorthWest;
         }
-        else if (angle >= 157.5 && angle < 202.5)
+        else if (angle >= 157.5f && angle < 202.5f)
         {
-            lastDirection = CharacterDirection.West;
+            lastDirection =
+                CharacterDirection.West;
         }
-        else if (angle >= 202.5 && angle < 247.5)
+        else if (angle >= 202.5f && angle < 247.5f)
         {
-            lastDirection = CharacterDirection.SouthWest;
+            lastDirection =
+                CharacterDirection.SouthWest;
         }
-        else if (angle >= 247.5 && angle < 292.5)
+        else if (angle >= 247.5f && angle < 292.5f)
         {
-            lastDirection = CharacterDirection.South;
+            lastDirection =
+                CharacterDirection.South;
         }
-        else if (angle >= 292.5 && angle < 337.5)
+        else if (angle >= 292.5f && angle < 337.5f)
         {
-            lastDirection = CharacterDirection.SouthEast;
+            lastDirection =
+                CharacterDirection.SouthEast;
         }
         else
         {
-            lastDirection = CharacterDirection.East;
+            lastDirection =
+                CharacterDirection.East;
         }
 
         return lastDirection;
+    }
+
+    // -------------------------------------------------
+    // FORCE FACING DIRECTION
+    // -------------------------------------------------
+
+    public void FaceDirection(Vector2 direction)
+    {
+        if (direction.sqrMagnitude <= 0.0001f)
+            return;
+
+        facingDirection = direction.normalized;
+
+        // Update the character's 8-direction facing state.
+        GetCurrentDirection();
+    }
+
+    public void LockFacingDirection()
+    {
+        facingLocked = true;
+    }
+
+    public void UnlockFacingDirection()
+    {
+        facingLocked = false;
     }
 }
