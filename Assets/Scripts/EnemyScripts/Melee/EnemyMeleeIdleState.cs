@@ -24,10 +24,6 @@ public class EnemyMeleeIdleState : EnemyMeleeState
         if (!Enemy.IsOnStairLink)
             Enemy.StopMoving();
 
-        Debug.Log(
-            $"[IDLE] {Enemy.name} ENTERED IDLE."
-        );
-
 
         if (AStarManager.Instance == null)
         {
@@ -47,11 +43,6 @@ public class EnemyMeleeIdleState : EnemyMeleeState
                 Enemy.transform.position) ||
             Enemy.IsOnStairLink;
 
-
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            $"Spawn tile walkable = {hasValidSpawnTile}"
-        );
 
 
         if (!hasValidSpawnTile)
@@ -124,11 +115,6 @@ public class EnemyMeleeIdleState : EnemyMeleeState
             {
                 waitingForNewDestination = false;
 
-                Debug.Log(
-                    $"[IDLE] {Enemy.name}: " +
-                    "Choosing new destination..."
-                );
-
                 ChooseNewDestination();
             }
 
@@ -142,12 +128,6 @@ public class EnemyMeleeIdleState : EnemyMeleeState
 
         waitingForNewDestination = true;
         waitTimer = 0f;
-
-
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            "Reached destination."
-        );
     }
 
 
@@ -177,13 +157,6 @@ public class EnemyMeleeIdleState : EnemyMeleeState
 
             return;
         }
-
-
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            $"Destination found at {destination.Value}"
-        );
-
 
         // =====================================================
         // FIND A* PATH
@@ -224,13 +197,6 @@ public class EnemyMeleeIdleState : EnemyMeleeState
         }
 
 
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            $"A* path found! " +
-            $"Length = {path.Count}"
-        );
-
-
         // =====================================================
         // GIVE PATH TO ENEMY
         // =====================================================
@@ -252,11 +218,6 @@ public class EnemyMeleeIdleState : EnemyMeleeState
             return;
         }
 
-
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            "Started following path."
-        );
     }
 
 
