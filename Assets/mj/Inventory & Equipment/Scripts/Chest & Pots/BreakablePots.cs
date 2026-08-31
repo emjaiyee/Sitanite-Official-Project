@@ -2,7 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
+<<<<<<< HEAD
 public class BreakablePot : MonoBehaviour
+=======
+public class BreakablePot : MonoBehaviour, IDamageable
+>>>>>>> main
 {
     [System.Serializable]
     public struct LootDrop
@@ -43,6 +47,17 @@ public class BreakablePot : MonoBehaviour
         potCollider = GetComponent<Collider2D>();
     }
 
+<<<<<<< HEAD
+=======
+    /// <summary>
+    /// IDamageable implementation. Allows MeleeWeapon.cs to break the pot via interface.
+    /// </summary>
+    public void TakeDamage(int amount, DamageType damageType = DamageType.Physical)
+    {
+        TryBreak();
+    }
+
+>>>>>>> main
     /// <summary>Swaps sprite, disables collision, and scatters loot onto the isometric ground plane.</summary>
     public bool TryBreak()
     {
@@ -62,7 +77,15 @@ public class BreakablePot : MonoBehaviour
 
     private void SpawnAndScatterLoot()
     {
+<<<<<<< HEAD
         if (lootPrefab == null) return;
+=======
+        if (lootPrefab == null)
+        {
+            Debug.LogWarning($"[BreakablePot] {name} is missing a assigned lootPrefab!");
+            return;
+        }
+>>>>>>> main
 
         Vector3 origin = spawnPoint != null ? spawnPoint.position : transform.position;
 
