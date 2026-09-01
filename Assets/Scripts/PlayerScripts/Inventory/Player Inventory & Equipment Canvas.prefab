@@ -181,6 +181,8 @@ GameObject:
   - component: {fileID: 3461542690991717611}
   - component: {fileID: 5465599210382171236}
   - component: {fileID: 7313526427179953065}
+  - component: {fileID: 5416528476907856377}
+  - component: {fileID: 2569844035455445687}
   m_Layer: 5
   m_Name: Inventory & Equipment Holder Panel
   m_TagString: Untagged
@@ -259,6 +261,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9020c33d6fe0bc341b499056f7f0d54d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryPanel
+--- !u!225 &5416528476907856377
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2216019481149983669}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!114 &2569844035455445687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2216019481149983669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23d5c765b7852b14f9692be37a676c25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UISuppressor
 --- !u!1 &2812087871700781162
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,7 +590,7 @@ MonoBehaviour:
   m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 1920, y: 1080}
+  m_ReferenceResolution: {x: 2560, y: 1440}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
