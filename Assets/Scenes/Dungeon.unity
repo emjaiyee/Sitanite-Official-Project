@@ -251,6 +251,83 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1 &349555423
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 349555424}
+  - component: {fileID: 349555425}
+  m_Layer: 0
+  m_Name: EnemySpawnerManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &349555424
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349555423}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 457963315}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &349555425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349555423}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a365103837e0ef408003fa01870ab64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnerManager
+  spawnConfigurations:
+  - minimumFloor: 1
+    maximumFloor: 2
+    enemyPrefabs:
+    - {fileID: 3586115904521672654, guid: 9c1074b6f917938449581efeaa18094c, type: 3}
+    - {fileID: 3586115904521672654, guid: affdae68f62d0554381ddfd39854fb97, type: 3}
+    minimumActiveSpawners: 3
+    maximumActiveSpawners: 6
+    activationChance: 0.625
+    health:
+      minimum: -3
+      maximum: 7
+      chance: 0.401
+    resistance:
+      minimum: 1
+      maximum: 2
+      chance: 0.502
+    damage:
+      minimum: -1
+      maximum: 3
+      chance: 0.547
+    level:
+      minimum: 1
+      maximum: 2
+      chance: 0.615
+    experienceReward:
+      minimum: 1
+      maximum: 15
+      chance: 0.502
+  spawnOnStart: 1
+  spawnDelay: 0
+  spawnParent: {fileID: 0}
+  floorManager: {fileID: 1969959510}
 --- !u!1 &457963313
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +370,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 349555424}
   - {fileID: 242918383}
   - {fileID: 1435930602}
   - {fileID: 1969959509}
@@ -2619,6 +2697,11 @@ MonoBehaviour:
     allowXL: 0
     minimumRooms: 2
     maximumRooms: 2
+    minimumActiveSpawners: 1
+    maximumActiveSpawners: 3
+    minimumEnemyLevel: 1
+    maximumEnemyLevel: 1
+    maximumEnemyLevelChance: 0.25
   roomManager: {fileID: 1454998428}
 --- !u!1 &1973740227
 GameObject:

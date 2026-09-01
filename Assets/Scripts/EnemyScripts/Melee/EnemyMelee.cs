@@ -277,6 +277,15 @@ public class EnemyMelee : MonoBehaviour
         chargedDamage = baseChargedDamage + GetScaledBonus(level, 5f);
     }
 
+    public void ApplyDamageModifier(float modifier)
+    {
+        CacheBaseStats();
+        baseDamage = Mathf.Max(0f, baseDamage + modifier);
+        baseChargedDamage = Mathf.Max(0f, baseChargedDamage + modifier);
+        damage = Mathf.Max(0f, damage + modifier);
+        chargedDamage = Mathf.Max(0f, chargedDamage + modifier);
+    }
+
 
     private void OnEnable()
     {

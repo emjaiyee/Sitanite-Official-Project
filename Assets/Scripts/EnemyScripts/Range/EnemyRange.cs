@@ -136,6 +136,19 @@ public class EnemyRange : MonoBehaviour
         spawnPosition = position;
     }
 
+    public void ApplyDamageModifier(float modifier)
+    {
+        CacheBaseStats();
+        baseProjectileDamage = Mathf.Max(
+            0,
+            Mathf.RoundToInt(baseProjectileDamage + modifier)
+        );
+        projectileDamage = Mathf.Max(
+            0,
+            Mathf.RoundToInt(projectileDamage + modifier)
+        );
+    }
+
 
     // =========================================================
     // PATH
