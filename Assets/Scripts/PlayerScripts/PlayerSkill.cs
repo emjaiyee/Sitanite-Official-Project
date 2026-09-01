@@ -252,7 +252,7 @@ public class PlayerSkill : MonoBehaviour
         {
             // Read progress BEFORE releasing (it resets on release).
             bool fullyCharged =
-                chargeableWeapon.ChargePercent >= 1f;
+                chargeableWeapon.ChargePercent >= 0.99f;
 
             if (fullyCharged)
                 fullyCharged = TryConsumeMaxChargeCost();

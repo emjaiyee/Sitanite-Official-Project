@@ -871,6 +871,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5462161634515221700, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462161634515221700, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462161634515221700, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5462161634515221700, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5503421495462413060, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5503421495462413060, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5503421495462413060, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5503421495462413060, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5552712261581309814, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -893,6 +925,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7087536124490106277, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394557908128512566, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394557908128512566, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394557908128512566, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394557908128512566, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7471901086809862274, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
@@ -945,6 +993,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8279922652235112652, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8672761318653912281, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8672761318653912281, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8672761318653912281, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8672761318653912281, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8766197732885629905, guid: 6db729ce6b5e919459a2d51d02c77c54, type: 3}
@@ -2340,18 +2404,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomManager
   smallRoomPrefabs:
-  - {fileID: 813509379841093977, guid: 00bb0326593d36e4b8f803048b1be003, type: 3}
-  - {fileID: 4057089196393080423, guid: 96884bbef967961488826ea9fa5ead74, type: 3}
-  - {fileID: 4446540059129025920, guid: c0a710d2d6370be44b56ac80bddf06e3, type: 3}
-  - {fileID: 3472139270589249039, guid: cfed6d6ed49e14840bbe67174ecb9931, type: 3}
+  - {fileID: 3669049625457777017, guid: 82be1dd741b69344d9634789acaa4639, type: 3}
   mediumRoomPrefabs: []
   largeRoomPrefabs: []
   xlRoomPrefabs: []
   roomSpacingX: 60
   lockNextRoomUntilCleared: 1
-  secretGatewayChance: 0.35
+  secretGatewayChance: 1
   floorManager: {fileID: 1969959510}
-  secretRoomPrefabs: []
+  secretRoomPrefabs:
+  - {fileID: 259565403157239011, guid: 7abaeae41c2df364fb0775d657a3786b, type: 3}
   secretRoomSpawnOffset: {x: 0, y: -30, z: 0}
 --- !u!1 &1686456529
 GameObject:
@@ -2419,7 +2481,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1895883630
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2555,8 +2617,8 @@ MonoBehaviour:
     allowMedium: 0
     allowLarge: 0
     allowXL: 0
-    minimumRooms: 5
-    maximumRooms: 10
+    minimumRooms: 2
+    maximumRooms: 2
   roomManager: {fileID: 1454998428}
 --- !u!1 &1973740227
 GameObject:

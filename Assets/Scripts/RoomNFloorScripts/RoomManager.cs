@@ -576,6 +576,7 @@ public class RoomManager : MonoBehaviour
             return;
 
         SetSecretGatewayVisible(validSecretGateway, true);
+        HeadsUpTextManager.Show("The floor shifts. A hidden room has opened.");
         Debug.Log(
             $"Secret Gateway '{validSecretGateway.name}' opened after " +
             $"clearing Room {room.RoomNumber}."
@@ -1077,26 +1078,45 @@ public class RoomManager : MonoBehaviour
         Player player =
             Player.Instance;
 
-        // Position player
-        player.transform.position =
-            spawnPoint.transform.position;
+        RoomTransitionManager roomTransitionManager =
+            RoomTransitionManager.Instance;
 
-        // Set elevation
-        PlayerElevationLevel elevation =
-            player.GetComponent<PlayerElevationLevel>();
-
-        if (elevation != null)
+        if (roomTransitionManager == null)
         {
-            elevation.SetLevel(
+            roomTransitionManager =
+                FindFirstObjectByType<RoomTransitionManager>();
+        }
+
+        if (roomTransitionManager != null)
+        {
+            roomTransitionManager.TransitionPlayer(
+                player.transform,
+                spawnPoint.transform,
                 spawnPoint.ElevationLevel
             );
         }
         else
         {
-            Debug.LogWarning(
-                "Player does not have a " +
-                "PlayerElevationLevel component."
-            );
+            // Fallback if the fade/transition system is absent.
+            player.transform.position =
+                spawnPoint.transform.position;
+
+            PlayerElevationLevel elevation =
+                player.GetComponent<PlayerElevationLevel>();
+
+            if (elevation != null)
+            {
+                elevation.SetLevel(
+                    spawnPoint.ElevationLevel
+                );
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "Player does not have a " +
+                    "PlayerElevationLevel component."
+                );
+            }
         }
 
         Debug.Log(
@@ -1502,6 +1522,10 @@ public class RoomManager : MonoBehaviour
         {
             Debug.Log(
                 "All rooms on this floor have been cleared."
+            );
+
+            HeadsUpTextManager.Show(
+                "The floor has been cleared. The gateway to the depths has opened."
             );
 
             foreach (Gateway gateway in validFloorGateways)

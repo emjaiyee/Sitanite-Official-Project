@@ -44,6 +44,18 @@ public class RoomTransitionManager : MonoBehaviour
         Transform player,
         Transform destination)
     {
+        TransitionPlayer(
+            player,
+            destination,
+            null
+        );
+    }
+
+    public void TransitionPlayer(
+        Transform player,
+        Transform destination,
+        int? overrideElevationLevel)
+    {
         if (isTransitioning)
             return;
 
@@ -71,7 +83,8 @@ public class RoomTransitionManager : MonoBehaviour
         StartCoroutine(
             TransitionRoutine(
                 player,
-                destination
+                destination,
+                overrideElevationLevel
             )
         );
     }
@@ -83,7 +96,8 @@ public class RoomTransitionManager : MonoBehaviour
 
     private IEnumerator TransitionRoutine(
         Transform player,
-        Transform destination)
+        Transform destination,
+        int? overrideElevationLevel)
     {
         isTransitioning = true;
 
@@ -126,34 +140,40 @@ public class RoomTransitionManager : MonoBehaviour
             >();
 
 
-        if (elevationDestination != null)
+        PlayerElevationLevel playerElevation =
+            player.GetComponent<
+                PlayerElevationLevel
+            >();
+
+
+        if (playerElevation != null)
         {
-            PlayerElevationLevel playerElevation =
-                player.GetComponent<
-                    PlayerElevationLevel
-                >();
-
-
-            if (playerElevation != null)
+            if (elevationDestination != null)
             {
                 playerElevation.SetLevel(
                     elevationDestination.ElevationLevel
                 );
             }
+            else if (overrideElevationLevel.HasValue)
+            {
+                playerElevation.SetLevel(
+                    overrideElevationLevel.Value
+                );
+            }
             else
             {
                 Debug.LogWarning(
-                    "Player does not have a " +
-                    "PlayerElevationLevel component."
+                    "Destination '" + destination.name + "' " +
+                    "does not have an " +
+                    "ElevationDestination component."
                 );
             }
         }
         else
         {
             Debug.LogWarning(
-                $"Destination '{destination.name}' " +
-                "does not have an " +
-                "ElevationDestination component."
+                "Player does not have a " +
+                "PlayerElevationLevel component."
             );
         }
 
