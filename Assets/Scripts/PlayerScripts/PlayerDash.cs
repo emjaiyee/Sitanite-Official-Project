@@ -4,13 +4,6 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerDash : MonoBehaviour
 {
-    [Header("Dash Settings")]
-    [SerializeField] private float dashSpeed = 10f;
-    [SerializeField] private float dashDuration = 0.2f;
-
-    [Header("Stamina")]
-    [SerializeField] private int dashCost = 20;
-
     [Header("Input")]
     [SerializeField] private InputActionReference dashAction;
 
@@ -31,7 +24,15 @@ public class PlayerDash : MonoBehaviour
     private bool overrideMovement;
     private Vector2 rampForward = Vector2.right;
 
+    // -------------------------------------------------
+    // SKILL / DASH LOCK
+    // -------------------------------------------------
+
+    private bool dashLocked;
+
     public bool IsDashing => isDashing;
+
+    public bool IsDashLocked => dashLocked;
 
     // -------------------------------------------------
     // UNITY
@@ -86,10 +87,9 @@ public class PlayerDash : MonoBehaviour
     {
         TrackMovementDirection();
 
-        if (
-            isDashing &&
-            Time.time >= dashTime + dashDuration
-        )
+        if (isDashing &&
+            stats != null &&
+            Time.time >= dashTime + stats.dashDuration)
         {
             EndDash();
         }
@@ -130,6 +130,10 @@ public class PlayerDash : MonoBehaviour
 
     private void StartDash()
     {
+        // Skills can temporarily disable dash.
+        if (dashLocked)
+            return;
+
         if (isDashing)
             return;
 
@@ -143,7 +147,7 @@ public class PlayerDash : MonoBehaviour
 
         if (stats != null)
         {
-            if (!stats.UseStamina(dashCost))
+            if (!stats.UseStamina(stats.dashCost))
             {
                 Debug.Log(
                     "[PlayerDash] Not enough stamina."
@@ -201,11 +205,15 @@ public class PlayerDash : MonoBehaviour
         rb.linearVelocity = Vector2.zero;
 
         // Apply dash velocity.
-        rb.linearVelocity =
-            dashDirection * dashSpeed;
+        if (stats != null)
+        {
+            rb.linearVelocity =
+                dashDirection * stats.DashSpeed;
+        }
 
         Debug.Log(
-            $"[PlayerDash] Dash triggered! Direction: {dashDirection}"
+            $"[PlayerDash] Dash triggered! " +
+            $"Direction: {dashDirection}"
         );
     }
 
@@ -231,6 +239,27 @@ public class PlayerDash : MonoBehaviour
     }
 
     // -------------------------------------------------
+    // SKILL DASH LOCK
+    // -------------------------------------------------
+
+    public void LockDash()
+    {
+        dashLocked = true;
+
+        // If a dash is currently happening when a skill
+        // starts, immediately stop it.
+        if (isDashing)
+        {
+            EndDash();
+        }
+    }
+
+    public void UnlockDash()
+    {
+        dashLocked = false;
+    }
+
+    // -------------------------------------------------
     // RAMP METHODS
     // -------------------------------------------------
 
@@ -243,7 +272,8 @@ public class PlayerDash : MonoBehaviour
         rampForward = forward.normalized;
 
         Debug.Log(
-            $"[PlayerDash] Entered ramp. Forward: {rampForward}"
+            $"[PlayerDash] Entered ramp. " +
+            $"Forward: {rampForward}"
         );
     }
 

@@ -1,152 +1,363 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerSkill : MonoBehaviour
 {
-    [Header("Skill Settings")]
-    [SerializeField] private float skillDuration = 0.5f;
-    [SerializeField] private float skillRadius = 2f;
-    [SerializeField] private int skillDamage = 50;
-
-    [Header("Stamina")]
-    [SerializeField] private int skillCost = 25;
-
     [Header("Input")]
     [SerializeField] private InputActionReference skillAction;
 
-    [Header("Layers")]
-    [SerializeField] private LayerMask hittableLayers;
-
-    [Header("Visual Feedback")]
-    [SerializeField] private GameObject swordVisualPrefab;    // red circle for Long Sword
-    [SerializeField] private GameObject battleAxeVisualPrefab; // unique prefab for Battle Axe
+    [Header("Skill Recovery")]
+    [Min(0f)] [SerializeField] private float skillMovementLockDuration = 0.2f;
 
     private PlayerStats stats;
     private PlayerEquipment equipment;
-    private bool isUsingSkill;
-    private float skillTime;
-    private GameObject activeVisual;
+    private PlayerWASD movement;
+    private PlayerDash dash;
 
-    public bool IsUsingSkill => isUsingSkill;
+    private bool skillActive;
+    private IChargeableWeapon activeChargeable;
+    private Coroutine skillRecovery;
+
+    // -------------------------------------------------
+    // UNITY
+    // -------------------------------------------------
 
     private void Awake()
     {
         stats = GetComponent<PlayerStats>();
         equipment = GetComponent<PlayerEquipment>();
+        movement = GetComponent<PlayerWASD>();
+        dash = GetComponent<PlayerDash>();
 
         if (stats == null)
-            Debug.LogError("PlayerSkill requires a PlayerStats component.");
+        {
+            Debug.LogError(
+                "PlayerSkill requires a PlayerStats component."
+            );
+        }
+
         if (equipment == null)
-            Debug.LogError("PlayerSkill requires a PlayerEquipment component.");
+        {
+            Debug.LogError(
+                "PlayerSkill requires a PlayerEquipment component."
+            );
+        }
+
+        if (movement == null)
+        {
+            Debug.LogError(
+                "PlayerSkill requires a PlayerWASD component."
+            );
+        }
+
+        if (dash == null)
+        {
+            Debug.LogError(
+                "PlayerSkill requires a PlayerDash component."
+            );
+        }
     }
 
     private void OnEnable()
     {
         if (skillAction == null)
         {
-            Debug.LogWarning("PlayerSkill has no Skill InputActionReference assigned.");
+            Debug.LogWarning(
+                "PlayerSkill has no Skill InputActionReference assigned."
+            );
+
             return;
         }
 
         skillAction.action.Enable();
-        skillAction.action.performed += OnSkillPerformed;
+
+        skillAction.action.started += OnSkillStarted;
+        skillAction.action.canceled += OnSkillCanceled;
     }
 
     private void OnDisable()
     {
-        if (skillAction == null) return;
+        if (skillAction == null)
+            return;
 
-        skillAction.action.performed -= OnSkillPerformed;
+        skillAction.action.started -= OnSkillStarted;
+        skillAction.action.canceled -= OnSkillCanceled;
+
         skillAction.action.Disable();
+
+        EndSkillMovementLock();
     }
 
     private void Update()
     {
-        if (isUsingSkill && Time.time >= skillTime + skillDuration)
-            EndSkill();
+        // While a skill is held, keep aiming it (and the player)
+        // toward the cursor until the moment it fires.
+        if (!skillActive || activeChargeable == null)
+            return;
+
+        Vector2 direction = GetMouseDirection();
+
+        if (direction.sqrMagnitude <= 0.0001f)
+            return;
+
+        activeChargeable.UpdateSkillDirection(direction);
+
+        if (movement != null)
+            movement.FaceDirection(direction);
     }
 
-    private void OnSkillPerformed(InputAction.CallbackContext context)
+    // -------------------------------------------------
+    // PRESS F
+    // -------------------------------------------------
+
+    private void OnSkillStarted(
+        InputAction.CallbackContext context)
     {
-        StartSkill();
+        StartWeaponSkill();
     }
 
-    private void StartSkill()
+    private void StartWeaponSkill()
     {
-        if (isUsingSkill) return;
+        if (skillActive)
+            return;
 
-        if (stats != null && !stats.UseStamina(skillCost))
+        if (stats == null ||
+            equipment == null)
+            return;
+
+        if (stats.IsDead)
+            return;
+
+        if (equipment.CurrentWeapon == null ||
+            equipment.CurrentWeaponData == null ||
+            equipment.CurrentWeaponData.EquipmentType != EquipmentType.Weapon)
         {
-            Debug.Log("[PlayerSkill] Not enough stamina to use skill.");
+            Debug.Log(
+                "[PlayerSkill] No weapon equipped."
+            );
+
             return;
         }
 
-        isUsingSkill = true;
-        skillTime = Time.time;
+        if (!equipment.CurrentWeapon.CanUseSkill)
+            return;
 
-        if (equipment.CurrentWeapon.WeaponId == "LongSword")
-            PerformLongSwordSkill();
-        else if (equipment.CurrentWeapon.WeaponId == "BattleAxe")
-            PerformBattleAxeSkill();
+        ItemData weaponData =
+            equipment.CurrentWeaponData;
+
+        if (!stats.UseResource(
+            weaponData.SkillCost,
+            weaponData.SkillResourceType))
+        {
+            Debug.Log(
+                $"[PlayerSkill] Not enough " +
+                $"{weaponData.SkillResourceType}."
+            );
+
+            return;
+        }
+
+        // ---------------------------------------------
+        // GET MOUSE DIRECTION
+        // ---------------------------------------------
+
+        Vector2 skillDirection = GetMouseDirection();
+
+        if (skillDirection.sqrMagnitude <= 0.0001f)
+            return;
+
+        // ---------------------------------------------
+        // FACE PLAYER
+        // ---------------------------------------------
+
+        if (movement != null)
+        {
+            movement.FaceDirection(skillDirection);
+            movement.LockFacingDirection();
+        }
+
+        // ---------------------------------------------
+        // MOVEMENT LOCK
+        // ---------------------------------------------
+
+        skillActive = true;
+
+        if (movement != null)
+        {
+            movement.LockMovement();
+        }
+
+        if (dash != null)
+        {
+            dash.LockDash();
+        }
+
+        // ---------------------------------------------
+        // USE SKILL
+        // ---------------------------------------------
+
+        activeChargeable =
+            IsChargedSkill(weaponData)
+                ? equipment.CurrentWeapon as IChargeableWeapon
+                : null;
+
+        equipment.CurrentWeapon.UseSkill(skillDirection);
+
+        if (activeChargeable == null)
+        {
+            skillRecovery = StartCoroutine(
+                EndSkillMovementLockAfterDelay()
+            );
+        }
+    }
+    // -------------------------------------------------
+    // RELEASE F
+    // -------------------------------------------------
+
+    private void OnSkillCanceled(
+        InputAction.CallbackContext context)
+    {
+        ReleaseWeaponSkill();
     }
 
-    private void PerformLongSwordSkill()
+    private void ReleaseWeaponSkill()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, skillRadius, hittableLayers);
-        foreach (Collider2D hit in hits)
+        if (!skillActive)
+            return;
+
+        if (equipment == null)
         {
-            IDamageable target = hit.GetComponent<IDamageable>();
-            if (target != null)
-            {
-                target.TakeDamage(skillDamage, DamageType.Physical);
-                Debug.Log($"[PlayerSkill] Long Sword skill hit {hit.name} for {skillDamage} damage.");
-            }
+            EndSkillMovementLock();
+            return;
         }
 
-        if (swordVisualPrefab != null)
+        if (equipment.CurrentWeapon == null ||
+            equipment.CurrentWeaponData == null ||
+            equipment.CurrentWeaponData.EquipmentType !=
+                EquipmentType.Weapon)
         {
-            activeVisual = Instantiate(swordVisualPrefab, transform.position, Quaternion.identity);
-            activeVisual.transform.localScale = new Vector3(skillRadius * 2, skillRadius * 2, 1);
+            EndSkillMovementLock();
+            return;
         }
 
-        Debug.Log("[PlayerSkill] Long Sword skill triggered!");
+        // -------------------------------------------------
+        // CHARGEABLE WEAPON
+        // -------------------------------------------------
+
+        IChargeableWeapon chargeableWeapon =
+            equipment.CurrentWeapon as IChargeableWeapon;
+
+        if (chargeableWeapon != null)
+        {
+            // Read progress BEFORE releasing (it resets on release).
+            bool fullyCharged =
+                chargeableWeapon.ChargePercent >= 1f;
+
+            if (fullyCharged)
+                fullyCharged = TryConsumeMaxChargeCost();
+
+            chargeableWeapon.ReleaseSkill(fullyCharged);
+        }
+
+        activeChargeable = null;
+
+        if (skillRecovery == null)
+        {
+            skillRecovery = StartCoroutine(
+                EndSkillMovementLockAfterDelay()
+            );
+        }
     }
 
-    private void PerformBattleAxeSkill()
+    // -------------------------------------------------
+    // MAX CHARGE COST
+    // -------------------------------------------------
+
+    // Base skill cost was already paid on press. A full-charge
+    // release pays the difference up to MaxChargeSkillCost.
+    // If the player can't afford it, the shot fires at 99%.
+    private bool TryConsumeMaxChargeCost()
     {
-        float slamRadius = skillRadius * 0.75f;
-        int slamDamage = skillDamage + 30;
+        ItemData weaponData = equipment.CurrentWeaponData;
 
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, slamRadius, hittableLayers);
-        foreach (Collider2D hit in hits)
-        {
-            IDamageable target = hit.GetComponent<IDamageable>();
-            if (target != null)
-            {
-                target.TakeDamage(slamDamage, DamageType.Physical);
-                Debug.Log($"[PlayerSkill] Battle Axe slam hit {hit.name} for {slamDamage} damage.");
-            }
-        }
+        if (stats == null || weaponData == null)
+            return true;
 
-        if (battleAxeVisualPrefab != null)
-        {
-            activeVisual = Instantiate(battleAxeVisualPrefab, transform.position, Quaternion.identity);
-            activeVisual.transform.localScale = new Vector3(slamRadius * 2, slamRadius * 2, 1);
-        }
+        int extraCost =
+            weaponData.MaxChargeSkillCost - weaponData.SkillCost;
 
-        Debug.Log("[PlayerSkill] Battle Axe skill triggered!");
+        if (extraCost <= 0)
+            return true;
+
+        if (stats.UseResource(extraCost, weaponData.SkillResourceType))
+            return true;
+
+        Debug.Log(
+            $"[PlayerSkill] Not enough {weaponData.SkillResourceType} " +
+            $"for max charge ({extraCost} extra). Firing at partial charge."
+        );
+
+        return false;
     }
 
-    private void EndSkill()
-    {
-        isUsingSkill = false;
+    // -------------------------------------------------
+    // MOVEMENT LOCK
+    // -------------------------------------------------
 
-        if (activeVisual != null)
+    private void EndSkillMovementLock()
+    {
+        if (!skillActive)
+            return;
+
+        skillActive = false;
+        activeChargeable = null;
+
+        if (movement != null)
         {
-            Destroy(activeVisual);
-            activeVisual = null;
+            movement.UnlockMovement();
+            movement.UnlockFacingDirection();
         }
 
-        Debug.Log("[PlayerSkill] Skill ended.");
+        if (dash != null)
+        {
+            dash.UnlockDash();
+        }
+    }
+
+    private IEnumerator EndSkillMovementLockAfterDelay()
+    {
+        yield return new WaitForSeconds(skillMovementLockDuration);
+
+        skillRecovery = null;
+        EndSkillMovementLock();
+    }
+
+    private bool IsChargedSkill(ItemData weaponData)
+    {
+        return weaponData.WeaponSkillType == WeaponSkillType.ChargedArrow ||
+               weaponData.WeaponSkillType == WeaponSkillType.Beam;
+    }
+
+    private Vector2 GetMouseDirection()
+    {
+        if (Mouse.current == null ||
+            Camera.main == null)
+        {
+            return Vector2.zero;
+        }
+
+        Vector3 mousePosition =
+            Camera.main.ScreenToWorldPoint(
+                Mouse.current.position.ReadValue()
+            );
+
+        Vector2 direction =
+            (Vector2)(mousePosition - transform.position);
+
+        if (direction.sqrMagnitude <= 0.0001f)
+            return Vector2.zero;
+
+        return direction.normalized;
     }
 }

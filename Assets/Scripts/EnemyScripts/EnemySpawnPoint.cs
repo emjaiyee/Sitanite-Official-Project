@@ -41,6 +41,11 @@ public class EnemySpawnPoint : MonoBehaviour
     [SerializeField] private float spawnDelay = 0f;
     [SerializeField] private Transform spawnParent;
 
+    [Header("Elevation")]
+    [Tooltip("Elevation level assigned to each enemy spawned by this point.")]
+    [Min(0)]
+    [SerializeField] private int elevationLevel;
+
     [Header("Rendering (ensure visibility)")]
     [Tooltip("Sorting layer name to apply to spawned enemies.")]
     [SerializeField] private string sortingLayer = "Default";
@@ -60,24 +65,9 @@ public class EnemySpawnPoint : MonoBehaviour
     [Tooltip("How many attempts to find a free position per enemy.")]
     [SerializeField] private int maxPositionAttempts = 12;
 
-    [Header("Enemy health & clear behavior")]
-    [Tooltip("Max health assigned to each spawned enemy.")]
-    [SerializeField] private int enemyMaxHealth = 10;
-
+    [Header("Enemy clear behavior")]
     [Tooltip("If true, this spawn point reports itself cleared when all enemies spawned by it have died.")]
     [SerializeField] private bool clearWhenAllDead = true;
-
-    [Tooltip("Damage dealt to the player while this enemy is touching them.")]
-    [Min(0)]
-    [SerializeField] private int enemyAttackDamage = 5;
-
-    [Tooltip("Maximum distance at which the enemy can deal contact damage.")]
-    [Min(0.01f)]
-    [SerializeField] private float enemyAttackRange = 0.7f;
-
-    [Tooltip("Time between contact damage hits.")]
-    [Min(0.01f)]
-    [SerializeField] private float enemyAttackCooldown = 1.5f;
 
 
     // Event invoked whenever an enemy is successfully spawned.
@@ -321,29 +311,20 @@ public class EnemySpawnPoint : MonoBehaviour
 
         ApplyRenderingSettings(instance);
 
+        EnemyElevationLevel enemyElevation =
+            instance.GetComponent<EnemyElevationLevel>();
 
-        // Ensure enemy has health component and set HP.
+        if (enemyElevation == null)
+            enemyElevation = instance.AddComponent<EnemyElevationLevel>();
+
+        enemyElevation.SetLevel(elevationLevel);
+
+
+        // Preserve the health configured on the enemy prefab.
         var eh = instance.GetComponent<EnemyHealth>();
 
         if (eh == null)
             eh = instance.AddComponent<EnemyHealth>();
-
-
-        // Always apply the spawn point's configured HP.
-        eh.Init(Mathf.Max(1, enemyMaxHealth));
-
-
-        var contactDamage =
-            instance.GetComponent<EnemyContactDamage>();
-
-        if (contactDamage == null)
-            contactDamage = instance.AddComponent<EnemyContactDamage>();
-
-        contactDamage.Configure(
-            enemyAttackDamage,
-            enemyAttackRange,
-            enemyAttackCooldown
-        );
 
 
         EnsureEnemyPhysics(instance);
@@ -519,7 +500,6 @@ public class EnemySpawnPoint : MonoBehaviour
             sg.sortingLayerName = sortingLayer;
             sg.sortingOrder = sortingOrder;
         }
-
 
         if (Mathf.Abs(zOffset) > 0f)
         {

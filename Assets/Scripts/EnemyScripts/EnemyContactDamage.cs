@@ -110,6 +110,6 @@ public class EnemyContactDamage : MonoBehaviour
 
         nextAttackTime = Time.time + attackCooldown;
         player.TakeDamage(damage);
-        Debug.Log($"[EnemyContactDamage] {name} hit player for {damage}. Player HP: {player.CurrentHealth}/{player.maxHealth}");
+        Debug.Log($"[EnemyContactDamage] {name} hit player for {damage}. Player HP: {player.CurrentHealth}/{player.MaxHealth}");
     }
 }

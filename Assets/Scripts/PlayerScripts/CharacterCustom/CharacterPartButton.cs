@@ -42,7 +42,7 @@ public class CharacterPartButton : MonoBehaviour
                 break;
 
             case CharacterPartType.Weapon:
-                appearance.weapon = part;
+                appearance.weapon = part as WeaponDefinition;
                 break;
         }
 

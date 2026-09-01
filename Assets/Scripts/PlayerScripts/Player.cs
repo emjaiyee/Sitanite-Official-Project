@@ -19,6 +19,11 @@ public class Player : MonoBehaviour
 
         Instance = this;
 
+        if (GetComponent<EquipmentCharacterVisualSync>() == null)
+        {
+            gameObject.AddComponent<EquipmentCharacterVisualSync>();
+        }
+
         DontDestroyOnLoad(gameObject);
 
         Debug.Log(

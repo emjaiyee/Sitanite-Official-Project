@@ -65,6 +65,12 @@ public class FloorManager : MonoBehaviour
         );
     }
 
+    public void EnterNextFloor()
+    {
+        currentFloor++;
+        GenerateCurrentFloor();
+    }
+
     private FloorConfiguration GetConfigurationForFloor(
         int floor)
     {

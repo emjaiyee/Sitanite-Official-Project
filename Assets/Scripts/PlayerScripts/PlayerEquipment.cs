@@ -1,118 +1,89 @@
 using UnityEngine;
 
 // Handles the player's currently equipped weapon.
-//
-// Weapon GameObjects should be children of the player and contain
-// a component implementing IWeapon.
-//
-// Example:
-// Player
-// ├── LongSword
-// │   └── Sword : MeleeWeapon
-// └── BattleAxe
-//     └── Axe : MeleeWeapon
 public class PlayerEquipment : MonoBehaviour
 {
-    [Header("Weapon Objects (children of the player)")]
-
-    [SerializeField]
-    private GameObject swordObject;
-
-    [SerializeField]
-    private GameObject battleAxeObject;
+    [Header("Weapon Setup")]
+    [SerializeField] private ItemData defaultWeapon;
+    [SerializeField] private WeaponController weaponController;
 
     public IWeapon CurrentWeapon { get; private set; }
+    public ItemData CurrentWeaponData { get; private set; }
+
+    private void Awake()
+    {
+        if (weaponController == null)
+            weaponController = GetComponentInChildren<WeaponController>(true);
+    }
 
     private void Start()
     {
-        // Default weapon.
-        EquipWeapon("LongSword");
-    }
+        SubscribeToEquipmentChanges();
 
-    /// <summary>
-    /// Equips a weapon using its WeaponId.
-    /// </summary>
-    public void EquipWeapon(string weaponId)
-    {
-        if (string.IsNullOrEmpty(weaponId))
+        if (EquipmentManager.Instance != null)
         {
-            Debug.LogWarning(
-                "PlayerEquipment: Weapon ID is empty."
-            );
+            InventoryItem equippedItem =
+                EquipmentManager.Instance.GetEquippedItem(EquipmentType.Weapon);
 
-            return;
+            if (equippedItem != null)
+            {
+                EquipWeapon(equippedItem.Data);
+                return;
+            }
         }
 
-        // Disable all currently equipped weapon objects.
-        DisableAllWeapons();
+        EquipWeapon(defaultWeapon);
+    }
 
-        // Find the requested weapon.
-        GameObject weaponObject =
-            GetWeaponObject(weaponId);
+    private void OnEnable()
+    {
+        SubscribeToEquipmentChanges();
+    }
 
-        if (weaponObject == null)
+    private void OnDisable()
+    {
+        if (EquipmentManager.Instance != null)
+            EquipmentManager.Instance.OnEquipmentChanged -= HandleEquipmentChanged;
+    }
+
+    private void SubscribeToEquipmentChanges()
+    {
+        if (EquipmentManager.Instance != null)
         {
-            Debug.LogWarning(
-                $"PlayerEquipment: No weapon found for ID '{weaponId}'."
-            );
+            EquipmentManager.Instance.OnEquipmentChanged -= HandleEquipmentChanged;
+            EquipmentManager.Instance.OnEquipmentChanged += HandleEquipmentChanged;
+        }
+    }
 
+    private void HandleEquipmentChanged(EquipmentType changedType, InventoryItem newItem)
+    {
+        if (changedType != EquipmentType.Weapon)
+            return;
+
+        EquipWeapon(newItem == null ? null : newItem.Data);
+    }
+
+    public void EquipWeapon(ItemData weaponData)
+    {
+        if (weaponData == null || weaponData.EquipmentType != EquipmentType.Weapon)
+        {
+            Debug.LogWarning("PlayerEquipment: ItemData is not a valid weapon.");
             CurrentWeapon = null;
+            CurrentWeaponData = null;
             return;
         }
 
-        // Make sure the weapon actually implements IWeapon.
-        IWeapon weapon =
-            weaponObject.GetComponent<IWeapon>();
-
-        if (weapon == null)
+        if (weaponController == null)
         {
-            Debug.LogError(
-                $"PlayerEquipment: '{weaponObject.name}' does not " +
-                "contain a component implementing IWeapon."
-            );
-
+            Debug.LogError("PlayerEquipment: WeaponController is not assigned.");
             CurrentWeapon = null;
+            CurrentWeaponData = null;
             return;
         }
 
-        weaponObject.SetActive(true);
-
-        CurrentWeapon = weapon;
-
-        Debug.Log(
-            $"PlayerEquipment: Equipped {weaponId}."
-        );
-    }
-
-    // -------------------------------------------------
-    // WEAPON LOOKUP
-    // -------------------------------------------------
-
-    private GameObject GetWeaponObject(string weaponId)
-    {
-        switch (weaponId)
-        {
-            case "LongSword":
-                return swordObject;
-
-            case "BattleAxe":
-                return battleAxeObject;
-
-            default:
-                return null;
-        }
-    }
-
-    // -------------------------------------------------
-    // DISABLE WEAPONS
-    // -------------------------------------------------
-
-    private void DisableAllWeapons()
-    {
-        if (swordObject != null)
-            swordObject.SetActive(false);
-
-        if (battleAxeObject != null)
-            battleAxeObject.SetActive(false);
+        weaponController.Configure(weaponData);
+        CurrentWeapon = weaponController;
+        CurrentWeaponData = weaponData;
+        Debug.Log($"PlayerEquipment: Equipped {weaponData.WeaponId}.");
     }
 }

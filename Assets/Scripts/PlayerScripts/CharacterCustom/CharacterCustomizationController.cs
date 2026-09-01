@@ -24,25 +24,52 @@ public class CharacterCustomizationController : MonoBehaviour
     [Header("Starting Class")]
     [SerializeField] private PlayerClass startingClass = PlayerClass.Warrior;
 
-    [Header("Melee Outfit")]
-    [SerializeField] private HeadwearDefinition warriorHeadwear;
-    [SerializeField] private CharacterPartDefinition warriorTorso;
-    [SerializeField] private CharacterPartDefinition warriorLegs;
+    [Header("Attribute References")]
+    [SerializeField] private PlayerAttributesNTraits attributes;
+    [SerializeField] private PlayerStats playerStats;
 
-    [Header("Ranger Outfit")]
-    [SerializeField] private HeadwearDefinition rangerHeadwear;
-    [SerializeField] private CharacterPartDefinition rangerTorso;
-    [SerializeField] private CharacterPartDefinition rangerLegs;
+    [Header("Class Starting Gear")]
+    [Tooltip("Item data granted to a Warrior when the class is selected.")]
+    [SerializeField] private ItemData[] warriorStartingGear;
 
-    [Header("Mage Outfit")]
-    [SerializeField] private HeadwearDefinition mageHeadwear;
-    [SerializeField] private CharacterPartDefinition mageTorso;
-    [SerializeField] private CharacterPartDefinition mageLegs;
+    [Tooltip("Item data granted to a Ranger when the class is selected.")]
+    [SerializeField] private ItemData[] rangerStartingGear;
+
+    [Tooltip("Item data granted to a Mage when the class is selected.")]
+    [SerializeField] private ItemData[] mageStartingGear;
+
+    [Header("Class Starter Items")]
+    [Tooltip("Non-equipment item data granted to a Warrior when the class is selected.")]
+    [SerializeField] private ItemData[] warriorStartingItems;
+
+    [Tooltip("Non-equipment item data granted to a Ranger when the class is selected.")]
+    [SerializeField] private ItemData[] rangerStartingItems;
+
+    [Tooltip("Non-equipment item data granted to a Mage when the class is selected.")]
+    [SerializeField] private ItemData[] mageStartingItems;
+
+    private PlayerClass? grantedStartingLoadoutClass;
+    private bool appliedStartingAttributes;
+
+    private void Awake()
+    {
+        if (attributes == null)
+            attributes = GetComponent<PlayerAttributesNTraits>();
+
+        if (playerStats == null)
+            playerStats = GetComponent<PlayerStats>();
+    }
 
     private void Start()
     {
         SetGender(startingGender);
         SetClass(startingClass);
+    }
+
+    private void Update()
+    {
+        if (characterRenderer != null)
+            SpawnClassLoadout(characterRenderer.Appearance.playerClass);
     }
 
     public void SetGender(CharacterGender gender)
@@ -158,6 +185,50 @@ public class CharacterCustomizationController : MonoBehaviour
         RefreshAppearance();
     }
 
+    public void SetEquipmentVisual(EquipmentType equipmentType, CharacterPartDefinition definition)
+    {
+        switch (equipmentType)
+        {
+            case EquipmentType.Helmet:
+                SetHeadwear(definition as HeadwearDefinition);
+                break;
+            case EquipmentType.Chestplate:
+                SetTorso(definition);
+                break;
+            case EquipmentType.Legging:
+                SetLegs(definition);
+                break;
+            case EquipmentType.Weapon:
+                characterRenderer.Appearance.weapon =
+                    definition as WeaponDefinition;
+                RefreshAppearance();
+                break;
+            case EquipmentType.Shield:
+                characterRenderer.Appearance.shield = definition;
+                RefreshAppearance();
+                break;
+        }
+    }
+
+    public void ReapplyEquipmentVisuals()
+    {
+        EquipmentManager equipmentManager = EquipmentManager.Instance;
+        if (equipmentManager == null)
+            return;
+
+        SetEquipmentVisual(EquipmentType.Helmet, GetEquippedDefinition(equipmentManager, EquipmentType.Helmet));
+        SetEquipmentVisual(EquipmentType.Chestplate, GetEquippedDefinition(equipmentManager, EquipmentType.Chestplate));
+        SetEquipmentVisual(EquipmentType.Legging, GetEquippedDefinition(equipmentManager, EquipmentType.Legging));
+        SetEquipmentVisual(EquipmentType.Weapon, GetEquippedDefinition(equipmentManager, EquipmentType.Weapon));
+        SetEquipmentVisual(EquipmentType.Shield, GetEquippedDefinition(equipmentManager, EquipmentType.Shield));
+    }
+
+    private CharacterPartDefinition GetEquippedDefinition(EquipmentManager equipmentManager, EquipmentType equipmentType)
+    {
+        InventoryItem item = equipmentManager.GetEquippedItem(equipmentType);
+        return item != null && item.Data != null ? item.Data.CharacterDefinition : null;
+    }
+
     public void SetHeadwearHidden(bool hidden)
     {
         CharacterAppearance appearance =
@@ -220,36 +291,164 @@ public class CharacterCustomizationController : MonoBehaviour
         CharacterAppearance appearance =
             characterRenderer.Appearance;
 
-        appearance.playerClass = playerClass;
+        bool classChanged = appearance.playerClass != playerClass;
 
-        switch (playerClass)
+        EquipmentManager equipmentManager = EquipmentManager.Instance;
+        if (equipmentManager != null)
         {
-            case PlayerClass.Warrior:
+            equipmentManager.Unequip(EquipmentType.Helmet);
+            equipmentManager.Unequip(EquipmentType.Chestplate);
+            equipmentManager.Unequip(EquipmentType.Legging);
+            equipmentManager.Unequip(EquipmentType.Weapon);
+            equipmentManager.Unequip(EquipmentType.Shield);
+        }
 
-                appearance.headwear = warriorHeadwear;
-                appearance.torso = warriorTorso;
-                appearance.legs = warriorLegs;
+        PlayerInventory playerInventory = GetComponent<PlayerInventory>();
+        if (playerInventory != null && playerInventory.MainBackPack != null)
+            playerInventory.MainBackPack.Clear();
 
-                break;
+        appearance.playerClass = playerClass;
+        appearance.headwear = null;
+        appearance.torso = null;
+        appearance.legs = null;
+        appearance.weapon = null;
+        appearance.shield = null;
 
-            case PlayerClass.Ranger:
+        if (attributes != null && (classChanged || !appliedStartingAttributes))
+        {
+            attributes.ApplyClassDefaults(playerClass);
+            appliedStartingAttributes = true;
 
-                appearance.headwear = rangerHeadwear;
-                appearance.torso = rangerTorso;
-                appearance.legs = rangerLegs;
-
-                break;
-
-            case PlayerClass.Mage:
-
-                appearance.headwear = mageHeadwear;
-                appearance.torso = mageTorso;
-                appearance.legs = mageLegs;
-
-                break;
+            if (playerStats != null)
+                playerStats.ResetToFull();
         }
 
         RefreshAppearance();
+        grantedStartingLoadoutClass = null;
+        SpawnClassLoadout(playerClass);
+    }
+
+    public int SpawnStartingGear(PlayerClass playerClass)
+    {
+        ItemData[] startingGear = playerClass switch
+        {
+            PlayerClass.Warrior => warriorStartingGear,
+            PlayerClass.Ranger => rangerStartingGear,
+            PlayerClass.Mage => mageStartingGear,
+            _ => null
+        };
+
+        return SpawnItemsToInventory(startingGear);
+    }
+
+    public int SpawnClassLoadout(PlayerClass playerClass)
+    {
+        if (grantedStartingLoadoutClass == playerClass)
+            return 0;
+
+        ItemData[] startingGear = GetStartingGear(playerClass);
+        ItemData[] startingItems = GetStartingItems(playerClass);
+        ItemData[] loadout = new ItemData[(startingGear?.Length ?? 0) + (startingItems?.Length ?? 0)];
+
+        int loadoutIndex = 0;
+        if (startingGear != null)
+        {
+            foreach (ItemData data in startingGear)
+                loadout[loadoutIndex++] = data;
+        }
+
+        if (startingItems != null)
+        {
+            foreach (ItemData data in startingItems)
+                loadout[loadoutIndex++] = data;
+        }
+
+        int spawnedCount = SpawnItemsToInventory(loadout);
+        if (spawnedCount >= 0)
+            grantedStartingLoadoutClass = playerClass;
+
+        return spawnedCount;
+    }
+
+    private ItemData[] GetStartingGear(PlayerClass playerClass)
+    {
+        return playerClass switch
+        {
+            PlayerClass.Warrior => warriorStartingGear,
+            PlayerClass.Ranger => rangerStartingGear,
+            PlayerClass.Mage => mageStartingGear,
+            _ => null
+        };
+    }
+
+    private ItemData[] GetStartingItems(PlayerClass playerClass)
+    {
+        return playerClass switch
+        {
+            PlayerClass.Warrior => warriorStartingItems,
+            PlayerClass.Ranger => rangerStartingItems,
+            PlayerClass.Mage => mageStartingItems,
+            _ => null
+        };
+    }
+
+    public int SpawnItemsToInventory(ItemData[] itemData)
+    {
+        if (itemData == null || itemData.Length == 0)
+            return 0;
+
+        PlayerInventory playerInventory = GetComponent<PlayerInventory>();
+        EquipmentManager equipmentManager = EquipmentManager.Instance;
+
+        foreach (ItemData data in itemData)
+        {
+            if (data == null)
+                continue;
+
+            if (data.EquipmentType != EquipmentType.None && equipmentManager == null)
+                return -1;
+
+            if (data.EquipmentType == EquipmentType.None &&
+                (playerInventory == null || playerInventory.MainBackPack == null))
+            {
+                return -1;
+            }
+        }
+
+        int spawnedCount = 0;
+        foreach (ItemData data in itemData)
+        {
+            if (data == null)
+                continue;
+
+            InventoryItem item = new InventoryItem(data);
+            if (data.EquipmentType != EquipmentType.None)
+            {
+                if (equipmentManager != null &&
+                    equipmentManager.Equip(data.EquipmentType, item, out _))
+                {
+                    spawnedCount++;
+                    continue;
+                }
+
+                Debug.LogWarning(
+                    $"CharacterCustomizationController: Could not equip '{data.itemName}' as starting gear.",
+                    this
+                );
+            }
+            else if (playerInventory.MainBackPack.TryAddItem(item))
+            {
+                spawnedCount++;
+                continue;
+            }
+            else
+                Debug.LogWarning(
+                    $"CharacterCustomizationController: Could not add '{data.itemName}' to the inventory.",
+                    this
+                );
+        }
+
+        return spawnedCount;
     }
 
     public CharacterAppearance GetAppearance()
