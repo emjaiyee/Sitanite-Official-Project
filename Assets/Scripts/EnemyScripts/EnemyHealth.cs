@@ -140,11 +140,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
 
         amount = Mathf.RoundToInt(
-            Mathf.Max(0f, amount - GetDamageResistance(damageType))
+            Mathf.Max(1f, amount - GetDamageResistance(damageType))
         );
-
-        if (amount <= 0)
-            return;
 
         CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
         runtimeCurrentHealth = CurrentHealth;

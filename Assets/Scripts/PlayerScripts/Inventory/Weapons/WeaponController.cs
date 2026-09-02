@@ -28,8 +28,10 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private bool isCharging;
     private GameObject activeChargeVisual;
     private GameObject activeFullChargeIndicator;
+    private SpriteRenderer[] chargeVisualSprites;
     private SpriteRenderer[] indicatorSprites;
     private bool hasReachedFullCharge;
+    private float fullChargeReachedTime;
     private float indicatorPulseTimer;
     private float nextAttackTime;
     private float nextSkillTime;
@@ -45,7 +47,10 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     public float ChargePercent =>
         isCharging && data != null
-            ? Mathf.Clamp01((Time.time - chargeStartTime) / data.MaxChargeTime)
+            ? Mathf.Clamp01(
+                (Time.time - chargeStartTime) /
+                Mathf.Max(0.0001f, data.MaxChargeTime)
+            )
             : 0f;
 
     private void Awake()
@@ -67,7 +72,8 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             return;
 
         float chargePercent = Mathf.Clamp01(
-            (Time.time - chargeStartTime) / data.MaxChargeTime
+            (Time.time - chargeStartTime) /
+            Mathf.Max(0.0001f, data.MaxChargeTime)
         );
 
         if (activeChargeVisual != null)
@@ -84,12 +90,13 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         if (chargePercent >= 1f && !hasReachedFullCharge)
         {
             hasReachedFullCharge = true;
+            fullChargeReachedTime = Time.time;
             SpawnFullChargeIndicator();
         }
 
-        // Animate the full charge indicator
-        if (hasReachedFullCharge && activeFullChargeIndicator != null)
+        if (hasReachedFullCharge)
         {
+            AnimateMaxChargeVisual();
             AnimateFullChargeIndicator();
         }
     }
@@ -398,6 +405,9 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
             activeChargeVisual.transform.localScale =
                 Vector3.one * data.StartChargeVisualScale;
+
+            chargeVisualSprites =
+                activeChargeVisual.GetComponentsInChildren<SpriteRenderer>();
         }
     }
 
@@ -879,6 +889,36 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     // CHARGE CLEANUP
     // =========================================================
 
+    private void AnimateMaxChargeVisual()
+    {
+        if (activeChargeVisual != null)
+        {
+            activeChargeVisual.transform.localScale =
+                Vector3.one * data.MaxChargeVisualScale;
+        }
+
+        if (chargeVisualSprites == null ||
+            chargeVisualSprites.Length == 0 ||
+            data.MaxChargeSprites == null ||
+            data.MaxChargeSprites.Length == 0 ||
+            data.MaxChargeAnimationSpeed <= 0f)
+        {
+            return;
+        }
+
+        int frameIndex = Mathf.FloorToInt(
+            (Time.time - fullChargeReachedTime) *
+            data.MaxChargeAnimationSpeed
+        ) % data.MaxChargeSprites.Length;
+
+        Sprite frame = data.MaxChargeSprites[frameIndex];
+        foreach (SpriteRenderer spriteRenderer in chargeVisualSprites)
+        {
+            if (spriteRenderer != null)
+                spriteRenderer.sprite = frame;
+        }
+    }
+
     private void SpawnFullChargeIndicator()
     {
         if (fullyChargedIndicatorPrefab == null)
@@ -954,6 +994,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             Destroy(activeFullChargeIndicator);
 
         activeFullChargeIndicator = null;
+        chargeVisualSprites = null;
         indicatorSprites = null;
     }
 

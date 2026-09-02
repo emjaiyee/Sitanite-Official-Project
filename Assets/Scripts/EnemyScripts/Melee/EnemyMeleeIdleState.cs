@@ -176,6 +176,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
                 "A* RETURNED NULL PATH!"
             );
 
+            SetCurrentCellAsIdleOrigin();
+
             waitingForNewDestination = true;
             waitTimer = 0f;
 
@@ -189,6 +191,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
                 $"[IDLE] {Enemy.name}: " +
                 "A* returned an EMPTY path."
             );
+
+            SetCurrentCellAsIdleOrigin();
 
             waitingForNewDestination = true;
             waitTimer = 0f;
@@ -218,6 +222,20 @@ public class EnemyMeleeIdleState : EnemyMeleeState
             return;
         }
 
+    }
+
+
+    private void SetCurrentCellAsIdleOrigin()
+    {
+        Vector3? currentCell =
+            AStarManager.Instance.GetWalkableCellCenter(
+                Enemy.transform.position
+            );
+
+        if (currentCell.HasValue)
+        {
+            Enemy.SetIdleOrigin(currentCell.Value);
+        }
     }
 
 

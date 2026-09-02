@@ -131,6 +131,11 @@ public class EnemyRange : MonoBehaviour
     public Vector3 SpawnPosition =>
         spawnPosition;
 
+    public void SetIdleOrigin(Vector3 position)
+    {
+        spawnPosition = position;
+    }
+
 
     // =========================================================
     // PATH

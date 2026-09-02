@@ -4,11 +4,11 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class AStarStairLink : MonoBehaviour
 {
-    [Header("Anchors")]
-    [Tooltip("Walkable point on the near side of the stair transition.")]
+    [Header("Endpoints")]
+    [Tooltip("Optional walkable point at the bottom of the ramp. Leave empty to use the RampMovementTrigger collider.")]
     [SerializeField] private Transform entryAnchor;
 
-    [Tooltip("Walkable point on the far side of the stair transition.")]
+    [Tooltip("Optional walkable point at the top of the ramp. Leave empty to use the RampMovementTrigger collider.")]
     [SerializeField] private Transform exitAnchor;
 
     [Header("Traversal")]
@@ -16,12 +16,17 @@ public class AStarStairLink : MonoBehaviour
     [SerializeField] private int traversalWaypointCount = 4;
 
     private Collider2D stairCollider;
+    private RampMovementTrigger rampMovement;
 
     public Vector3 EntryPosition =>
-        entryAnchor != null ? entryAnchor.position : transform.position;
+        entryAnchor != null
+            ? entryAnchor.position
+            : GetColliderEndpoint(false);
 
     public Vector3 ExitPosition =>
-        exitAnchor != null ? exitAnchor.position : transform.position;
+        exitAnchor != null
+            ? exitAnchor.position
+            : GetColliderEndpoint(true);
 
     private void Reset()
     {
@@ -32,6 +37,7 @@ public class AStarStairLink : MonoBehaviour
     private void Awake()
     {
         stairCollider = GetComponent<Collider2D>();
+        rampMovement = GetComponent<RampMovementTrigger>();
     }
 
     private void Start()
@@ -77,7 +83,8 @@ public class AStarStairLink : MonoBehaviour
 
     public bool IsConfigured()
     {
-        return entryAnchor != null && exitAnchor != null;
+        return (entryAnchor != null && exitAnchor != null) ||
+            rampMovement != null;
     }
 
     public bool IsCloserToEntry(Vector3 worldPosition)
@@ -104,6 +111,26 @@ public class AStarStairLink : MonoBehaviour
         points.Add(end);
 
         return points;
+    }
+
+    private Vector3 GetColliderEndpoint(bool upperEnd)
+    {
+        if (rampMovement == null ||
+            rampMovement.RampCollider == null ||
+            rampMovement.RampForward.sqrMagnitude <= 0.0001f)
+        {
+            return transform.position;
+        }
+
+        Vector2 direction = rampMovement.RampForward;
+        Bounds bounds = rampMovement.RampCollider.bounds;
+        float distance = bounds.extents.magnitude * 2f + 0.1f;
+        Vector2 probe = (Vector2)bounds.center +
+            direction * (upperEnd ? distance : -distance);
+
+        Vector2 edge = rampMovement.RampCollider.ClosestPoint(probe);
+
+        return edge + direction * (upperEnd ? 0.05f : -0.05f);
     }
 
 

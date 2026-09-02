@@ -81,7 +81,8 @@ public class EnemyMeleeChaseState : EnemyMeleeState
 
         repathTimer += Time.deltaTime;
 
-        if (repathTimer >= RepathInterval)
+        if (!Enemy.IsOnStairLink &&
+            repathTimer >= RepathInterval)
         {
             repathTimer = 0f;
 
