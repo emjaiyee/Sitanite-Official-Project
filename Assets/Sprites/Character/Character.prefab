@@ -261,6 +261,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
   attackPoint: {fileID: 3371824977953561613}
   firePoint: {fileID: 8117855276665226801}
+  fullyChargedIndicatorPrefab: {fileID: 0}
+  indicatorRotationSpeed: 180
+  indicatorPulseSpeed: 3
+  indicatorPulseMin: 0.9
+  indicatorPulseMax: 1.1
+  rotateIndicator: 1
+  pulseIndicator: 1
 --- !u!1 &3652299398545989156
 GameObject:
   m_ObjectHideFlags: 0
@@ -410,6 +417,7 @@ GameObject:
   - component: {fileID: 1613250513679658638}
   - component: {fileID: 6851415273692241425}
   - component: {fileID: 1731212550873553795}
+  - component: {fileID: 6756481364951381221}
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
@@ -483,6 +491,7 @@ MonoBehaviour:
   moveAction: {fileID: -7623319301975187240, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
   sprintAction: {fileID: 9047545557421842618, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
   useIsometricMovement: 0
+  diagonalAxisScale: 0.5
 --- !u!70 &6600023078225743897
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -991,6 +1000,28 @@ MonoBehaviour:
   playerSkill: {fileID: 6851415273692241425}
   disabledScenes:
   - CharacterCreation
+--- !u!95 &6756481364951381221
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5054948953897289759}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: da619ca6a692c4c44ae6614ec63ad395, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &5246304247548789014
 GameObject:
   m_ObjectHideFlags: 0

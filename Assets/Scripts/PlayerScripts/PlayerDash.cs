@@ -7,85 +7,95 @@ public class PlayerDash : MonoBehaviour
     [Header("Input")]
     [SerializeField] private InputActionReference dashAction;
 
+
     private Rigidbody2D rb;
     private PlayerWASD movement;
     private PlayerStats stats;
+    private PlayerAnimationController animationController;
+
 
     private bool isDashing;
     private float dashTime;
 
-    // Last valid movement direction.
+
+    // Last valid movement direction
     private Vector2 lastMoveDirection = Vector2.right;
 
-    // -------------------------------------------------
-    // RAMP SUPPORT
-    // -------------------------------------------------
 
+    // Ramp support
     private bool overrideMovement;
     private Vector2 rampForward = Vector2.right;
 
-    // -------------------------------------------------
-    // SKILL / DASH LOCK
-    // -------------------------------------------------
 
+    // Skill dash lock
     private bool dashLocked;
 
-    public bool IsDashing => isDashing;
 
+    public bool IsDashing => isDashing;
     public bool IsDashLocked => dashLocked;
 
-    // -------------------------------------------------
-    // UNITY
-    // -------------------------------------------------
+
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+
         movement = GetComponent<PlayerWASD>();
         stats = GetComponent<PlayerStats>();
+        animationController = GetComponent<PlayerAnimationController>();
+
 
         if (movement == null)
-        {
-            Debug.LogError(
-                "PlayerDash requires a PlayerWASD component."
-            );
-        }
+            Debug.LogError("PlayerDash requires PlayerWASD.");
+
 
         if (stats == null)
-        {
-            Debug.LogError(
-                "PlayerDash requires a PlayerStats component."
+            Debug.LogError("PlayerDash requires PlayerStats.");
+
+
+        if (animationController == null)
+            Debug.LogWarning(
+                "PlayerDash could not find PlayerAnimationController."
             );
-        }
     }
+
+
 
     private void OnEnable()
     {
         if (dashAction == null)
         {
             Debug.LogWarning(
-                "PlayerDash has no Dash InputActionReference assigned."
+                "PlayerDash has no Dash InputActionReference."
             );
 
             return;
         }
 
+
         dashAction.action.Enable();
         dashAction.action.performed += OnDashPerformed;
     }
+
+
 
     private void OnDisable()
     {
         if (dashAction == null)
             return;
 
+
         dashAction.action.performed -= OnDashPerformed;
         dashAction.action.Disable();
     }
 
+
+
+
     private void Update()
     {
         TrackMovementDirection();
+
 
         if (isDashing &&
             stats != null &&
@@ -95,17 +105,18 @@ public class PlayerDash : MonoBehaviour
         }
     }
 
-    // -------------------------------------------------
-    // MOVEMENT DIRECTION
-    // -------------------------------------------------
+
+
+
 
     private void TrackMovementDirection()
     {
         if (movement == null)
             return;
 
-        Vector2 currentMovement =
-            movement.MoveDirection;
+
+        Vector2 currentMovement = movement.MoveDirection;
+
 
         if (currentMovement.sqrMagnitude > 0.0001f)
         {
@@ -114,9 +125,9 @@ public class PlayerDash : MonoBehaviour
         }
     }
 
-    // -------------------------------------------------
-    // INPUT
-    // -------------------------------------------------
+
+
+
 
     private void OnDashPerformed(
         InputAction.CallbackContext context)
@@ -124,27 +135,28 @@ public class PlayerDash : MonoBehaviour
         StartDash();
     }
 
-    // -------------------------------------------------
-    // DASH
-    // -------------------------------------------------
+
+
+
+
 
     private void StartDash()
     {
-        // Skills can temporarily disable dash.
         if (dashLocked)
             return;
+
 
         if (isDashing)
             return;
 
-        // Dead players cannot dash.
+
         if (stats != null && stats.IsDead)
             return;
 
-        // ---------------------------------------------
-        // STAMINA
-        // ---------------------------------------------
 
+
+
+        // Consume stamina
         if (stats != null)
         {
             if (!stats.UseStamina(stats.dashCost))
@@ -157,21 +169,22 @@ public class PlayerDash : MonoBehaviour
             }
         }
 
-        // ---------------------------------------------
-        // DIRECTION
-        // ---------------------------------------------
+
+
+
 
         Vector2 dashDirection =
             lastMoveDirection;
 
-        // ---------------------------------------------
-        // RAMP SUPPORT
-        // ---------------------------------------------
 
+
+
+        // Ramp movement
         if (overrideMovement)
         {
             Vector2 forward =
                 rampForward.normalized;
+
 
             float amount =
                 Vector2.Dot(
@@ -179,110 +192,137 @@ public class PlayerDash : MonoBehaviour
                     forward
                 );
 
+
             dashDirection =
                 forward * amount;
         }
 
+
+
+
         if (dashDirection.sqrMagnitude <= 0.0001f)
             return;
 
+
+
         dashDirection.Normalize();
 
-        // ---------------------------------------------
+
+
         // START DASH
-        // ---------------------------------------------
 
         isDashing = true;
         dashTime = Time.time;
 
-        // Tell PlayerWASD to stop controlling the Rigidbody.
+
+
         if (movement != null)
         {
             movement.LockMovement();
         }
 
-        // Clear existing movement.
+
+
         rb.linearVelocity = Vector2.zero;
 
-        // Apply dash velocity.
+
+
         if (stats != null)
         {
             rb.linearVelocity =
                 dashDirection * stats.DashSpeed;
         }
 
+
+
+        // Tell animator
+        if(animationController != null)
+        {
+            animationController.PlayDash();
+        }
+
+
+
         Debug.Log(
-            $"[PlayerDash] Dash triggered! " +
-            $"Direction: {dashDirection}"
+            $"[PlayerDash] Dash triggered! Direction: {dashDirection}"
         );
     }
+
+
+
+
+
 
     private void EndDash()
     {
         if (!isDashing)
             return;
 
+
         isDashing = false;
 
-        // Stop dash velocity.
+
         rb.linearVelocity = Vector2.zero;
 
-        // Give movement control back to PlayerWASD.
+
+
         if (movement != null)
         {
             movement.UnlockMovement();
         }
+
+
 
         Debug.Log(
             "[PlayerDash] Dash ended."
         );
     }
 
-    // -------------------------------------------------
-    // SKILL DASH LOCK
-    // -------------------------------------------------
+
+
+
 
     public void LockDash()
     {
         dashLocked = true;
 
-        // If a dash is currently happening when a skill
-        // starts, immediately stop it.
-        if (isDashing)
+
+        if(isDashing)
         {
             EndDash();
         }
     }
+
+
+
+
 
     public void UnlockDash()
     {
         dashLocked = false;
     }
 
-    // -------------------------------------------------
-    // RAMP METHODS
-    // -------------------------------------------------
+
+
+
+
 
     public void EnterRamp(Vector2 forward)
     {
-        if (forward.sqrMagnitude <= 0.0001f)
+        if(forward.sqrMagnitude <= 0.0001f)
             return;
+
 
         overrideMovement = true;
         rampForward = forward.normalized;
-
-        Debug.Log(
-            $"[PlayerDash] Entered ramp. " +
-            $"Forward: {rampForward}"
-        );
     }
+
+
+
+
 
     public void ExitRamp()
     {
         overrideMovement = false;
-
-        Debug.Log(
-            "[PlayerDash] Exited ramp."
-        );
     }
 }

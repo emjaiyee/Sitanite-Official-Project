@@ -7,21 +7,29 @@ public class PlayerSkill : MonoBehaviour
     [Header("Input")]
     [SerializeField] private InputActionReference skillAction;
 
+
     [Header("Skill Recovery")]
-    [Min(0f)] [SerializeField] private float skillMovementLockDuration = 0.2f;
+    [Min(0f)]
+    [SerializeField] private float skillMovementLockDuration = 0.2f;
+
+
 
     private PlayerStats stats;
     private PlayerEquipment equipment;
     private PlayerWASD movement;
     private PlayerDash dash;
+    private PlayerAnimationController animationController;
+
+
 
     private bool skillActive;
+
     private IChargeableWeapon activeChargeable;
+
     private Coroutine skillRecovery;
 
-    // -------------------------------------------------
-    // UNITY
-    // -------------------------------------------------
+
+
 
     private void Awake()
     {
@@ -30,45 +38,55 @@ public class PlayerSkill : MonoBehaviour
         movement = GetComponent<PlayerWASD>();
         dash = GetComponent<PlayerDash>();
 
-        if (stats == null)
-        {
-            Debug.LogError(
-                "PlayerSkill requires a PlayerStats component."
-            );
-        }
+        animationController =
+            GetComponent<PlayerAnimationController>();
 
-        if (equipment == null)
-        {
-            Debug.LogError(
-                "PlayerSkill requires a PlayerEquipment component."
-            );
-        }
 
-        if (movement == null)
-        {
+        if(stats == null)
             Debug.LogError(
-                "PlayerSkill requires a PlayerWASD component."
+                "PlayerSkill requires PlayerStats."
             );
-        }
 
-        if (dash == null)
-        {
+
+        if(equipment == null)
             Debug.LogError(
-                "PlayerSkill requires a PlayerDash component."
+                "PlayerSkill requires PlayerEquipment."
             );
-        }
+
+
+        if(movement == null)
+            Debug.LogError(
+                "PlayerSkill requires PlayerWASD."
+            );
+
+
+        if(dash == null)
+            Debug.LogError(
+                "PlayerSkill requires PlayerDash."
+            );
+
+
+        if(animationController == null)
+            Debug.LogWarning(
+                "PlayerSkill could not find PlayerAnimationController."
+            );
     }
+
+
+
+
 
     private void OnEnable()
     {
-        if (skillAction == null)
+        if(skillAction == null)
         {
             Debug.LogWarning(
-                "PlayerSkill has no Skill InputActionReference assigned."
+                "PlayerSkill has no Skill InputActionReference."
             );
 
             return;
         }
+
 
         skillAction.action.Enable();
 
@@ -76,40 +94,57 @@ public class PlayerSkill : MonoBehaviour
         skillAction.action.canceled += OnSkillCanceled;
     }
 
+
+
+
+
     private void OnDisable()
     {
-        if (skillAction == null)
+        if(skillAction == null)
             return;
+
 
         skillAction.action.started -= OnSkillStarted;
         skillAction.action.canceled -= OnSkillCanceled;
 
+
         skillAction.action.Disable();
+
 
         EndSkillMovementLock();
     }
 
+
+
+
+
     private void Update()
     {
-        // While a skill is held, keep aiming it (and the player)
-        // toward the cursor until the moment it fires.
-        if (!skillActive || activeChargeable == null)
+        if(!skillActive ||
+           activeChargeable == null)
             return;
 
-        Vector2 direction = GetMouseDirection();
 
-        if (direction.sqrMagnitude <= 0.0001f)
+        Vector2 direction =
+            GetMouseDirection();
+
+
+        if(direction.sqrMagnitude <= 0.0001f)
             return;
 
-        activeChargeable.UpdateSkillDirection(direction);
 
-        if (movement != null)
+        activeChargeable.UpdateSkillDirection(
+            direction
+        );
+
+
+        if(movement != null)
             movement.FaceDirection(direction);
     }
 
-    // -------------------------------------------------
-    // PRESS F
-    // -------------------------------------------------
+
+
+
 
     private void OnSkillStarted(
         InputAction.CallbackContext context)
@@ -117,21 +152,29 @@ public class PlayerSkill : MonoBehaviour
         StartWeaponSkill();
     }
 
+
+
+
+
     private void StartWeaponSkill()
     {
-        if (skillActive)
+        if(skillActive)
             return;
 
-        if (stats == null ||
-            equipment == null)
+
+        if(stats == null ||
+           equipment == null)
             return;
 
-        if (stats.IsDead)
+
+        if(stats.IsDead)
             return;
 
-        if (equipment.CurrentWeapon == null ||
-            equipment.CurrentWeaponData == null ||
-            equipment.CurrentWeaponData.EquipmentType != EquipmentType.Weapon)
+
+
+        if(equipment.CurrentWeapon == null ||
+           equipment.CurrentWeaponData == null ||
+           equipment.CurrentWeaponData.EquipmentType != EquipmentType.Weapon)
         {
             Debug.Log(
                 "[PlayerSkill] No weapon equipped."
@@ -140,80 +183,117 @@ public class PlayerSkill : MonoBehaviour
             return;
         }
 
-        if (!equipment.CurrentWeapon.CanUseSkill)
+
+
+        if(!equipment.CurrentWeapon.CanUseSkill)
             return;
+
+
 
         ItemData weaponData =
             equipment.CurrentWeaponData;
 
-        if (!stats.UseResource(
+
+
+        if(!stats.UseResource(
             weaponData.SkillCost,
             weaponData.SkillResourceType))
         {
             Debug.Log(
-                $"[PlayerSkill] Not enough " +
-                $"{weaponData.SkillResourceType}."
+                "[PlayerSkill] Not enough resource."
             );
 
             return;
         }
 
-        // ---------------------------------------------
-        // GET MOUSE DIRECTION
-        // ---------------------------------------------
 
-        Vector2 skillDirection = GetMouseDirection();
 
-        if (skillDirection.sqrMagnitude <= 0.0001f)
+
+
+        Vector2 skillDirection =
+            GetMouseDirection();
+
+
+
+        if(skillDirection.sqrMagnitude <= 0.0001f)
             return;
 
-        // ---------------------------------------------
-        // FACE PLAYER
-        // ---------------------------------------------
 
-        if (movement != null)
+
+
+
+        if(movement != null)
         {
-            movement.FaceDirection(skillDirection);
+            movement.FaceDirection(
+                skillDirection
+            );
+
             movement.LockFacingDirection();
         }
 
-        // ---------------------------------------------
-        // MOVEMENT LOCK
-        // ---------------------------------------------
+
+
+
 
         skillActive = true;
 
-        if (movement != null)
-        {
+
+
+        if(movement != null)
             movement.LockMovement();
-        }
 
-        if (dash != null)
-        {
+
+
+        if(dash != null)
             dash.LockDash();
+
+
+
+
+
+        // PLAY SKILL ANIMATION
+        if(animationController != null)
+        {
+            animationController.PlaySkill();
         }
 
-        // ---------------------------------------------
-        // USE SKILL
-        // ---------------------------------------------
+
+
+
 
         activeChargeable =
             IsChargedSkill(weaponData)
-                ? equipment.CurrentWeapon as IChargeableWeapon
-                : null;
+            ?
+            equipment.CurrentWeapon as IChargeableWeapon
+            :
+            null;
 
-        equipment.CurrentWeapon.UseSkill(skillDirection);
 
-        if (activeChargeable == null)
+
+
+
+        equipment.CurrentWeapon.UseSkill(
+            skillDirection
+        );
+
+
+
+
+
+        if(activeChargeable == null)
         {
-            skillRecovery = StartCoroutine(
-                EndSkillMovementLockAfterDelay()
-            );
+            skillRecovery =
+                StartCoroutine(
+                    EndSkillMovementLockAfterDelay()
+                );
         }
     }
-    // -------------------------------------------------
-    // RELEASE F
-    // -------------------------------------------------
+
+
+
+
+
+
 
     private void OnSkillCanceled(
         InputAction.CallbackContext context)
@@ -221,117 +301,139 @@ public class PlayerSkill : MonoBehaviour
         ReleaseWeaponSkill();
     }
 
+
+
+
+
     private void ReleaseWeaponSkill()
     {
-        if (!skillActive)
+        if(!skillActive)
             return;
 
-        if (equipment == null)
+
+        if(equipment == null)
         {
             EndSkillMovementLock();
             return;
         }
 
-        if (equipment.CurrentWeapon == null ||
-            equipment.CurrentWeaponData == null ||
-            equipment.CurrentWeaponData.EquipmentType !=
-                EquipmentType.Weapon)
-        {
-            EndSkillMovementLock();
-            return;
-        }
 
-        // -------------------------------------------------
-        // CHARGEABLE WEAPON
-        // -------------------------------------------------
 
         IChargeableWeapon chargeableWeapon =
             equipment.CurrentWeapon as IChargeableWeapon;
 
-        if (chargeableWeapon != null)
+
+
+        if(chargeableWeapon != null)
         {
-            // Read progress BEFORE releasing (it resets on release).
             bool fullyCharged =
                 chargeableWeapon.ChargePercent >= 1f;
 
-            if (fullyCharged)
-                fullyCharged = TryConsumeMaxChargeCost();
 
-            chargeableWeapon.ReleaseSkill(fullyCharged);
+            if(fullyCharged)
+                TryConsumeMaxChargeCost();
+
+
+            chargeableWeapon.ReleaseSkill(
+                fullyCharged
+            );
         }
+
+
 
         activeChargeable = null;
 
-        if (skillRecovery == null)
+
+
+        if(skillRecovery == null)
         {
-            skillRecovery = StartCoroutine(
-                EndSkillMovementLockAfterDelay()
-            );
+            skillRecovery =
+                StartCoroutine(
+                    EndSkillMovementLockAfterDelay()
+                );
         }
     }
 
-    // -------------------------------------------------
-    // MAX CHARGE COST
-    // -------------------------------------------------
 
-    // Base skill cost was already paid on press. A full-charge
-    // release pays the difference up to MaxChargeSkillCost.
-    // If the player can't afford it, the shot fires at 99%.
+
+
+
+
     private bool TryConsumeMaxChargeCost()
     {
-        ItemData weaponData = equipment.CurrentWeaponData;
+        ItemData weaponData =
+            equipment.CurrentWeaponData;
 
-        if (stats == null || weaponData == null)
+
+        if(weaponData == null)
             return true;
+
+
 
         int extraCost =
-            weaponData.MaxChargeSkillCost - weaponData.SkillCost;
+            weaponData.MaxChargeSkillCost -
+            weaponData.SkillCost;
 
-        if (extraCost <= 0)
+
+
+        if(extraCost <= 0)
             return true;
 
-        if (stats.UseResource(extraCost, weaponData.SkillResourceType))
-            return true;
 
-        Debug.Log(
-            $"[PlayerSkill] Not enough {weaponData.SkillResourceType} " +
-            $"for max charge ({extraCost} extra). Firing at partial charge."
+
+        return stats.UseResource(
+            extraCost,
+            weaponData.SkillResourceType
         );
-
-        return false;
     }
 
-    // -------------------------------------------------
-    // MOVEMENT LOCK
-    // -------------------------------------------------
+
+
+
 
     private void EndSkillMovementLock()
     {
-        if (!skillActive)
+        if(!skillActive)
             return;
 
+
         skillActive = false;
+
         activeChargeable = null;
 
-        if (movement != null)
+
+
+        if(movement != null)
         {
             movement.UnlockMovement();
             movement.UnlockFacingDirection();
         }
 
-        if (dash != null)
-        {
+
+
+        if(dash != null)
             dash.UnlockDash();
-        }
     }
+
+
+
+
 
     private IEnumerator EndSkillMovementLockAfterDelay()
     {
-        yield return new WaitForSeconds(skillMovementLockDuration);
+        yield return new WaitForSeconds(
+            skillMovementLockDuration
+        );
+
 
         skillRecovery = null;
+
         EndSkillMovementLock();
     }
+
+
+
+
 
     private bool IsChargedSkill(ItemData weaponData)
     {
@@ -339,24 +441,36 @@ public class PlayerSkill : MonoBehaviour
                weaponData.WeaponSkillType == WeaponSkillType.Beam;
     }
 
+
+
+
+
     private Vector2 GetMouseDirection()
     {
-        if (Mouse.current == null ||
-            Camera.main == null)
+        if(Mouse.current == null ||
+           Camera.main == null)
         {
             return Vector2.zero;
         }
+
+
 
         Vector3 mousePosition =
             Camera.main.ScreenToWorldPoint(
                 Mouse.current.position.ReadValue()
             );
 
-        Vector2 direction =
-            (Vector2)(mousePosition - transform.position);
 
-        if (direction.sqrMagnitude <= 0.0001f)
+
+        Vector2 direction =
+            mousePosition - transform.position;
+
+
+
+        if(direction.sqrMagnitude <= 0.0001f)
             return Vector2.zero;
+
+
 
         return direction.normalized;
     }
