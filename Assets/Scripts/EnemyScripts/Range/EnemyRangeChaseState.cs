@@ -100,7 +100,8 @@ public class EnemyRangeChaseState : EnemyRangeState
             Time.deltaTime;
 
 
-        if (repathTimer >= RepathInterval)
+        if (!Enemy.IsOnStairLink &&
+            repathTimer >= RepathInterval)
         {
             repathTimer = 0f;
 

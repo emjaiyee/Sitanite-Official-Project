@@ -16,6 +16,10 @@ public class PlayerElevationLevel : MonoBehaviour
         if (target == null || Instance == null)
             return true;
 
+
+        if (AreBothOnSameRamp(target))
+            return true;
+
         EnemyElevationLevel enemyElevation =
             target.GetComponentInParent<EnemyElevationLevel>();
 
@@ -23,6 +27,49 @@ public class PlayerElevationLevel : MonoBehaviour
             return true;
 
         return Mathf.Abs(Instance.CurrentLevel - enemyElevation.CurrentLevel) <= 1;
+    }
+
+
+    private static bool AreBothOnSameRamp(Transform target)
+    {
+        Collider2D playerCollider =
+            Instance.GetComponentInChildren<Collider2D>();
+
+
+        Collider2D targetCollider =
+            target.GetComponentInParent<Collider2D>();
+
+
+        if (playerCollider == null || targetCollider == null)
+            return false;
+
+
+        Vector2 playerPoint = playerCollider.bounds.center;
+        Vector2 targetPoint = targetCollider.bounds.center;
+
+
+        RampMovementTrigger[] ramps =
+            UnityEngine.Object.FindObjectsOfType<RampMovementTrigger>();
+
+
+        foreach (RampMovementTrigger ramp in ramps)
+        {
+            if (ramp == null || ramp.RampCollider == null)
+                continue;
+
+
+            Collider2D rampCollider = ramp.RampCollider;
+
+
+            if (rampCollider.OverlapPoint(playerPoint) &&
+                rampCollider.OverlapPoint(targetPoint))
+            {
+                return true;
+            }
+        }
+
+
+        return false;
     }
 
     private void Awake()

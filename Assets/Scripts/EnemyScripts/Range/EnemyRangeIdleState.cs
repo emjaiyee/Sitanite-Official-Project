@@ -89,6 +89,7 @@ public class EnemyRangeIdleState : EnemyRangeState
 
         if (path == null || path.Count == 0)
         {
+            SetCurrentCellAsIdleOrigin();
             waitingForNewDestination = true;
             waitTimer = 0f;
             return;
@@ -98,6 +99,19 @@ public class EnemyRangeIdleState : EnemyRangeState
         {
             waitingForNewDestination = true;
             waitTimer = 0f;
+        }
+    }
+
+    private void SetCurrentCellAsIdleOrigin()
+    {
+        Vector3? currentCell =
+            AStarManager.Instance.GetWalkableCellCenter(
+                Enemy.transform.position
+            );
+
+        if (currentCell.HasValue)
+        {
+            Enemy.SetIdleOrigin(currentCell.Value);
         }
     }
 }

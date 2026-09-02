@@ -19,6 +19,12 @@ public class RampMovementTrigger : MonoBehaviour
     [SerializeField]
     private Vector2 rampForward = new Vector2(1f, 0.5f);
 
+    public Collider2D RampCollider =>
+        GetComponent<Collider2D>();
+
+    public Vector2 RampForward =>
+        rampForward.normalized;
+
     private void Reset()
     {
         GetComponent<Collider2D>().isTrigger = true;

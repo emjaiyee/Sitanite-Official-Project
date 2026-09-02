@@ -638,10 +638,7 @@ public class PlayerStats : MonoBehaviour
         if (amount <= 0 || IsDead || currentHealth <= 0)
             return;
 
-        amount = Mathf.Max(0f, amount - GetDamageResistance(damageType));
-
-        if (amount <= 0)
-            return;
+        amount = Mathf.Max(1f, amount - GetDamageResistance(damageType));
 
         currentHealth = Mathf.Max(
             0,

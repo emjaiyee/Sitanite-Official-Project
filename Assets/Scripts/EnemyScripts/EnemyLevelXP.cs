@@ -77,6 +77,11 @@ public class EnemyLevelXP : MonoBehaviour
         experienceReward = Mathf.Max(0f, reward);
     }
 
+    public void AddExperienceReward(float modifier)
+    {
+        experienceReward = Mathf.Max(0f, experienceReward + modifier);
+    }
+
     private void ResolveReferences()
     {
         if (enemyHealth == null)

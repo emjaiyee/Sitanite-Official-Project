@@ -7,10 +7,6 @@ using UnityEngine.Rendering;
 [AddComponentMenu("Dimla/Enemy Spawn Point")]
 public class EnemySpawnPoint : MonoBehaviour
 {
-    [Header("Spawn Source")]
-    [Tooltip("Assign the enemy prefab. Spawned enemies use the prefab's own sprite, collider, and size.")]
-    [SerializeField] private GameObject enemyPrefab;
-
     [Header("Spawn Count (random)")]
     [Tooltip("Spawn a random number of enemies between Min and Max (inclusive).")]
     [SerializeField] private bool useRandomCount = true;
@@ -110,6 +106,31 @@ public class EnemySpawnPoint : MonoBehaviour
     /// </summary>
     public List<GameObject> SpawnEnemies()
     {
+        Debug.LogWarning(
+            $"[EnemySpawnPoint] '{name}' no longer owns the prefab source. Use EnemySpawnerManager to drive spawning."
+        );
+
+        return new List<GameObject>();
+    }
+
+
+    /// <summary>
+    /// Spawns multiple enemies using a prefab supplied by the room-level manager.
+    /// </summary>
+    public List<GameObject> SpawnEnemies(
+        GameObject managedEnemyPrefab,
+        int enemyLevel,
+        Transform parentOverride)
+    {
+        if (managedEnemyPrefab == null)
+        {
+            Debug.LogWarning(
+                "[EnemySpawnPoint] No enemy prefab was supplied by the spawner manager on " + name
+            );
+
+            return new List<GameObject>();
+        }
+
         int count = fixedSpawnCount;
 
         if (useRandomCount)
@@ -120,17 +141,14 @@ public class EnemySpawnPoint : MonoBehaviour
             count = UnityEngine.Random.Range(min, max + 1);
         }
 
-        var spawned = new List<GameObject>();
+        List<GameObject> spawned = new List<GameObject>();
 
-        // No enemies means this spawn point is already clear.
         if (count <= 0)
         {
             Debug.Log($"[EnemySpawnPoint] Spawn count is {count} at '{name}'. Spawn point is already clear.");
-
             RaiseWaveCleared();
             return spawned;
         }
-
 
         if (evenDistribution && count > 1)
         {
@@ -158,14 +176,13 @@ public class EnemySpawnPoint : MonoBehaviour
                         (Vector2)transform.position +
                         new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * r;
 
-                    if (IsPositionAcceptable(pos, spawned))
+                    if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab))
                     {
                         chosenPos = pos;
                         found = true;
                         break;
                     }
                 }
-
 
                 if (!found)
                 {
@@ -175,7 +192,7 @@ public class EnemySpawnPoint : MonoBehaviour
                             (Vector2)transform.position +
                             UnityEngine.Random.insideUnitCircle * spawnRadius;
 
-                        if (IsPositionAcceptable(pos, spawned))
+                        if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab))
                         {
                             chosenPos = pos;
                             found = true;
@@ -184,10 +201,14 @@ public class EnemySpawnPoint : MonoBehaviour
                     }
                 }
 
-
                 if (found)
                 {
-                    var go = SpawnEnemyAt((Vector3)chosenPos);
+                    GameObject go = SpawnEnemyAt(
+                        (Vector3)chosenPos,
+                        managedEnemyPrefab,
+                        enemyLevel,
+                        parentOverride
+                    );
 
                     if (go != null)
                         spawned.Add(go);
@@ -216,7 +237,7 @@ public class EnemySpawnPoint : MonoBehaviour
                         (Vector2)transform.position +
                         UnityEngine.Random.insideUnitCircle * spawnRadius;
 
-                    if (IsPositionAcceptable(pos2D, spawned))
+                    if (IsPositionAcceptable(pos2D, spawned, managedEnemyPrefab))
                     {
                         found = true;
                         break;
@@ -226,22 +247,25 @@ public class EnemySpawnPoint : MonoBehaviour
                     attemptsTotal++;
                 }
 
-
                 if (!found)
                 {
                     Vector2 centerPos = transform.position;
 
-                    if (IsPositionAcceptable(centerPos, spawned))
+                    if (IsPositionAcceptable(centerPos, spawned, managedEnemyPrefab))
                     {
                         pos2D = centerPos;
                         found = true;
                     }
                 }
 
-
                 if (found)
                 {
-                    var go = SpawnEnemyAt((Vector3)pos2D);
+                    GameObject go = SpawnEnemyAt(
+                        (Vector3)pos2D,
+                        managedEnemyPrefab,
+                        enemyLevel,
+                        parentOverride
+                    );
 
                     if (go != null)
                         spawned.Add(go);
@@ -258,20 +282,10 @@ public class EnemySpawnPoint : MonoBehaviour
             }
         }
 
+        Debug.Log($"[EnemySpawnPoint] Spawned {spawned.Count} enemy(ies) at '{name}'");
 
-        Debug.Log(
-            $"[EnemySpawnPoint] Spawned {spawned.Count} enemy(ies) at '{name}'"
-        );
-
-
-        // This is important:
-        // If the requested count was greater than zero but no enemies
-        // could actually be spawned, this spawn point should not remain
-        // permanently uncleared.
         if (spawned.Count == 0)
-        {
             RaiseWaveCleared();
-        }
 
         return spawned;
     }
@@ -282,7 +296,11 @@ public class EnemySpawnPoint : MonoBehaviour
     /// </summary>
     public GameObject SpawnSingle()
     {
-        return SpawnEnemyAt(transform.position);
+        Debug.LogWarning(
+            $"[EnemySpawnPoint] '{name}' no longer owns the prefab source. Use EnemySpawnerManager to drive spawning."
+        );
+
+        return null;
     }
 
 
@@ -291,22 +309,38 @@ public class EnemySpawnPoint : MonoBehaviour
     /// </summary>
     public GameObject SpawnEnemyAt(Vector3 worldPosition)
     {
-        if (enemyPrefab == null)
+        Debug.LogWarning(
+            $"[EnemySpawnPoint] '{name}' no longer owns the prefab source. Use EnemySpawnerManager to drive spawning."
+        );
+
+        return null;
+    }
+
+
+    /// <summary>
+    /// Spawns a single enemy at the provided world position using a prefab supplied by the manager.
+    /// </summary>
+    public GameObject SpawnEnemyAt(
+        Vector3 worldPosition,
+        GameObject managedEnemyPrefab,
+        int enemyLevel,
+        Transform parentOverride = null)
+    {
+        if (managedEnemyPrefab == null)
         {
             Debug.LogWarning(
-                "[EnemySpawnPoint] No enemyPrefab assigned on " + name
+                "[EnemySpawnPoint] No enemy prefab was supplied by the spawner manager on " + name
             );
 
             return null;
         }
 
-
         GameObject instance =
             Instantiate(
-                enemyPrefab,
+                managedEnemyPrefab,
                 worldPosition,
                 transform.rotation,
-                spawnParent
+                parentOverride != null ? parentOverride : spawnParent
             );
 
         ApplyRenderingSettings(instance);
@@ -319,23 +353,23 @@ public class EnemySpawnPoint : MonoBehaviour
 
         enemyElevation.SetLevel(elevationLevel);
 
+        EnemyLevelXP enemyLevelXp =
+            instance.GetComponent<EnemyLevelXP>();
 
-        // Preserve the health configured on the enemy prefab.
-        var eh = instance.GetComponent<EnemyHealth>();
+        if (enemyLevelXp == null)
+            enemyLevelXp = instance.AddComponent<EnemyLevelXP>();
 
-        if (eh == null)
-            eh = instance.AddComponent<EnemyHealth>();
+        enemyLevelXp.SetLevel(enemyLevel);
 
+        EnemyHealth enemyHealth = instance.GetComponent<EnemyHealth>();
+
+        if (enemyHealth == null)
+            enemyHealth = instance.AddComponent<EnemyHealth>();
 
         EnsureEnemyPhysics(instance);
 
-
-        // Subscribe to the enemy's death event.
-        eh.OnEnemyDied += HandleTrackedEnemyDied;
-
-
+        enemyHealth.OnEnemyDied += HandleTrackedEnemyDied;
         trackedEnemies.Add(instance);
-
 
         OnEnemySpawned?.Invoke(instance);
 
@@ -396,11 +430,12 @@ public class EnemySpawnPoint : MonoBehaviour
 
     private bool IsPositionAcceptable(
         Vector2 pos,
-        List<GameObject> alreadySpawned)
+        List<GameObject> alreadySpawned,
+        GameObject prefab)
     {
         // Compute approximate collision radius from prefab/sprite
         // and combine with minSeparation.
-        float approxRadius = GetApproximateRadius();
+        float approxRadius = GetApproximateRadius(prefab);
         float required = Mathf.Max(minSeparation, approxRadius);
 
 
@@ -442,10 +477,16 @@ public class EnemySpawnPoint : MonoBehaviour
 
     private float GetApproximateRadius()
     {
-        if (enemyPrefab != null)
+        return minSeparation * 0.5f;
+    }
+
+
+    private float GetApproximateRadius(GameObject prefab)
+    {
+        if (prefab != null)
         {
             var collider =
-                enemyPrefab.GetComponentInChildren<Collider2D>(true);
+                prefab.GetComponentInChildren<Collider2D>(true);
 
             if (collider != null)
                 return collider.bounds.extents.magnitude;

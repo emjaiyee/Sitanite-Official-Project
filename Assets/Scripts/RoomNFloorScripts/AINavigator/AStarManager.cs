@@ -228,6 +228,21 @@ public class AStarManager : MonoBehaviour
     }
 
 
+    public Vector3? GetWalkableCellCenter(
+        Vector3 worldPosition)
+    {
+        Tilemap tilemap =
+            GetWalkableTilemapAtPosition(worldPosition);
+
+        if (tilemap == null)
+            return null;
+
+        return tilemap.GetCellCenterWorld(
+            tilemap.WorldToCell(worldPosition)
+        );
+    }
+
+
     // =========================================================
     // FIND PATH
     // =========================================================
@@ -408,9 +423,6 @@ public class AStarManager : MonoBehaviour
 
         foreach (AStarStairLink stairLink in stairLinks)
         {
-            if (stairLink == null)
-                continue;
-
             TryBuildCrossMapPath(
                 startTilemap,
                 startWorldPosition,
@@ -419,7 +431,8 @@ public class AStarManager : MonoBehaviour
                 stairLink,
                 true,
                 ref bestPath,
-                ref bestCost);
+                ref bestCost
+            );
 
             TryBuildCrossMapPath(
                 startTilemap,
@@ -429,7 +442,8 @@ public class AStarManager : MonoBehaviour
                 stairLink,
                 false,
                 ref bestPath,
-                ref bestCost);
+                ref bestCost
+            );
         }
 
         return bestPath;
@@ -442,34 +456,35 @@ public class AStarManager : MonoBehaviour
         Tilemap targetTilemap,
         Vector3 targetWorldPosition,
         AStarStairLink stairLink,
-        bool useEntrySide,
+        bool fromEntryToExit,
         ref List<Vector3> bestPath,
         ref int bestCost)
     {
-        Vector3 startAnchor =
-            useEntrySide
-                ? stairLink.EntryPosition
-                : stairLink.ExitPosition;
+        if (stairLink == null)
+            return;
 
-        Vector3 targetAnchor =
-            useEntrySide
-                ? stairLink.ExitPosition
-                : stairLink.EntryPosition;
+        Vector3 approachPoint = fromEntryToExit
+            ? stairLink.EntryPosition
+            : stairLink.ExitPosition;
 
-        List<Vector3> startSegment =
+        Vector3 arrivalPoint = fromEntryToExit
+            ? stairLink.ExitPosition
+            : stairLink.EntryPosition;
+
+        List<Vector3> approachSegment =
             BuildPathOnTilemap(
                 startTilemap,
                 startWorldPosition,
-                startAnchor
+                approachPoint
             );
 
-        if (startSegment == null)
+        if (approachSegment == null)
             return;
 
         List<Vector3> targetSegment =
             BuildPathOnTilemap(
                 targetTilemap,
-                targetAnchor,
+                arrivalPoint,
                 targetWorldPosition
             );
 
@@ -479,10 +494,10 @@ public class AStarManager : MonoBehaviour
         List<Vector3> candidatePath =
             new List<Vector3>();
 
-        AppendWorldPoints(candidatePath, startSegment);
+        AppendWorldPoints(candidatePath, approachSegment);
         AppendWorldPoints(
             candidatePath,
-            stairLink.BuildTraversalPoints(useEntrySide)
+            stairLink.BuildTraversalPoints(fromEntryToExit)
         );
         AppendWorldPoints(candidatePath, targetSegment);
 

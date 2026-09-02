@@ -62,24 +62,24 @@ public class RoomManager : MonoBehaviour
     // ROOM CLEAR TRACKING
     // -------------------------------------------------
 
-    // Tracks every EnemySpawnPoint belonging to each room.
+    // Tracks every EnemySpawnerManager belonging to each room.
     private readonly Dictionary<
         RoomInstance,
-        List<EnemySpawnPoint>
+        List<EnemySpawnerManager>
     > roomSpawnPoints =
         new Dictionary<
             RoomInstance,
-            List<EnemySpawnPoint>
+            List<EnemySpawnerManager>
         >();
 
     // Tracks which spawn points have reported themselves cleared.
     private readonly Dictionary<
         RoomInstance,
-        HashSet<EnemySpawnPoint>
+        HashSet<EnemySpawnerManager>
     > clearedSpawnPoints =
         new Dictionary<
             RoomInstance,
-            HashSet<EnemySpawnPoint>
+            HashSet<EnemySpawnerManager>
         >();
 
 
@@ -141,6 +141,21 @@ public class RoomManager : MonoBehaviour
         }
 
         ClearGeneratedRooms();
+
+        EnemySpawnerManager enemySpawnerManager =
+            FindFirstObjectByType<EnemySpawnerManager>();
+
+        if (enemySpawnerManager == null)
+        {
+            Debug.LogError(
+                "RoomManager requires one scene-level EnemySpawnerManager."
+            );
+            return;
+        }
+
+        enemySpawnerManager.BeginFloor(floorManager);
+        enemySpawnerManager.OnRoomWaveCleared +=
+            HandleRoomWaveCleared;
 
         List<GameObject> prefabPool =
             GetAllowedRoomPrefabs(configuration);
@@ -433,14 +448,17 @@ public class RoomManager : MonoBehaviour
         if (room == null)
             return;
 
-        EnemySpawnPoint[] spawnPoints =
-            room.GetComponentsInChildren<EnemySpawnPoint>(true);
+        EnemySpawnerManager enemySpawnerManager =
+            FindFirstObjectByType<EnemySpawnerManager>();
 
-        List<EnemySpawnPoint> roomPoints =
-            new List<EnemySpawnPoint>(spawnPoints);
+        List<EnemySpawnerManager> roomPoints =
+            new List<EnemySpawnerManager>();
 
-        HashSet<EnemySpawnPoint> clearedPoints =
-            new HashSet<EnemySpawnPoint>();
+        if (enemySpawnerManager != null)
+            roomPoints.Add(enemySpawnerManager);
+
+        HashSet<EnemySpawnerManager> clearedPoints =
+            new HashSet<EnemySpawnerManager>();
 
         roomSpawnPoints[room] = roomPoints;
         clearedSpawnPoints[room] = clearedPoints;
@@ -448,7 +466,7 @@ public class RoomManager : MonoBehaviour
 
         Debug.Log(
             $"Room {room.RoomNumber} has " +
-            $"{roomPoints.Count} EnemySpawnPoint(s)."
+            $"{roomPoints.Count} EnemySpawnerManager(s)."
         );
 
 
@@ -460,7 +478,7 @@ public class RoomManager : MonoBehaviour
         {
             Debug.Log(
                 $"Room {room.RoomNumber} contains no " +
-                "EnemySpawnPoints."
+                "EnemySpawnerManagers."
             );
 
             if (room.RoomNumber == 1)
@@ -496,29 +514,28 @@ public class RoomManager : MonoBehaviour
         // SUBSCRIBE TO SPAWN POINTS
         // -------------------------------------------------
 
-        foreach (
-            EnemySpawnPoint spawnPoint
-            in roomPoints
-        )
+        if (enemySpawnerManager != null)
         {
-            if (spawnPoint == null)
-                continue;
-
-            EnemySpawnPoint capturedSpawnPoint =
-                spawnPoint;
-
-            spawnPoint.OnWaveCleared +=
-                () => HandleSpawnPointCleared(
-                    room,
-                    capturedSpawnPoint
-                );
+            enemySpawnerManager.RegisterRoom(room);
         }
+    }
+
+    private void HandleRoomWaveCleared(RoomInstance room)
+    {
+        if (room == null ||
+            !roomSpawnPoints.TryGetValue(
+                room,
+                out List<EnemySpawnerManager> spawnPoints) ||
+            spawnPoints.Count == 0)
+            return;
+
+        HandleSpawnPointCleared(room, spawnPoints[0]);
     }
 
 
     private void HandleSpawnPointCleared(
         RoomInstance room,
-        EnemySpawnPoint spawnPoint)
+        EnemySpawnerManager spawnPoint)
     {
         if (room == null || spawnPoint == null)
             return;
@@ -526,7 +543,7 @@ public class RoomManager : MonoBehaviour
         if (!roomSpawnPoints.ContainsKey(room))
             return;
 
-        HashSet<EnemySpawnPoint> clearedPoints =
+        HashSet<EnemySpawnerManager> clearedPoints =
             clearedSpawnPoints[room];
 
         // Prevent duplicate notifications.
@@ -535,7 +552,7 @@ public class RoomManager : MonoBehaviour
 
         Debug.Log(
             $"Room {room.RoomNumber}: " +
-            $"EnemySpawnPoint '{spawnPoint.name}' cleared. " +
+            $"EnemySpawnerManager '{spawnPoint.name}' cleared. " +
             $"{clearedPoints.Count}/" +
             $"{roomSpawnPoints[room].Count} cleared."
         );
@@ -576,6 +593,7 @@ public class RoomManager : MonoBehaviour
             return;
 
         SetSecretGatewayVisible(validSecretGateway, true);
+        HeadsUpTextManager.Show("The floor shifts. A hidden room has opened.");
         Debug.Log(
             $"Secret Gateway '{validSecretGateway.name}' opened after " +
             $"clearing Room {room.RoomNumber}."
@@ -625,7 +643,7 @@ public class RoomManager : MonoBehaviour
 
         if (!roomSpawnPoints.TryGetValue(
                 destinationRoom,
-                out List<EnemySpawnPoint> spawnPoints))
+                out List<EnemySpawnerManager> spawnPoints))
             return;
 
         if (spawnPoints.Count > 0)
@@ -633,7 +651,7 @@ public class RoomManager : MonoBehaviour
 
         Debug.Log(
             $"Room {destinationRoom.RoomNumber} was entered and " +
-            "contains no EnemySpawnPoints. Clearing room."
+            "contains no EnemySpawnerManagers. Clearing room."
         );
 
         HandleRoomCleared(destinationRoom);
@@ -1077,26 +1095,45 @@ public class RoomManager : MonoBehaviour
         Player player =
             Player.Instance;
 
-        // Position player
-        player.transform.position =
-            spawnPoint.transform.position;
+        RoomTransitionManager roomTransitionManager =
+            RoomTransitionManager.Instance;
 
-        // Set elevation
-        PlayerElevationLevel elevation =
-            player.GetComponent<PlayerElevationLevel>();
-
-        if (elevation != null)
+        if (roomTransitionManager == null)
         {
-            elevation.SetLevel(
+            roomTransitionManager =
+                FindFirstObjectByType<RoomTransitionManager>();
+        }
+
+        if (roomTransitionManager != null)
+        {
+            roomTransitionManager.TransitionPlayer(
+                player.transform,
+                spawnPoint.transform,
                 spawnPoint.ElevationLevel
             );
         }
         else
         {
-            Debug.LogWarning(
-                "Player does not have a " +
-                "PlayerElevationLevel component."
-            );
+            // Fallback if the fade/transition system is absent.
+            player.transform.position =
+                spawnPoint.transform.position;
+
+            PlayerElevationLevel elevation =
+                player.GetComponent<PlayerElevationLevel>();
+
+            if (elevation != null)
+            {
+                elevation.SetLevel(
+                    spawnPoint.ElevationLevel
+                );
+            }
+            else
+            {
+                Debug.LogWarning(
+                    "Player does not have a " +
+                    "PlayerElevationLevel component."
+                );
+            }
         }
 
         Debug.Log(
@@ -1504,6 +1541,10 @@ public class RoomManager : MonoBehaviour
                 "All rooms on this floor have been cleared."
             );
 
+            HeadsUpTextManager.Show(
+                "The floor has been cleared. The gateway to the depths has opened."
+            );
+
             foreach (Gateway gateway in validFloorGateways)
                 SetGatewayVisible(gateway, true);
 
@@ -1556,11 +1597,17 @@ public class RoomManager : MonoBehaviour
 
     private void ClearGeneratedRooms()
     {
+        EnemySpawnerManager enemySpawnerManager =
+            FindFirstObjectByType<EnemySpawnerManager>();
+
+        if (enemySpawnerManager != null)
+            enemySpawnerManager.OnRoomWaveCleared -= HandleRoomWaveCleared;
+
         // Remove event subscriptions before destroying rooms.
         foreach (
             KeyValuePair<
                 RoomInstance,
-                List<EnemySpawnPoint>
+                List<EnemySpawnerManager>
             > entry
             in roomSpawnPoints
         )
@@ -1568,14 +1615,14 @@ public class RoomManager : MonoBehaviour
             RoomInstance room =
                 entry.Key;
 
-            List<EnemySpawnPoint> spawnPoints =
+            List<EnemySpawnerManager> spawnPoints =
                 entry.Value;
 
             if (spawnPoints == null)
                 continue;
 
             foreach (
-                EnemySpawnPoint spawnPoint
+                EnemySpawnerManager spawnPoint
                 in spawnPoints
             )
             {
@@ -1616,6 +1663,7 @@ public class RoomManager : MonoBehaviour
 
         generatedSecretRooms.Clear();
     }
+
     private void SetRoomGatewayState(
     RoomInstance room,
     bool unlocked)

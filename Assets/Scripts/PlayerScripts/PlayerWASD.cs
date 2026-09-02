@@ -106,10 +106,7 @@ public class PlayerWASD : MonoBehaviour
                 ? GetGridDiagonalMovement(input)
                 : input;
 
-        Vector2 rampMovement =
-            useIsometricMovement
-                ? GetIsometricMovement(input)
-                : input;
+        Vector2 rampMovement = input;
 
         if (overrideMovement)
         {
