@@ -303,31 +303,48 @@ public class EnemySpawnerManager : MonoBehaviour
         int activeCount,
         SpawnConfiguration configuration)
     {
-        List<EnemySpawnPoint> pool = new List<EnemySpawnPoint>();
+        List<EnemySpawnPoint> preferredPool = new List<EnemySpawnPoint>();
+        List<EnemySpawnPoint> fallbackPool = new List<EnemySpawnPoint>();
 
         foreach (EnemySpawnPoint spawnPoint in spawnPoints)
         {
-            if (spawnPoint != null &&
-                (configuration == null ||
-                 UnityEngine.Random.value <= configuration.activationChance))
-                pool.Add(spawnPoint);
+            if (spawnPoint == null)
+                continue;
+
+            if (configuration == null ||
+                UnityEngine.Random.value <= configuration.activationChance)
+                preferredPool.Add(spawnPoint);
+            else
+                fallbackPool.Add(spawnPoint);
         }
 
-        if (pool.Count == 0 || activeCount <= 0)
+        if (preferredPool.Count + fallbackPool.Count == 0 || activeCount <= 0)
             return new List<EnemySpawnPoint>();
 
-        activeCount = Mathf.Min(activeCount, pool.Count);
+        activeCount = Mathf.Min(
+            activeCount,
+            preferredPool.Count + fallbackPool.Count
+        );
 
         List<EnemySpawnPoint> selected = new List<EnemySpawnPoint>();
 
-        for (int i = 0; i < activeCount; i++)
+        SelectRandomSpawnPoints(preferredPool, selected, activeCount);
+        SelectRandomSpawnPoints(fallbackPool, selected, activeCount);
+
+        return selected;
+    }
+
+    private static void SelectRandomSpawnPoints(
+        List<EnemySpawnPoint> pool,
+        List<EnemySpawnPoint> selected,
+        int targetCount)
+    {
+        while (pool.Count > 0 && selected.Count < targetCount)
         {
             int index = UnityEngine.Random.Range(0, pool.Count);
             selected.Add(pool[index]);
             pool.RemoveAt(index);
         }
-
-        return selected;
     }
 
     private void HandleSpawnPointCleared(EnemySpawnPoint spawnPoint, Action handler)
