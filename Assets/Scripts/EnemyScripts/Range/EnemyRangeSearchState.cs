@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyRangeSearchState : EnemyRangeState
@@ -11,14 +12,33 @@ public class EnemyRangeSearchState : EnemyRangeState
 
     public override void Enter()
     {
-        if (!Enemy.IsOnStairLink)
+        if (Enemy.LastKnownPlayerPosition.HasValue &&
+            AStarManager.Instance != null)
+        {
+            List<Vector3> path = AStarManager.Instance.FindPath(
+                Enemy.transform.position,
+                Enemy.LastKnownPlayerPosition.Value,
+                Enemy.ElevationLevel
+            );
+
+            Enemy.SetPath(path);
+        }
+        else if (!Enemy.IsOnStairLink)
+        {
             Enemy.StopMoving();
+        }
 
         searchTimer = 0f;
     }
 
     public override void Tick()
     {
+        if (Enemy.HasPath)
+        {
+            Enemy.FollowCurrentPath();
+            return;
+        }
+
         if (Enemy.Player == null)
         {
             FinishSearch();

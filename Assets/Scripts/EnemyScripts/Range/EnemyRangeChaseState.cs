@@ -134,7 +134,11 @@ public class EnemyRangeChaseState : EnemyRangeState
         List<Vector3> path =
             AStarManager.Instance.FindPath(
                 Enemy.transform.position,
-                Enemy.Player.position
+                Enemy.Player.position,
+                Enemy.ElevationLevel,
+                PlayerElevationLevel.Instance != null
+                    ? PlayerElevationLevel.Instance.CurrentLevel
+                    : Enemy.ElevationLevel
             );
 
 

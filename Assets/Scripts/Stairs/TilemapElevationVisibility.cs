@@ -51,6 +51,14 @@ public class TilemapElevationVisibility : MonoBehaviour
         PlayerElevationLevel.OnElevationChanged -= Refresh;
     }
 
+
+    private void Start()
+    {
+        if (PlayerElevationLevel.Instance != null)
+            Refresh(PlayerElevationLevel.Instance.CurrentLevel);
+    }
+
+
     public void Refresh(int playerLevel)
     {
         bool enabled = true;

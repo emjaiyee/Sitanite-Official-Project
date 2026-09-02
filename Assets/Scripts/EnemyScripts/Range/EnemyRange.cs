@@ -14,6 +14,7 @@ public class EnemyRange : MonoBehaviour
         Idle,
         Chase,
         Search,
+        Locate,
         Death
     }
 
@@ -57,6 +58,14 @@ public class EnemyRange : MonoBehaviour
 
     public int IdleWanderRadius =>
         idleWanderRadius;
+
+    [Header("Locate")]
+    [Min(0f)] [SerializeField] private float locateWaitDuration = 2.5f;
+
+    public float LocateWaitDuration => locateWaitDuration;
+
+    public Vector3? DamageSourcePosition { get; private set; }
+    public Vector3? LastKnownPlayerPosition { get; private set; }
 
 
     // =========================================================
@@ -117,6 +126,7 @@ public class EnemyRange : MonoBehaviour
     // =========================================================
 
     private EnemyHealth enemyHealth;
+    private EnemyElevationLevel enemyElevation;
     private Transform player;
     private PlayerStats playerStats;
 
@@ -130,6 +140,9 @@ public class EnemyRange : MonoBehaviour
 
     public Vector3 SpawnPosition =>
         spawnPosition;
+
+    public int ElevationLevel =>
+        enemyElevation != null ? enemyElevation.CurrentLevel : 0;
 
     public void SetIdleOrigin(Vector3 position)
     {
@@ -202,6 +215,9 @@ public class EnemyRange : MonoBehaviour
     {
         enemyHealth =
             GetComponent<EnemyHealth>();
+
+        enemyElevation =
+            GetComponent<EnemyElevationLevel>();
 
         spawnPosition =
             transform.position;
@@ -276,7 +292,8 @@ public class EnemyRange : MonoBehaviour
             );
         }
         else if (!AStarManager.Instance.IsPositionWalkable(
-                     transform.position))
+                     transform.position,
+                     ElevationLevel))
         {
             Debug.LogWarning(
                 $"[EnemyRange] {name} spawned on a " +
@@ -376,9 +393,32 @@ public class EnemyRange : MonoBehaviour
         EnemyHealth source,
         Vector3? damageSource)
     {
-        // Intentionally does NOT alert or change detection state.
-        //
-        // EnemyRange does not use the EnemyMelee Alerted system.
+        NotifyDamaged(damageSource);
+    }
+
+    public void NotifyDamaged(Vector3? damageSource)
+    {
+        if (!damageSource.HasValue ||
+            CurrentState == EnemyState.Death ||
+            CurrentState == EnemyState.Chase)
+        {
+            return;
+        }
+
+        DamageSourcePosition = damageSource.Value;
+
+        if (CurrentState == EnemyState.Locate)
+        {
+            EnemyRangeLocateState locateState =
+                currentState as EnemyRangeLocateState;
+
+            if (locateState != null)
+                locateState.RefreshDestination();
+
+            return;
+        }
+
+        ChangeState(EnemyState.Locate);
     }
 
 
@@ -435,6 +475,9 @@ public class EnemyRange : MonoBehaviour
             case EnemyState.Search:
                 return new EnemyRangeSearchState(this);
 
+            case EnemyState.Locate:
+                return new EnemyRangeLocateState(this);
+
             case EnemyState.Death:
                 return new EnemyRangeDeathState(this);
 
@@ -471,12 +514,18 @@ public class EnemyRange : MonoBehaviour
             return false;
 
 
-        return AStarManager.Instance
+        bool detected = AStarManager.Instance
             .IsPositionWithinDetectionRadius(
                 transform.position,
                 player.position,
-                DetectionRadius
+                DetectionRadius,
+                ElevationLevel
             );
+
+        if (detected)
+            LastKnownPlayerPosition = player.position;
+
+        return detected;
     }
 
 
@@ -526,7 +575,9 @@ public class EnemyRange : MonoBehaviour
     /// </summary>
     public bool TryShootProjectile()
     {
-        if (player == null)
+        if (CurrentState != EnemyState.Chase ||
+            player == null ||
+            !IsPlayerDetected())
             return false;
 
 

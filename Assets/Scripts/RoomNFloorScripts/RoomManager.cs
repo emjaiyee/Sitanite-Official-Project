@@ -1542,7 +1542,7 @@ public class RoomManager : MonoBehaviour
             );
 
             HeadsUpTextManager.Show(
-                "The floor has been cleared. The gateway to the depths has opened."
+                "The floor has been cleared. The way to the depths has opened."
             );
 
             foreach (Gateway gateway in validFloorGateways)
