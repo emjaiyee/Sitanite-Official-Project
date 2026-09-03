@@ -297,7 +297,7 @@ Transform:
   - {fileID: 1435930602}
   - {fileID: 1969959509}
   - {fileID: 1454998427}
-  - {fileID: 2105966916}
+  - {fileID: 5716988520965968238}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &510210121
@@ -2699,7 +2699,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &2105966915
+--- !u!1001 &4524897353731463031
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -2710,10 +2710,6 @@ PrefabInstance:
     - target: {fileID: 3669049625457777017, guid: 445defc8a089fa54ca0c67e4e0fa1a3b, type: 3}
       propertyPath: m_Name
       value: RoomW_Exit
-      objectReference: {fileID: 0}
-    - target: {fileID: 5096363770132806974, guid: 445defc8a089fa54ca0c67e4e0fa1a3b, type: 3}
-      propertyPath: disableThreshold
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5716988522233008173, guid: 445defc8a089fa54ca0c67e4e0fa1a3b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2760,10 +2756,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 445defc8a089fa54ca0c67e4e0fa1a3b, type: 3}
---- !u!4 &2105966916 stripped
+--- !u!4 &5716988520965968238 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5716988522233008173, guid: 445defc8a089fa54ca0c67e4e0fa1a3b, type: 3}
-  m_PrefabInstance: {fileID: 2105966915}
+  m_PrefabInstance: {fileID: 4524897353731463031}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8798791297599282146
 PrefabInstance:

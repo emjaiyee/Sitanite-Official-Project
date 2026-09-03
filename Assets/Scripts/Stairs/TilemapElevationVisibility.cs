@@ -22,6 +22,7 @@ public class TilemapElevationVisibility : MonoBehaviour
     [SerializeField] private CompositeCollider2D compositeCollider;
 
     private bool currentState = true;
+    private bool hasRefreshed;
     private Color originalColor;
 
     private Coroutine fadeCoroutine;
@@ -37,6 +38,12 @@ public class TilemapElevationVisibility : MonoBehaviour
     {
         if (tilemap == null)
             tilemap = GetComponent<Tilemap>();
+
+        if (tilemapCollider == null)
+            tilemapCollider = GetComponent<TilemapCollider2D>();
+
+        if (compositeCollider == null)
+            compositeCollider = GetComponent<CompositeCollider2D>();
 
         originalColor = tilemap.color;
     }
@@ -71,10 +78,11 @@ public class TilemapElevationVisibility : MonoBehaviour
                 enabled = false;
         }
 
-        if (enabled == currentState)
+        if (hasRefreshed && enabled == currentState)
             return;
 
         currentState = enabled;
+        hasRefreshed = true;
 
         float targetAlpha = enabled ? originalColor.a : 0f;
 

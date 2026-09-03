@@ -279,6 +279,8 @@ public class EnemyRange : MonoBehaviour
         if (legacyContactDamage != null)
             legacyContactDamage.enabled = false;
 
+        nextAttackTime = Time.time + attackCooldown;
+
 
         // -----------------------------------------------------
         // CHECK A* SPAWN TILE
@@ -577,7 +579,8 @@ public class EnemyRange : MonoBehaviour
     {
         if (CurrentState != EnemyState.Chase ||
             player == null ||
-            !IsPlayerDetected())
+            !IsPlayerDetected() ||
+            !IsPlayerWithinAttackRange())
             return false;
 
 
