@@ -94,6 +94,7 @@ public class EnemyMelee : MonoBehaviour
     private float chargedAttackTimer;
     private bool chargingAttack;
     private bool baseStatsCached;
+    private float baseMoveSpeed;
     private float baseDamage;
     private float baseChargedDamage;
 
@@ -273,8 +274,18 @@ public class EnemyMelee : MonoBehaviour
 
         level = Mathf.Max(1, level);
 
+        moveSpeed = baseMoveSpeed + GetMovementSpeedBonus(level, 0.005f);
         damage = baseDamage + GetScaledBonus(level, 5f);
         chargedDamage = baseChargedDamage + GetScaledBonus(level, 5f);
+    }
+
+    public void ApplyDamageModifier(float modifier)
+    {
+        CacheBaseStats();
+        baseDamage = Mathf.Max(0f, baseDamage + modifier);
+        baseChargedDamage = Mathf.Max(0f, baseChargedDamage + modifier);
+        damage = Mathf.Max(0f, damage + modifier);
+        chargedDamage = Mathf.Max(0f, chargedDamage + modifier);
     }
 
 
@@ -814,6 +825,7 @@ public class EnemyMelee : MonoBehaviour
             return;
 
         baseStatsCached = true;
+    baseMoveSpeed = moveSpeed;
         baseDamage = damage;
         baseChargedDamage = chargedDamage;
     }
@@ -843,6 +855,39 @@ public class EnemyMelee : MonoBehaviour
 
                 specialBonus = followUpBonus * 2f;
                 followUpBonus = Mathf.Ceil(specialBonus * 0.75f);
+                continue;
+            }
+
+            bonus += perLevelBonus;
+        }
+
+        return bonus;
+    }
+
+    private static float GetMovementSpeedBonus(int level, float perLevelBonus)
+    {
+        if (level <= 1)
+            return 0f;
+
+        float bonus = 0f;
+        float specialBonus = perLevelBonus * 2f;
+        float followUpBonus = specialBonus * 0.75f;
+
+        for (int currentLevel = 2; currentLevel <= level; currentLevel++)
+        {
+            int levelInCycle = currentLevel % 5;
+
+            if (levelInCycle == 0)
+            {
+                bonus += specialBonus;
+                continue;
+            }
+
+            if (levelInCycle == 1)
+            {
+                bonus += followUpBonus;
+                specialBonus = followUpBonus * 2f;
+                followUpBonus = specialBonus * 0.75f;
                 continue;
             }
 

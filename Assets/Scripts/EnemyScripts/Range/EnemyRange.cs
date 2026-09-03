@@ -136,6 +136,19 @@ public class EnemyRange : MonoBehaviour
         spawnPosition = position;
     }
 
+    public void ApplyDamageModifier(float modifier)
+    {
+        CacheBaseStats();
+        baseProjectileDamage = Mathf.Max(
+            0,
+            Mathf.RoundToInt(baseProjectileDamage + modifier)
+        );
+        projectileDamage = Mathf.Max(
+            0,
+            Mathf.RoundToInt(projectileDamage + modifier)
+        );
+    }
+
 
     // =========================================================
     // PATH
@@ -697,14 +710,12 @@ public class EnemyRange : MonoBehaviour
                 level
             );
 
-
         moveSpeed =
             baseMoveSpeed +
-            GetScaledBonus(
+            GetMovementSpeedBonus(
                 level,
-                0.5f
+                0.005f
             );
-
 
         projectileDamage =
             baseProjectileDamage +
@@ -789,6 +800,41 @@ public class EnemyRange : MonoBehaviour
                 perLevelBonus;
         }
 
+
+        return bonus;
+    }
+
+    private static float GetMovementSpeedBonus(
+        int level,
+        float perLevelBonus)
+    {
+        if (level <= 1)
+            return 0f;
+
+        float bonus = 0f;
+        float specialBonus = perLevelBonus * 2f;
+        float followUpBonus = specialBonus * 0.75f;
+
+        for (int currentLevel = 2; currentLevel <= level; currentLevel++)
+        {
+            int levelInCycle = currentLevel % 5;
+
+            if (levelInCycle == 0)
+            {
+                bonus += specialBonus;
+                continue;
+            }
+
+            if (levelInCycle == 1)
+            {
+                bonus += followUpBonus;
+                specialBonus = followUpBonus * 2f;
+                followUpBonus = specialBonus * 0.75f;
+                continue;
+            }
+
+            bonus += perLevelBonus;
+        }
 
         return bonus;
     }

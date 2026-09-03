@@ -84,7 +84,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 3112589160528298819, guid: e933ff1806372e442a2b7fe8f40bf616, type: 3}
+  m_Sprite: {fileID: 5027754878765594241, guid: 4cb5f0891cdb996499c0f0302f60a444, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -131,8 +131,8 @@ BoxCollider2D:
   m_Offset: {x: -0.0032601953, y: -0.0013542771}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.2, y: 0.28}
+    pivot: {x: 0.5, y: 0.25}
+    oldSize: {x: 0.32, y: 0.32}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -153,21 +153,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BreakablePot
   potRenderer: {fileID: 1732267195625577801}
-  brokenSprite: {fileID: 1522604426497777653, guid: cb87c76099e1e894a825e119b0542031, type: 3}
+  brokenSprite: {fileID: -9076975531980210453, guid: a072f9a08b2011243babeb840998b95f, type: 3}
   spawnPoint: {fileID: 5815378549084358261}
   lootPrefab: {fileID: 7909839741886251486, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
   lootPool:
   - itemData: {fileID: 11400000, guid: 727b3716660ad6e48ab413c90834554b, type: 2}
     minQuantity: 1
     maxQuantity: 1
-    dropChance: 1
-  - itemData: {fileID: 11400000, guid: 6fdc0035e0972e54aa1d2ba7a7986ae1, type: 2}
-    minQuantity: 1
-    maxQuantity: 1
-    dropChance: 1
+    dropChance: 0.5
   scatterForce: 0.25
   verticalRatio: 0.5
   interactionRange: 1.2
+  breakableDamageTypes: 260
 --- !u!1 &8282592375895630425
 GameObject:
   m_ObjectHideFlags: 0

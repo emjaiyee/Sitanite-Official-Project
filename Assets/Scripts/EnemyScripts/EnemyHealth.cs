@@ -119,6 +119,46 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         OnHealthChanged?.Invoke(this);
     }
 
+    public void ApplyAdditiveModifiers(int healthModifier, float resistanceModifier)
+    {
+        CacheBaseStats();
+
+        baseMaxHealth = Mathf.Max(1, baseMaxHealth + healthModifier);
+        maxHealth = Mathf.Max(1, maxHealth + healthModifier);
+        CurrentHealth = Mathf.Clamp(CurrentHealth + healthModifier, 1, maxHealth);
+        runtimeCurrentHealth = CurrentHealth;
+
+        basePierceResistanceValue = AddToActiveResistance(basePierceResistanceValue, resistanceModifier);
+        baseStabResistanceValue = AddToActiveResistance(baseStabResistanceValue, resistanceModifier);
+        baseSlashResistanceValue = AddToActiveResistance(baseSlashResistanceValue, resistanceModifier);
+        baseBluntResistanceValue = AddToActiveResistance(baseBluntResistanceValue, resistanceModifier);
+        baseFrostResistanceValue = AddToActiveResistance(baseFrostResistanceValue, resistanceModifier);
+        basePoisonResistanceValue = AddToActiveResistance(basePoisonResistanceValue, resistanceModifier);
+        baseLightningResistanceValue = AddToActiveResistance(baseLightningResistanceValue, resistanceModifier);
+        basePsychicResistanceValue = AddToActiveResistance(basePsychicResistanceValue, resistanceModifier);
+        baseNecrosisResistanceValue = AddToActiveResistance(baseNecrosisResistanceValue, resistanceModifier);
+        baseWaterResistanceValue = AddToActiveResistance(baseWaterResistanceValue, resistanceModifier);
+        baseEarthResistanceValue = AddToActiveResistance(baseEarthResistanceValue, resistanceModifier);
+        baseFireResistanceValue = AddToActiveResistance(baseFireResistanceValue, resistanceModifier);
+        baseAirResistanceValue = AddToActiveResistance(baseAirResistanceValue, resistanceModifier);
+        basePhysicalResistanceValue = AddToActiveResistance(basePhysicalResistanceValue, resistanceModifier);
+
+        basePierceResistance = AddToActiveResistance(basePierceResistance, resistanceModifier);
+        baseStabResistance = AddToActiveResistance(baseStabResistance, resistanceModifier);
+        baseSlashResistance = AddToActiveResistance(baseSlashResistance, resistanceModifier);
+        baseBluntResistance = AddToActiveResistance(baseBluntResistance, resistanceModifier);
+        baseFrostResistance = AddToActiveResistance(baseFrostResistance, resistanceModifier);
+        basePoisonResistance = AddToActiveResistance(basePoisonResistance, resistanceModifier);
+        baseLightningResistance = AddToActiveResistance(baseLightningResistance, resistanceModifier);
+        basePsychicResistance = AddToActiveResistance(basePsychicResistance, resistanceModifier);
+        baseNecrosisResistance = AddToActiveResistance(baseNecrosisResistance, resistanceModifier);
+        baseWaterResistance = AddToActiveResistance(baseWaterResistance, resistanceModifier);
+        baseEarthResistance = AddToActiveResistance(baseEarthResistance, resistanceModifier);
+        baseFireResistance = AddToActiveResistance(baseFireResistance, resistanceModifier);
+        baseAirResistance = AddToActiveResistance(baseAirResistance, resistanceModifier);
+        basePhysicalResistance = AddToActiveResistance(basePhysicalResistance, resistanceModifier);
+    }
+
 
     // =========================================================
     // DAMAGE
@@ -265,6 +305,11 @@ public class EnemyHealth : MonoBehaviour, IDamageable
             return 0f;
 
         return baseValue + GetScaledBonus(level, 3f);
+    }
+
+    private static float AddToActiveResistance(float value, float modifier)
+    {
+        return value > 0f ? Mathf.Max(0f, value + modifier) : 0f;
     }
 
 
