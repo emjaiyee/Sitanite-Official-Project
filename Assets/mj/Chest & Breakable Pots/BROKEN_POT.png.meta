@@ -1,19 +1,31 @@
 fileFormatVersion: 2
-guid: cf4fb5fa008515f4cb33b2851ed5e933
+guid: a072f9a08b2011243babeb840998b95f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2436486168305176611
-    second: OPENCHEST_SHEET_0
+      213: -9076975531980210453
+    second: BROKEN_POT_0
   - first:
-      213: 4852652638138899962
-    second: OPENCHEST_SHEET_1
+      213: 116850129996867647
+    second: BROKEN_POT_1
   - first:
-      213: 6132276951636544254
-    second: OPENCHEST_SHEET_2
+      213: 5212357951094049182
+    second: BROKEN_POT_2
   - first:
-      213: 7580293641334252017
-    second: OPENCHEST_SHEET_3
+      213: -4678287042574026931
+    second: BROKEN_POT_3
+  - first:
+      213: 4818056442181101046
+    second: BROKEN_POT_4
+  - first:
+      213: -702189795992195788
+    second: BROKEN_POT_5
+  - first:
+      213: -1248952243851525998
+    second: BROKEN_POT_6
+  - first:
+      213: -329744586763628142
+    second: BROKEN_POT_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,89 +121,45 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: OPENCHEST_SHEET_0
+      name: BROKEN_POT_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ddf640e2dbcdf2ed0800000000000000
-      internalID: -2436486168305176611
+      spriteID: bee386578da180280800000000000000
+      internalID: -9076975531980210453
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: OPENCHEST_SHEET_1
+      name: BROKEN_POT_1
       rect:
         serializedVersion: 2
         x: 32
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: afd91aa2dd5185340800000000000000
-      internalID: 4852652638138899962
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OPENCHEST_SHEET_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: efa8c96b5693a1550800000000000000
-      internalID: 6132276951636544254
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: OPENCHEST_SHEET_3
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1f161e897ec923960800000000000000
-      internalID: 7580293641334252017
+      spriteID: f38eb6af2922f9100800000000000000
+      internalID: 116850129996867647
       vertices: []
       indices: 
       edges: []
@@ -200,7 +168,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 9cf3608a26485fa4a8453b70db805cdc
+    spriteID: 601b01673a7d8b14fab25c169f2d8028
     internalID: 0
     vertices: []
     indices: 
@@ -210,12 +178,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":32.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.25},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      OPENCHEST_SHEET_0: -2436486168305176611
-      OPENCHEST_SHEET_1: 4852652638138899962
-      OPENCHEST_SHEET_2: 6132276951636544254
-      OPENCHEST_SHEET_3: 7580293641334252017
+      BROKEN_POT_0: -9076975531980210453
+      BROKEN_POT_1: 116850129996867647
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
