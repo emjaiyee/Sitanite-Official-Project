@@ -67,7 +67,19 @@ public class FloorManager : MonoBehaviour
 
     public void EnterNextFloor()
     {
-        currentFloor++;
+        int nextFloor = currentFloor + 1;
+
+        if (GetConfigurationForFloor(nextFloor) == null)
+        {
+            Debug.LogError(
+                $"Cannot enter Floor {nextFloor}: " +
+                "no configuration exists."
+            );
+
+            return;
+        }
+
+        currentFloor = nextFloor;
         GenerateCurrentFloor();
     }
 
@@ -89,10 +101,6 @@ public class FloorManager : MonoBehaviour
                 return configuration;
             }
         }
-
-        Debug.LogError(
-            $"No FloorConfiguration found for Floor {floor}."
-        );
 
         return null;
     }

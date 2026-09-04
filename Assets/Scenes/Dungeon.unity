@@ -2482,7 +2482,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomManager
   smallRoomPrefabs:
-  - {fileID: 3669049625457777017, guid: 82be1dd741b69344d9634789acaa4639, type: 3}
+  - {fileID: 3669049625457777017, guid: 445defc8a089fa54ca0c67e4e0fa1a3b, type: 3}
+  - {fileID: 813509379841093977, guid: 00bb0326593d36e4b8f803048b1be003, type: 3}
   mediumRoomPrefabs: []
   largeRoomPrefabs: []
   xlRoomPrefabs: []
@@ -2697,11 +2698,11 @@ MonoBehaviour:
     allowXL: 0
     minimumRooms: 2
     maximumRooms: 2
-    minimumActiveSpawners: 1
-    maximumActiveSpawners: 3
+    minimumActiveSpawners: 2
+    maximumActiveSpawners: 5
     minimumEnemyLevel: 1
-    maximumEnemyLevel: 1
-    maximumEnemyLevelChance: 0.25
+    maximumEnemyLevel: 2
+    maximumEnemyLevelChance: 0.217
   roomManager: {fileID: 1454998428}
 --- !u!1 &1973740227
 GameObject:

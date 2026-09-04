@@ -40,7 +40,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
 
         hasValidSpawnTile =
             AStarManager.Instance.IsPositionWalkable(
-                Enemy.transform.position) ||
+                Enemy.transform.position,
+                Enemy.ElevationLevel) ||
             Enemy.IsOnStairLink;
 
 
@@ -110,21 +111,14 @@ public class EnemyMeleeIdleState : EnemyMeleeState
         {
             waitTimer += Time.deltaTime;
 
-
             if (waitTimer >= WaitDuration)
             {
                 waitingForNewDestination = false;
-
                 ChooseNewDestination();
             }
 
             return;
         }
-
-
-        // =====================================================
-        // PATH FINISHED
-        // =====================================================
 
         waitingForNewDestination = true;
         waitTimer = 0f;
@@ -141,7 +135,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
             AStarManager.Instance
                 .GetRandomWalkablePositionNear(
                     Enemy.SpawnPosition,
-                    Enemy.IdleWanderRadius
+                    Enemy.IdleWanderRadius,
+                    Enemy.ElevationLevel
                 );
 
 
@@ -165,7 +160,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
         List<Vector3> path =
             AStarManager.Instance.FindPath(
                 Enemy.transform.position,
-                destination.Value
+                destination.Value,
+                Enemy.ElevationLevel
             );
 
 
@@ -216,6 +212,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
                 "Enemy rejected the A* path!"
             );
 
+            SetCurrentCellAsIdleOrigin();
+
             waitingForNewDestination = true;
             waitTimer = 0f;
 
@@ -223,19 +221,19 @@ public class EnemyMeleeIdleState : EnemyMeleeState
         }
 
     }
-
-
     private void SetCurrentCellAsIdleOrigin()
     {
+        if (AStarManager.Instance == null)
+            return;
+
         Vector3? currentCell =
             AStarManager.Instance.GetWalkableCellCenter(
-                Enemy.transform.position
+                Enemy.transform.position,
+                Enemy.ElevationLevel
             );
 
         if (currentCell.HasValue)
-        {
             Enemy.SetIdleOrigin(currentCell.Value);
-        }
     }
 
 

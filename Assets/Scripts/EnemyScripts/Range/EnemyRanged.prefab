@@ -209,6 +209,7 @@ MonoBehaviour:
   detectionRadius: 12
   moveSpeed: 1
   idleWanderRadius: 6
+  locateWaitDuration: 2.5
   attackRange: 6
   projectileDamageType: 1
   projectileDamage: 10
@@ -244,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee6c583c6c5f4524d83f8c186f29e00d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyElevationVisibility
-  disableAtThreshold: 0
+  disableAtThreshold: 1
   disableThreshold: 4
   smoothFade: 1
   fadeDuration: 0.2

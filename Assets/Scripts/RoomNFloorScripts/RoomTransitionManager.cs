@@ -19,6 +19,8 @@ public class RoomTransitionManager : MonoBehaviour
 
     private bool isTransitioning;
 
+    public bool IsTransitioning => isTransitioning;
+
 
     // =========================================================
     // UNITY
