@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 997d05a876fd85841a205d6d18fb2f8e, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: 9aaf9b34558abc849a80d6fae34df741, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -277,6 +277,9 @@ MonoBehaviour:
   slotType: 1
   slotRectTransform: {fileID: 132240900}
   slotSize: 64
+  slotImage: {fileID: 0}
+  emptySlotSprite: {fileID: 0}
+  occupiedSlotSprite: {fileID: 0}
 --- !u!114 &132240902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,6 +490,9 @@ MonoBehaviour:
   slotType: 3
   slotRectTransform: {fileID: 354676784}
   slotSize: 64
+  slotImage: {fileID: 0}
+  emptySlotSprite: {fileID: 0}
+  occupiedSlotSprite: {fileID: 0}
 --- !u!114 &354676786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -919,6 +925,9 @@ MonoBehaviour:
   slotType: 4
   slotRectTransform: {fileID: 574209883}
   slotSize: 64
+  slotImage: {fileID: 0}
+  emptySlotSprite: {fileID: 0}
+  occupiedSlotSprite: {fileID: 0}
 --- !u!114 &574209885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1599,6 +1608,7 @@ MonoBehaviour:
   scatterForce: 0.25
   verticalRatio: 0.5
   interactionRange: 1.2
+  breakableDamageTypes: 260
 --- !u!1 &1033136217
 GameObject:
   m_ObjectHideFlags: 0
@@ -1652,6 +1662,9 @@ MonoBehaviour:
   slotType: 5
   slotRectTransform: {fileID: 1033136218}
   slotSize: 64
+  slotImage: {fileID: 0}
+  emptySlotSprite: {fileID: 0}
+  occupiedSlotSprite: {fileID: 0}
 --- !u!114 &1033136220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1711,6 +1724,7 @@ GameObject:
   - component: {fileID: 1229293539}
   - component: {fileID: 1229293538}
   - component: {fileID: 1229293541}
+  - component: {fileID: 1229293542}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1806,11 +1820,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 032508b2ba8160e4e8a71891a4ee5243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWASD
-  moveSpeed: 2
-  sprintSpeed: 8
   moveAction: {fileID: -7623319301975187240, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
   sprintAction: {fileID: 0}
   useIsometricMovement: 0
+  diagonalAxisScale: 0.5
 --- !u!50 &1229293532
 Rigidbody2D:
   serializedVersion: 5
@@ -2001,9 +2014,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f3c1a3642cd7d44e93d58e7b5570018, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerDash
-  dashSpeed: 4
-  dashDuration: 0.2
-  dashCost: 20
   dashAction: {fileID: -4344421054659067190, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
 --- !u!114 &1229293539
 MonoBehaviour:
@@ -2018,6 +2028,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   attackAction: {fileID: 4355990924167721325, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
+  attackMovementLockDuration: 0.2
 --- !u!114 &1229293540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2030,8 +2041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce7a4c5e4b5cf0a448d9f703a84d4637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEquipment
-  swordObject: {fileID: 67633604}
-  battleAxeObject: {fileID: 0}
+  defaultWeapon: {fileID: 0}
+  weaponController: {fileID: 0}
 --- !u!114 &1229293541
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2047,27 +2058,177 @@ MonoBehaviour:
   maxHealth: 100
   maxMana: 75
   maxStamina: 75
+  effectiveMaxHealth: 0
+  effectiveMaxMana: 0
+  effectiveMaxStamina: 0
+  basePierceDamage: 0
+  baseStabDamage: 0
+  baseSlashDamage: 0
+  baseBluntDamage: 0
+  baseFrostDamage: 0
+  basePoisonDamage: 0
+  baseLightningDamage: 0
+  basePsychicDamage: 0
+  baseNecrosisDamage: 0
+  baseWaterDamage: 0
+  baseEarthDamage: 0
+  baseFireDamage: 0
+  baseAirDamage: 0
+  basePhysicalDamage: 0
+  effectivePierceDamage: 0
+  effectiveStabDamage: 0
+  effectiveSlashDamage: 0
+  effectiveBluntDamage: 0
+  effectiveFrostDamage: 0
+  effectivePoisonDamage: 0
+  effectiveLightningDamage: 0
+  effectivePsychicDamage: 0
+  effectiveNecrosisDamage: 0
+  effectiveWaterDamage: 0
+  effectiveEarthDamage: 0
+  effectiveFireDamage: 0
+  effectiveAirDamage: 0
+  effectivePhysicalDamage: 0
+  basePierceResistance: 0
+  baseStabResistance: 0
+  baseSlashResistance: 0
+  baseBluntResistance: 0
+  baseFrostResistance: 0
+  basePoisonResistance: 0
+  baseLightningResistance: 0
+  basePsychicResistance: 0
+  baseNecrosisResistance: 0
+  baseWaterResistance: 0
+  baseEarthResistance: 0
+  baseFireResistance: 0
+  baseAirResistance: 0
+  basePhysicalResistance: 0
+  effectivePierceResistance: 0
+  effectiveStabResistance: 0
+  effectiveSlashResistance: 0
+  effectiveBluntResistance: 0
+  effectiveFrostResistance: 0
+  effectivePoisonResistance: 0
+  effectiveLightningResistance: 0
+  effectivePsychicResistance: 0
+  effectiveNecrosisResistance: 0
+  effectiveWaterResistance: 0
+  effectiveEarthResistance: 0
+  effectiveFireResistance: 0
+  effectiveAirResistance: 0
+  effectivePhysicalResistance: 0
   currentHealth: 100
   currentMana: 75
   currentStamina: 75
+  level: 1
+  experiencePoints: 0
+  experienceToNextLevel: 100
   characterName: 
   gender: 0
   playerClass: 0
   movement: {fileID: 0}
+  attributes: {fileID: 0}
+  moveSpeed: 1.2
+  sprintSpeed: 1.8
+  effectiveMoveSpeed: 0
+  effectiveSprintSpeed: 0
+  dashSpeed: 2
+  dashDuration: 0.2
+  dashCost: 20
+  effectiveDashSpeed: 0
   sprintCostPerSecond: 4
   exhaustedSpeedMultiplier: 0.35
-  meleeHealthRegen: 1
-  meleeManaRegen: 0
-  meleeStaminaRegen: 3
-  rangedHealthRegen: 1
-  rangedManaRegen: 2
-  rangedStaminaRegen: 2
-  mageHealthRegen: 1
-  mageManaRegen: 4
-  mageStaminaRegen: 1
-  skillManaCost: 25
-  skillAction: {fileID: 0}
+  regenerationCooldown: 0.5
+  healthRegen: 1
+  manaRegen: 0
+  staminaRegen: 3
+  effectiveHealthRegen: 0
+  effectiveManaRegen: 0
+  effectiveStaminaRegen: 0
   deadPlayerOpacity: 0.5
+--- !u!114 &1229293542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229293528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c79c9ef22d437a04989cd472afb4ae57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttributesNTraits
+  starterAttributePoints: 5
+  starterTraitPoints: 5
+  availableAttributePoints: 0
+  availableTraitPoints: 0
+  strength: 5
+  dexterity: 5
+  intelligence: 5
+  vitality: 1
+  focus: 1
+  endurance: 1
+  agility: 1
+  vigor: 1
+  haste: 1
+  attunement: 1
+  mundane: 1
+  arcane: 1
+  elemental: 1
+  precision: 1
+  fortitude: 1
+  willpower: 1
+  warriorDefaults:
+    strength: 7
+    dexterity: 5
+    intelligence: 5
+    vitality: 2
+    focus: 1
+    endurance: 1
+    agility: 1
+    vigor: 2
+    haste: 1
+    attunement: 1
+    mundane: 2
+    arcane: 1
+    elemental: 1
+    precision: 1
+    fortitude: 2
+    willpower: 1
+  rangerDefaults:
+    strength: 5
+    dexterity: 7
+    intelligence: 5
+    vitality: 1
+    focus: 1
+    endurance: 1
+    agility: 2
+    vigor: 1
+    haste: 2
+    attunement: 1
+    mundane: 1
+    arcane: 1
+    elemental: 1
+    precision: 2
+    fortitude: 1
+    willpower: 1
+  mageDefaults:
+    strength: 5
+    dexterity: 5
+    intelligence: 7
+    vitality: 1
+    focus: 2
+    endurance: 1
+    agility: 1
+    vigor: 1
+    haste: 1
+    attunement: 2
+    mundane: 1
+    arcane: 2
+    elemental: 2
+    precision: 1
+    fortitude: 1
+    willpower: 2
 --- !u!1 &1435930601
 GameObject:
   m_ObjectHideFlags: 0
@@ -2210,6 +2371,7 @@ MonoBehaviour:
     dropChance: 1
   scatterForce: 0.25
   verticalRatio: 0.5
+  openableDamageTypes: 260
 --- !u!212 &1445277954
 SpriteRenderer:
   serializedVersion: 2
@@ -2338,6 +2500,10 @@ MonoBehaviour:
   xlRoomPrefabs: []
   roomSpacingX: 30
   lockNextRoomUntilCleared: 1
+  secretGatewayChance: 0.35
+  floorManager: {fileID: 0}
+  secretRoomPrefabs: []
+  secretRoomSpawnOffset: {x: 0, y: -30, z: 0}
 --- !u!1 &1686456529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2828,6 +2994,11 @@ MonoBehaviour:
     allowXL: 0
     minimumRooms: 5
     maximumRooms: 10
+    minimumActiveSpawners: 1
+    maximumActiveSpawners: 3
+    minimumEnemyLevel: 1
+    maximumEnemyLevel: 1
+    maximumEnemyLevelChance: 0.25
   roomManager: {fileID: 1454998428}
 --- !u!1 &2027045383
 GameObject:
@@ -2949,6 +3120,9 @@ MonoBehaviour:
   slotType: 2
   slotRectTransform: {fileID: 2056212159}
   slotSize: 64
+  slotImage: {fileID: 0}
+  emptySlotSprite: {fileID: 0}
+  occupiedSlotSprite: {fileID: 0}
 --- !u!114 &2056212161
 MonoBehaviour:
   m_ObjectHideFlags: 0
