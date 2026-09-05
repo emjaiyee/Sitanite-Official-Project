@@ -240,7 +240,13 @@ public class PlayerDash : MonoBehaviour
         {
             animationController.PlayDash();
         }
+        PlayerSoundHelper sound =
+    GetComponent<PlayerSoundHelper>();
 
+if(sound != null)
+{
+    sound.PlayDash();
+}
 
 
         Debug.Log(
