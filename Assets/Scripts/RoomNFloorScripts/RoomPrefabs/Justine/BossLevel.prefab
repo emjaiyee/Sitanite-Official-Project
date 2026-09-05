@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 339693300745650597}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.82, y: 7.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -33,6 +33,7 @@ Transform:
   - {fileID: 6252393309489435507}
   - {fileID: 4859747571198934011}
   - {fileID: 2534588357488762806}
+  - {fileID: 8482470382480262065}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1581784537494536405
@@ -25981,6 +25982,72 @@ MonoBehaviour:
   tilemap: {fileID: 6026263839935501467}
   tilemapCollider: {fileID: 0}
   compositeCollider: {fileID: 0}
+--- !u!1 &1047925922340440039
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8482470382480262065}
+  - component: {fileID: 3749580327140765608}
+  m_Layer: 0
+  m_Name: EnemySpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8482470382480262065
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047925922340440039}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.41, y: 3.92, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 30895169307764160}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3749580327140765608
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1047925922340440039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2bf5d56427dfd41bee5e6e93b96c4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
+  useRandomCount: 1
+  minSpawn: 2
+  maxSpawn: 4
+  fixedSpawnCount: 1
+  spawnRadius: 0.5
+  minSeparation: 0.3
+  evenDistribution: 1
+  angleJitterDegrees: 12
+  radialJitter: 0.25
+  spawnOnStart: 1
+  spawnDelay: 0
+  spawnParent: {fileID: 8482470382480262065}
+  elevationLevel: 0
+  sortingLayer: Default
+  sortingOrder: 50
+  zOffset: 0
+  addSortingGroupIfMultipleRenderers: 1
+  spawnCheckMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  maxPositionAttempts: 12
+  clearWhenAllDead: 1
 --- !u!1 &1334498751942398846
 GameObject:
   m_ObjectHideFlags: 0
@@ -52009,6 +52076,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b450981dcfa7b31449a479ba4545bb95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AStarWalkableMap
+  elevationLevel: 0
 --- !u!114 &3415970329717332045
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59900,6 +59968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b450981dcfa7b31449a479ba4545bb95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AStarWalkableMap
+  elevationLevel: 0
 --- !u!114 &5868210765775490108
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -22758,6 +22758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b450981dcfa7b31449a479ba4545bb95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AStarWalkableMap
+  elevationLevel: 0
 --- !u!114 &3557305511996988002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22957,6 +22958,72 @@ MonoBehaviour:
   enableRampMovement: 1
   rampForwardPreset: 1
   rampForward: {x: 1, y: 1.6}
+--- !u!1 &2424492512965312838
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1472884639371258519}
+  - component: {fileID: 1282016622434139741}
+  m_Layer: 0
+  m_Name: EnemySpawnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1472884639371258519
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2424492512965312838}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.54, y: 1.45, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3286963756559924220}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1282016622434139741
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2424492512965312838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba2bf5d56427dfd41bee5e6e93b96c4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnPoint
+  useRandomCount: 1
+  minSpawn: 2
+  maxSpawn: 4
+  fixedSpawnCount: 1
+  spawnRadius: 0.5
+  minSeparation: 0.3
+  evenDistribution: 1
+  angleJitterDegrees: 12
+  radialJitter: 0.25
+  spawnOnStart: 1
+  spawnDelay: 0
+  spawnParent: {fileID: 1472884639371258519}
+  elevationLevel: 0
+  sortingLayer: Default
+  sortingOrder: 50
+  zOffset: 0
+  addSortingGroupIfMultipleRenderers: 1
+  spawnCheckMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  maxPositionAttempts: 12
+  clearWhenAllDead: 1
 --- !u!1 &3224375038337518599
 GameObject:
   m_ObjectHideFlags: 0
@@ -23523,6 +23590,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b450981dcfa7b31449a479ba4545bb95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AStarWalkableMap
+  elevationLevel: 0
 --- !u!114 &5435860143078232377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40427,6 +40495,7 @@ Transform:
   - {fileID: 535305269773140046}
   - {fileID: 7803085967489633873}
   - {fileID: 2007573694212014384}
+  - {fileID: 1472884639371258519}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4040223271669180772
