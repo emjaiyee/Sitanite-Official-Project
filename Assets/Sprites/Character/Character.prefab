@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8117855276665226801}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8329789945758800289}
   - component: {fileID: 53923350455531113}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -132,7 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2562117481583580720}
   - component: {fileID: 7951432704904123107}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: WeaponUnder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,7 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5700263183971444938}
   - component: {fileID: 9107765637611900218}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: EquippedWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,13 +261,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponController
   attackPoint: {fileID: 3371824977953561613}
   firePoint: {fileID: 8117855276665226801}
-  fullyChargedIndicatorPrefab: {fileID: 0}
-  indicatorRotationSpeed: 180
-  indicatorPulseSpeed: 3
-  indicatorPulseMin: 0.9
-  indicatorPulseMax: 1.1
-  rotateIndicator: 1
-  pulseIndicator: 1
 --- !u!1 &3652299398545989156
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,7 +271,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1456467461481940635}
   - component: {fileID: 5367698063950960230}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Torso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -368,7 +361,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3371824977953561613}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -417,7 +410,7 @@ GameObject:
   - component: {fileID: 1613250513679658638}
   - component: {fileID: 6851415273692241425}
   - component: {fileID: 1731212550873553795}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -489,8 +482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWASD
   moveAction: {fileID: -7623319301975187240, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
   sprintAction: {fileID: 9047545557421842618, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
-  useIsometricMovement: 1
-  diagonalAxisScale: 0.5
+  useIsometricMovement: 0
 --- !u!70 &6600023078225743897
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -768,7 +760,7 @@ MonoBehaviour:
   playerClass: 0
   movement: {fileID: 5539229426081354734}
   attributes: {fileID: 3176237796533987833}
-  moveSpeed: 1
+  moveSpeed: 1.2
   sprintSpeed: 1.8
   effectiveMoveSpeed: 0
   effectiveSprintSpeed: 0
@@ -923,15 +915,15 @@ MonoBehaviour:
   femaleEyes: {fileID: 11400000, guid: e331e31d1d836b749930212226edf0d2, type: 2}
   femaleHair: {fileID: 11400000, guid: ee115ab25dc7d0945bf1036a6ab7e054, type: 2}
   startingClass: 0
-  attributes: {fileID: 3176237796533987833}
-  playerStats: {fileID: 8549833145988909020}
+  attributes: {fileID: 0}
+  playerStats: {fileID: 0}
   warriorStartingGear:
   - {fileID: 11400000, guid: 7420c82adfcd121419c29d473304b588, type: 2}
   - {fileID: 11400000, guid: c1b1708b113e1e944b9cc4f8fdb1114b, type: 2}
   - {fileID: 11400000, guid: 03c6e9d0387ccac40bd2d370f99c3857, type: 2}
   rangerStartingGear: []
   mageStartingGear:
-  - {fileID: 11400000, guid: 05209c6759f80f44980eb67a74c3320b, type: 2}
+  - {fileID: 11400000, guid: 270df18fdaa71794091bf2e795e09db7, type: 2}
   - {fileID: 11400000, guid: 12b486c90eeea3841a4f7554aefebdd0, type: 2}
   - {fileID: 11400000, guid: d3ec1a675e1627b49a2bb7cd282e4739, type: 2}
   - {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
@@ -969,16 +961,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSpriteController
   playerWASD: {fileID: 5539229426081354734}
   characterRenderer: {fileID: 6783837840638991853}
-  idleFramesPerSecond: 4
-  walkFramesPerSecond: 8
-  runningFramesPerSecond: 12
-  attackFramesPerSecond: 10
-  skillFramesPerSecond: 10
-  dashFramesPerSecond: 14
-  deathFramesPerSecond: 6
-  attackDuration: 0.4
-  skillDuration: 0.4
-  dashDuration: 0.2
 --- !u!114 &6851415273692241425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1019,7 +1001,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7690639867013062086}
   - component: {fileID: 7266763579535133445}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Headwear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1110,7 +1092,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8270009767373276342}
   - component: {fileID: 8009545131767036029}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1201,7 +1183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2665722754575717680}
   - component: {fileID: 7586370554039716126}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Hair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1292,7 +1274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6213420931129277828}
   - component: {fileID: 7354886033935330507}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1383,7 +1365,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5536741838045283725}
   - component: {fileID: 2491044693711779770}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: WeaponOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
