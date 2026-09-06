@@ -85,7 +85,7 @@ public class GatewayVisibility : MonoBehaviour
             // Even if the visual state is already correct,
             // make sure the collider matches it.
             if (gatewayCollider != null)
-                gatewayCollider.enabled = visible && !invisibleWhenUnlocked;
+                gatewayCollider.enabled = visible;
 
             if (visible && tilemapRenderer != null)
                 tilemapRenderer.enabled = true;
@@ -132,7 +132,7 @@ public class GatewayVisibility : MonoBehaviour
         // from entering the gateway.
         if (gatewayCollider != null)
         {
-            gatewayCollider.enabled = visible && !invisibleWhenUnlocked;
+            gatewayCollider.enabled = visible;
         }
 
         if (visible && tilemapRenderer != null)
@@ -172,7 +172,7 @@ public class GatewayVisibility : MonoBehaviour
             : 0f);
 
         if (gatewayCollider != null)
-            gatewayCollider.enabled = visible && !invisibleWhenUnlocked;
+            gatewayCollider.enabled = visible;
     }
 
     protected bool ShouldShowVisual(bool visible)

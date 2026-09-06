@@ -56,7 +56,8 @@ public class EnemyMeleeLocateState : EnemyMeleeState
         List<Vector3> path =
             AStarManager.Instance.FindPath(
                 Enemy.transform.position,
-                Enemy.DamageSourcePosition.Value
+                Enemy.DamageSourcePosition.Value,
+                Enemy.ElevationLevel
             );
 
         if (!Enemy.SetPath(path))
