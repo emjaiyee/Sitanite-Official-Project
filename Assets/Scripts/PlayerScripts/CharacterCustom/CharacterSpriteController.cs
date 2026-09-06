@@ -1,4 +1,31 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
+
+public enum SpriteSoundEventType
+{
+    Footstep,
+    Attack,
+    Skill,
+    Dash,
+    Hurt,
+    Death
+}
+
+[Serializable]
+public class SpriteFrameSoundEvent
+{
+    [Min(0)] public int frame;
+    public SpriteSoundEventType sound;
+}
+
+[Serializable]
+public class SpriteAnimationSoundTrack
+{
+    [Min(1)] public int frameCount = 1;
+    public bool loop;
+    public List<SpriteFrameSoundEvent> events = new List<SpriteFrameSoundEvent>();
+}
 
 public class CharacterSpriteController : MonoBehaviour
 {
@@ -7,6 +34,9 @@ public class CharacterSpriteController : MonoBehaviour
 
     [SerializeField]
     private CharacterRenderer characterRenderer;
+
+    [SerializeField]
+    private PlayerSoundHelper playerSoundHelper;
 
     [Header("Sprite Animation")]
     [Min(0.01f)]
@@ -30,10 +60,20 @@ public class CharacterSpriteController : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float dashDuration = 0.2f;
 
+    [Header("Frame Sound Events")]
+    [SerializeField] private SpriteAnimationSoundTrack idleSoundEvents;
+    [SerializeField] private SpriteAnimationSoundTrack walkSoundEvents;
+    [SerializeField] private SpriteAnimationSoundTrack runningSoundEvents;
+    [SerializeField] private SpriteAnimationSoundTrack attackSoundEvents;
+    [SerializeField] private SpriteAnimationSoundTrack skillSoundEvents;
+    [SerializeField] private SpriteAnimationSoundTrack dashSoundEvents;
+    [SerializeField] private SpriteAnimationSoundTrack deathSoundEvents;
+
     private CharacterAnimationState currentAnimationState;
     private float actionEndTime;
     private float stateStartTime;
     private bool actionActive;
+    private int previousAnimationFrame = -1;
 
     private void Awake()
     {
@@ -42,6 +82,9 @@ public class CharacterSpriteController : MonoBehaviour
 
         if (characterRenderer == null)
             characterRenderer = GetComponent<CharacterRenderer>();
+
+        if (playerSoundHelper == null)
+            playerSoundHelper = GetComponent<PlayerSoundHelper>();
 
         stateStartTime = Time.time;
     }
@@ -73,6 +116,7 @@ public class CharacterSpriteController : MonoBehaviour
         );
 
         characterRenderer.SetAnimationState(currentAnimationState, frame);
+        PlayFrameSoundEvents(frame);
     }
 
     public void PlayAttack()
@@ -113,6 +157,7 @@ public class CharacterSpriteController : MonoBehaviour
 
         currentAnimationState = animationState;
         stateStartTime = Time.time;
+        previousAnimationFrame = -1;
     }
 
     private float GetFramesPerSecond()
@@ -128,5 +173,81 @@ public class CharacterSpriteController : MonoBehaviour
             CharacterAnimationState.Death => deathFramesPerSecond,
             _ => walkFramesPerSecond
         };
+    }
+
+    private void PlayFrameSoundEvents(int animationFrame)
+    {
+        if (playerSoundHelper == null ||
+            animationFrame == previousAnimationFrame)
+            return;
+
+        SpriteAnimationSoundTrack soundTrack = GetSoundTrack();
+        if (soundTrack == null || soundTrack.events == null)
+        {
+            previousAnimationFrame = animationFrame;
+            return;
+        }
+
+        int firstFrame = Mathf.Max(previousAnimationFrame + 1, 0);
+
+        for (int enteredFrame = firstFrame;
+             enteredFrame <= animationFrame;
+             enteredFrame++)
+        {
+            if (!soundTrack.loop && enteredFrame >= soundTrack.frameCount)
+                break;
+
+            int soundFrame = soundTrack.loop
+                ? enteredFrame % soundTrack.frameCount
+                : enteredFrame;
+
+            foreach (SpriteFrameSoundEvent soundEvent in soundTrack.events)
+            {
+                if (soundEvent != null && soundEvent.frame == soundFrame)
+                    PlaySound(soundEvent.sound);
+            }
+        }
+
+        previousAnimationFrame = animationFrame;
+    }
+
+    private SpriteAnimationSoundTrack GetSoundTrack()
+    {
+        return currentAnimationState switch
+        {
+            CharacterAnimationState.Idle => idleSoundEvents,
+            CharacterAnimationState.Walk => walkSoundEvents,
+            CharacterAnimationState.Running => runningSoundEvents,
+            CharacterAnimationState.Attack => attackSoundEvents,
+            CharacterAnimationState.Skill => skillSoundEvents,
+            CharacterAnimationState.Dash => dashSoundEvents,
+            CharacterAnimationState.Death => deathSoundEvents,
+            _ => null
+        };
+    }
+
+    private void PlaySound(SpriteSoundEventType soundEvent)
+    {
+        switch (soundEvent)
+        {
+            case SpriteSoundEventType.Footstep:
+                playerSoundHelper.PlayFootstep();
+                break;
+            case SpriteSoundEventType.Attack:
+                playerSoundHelper.PlayAttack();
+                break;
+            case SpriteSoundEventType.Skill:
+                playerSoundHelper.PlaySkill();
+                break;
+            case SpriteSoundEventType.Dash:
+                playerSoundHelper.PlayDash();
+                break;
+            case SpriteSoundEventType.Hurt:
+                playerSoundHelper.PlayHurt();
+                break;
+            case SpriteSoundEventType.Death:
+                playerSoundHelper.PlayDeath();
+                break;
+        }
     }
 }
