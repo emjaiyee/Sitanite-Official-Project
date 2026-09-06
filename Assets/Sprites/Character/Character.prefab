@@ -418,6 +418,7 @@ GameObject:
   - component: {fileID: 6851415273692241425}
   - component: {fileID: 1731212550873553795}
   - component: {fileID: 6756481364951381221}
+  - component: {fileID: 1263847002192746248}
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
@@ -970,6 +971,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSpriteController
   playerWASD: {fileID: 5539229426081354734}
   characterRenderer: {fileID: 6783837840638991853}
+  idleFramesPerSecond: 4
+  walkFramesPerSecond: 8
+  runningFramesPerSecond: 12
+  attackFramesPerSecond: 10
+  skillFramesPerSecond: 10
+  dashFramesPerSecond: 14
+  deathFramesPerSecond: 6
+  attackDuration: 0.4
+  skillDuration: 0.4
+  dashDuration: 0.2
 --- !u!114 &6851415273692241425
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1022,6 +1033,30 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1263847002192746248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5054948953897289759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3caf5c731a2372a41aa70a3f2b497a3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAnimationController
+  animator: {fileID: 6756481364951381221}
+  playerMovement: {fileID: 5539229426081354734}
+  characterSpriteController: {fileID: 1613250513679658638}
+  speedParameter: Speed
+  moveXParameter: MoveX
+  moveYParameter: MoveY
+  runningParameter: Running
+  attackParameter: Attack
+  skillParameter: Skill
+  weaponTypeParameter: WeaponType
+  dashParameter: Dash
+  deathParameter: Death
 --- !u!1 &5246304247548789014
 GameObject:
   m_ObjectHideFlags: 0

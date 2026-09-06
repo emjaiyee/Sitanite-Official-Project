@@ -19,12 +19,17 @@ public class CharacterRenderer : MonoBehaviour
     [SerializeField] private SpriteRenderer shieldRenderer;
 
     private CharacterDirection currentDirection = CharacterDirection.SouthWest;
+    private CharacterAnimationState currentAnimationState = CharacterAnimationState.Idle;
+    private int currentAnimationFrame;
 
     public CharacterDirection CurrentDirection
     {
         get => currentDirection;
         set
         {
+            if (currentDirection == value)
+                return;
+
             currentDirection = value;
             UpdateAppearance();
         }
@@ -99,8 +104,11 @@ public class CharacterRenderer : MonoBehaviour
         }
 
         headwearRenderer.enabled = true;
-        headwearRenderer.sprite =
-            appearance.headwear.GetSprite(currentDirection);
+        headwearRenderer.sprite = appearance.headwear.GetSprite(
+            currentDirection,
+            currentAnimationState,
+            currentAnimationFrame
+        );
     }
 
     private void UpdateWeapon()
@@ -142,11 +150,28 @@ public class CharacterRenderer : MonoBehaviour
         }
 
         renderer.enabled = true;
-        renderer.sprite = definition.GetSprite(currentDirection);
+        renderer.sprite = definition.GetSprite(
+            currentDirection,
+            currentAnimationState,
+            currentAnimationFrame
+        );
     }
 
     public void Refresh()
     {
+        UpdateAppearance();
+    }
+
+    public void SetAnimationState(
+        CharacterAnimationState animationState,
+        int frame)
+    {
+        if (currentAnimationState == animationState &&
+            currentAnimationFrame == frame)
+            return;
+
+        currentAnimationState = animationState;
+        currentAnimationFrame = frame;
         UpdateAppearance();
     }
 }

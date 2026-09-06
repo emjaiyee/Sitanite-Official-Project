@@ -6,12 +6,14 @@ public class PlayerAnimationController : MonoBehaviour
     [Header("References")]
     [SerializeField] private Animator animator;
     [SerializeField] private PlayerWASD playerMovement;
+    [SerializeField] private CharacterSpriteController characterSpriteController;
 
 
     [Header("Movement Parameters")]
     [SerializeField] private string speedParameter = "Speed";
     [SerializeField] private string moveXParameter = "MoveX";
     [SerializeField] private string moveYParameter = "MoveY";
+    [SerializeField] private string runningParameter = "Running";
 
 
     [Header("Combat Parameters")]
@@ -19,7 +21,7 @@ public class PlayerAnimationController : MonoBehaviour
     [SerializeField] private string skillParameter = "Skill";
 
     // MUST MATCH ANIMATOR PARAMETER NAME
-    [SerializeField] private string weaponTypeParameter = "WeaponT";
+    [SerializeField] private string weaponTypeParameter = "WeaponType";
 
 
     [Header("Other Parameters")]
@@ -36,6 +38,9 @@ public class PlayerAnimationController : MonoBehaviour
 
         if (playerMovement == null)
             playerMovement = GetComponent<PlayerWASD>();
+
+        if (characterSpriteController == null)
+            characterSpriteController = GetComponent<CharacterSpriteController>();
     }
 
 
@@ -82,6 +87,11 @@ public class PlayerAnimationController : MonoBehaviour
             moveYParameter,
             facing.y
         );
+
+        animator.SetBool(
+            runningParameter,
+            playerMovement.IsSprinting
+        );
     }
 
 
@@ -100,6 +110,9 @@ public class PlayerAnimationController : MonoBehaviour
         animator.SetTrigger(
             attackParameter
         );
+
+        if (characterSpriteController != null)
+            characterSpriteController.PlayAttack();
     }
 
 
@@ -111,6 +124,9 @@ public class PlayerAnimationController : MonoBehaviour
         animator.SetTrigger(
             skillParameter
         );
+
+        if (characterSpriteController != null)
+            characterSpriteController.PlaySkill();
     }
 
 
@@ -152,6 +168,9 @@ public class PlayerAnimationController : MonoBehaviour
         animator.SetTrigger(
             dashParameter
         );
+
+        if (characterSpriteController != null)
+            characterSpriteController.PlayDash();
     }
 
 
@@ -165,5 +184,8 @@ public class PlayerAnimationController : MonoBehaviour
             deathParameter,
             true
         );
+
+        if (characterSpriteController != null)
+            characterSpriteController.PlayDeath();
     }
 }
