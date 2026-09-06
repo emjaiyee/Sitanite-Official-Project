@@ -53,6 +53,7 @@ public class EnemyMeleeChaseState : EnemyMeleeState
         {
             Enemy.StopMoving();
             Enemy.TryAttack();
+            
             return;
         }
 
@@ -66,6 +67,8 @@ public class EnemyMeleeChaseState : EnemyMeleeState
                 $"[Chase] {Enemy.name}: " +
                 "Lost the player. Entering Search."
             );
+
+            Enemy.takingAim = false;
 
             Enemy.ChangeState(
                 EnemyMelee.EnemyState.Search

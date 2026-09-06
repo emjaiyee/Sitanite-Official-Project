@@ -180,6 +180,16 @@ public class EnemyMelee : MonoBehaviour
         deathFadeDuration;
 
 
+    // ==========================================================
+    // ANIMATIONS   
+    // ==========================================================
+
+    private Animator animator;
+    public Animator Animator =>
+        animator;
+
+    public bool takingAim;
+
     // =========================================================
     // REFERENCES
     // =========================================================
@@ -187,6 +197,7 @@ public class EnemyMelee : MonoBehaviour
     private EnemyHealth enemyHealth;
     private Transform player;
     private PlayerStats playerStats;
+
 
     private Vector3 spawnPosition;
 
@@ -233,6 +244,9 @@ public class EnemyMelee : MonoBehaviour
     {
         enemyHealth =
             GetComponent<EnemyHealth>();
+
+        animator =
+            GetComponent<Animator>();
 
         CacheBaseStats();
 
@@ -385,6 +399,8 @@ public class EnemyMelee : MonoBehaviour
             IsPlayerWithinAttackRange())
         {
             PauseMovement(true);
+            animator.SetBool("IsMoving", false);
+            takingAim = true;
             TryAttack();
             return;
         }
@@ -392,6 +408,15 @@ public class EnemyMelee : MonoBehaviour
         PauseMovement(false);
 
         currentState.Tick();
+    }
+
+    private void LateUpdate()
+    {
+        //-----------------------------------------------------
+        // Animation Direction 
+        //-----------------------------------------------------
+
+        CalculateAnimationDirection();
     }
 
 
@@ -581,7 +606,10 @@ public class EnemyMelee : MonoBehaviour
     public void TryAttack()
     {
         if (player == null || Time.time < nextAttackTime)
+        {
+            animator.SetBool("IsAttacking", false);
             return;
+        }
 
         if (playerStats == null)
             playerStats = FindPlayerStats(player.gameObject);
@@ -606,7 +634,6 @@ public class EnemyMelee : MonoBehaviour
             StopMoving();
             return;
         }
-
         CompleteAttack();
     }
 
@@ -616,7 +643,9 @@ public class EnemyMelee : MonoBehaviour
         chargedAttackTimer = 0f;
 
         if (player == null || !IsPlayerWithinAttackRange())
+        {
             return;
+        }
 
         if (playerStats == null)
             playerStats = FindPlayerStats(player.gameObject);
@@ -629,6 +658,8 @@ public class EnemyMelee : MonoBehaviour
             );
             return;
         }
+
+        animator.SetBool("IsAttacking", true);
 
         DamageType damageType = useChargedAttack
             ? chargedAttackDamageType
@@ -662,12 +693,14 @@ public class EnemyMelee : MonoBehaviour
         currentPath = null;
         currentPathIndex = 0;
         movementPaused = false;
+        animator.SetBool("IsMoving", false);
     }
 
 
     public void PauseMovement(bool paused)
     {
         movementPaused = paused;
+        
     }
 
 
@@ -700,6 +733,8 @@ public class EnemyMelee : MonoBehaviour
         if (!HasPath)
             return;
 
+        animator.SetBool("IsMoving", true);
+
         Vector3 target =
             currentPath[currentPathIndex];
 
@@ -710,6 +745,8 @@ public class EnemyMelee : MonoBehaviour
                 moveSpeed * Time.deltaTime
             );
 
+        // Place is Moving ture Here?
+
         if (Vector3.Distance(
                 transform.position,
                 target) <= 0.01f)
@@ -719,6 +756,61 @@ public class EnemyMelee : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // ANIMATION  DIRECTION
+    // =========================================================
+    public void CalculateAnimationDirection()
+    {
+        //-----------------------------------------------------
+        // AIMING DIRECTION
+        //-----------------------------------------------------
+
+        if (takingAim)
+        {
+
+            Vector2 direction = (player.position - transform.position).normalized;
+            Vector2 targetAim = new Vector2(
+                Mathf.Round(direction.x),
+                Mathf.Round(direction.y)
+            );
+
+            animator.SetFloat("MoveX", targetAim.x);
+            animator.SetFloat("MoveY", targetAim.y);
+
+            Debug.Log(
+                     $"[Aim] {name}: " +
+                     $"Float x is '{targetAim.x}' Float y is '{targetAim.y}'" +
+                     "Its working!"
+                     );
+            return;
+        }
+
+        //-----------------------------------------------------
+        // MOVEMENT DIRECTION
+        //-----------------------------------------------------
+
+
+        if (!HasPath || movementPaused)
+        {
+            return;
+        }
+
+        Vector2 targetPath = currentPath[currentPathIndex];
+        Vector2 normalized = (targetPath - (Vector2)transform.position).normalized;
+        Vector2 targetDirection = new Vector2(
+            Mathf.Round(normalized.x * 100f) / 100f,
+            Mathf.Round(normalized.y * 100f) / 100f
+        );
+
+        animator.SetFloat("MoveX", targetDirection.x);
+        animator.SetFloat("MoveY", targetDirection.y);
+
+        Debug.Log(
+                 $"[Direction] {name}: " +
+                 $"Float x is '{targetDirection.x}' Float y is '{targetDirection.y}'" +
+                 "Its working!"
+             );
+    }
 
     // =========================================================
     // DEBUG GIZMOS

@@ -61,6 +61,8 @@ public class EnemyRangeChaseState : EnemyRangeState
         if (!Enemy.IsPlayerDetected())
         {
             Enemy.StopMoving();
+            
+            Enemy.takingAim = false;
 
             Enemy.ChangeState(
                 EnemyRange.EnemyState.Search
@@ -88,9 +90,11 @@ public class EnemyRangeChaseState : EnemyRangeState
 
             Enemy.TryShootProjectile();
 
+            Enemy.takingAim = true;
+
             return;
         }
-
+        
 
         // -----------------------------------------------------
         // REPATH

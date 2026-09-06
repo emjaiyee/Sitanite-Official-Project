@@ -112,6 +112,17 @@ public class EnemyRange : MonoBehaviour
     private int baseProjectileDamage;
 
 
+    // ==========================================================
+    // ANIMATIONS   
+    // ==========================================================
+
+    private Animator animator;
+    public Animator Animator =>
+        animator;
+
+    public bool takingAim;
+
+
     // =========================================================
     // REFERENCES
     // =========================================================
@@ -120,6 +131,7 @@ public class EnemyRange : MonoBehaviour
     private Transform player;
     private PlayerStats playerStats;
 
+    
     private Vector3 spawnPosition;
 
     public EnemyHealth Health =>
@@ -154,7 +166,7 @@ public class EnemyRange : MonoBehaviour
     // PATH
     // =========================================================
 
-    private List<Vector3> currentPath;
+    private List<Vector3> currentPath;    
     private int currentPathIndex;
     private bool movementPaused;
 
@@ -202,6 +214,9 @@ public class EnemyRange : MonoBehaviour
     {
         enemyHealth =
             GetComponent<EnemyHealth>();
+
+        animator =
+            GetComponent<Animator>();
 
         spawnPosition =
             transform.position;
@@ -331,8 +346,18 @@ public class EnemyRange : MonoBehaviour
         // -----------------------------------------------------
 
         currentState.Tick();
+
+      
     }
 
+    private void LateUpdate()
+    {
+        //-----------------------------------------------------
+        // Animation Direction 
+        //-----------------------------------------------------
+
+        CalculateAnimationDirection();
+    }
 
     // =========================================================
     // PLAYER
@@ -542,8 +567,12 @@ public class EnemyRange : MonoBehaviour
 
 
         if (Time.time < nextAttackTime)
+        {   
+            animator.SetBool("IsAttacking", false);
             return false;
-
+        }
+        animator.SetBool("IsAttacking", true);
+       
 
         // -----------------------------------------------------
         // ATTACK POINT
@@ -629,6 +658,8 @@ public class EnemyRange : MonoBehaviour
     {
         currentPath = null;
         currentPathIndex = 0;
+        animator.SetBool("IsMoving", false);
+      
     }
 
 
@@ -668,6 +699,7 @@ public class EnemyRange : MonoBehaviour
             return;
         }
 
+        animator.SetBool("IsMoving", true);
 
         Vector3 target =
             currentPath[currentPathIndex];
@@ -694,6 +726,67 @@ public class EnemyRange : MonoBehaviour
         }
     }
 
+    // =========================================================
+    // ANIMATION DIRECTION
+    // =========================================================
+    public void CalculateAnimationDirection()  
+    {
+        //-----------------------------------------------------
+        // AIMING DIRECTION
+        //-----------------------------------------------------
+
+        if (takingAim)
+        {
+
+            Vector2 direction = (player.position - transform.position).normalized;
+            Vector2 targetAim = new Vector2(
+                Mathf.Round(direction.x),
+                Mathf.Round(direction.y)
+            );
+
+            animator.SetFloat("MoveX", targetAim.x);
+            animator.SetFloat("MoveY", targetAim.y);
+
+            Debug.Log(
+                     $"[Aim] {name}: " +
+                     $"Float x is '{targetAim.x}' Float y is '{targetAim.y}'" +
+                     "Its working!"
+                     );
+            return;
+        }
+
+        //-----------------------------------------------------
+        // MOVEMENT DIRECTION
+        //-----------------------------------------------------
+
+        if (!HasPath || movementPaused)
+        {
+            return; 
+        }
+
+
+        Vector2 targetPath = currentPath[currentPathIndex];
+        Vector2 normalized = (targetPath - (Vector2)transform.position).normalized;
+        Vector2 targetDirection = new Vector2(
+            Mathf.Round(normalized.x * 100f)/100f,
+            Mathf.Round(normalized.y * 100f)/100f
+        );
+
+        animator.SetFloat("MoveX", targetDirection.x);
+        animator.SetFloat("MoveY", targetDirection.y);
+
+        Debug.Log(
+                 $"[Direction] {name}: " +
+                 $"Float x is '{targetDirection.x}' Float y is '{targetDirection.y}'" +
+                 "Its working!"
+             );
+
+        
+    }
+    
+    
+    
+    
 
     // =========================================================
     // STATS

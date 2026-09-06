@@ -25,6 +25,7 @@ public class EnemyMeleeDeathState : EnemyMeleeState
 
         Enemy.StopMoving();
 
+        Enemy.Animator.SetTrigger("IsDead");
 
         // -----------------------------------------------------
         // FIND SPRITE RENDERER

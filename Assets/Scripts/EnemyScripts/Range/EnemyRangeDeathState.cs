@@ -14,10 +14,13 @@ public class EnemyRangeDeathState : EnemyRangeState
     {
         deathTimer = 0f;
         Enemy.StopMoving();
+        Enemy.Animator.SetTrigger("IsDead");
 
         spriteRenderer = Enemy.GetComponentInChildren<SpriteRenderer>();
         if (spriteRenderer != null)
             originalColor = spriteRenderer.color;
+
+        
     }
 
     public override void Tick()
