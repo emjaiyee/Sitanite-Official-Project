@@ -4,7 +4,14 @@ using UnityEngine.Tilemaps;
 [RequireComponent(typeof(Tilemap))]
 public class AStarWalkableMap : MonoBehaviour
 {
+    [Header("Elevation")]
+    [SerializeField] private int elevationLevel = 0;
+
     private Tilemap tilemap;
+
+    public int ElevationLevel => elevationLevel;
+
+    public Tilemap Tilemap => tilemap;
 
     private void Awake()
     {
@@ -22,14 +29,14 @@ public class AStarWalkableMap : MonoBehaviour
             return;
         }
 
-        AStarManager.Instance.RegisterWalkableTilemap(tilemap);
+        AStarManager.Instance.RegisterWalkableTilemap(this);
     }
 
     private void OnDestroy()
     {
         if (AStarManager.Instance != null)
         {
-            AStarManager.Instance.UnregisterWalkableTilemap(tilemap);
+            AStarManager.Instance.UnregisterWalkableTilemap(this);
         }
     }
 }

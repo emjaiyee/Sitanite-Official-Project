@@ -24,7 +24,9 @@ public class EnemyRangeIdleState : EnemyRangeState
         }
 
         hasValidSpawnTile =
-            AStarManager.Instance.IsPositionWalkable(Enemy.transform.position) ||
+            AStarManager.Instance.IsPositionWalkable(
+                Enemy.transform.position,
+                Enemy.ElevationLevel) ||
             Enemy.IsOnStairLink;
 
         if (!hasValidSpawnTile)
@@ -74,10 +76,12 @@ public class EnemyRangeIdleState : EnemyRangeState
 
         Vector3? destination = AStarManager.Instance.GetRandomWalkablePositionNear(
             Enemy.SpawnPosition,
-            Enemy.IdleWanderRadius);
+            Enemy.IdleWanderRadius,
+            Enemy.ElevationLevel);
 
         if (!destination.HasValue)
         {
+            SetCurrentCellAsIdleOrigin();
             waitingForNewDestination = true;
             waitTimer = 0f;
             return;
@@ -85,7 +89,8 @@ public class EnemyRangeIdleState : EnemyRangeState
 
         List<Vector3> path = AStarManager.Instance.FindPath(
             Enemy.transform.position,
-            destination.Value);
+            destination.Value,
+            Enemy.ElevationLevel);
 
         if (path == null || path.Count == 0)
         {
@@ -97,6 +102,7 @@ public class EnemyRangeIdleState : EnemyRangeState
 
         if (!Enemy.SetPath(path))
         {
+            SetCurrentCellAsIdleOrigin();
             waitingForNewDestination = true;
             waitTimer = 0f;
         }
@@ -104,14 +110,15 @@ public class EnemyRangeIdleState : EnemyRangeState
 
     private void SetCurrentCellAsIdleOrigin()
     {
+        if (AStarManager.Instance == null)
+            return;
+
         Vector3? currentCell =
             AStarManager.Instance.GetWalkableCellCenter(
-                Enemy.transform.position
-            );
+                Enemy.transform.position,
+                Enemy.ElevationLevel);
 
         if (currentCell.HasValue)
-        {
             Enemy.SetIdleOrigin(currentCell.Value);
-        }
     }
 }

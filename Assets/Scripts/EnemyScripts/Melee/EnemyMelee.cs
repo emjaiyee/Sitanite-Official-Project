@@ -120,6 +120,7 @@ public class EnemyMelee : MonoBehaviour
 
     // Last known position that damage came from.
     public Vector3? DamageSourcePosition { get; private set; }
+    public Vector3? LastKnownPlayerPosition { get; private set; }
 
     /// <summary>
     /// Called by EnemyHealth when this enemy takes damage.
@@ -185,6 +186,7 @@ public class EnemyMelee : MonoBehaviour
     // =========================================================
 
     private EnemyHealth enemyHealth;
+    private EnemyElevationLevel enemyElevation;
     private Transform player;
     private PlayerStats playerStats;
 
@@ -199,6 +201,9 @@ public class EnemyMelee : MonoBehaviour
 
     public Vector3 SpawnPosition =>
         spawnPosition;
+
+    public int ElevationLevel =>
+        enemyElevation != null ? enemyElevation.CurrentLevel : 0;
 
     public void SetIdleOrigin(Vector3 position)
     {
@@ -233,6 +238,9 @@ public class EnemyMelee : MonoBehaviour
     {
         enemyHealth =
             GetComponent<EnemyHealth>();
+
+        enemyElevation =
+            GetComponent<EnemyElevationLevel>();
 
         CacheBaseStats();
 
@@ -306,6 +314,8 @@ public class EnemyMelee : MonoBehaviour
         if (legacyContactDamage != null)
             legacyContactDamage.enabled = false;
 
+        nextAttackTime = Time.time + attackCooldown;
+
         // -----------------------------------------------------
         // CHECK A* SPAWN TILE
         // -----------------------------------------------------
@@ -320,7 +330,8 @@ public class EnemyMelee : MonoBehaviour
 
         if (AStarManager.Instance != null &&
             !AStarManager.Instance.IsPositionWalkable(
-                transform.position))
+                transform.position,
+                ElevationLevel))
         {
             Debug.LogWarning(
                 $"[EnemyMelee] {name} spawned on a " +
@@ -560,12 +571,18 @@ public class EnemyMelee : MonoBehaviour
             return false;
 
 
-        return AStarManager.Instance
+        bool detected = AStarManager.Instance
             .IsPositionWithinDetectionRadius(
                 transform.position,
                 player.position,
-                DetectionRadius
+                DetectionRadius,
+                ElevationLevel
             );
+
+        if (detected)
+            LastKnownPlayerPosition = player.position;
+
+        return detected;
     }
 
     public bool IsPlayerWithinAttackRange()
@@ -580,7 +597,11 @@ public class EnemyMelee : MonoBehaviour
 
     public void TryAttack()
     {
-        if (player == null || Time.time < nextAttackTime)
+        if (CurrentState != EnemyState.Chase ||
+            player == null ||
+            !IsPlayerDetected() ||
+            !IsPlayerWithinAttackRange() ||
+            Time.time < nextAttackTime)
             return;
 
         if (playerStats == null)

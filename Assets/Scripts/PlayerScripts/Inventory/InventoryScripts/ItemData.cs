@@ -86,11 +86,10 @@ public enum EquipmentType
 
 public enum WeaponAttackType
 {
-    None,
-    Melee,
-    Ranged,
-    Spell
-}
+    Melee = 0,
+    Ranged = 1,
+    Spell = 2
+}   
 
 public enum WeaponSkillType
 {
@@ -158,7 +157,7 @@ public class ItemData : ScriptableObject
     [Tooltip("Stable identifier used by gameplay systems.")]
     [SerializeField] private string weaponId;
 
-    [SerializeField] private WeaponAttackType weaponAttackType = WeaponAttackType.None;
+    [SerializeField] private WeaponAttackType weaponAttackType = WeaponAttackType.Melee;
     [SerializeField] private WeaponSkillType weaponSkillType = WeaponSkillType.None;
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private LayerMask hittableLayers;
