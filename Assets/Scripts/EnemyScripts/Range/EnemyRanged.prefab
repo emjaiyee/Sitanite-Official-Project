@@ -216,11 +216,12 @@ MonoBehaviour:
   attackRange: 6
   projectileDamageType: 1
   projectileDamage: 10
-  attackCooldown: 2.5
+  attackCooldown: 1
   projectileSpeed: 2.5
   projectileLifetime: 16
   attackPoint: {fileID: 5414698661971084702}
-  projectilePrefab: {fileID: 7280552908879159887, guid: 219083c3bbab5c340bdbfeeba73e1861, type: 3}
+  projectilePrefab: {fileID: 7280552908879159887, guid: f49184f8111020b488a98da4b48e5c27, type: 3}
+  takingAim: 0
   deathAnimationDelay: 0.5
   deathFadeDuration: 0.75
 --- !u!114 &5575200063884600762

@@ -1,7 +1,8 @@
 using UnityEngine;
 
-public class BaseArrow : MonoBehaviour, IProjectileType
+public class BaseMissile : MonoBehaviour, IProjectileType
 {
+
     [Header("Collision")]
     [SerializeField] private LayerMask hittableLayers = Physics2D.AllLayers;
 
@@ -9,7 +10,12 @@ public class BaseArrow : MonoBehaviour, IProjectileType
     [SerializeField] private bool enableDebugLogs = true;
     [SerializeField] private bool logMovement = false;
 
-    private int damage; 
+    [Header("Target")]
+    [SerializeField] private Transform target;
+    [SerializeField] private float rotationSpeed = 20f;  
+    
+
+    private int damage;
     private DamageType damageType;
     private float speed;
     private float lifetime;
@@ -55,6 +61,11 @@ public class BaseArrow : MonoBehaviour, IProjectileType
         }
     }
 
+    private void Awake()
+    {
+        target = GameObject.FindGameObjectWithTag("Player")?.transform;
+    }
+
     private void Update()
     {
         if (!initialized)
@@ -62,8 +73,37 @@ public class BaseArrow : MonoBehaviour, IProjectileType
 
         Vector3 previousPosition = transform.position;
 
-        transform.position +=
-            direction * speed * Time.deltaTime;                     
+        if (target == null)
+        {
+            transform.position +=
+                direction * speed * Time.deltaTime;                     //Movement script
+        }
+        //---------------------------------------------------------------------------------------------------------------
+       
+        if (target != null)
+        { 
+            Vector3 direction = target.position - transform.position;
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                rotation,
+                rotationSpeed * Time.deltaTime);
+
+            transform.position +=
+            transform.right * speed * Time.deltaTime;
+
+            Debug.Log(
+                    $"[BaseMissile] Is Rotating"                    
+                );
+        }
+
+        //---------------------------------------------------------------------------------------------------------------
+
+
+
 
         if (logMovement)
         {
@@ -74,7 +114,7 @@ public class BaseArrow : MonoBehaviour, IProjectileType
             );
         }
 
-        if (Time.time >= destroyTime)                               
+        if (Time.time >= destroyTime)                               //Arrow Life time
         {
             if (enableDebugLogs)
             {
@@ -90,7 +130,7 @@ public class BaseArrow : MonoBehaviour, IProjectileType
             return;
         }
 
-        if (Vector3.Distance(                                                  
+        if (Vector3.Distance(                                                  //Arrow Distance Reached
                 startPosition,
                 transform.position) >= lifetime * speed)
         {
@@ -257,3 +297,15 @@ public class BaseArrow : MonoBehaviour, IProjectileType
         OnTriggerEnter2D(collision.collider);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

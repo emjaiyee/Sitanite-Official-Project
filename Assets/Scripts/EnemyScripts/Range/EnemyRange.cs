@@ -605,8 +605,8 @@ public class EnemyRange : MonoBehaviour
             );
 
 
-        BaseArrow projectile =
-            projectileObject.GetComponent<BaseArrow>();
+        IProjectileType projectile =
+            projectileObject.GetComponent<IProjectileType>();
 
 
         if (projectile == null)
