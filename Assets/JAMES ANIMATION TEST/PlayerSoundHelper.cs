@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[RequireComponent(typeof(AudioSource))]
 public class PlayerSoundHelper : MonoBehaviour
 {
     [Header("Audio Source")]
