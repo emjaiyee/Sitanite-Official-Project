@@ -28,6 +28,7 @@ public class PlayerAnimationController : MonoBehaviour
     [SerializeField] private string dashParameter = "Dash";
     [SerializeField] private string deathParameter = "Death";
 
+    private WeaponAttackType weaponAttackType = WeaponAttackType.Melee;
 
 
     private void Awake()
@@ -112,7 +113,7 @@ public class PlayerAnimationController : MonoBehaviour
         );
 
         if (characterSpriteController != null)
-            characterSpriteController.PlayAttack();
+            characterSpriteController.PlayWeaponAction(weaponAttackType);
     }
 
 
@@ -126,7 +127,7 @@ public class PlayerAnimationController : MonoBehaviour
         );
 
         if (characterSpriteController != null)
-            characterSpriteController.PlaySkill();
+            characterSpriteController.PlayWeaponAction(weaponAttackType);
     }
 
 
@@ -141,6 +142,7 @@ public class PlayerAnimationController : MonoBehaviour
     public void SetWeaponType(
         WeaponAttackType type)
     {
+        weaponAttackType = type;
         animator.SetInteger(
             weaponTypeParameter,
             (int)type

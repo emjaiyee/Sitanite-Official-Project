@@ -130,7 +130,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -168,7 +168,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -189,709 +189,722 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_0
+      name: MaleWalk2-Sheet_walkAnimation_000
       rect:
         serializedVersion: 2
-        x: 7
-        y: 1
-        width: 19
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5e9fa506ff8bc83d0800000000000000
-      internalID: -3202981827994519067
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_1
-      rect:
-        serializedVersion: 2
-        x: 35
+        x: 0
         y: 0
-        width: 25
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e91dd6b86449a1fa0800000000000000
-      internalID: -5829183736969834082
+      spriteID: 308f292bddcbb1e46beb4303dde35f58
+      internalID: 1963650409
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_2
+      name: MaleWalk2-Sheet_walkAnimation_001
       rect:
         serializedVersion: 2
-        x: 71
-        y: 1
-        width: 19
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bc99c5ad292ffe730800000000000000
-      internalID: 4030706904062532043
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_3
-      rect:
-        serializedVersion: 2
-        x: 101
-        y: 2
-        width: 20
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0fc70bf158ddeb5c0800000000000000
-      internalID: -4197674238830674704
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_4
-      rect:
-        serializedVersion: 2
-        x: 135
-        y: 2
-        width: 19
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 42bcae0c7237f76e0800000000000000
-      internalID: -1837623508366341340
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_5
-      rect:
-        serializedVersion: 2
-        x: 168
+        x: 32
         y: 0
-        width: 16
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2de179444994ed010800000000000000
-      internalID: 1215489850591354578
+      spriteID: 1cdaa27959e98aa4b9c51c876d22bf5b
+      internalID: -1894959279
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_6
+      name: MaleWalk2-Sheet_walkAnimation_002
       rect:
         serializedVersion: 2
-        x: 199
-        y: 2
-        width: 19
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7d04a33d8e91534c0800000000000000
-      internalID: -4308508980743094057
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_7
-      rect:
-        serializedVersion: 2
-        x: 233
+        x: 64
         y: 0
-        width: 16
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d824298aa00b4df80800000000000000
-      internalID: -8082641871398878579
+      spriteID: 5b7bd1061e9ace042956755a060cd0cc
+      internalID: 916269306
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_8
+      name: MaleWalk2-Sheet_walkAnimation_003
       rect:
         serializedVersion: 2
-        x: 263
-        y: 1
-        width: 19
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a4426e09fa4506750800000000000000
-      internalID: 6296125392090965066
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_9
-      rect:
-        serializedVersion: 2
-        x: 293
+        x: 96
         y: 0
-        width: 25
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f1b64779314e30480800000000000000
-      internalID: -8934046462976431329
+      spriteID: 59503789f6589a441b10ff3e0b30bc6c
+      internalID: 177337819
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_10
+      name: MaleWalk2-Sheet_walkAnimation_004
       rect:
         serializedVersion: 2
-        x: 327
-        y: 1
-        width: 19
-        height: 41
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0887ca970a09b82a0800000000000000
-      internalID: -6734129798891931520
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_11
-      rect:
-        serializedVersion: 2
-        x: 360
-        y: 2
-        width: 20
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 69141306731c66cb0800000000000000
-      internalID: -4870993503373409898
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_12
-      rect:
-        serializedVersion: 2
-        x: 394
-        y: 2
-        width: 14
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 330b0892e07a56c60800000000000000
-      internalID: 7810832808011673651
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_13
-      rect:
-        serializedVersion: 2
-        x: 421
-        y: 1
-        width: 23
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8d2453b8a66bdc3e0800000000000000
-      internalID: -2031767288155913512
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_14
-      rect:
-        serializedVersion: 2
-        x: 458
-        y: 2
-        width: 14
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 361043aabb39d9340800000000000000
-      internalID: 4872212806108447075
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_15
-      rect:
-        serializedVersion: 2
-        x: 487
-        y: 2
-        width: 21
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 85356087d8cfffde0800000000000000
-      internalID: -1297040483125144744
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_16
-      rect:
-        serializedVersion: 2
-        x: 520
-        y: 2
-        width: 19
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ef7040f5a3b92d850800000000000000
-      internalID: 6400348695451404286
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_17
-      rect:
-        serializedVersion: 2
-        x: 549
+        x: 128
         y: 0
-        width: 24
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ca33bda62e0f4fdb0800000000000000
-      internalID: -4758914050977746004
+      spriteID: 2d152a0304dbe9144a0fcd2db75b92a1
+      internalID: 1326735605
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_18
+      name: MaleWalk2-Sheet_walkAnimation_005
       rect:
         serializedVersion: 2
-        x: 584
-        y: 2
-        width: 19
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8af669333fbf01cd0800000000000000
-      internalID: -2589292763776913496
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_19
-      rect:
-        serializedVersion: 2
-        x: 616
-        y: 2
-        width: 19
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 25e65498d524d7ac0800000000000000
-      internalID: -3855852736456855982
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_20
-      rect:
-        serializedVersion: 2
-        x: 647
-        y: 4
-        width: 19
-        height: 38
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 334cc59cfd3e00dd0800000000000000
-      internalID: -2521765241031965645
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_21
-      rect:
-        serializedVersion: 2
-        x: 682
+        x: 160
         y: 0
-        width: 14
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3fef4be65d82d8b20800000000000000
-      internalID: 3138209412497604339
+      spriteID: e238421f228fc9948bc39bdf0df39075
+      internalID: -348673924
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_22
+      name: MaleWalk2-Sheet_walkAnimation_006
       rect:
         serializedVersion: 2
-        x: 711
-        y: 4
-        width: 19
-        height: 38
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 049c054c791f94850800000000000000
-      internalID: 6361881582773520704
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_23
-      rect:
-        serializedVersion: 2
-        x: 745
+        x: 192
         y: 0
-        width: 14
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ef4c662d2f0ecf4b0800000000000000
-      internalID: -5405198119234779906
+      spriteID: ece644753ee680448a5a1e1eea6c9cec
+      internalID: -361970869
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_24
+      name: MaleWalk2-Sheet_walkAnimation_007
       rect:
         serializedVersion: 2
-        x: 774
-        y: 2
-        width: 19
-        height: 40
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1c32c6b5feb881df0800000000000000
-      internalID: -209263522525469759
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: MaleWalk2-Sheet_25
-      rect:
-        serializedVersion: 2
-        x: 804
+        x: 224
         y: 0
-        width: 24
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 51809a18b58cddc70800000000000000
-      internalID: 8997567925899036693
+      spriteID: 736d3450bbdeea6428dfc44f6a4d2bdc
+      internalID: 1690827692
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_26
+      name: MaleWalk2-Sheet_walkAnimation_008
       rect:
         serializedVersion: 2
-        x: 838
-        y: 2
-        width: 19
-        height: 40
+        x: 256
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 004b7d17b85af12c0800000000000000
-      internalID: -4458663087744502784
+      spriteID: 0ba077e56337951408fb997a8b9bcd00
+      internalID: -2005346674
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_27
+      name: MaleWalk2-Sheet_walkAnimation_009
       rect:
         serializedVersion: 2
-        x: 870
-        y: 2
-        width: 19
-        height: 39
+        x: 288
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d0fa09f85e28021b0800000000000000
-      internalID: -5683398807273820403
+      spriteID: 92a9c44ea010d8b4789daad0b0b2f411
+      internalID: -1458169585
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_28
+      name: MaleWalk2-Sheet_walkAnimation_010
       rect:
         serializedVersion: 2
-        x: 904
-        y: 2
-        width: 14
-        height: 40
+        x: 320
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fd4eb73c84dc30280800000000000000
-      internalID: -9078186711447771937
+      spriteID: c78ee0dac9d1a104a9206c78ba632073
+      internalID: -980575703
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_29
+      name: MaleWalk2-Sheet_walkAnimation_011
       rect:
         serializedVersion: 2
-        x: 932
-        y: 1
-        width: 23
-        height: 40
+        x: 352
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 026605513d6dcc0c0800000000000000
-      internalID: -4554028921094380000
+      spriteID: 2bb6135faeaf4a3418e40c9ecd27d121
+      internalID: -1925537743
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_30
+      name: MaleWalk2-Sheet_walkAnimation_012
       rect:
         serializedVersion: 2
-        x: 968
-        y: 2
-        width: 14
-        height: 40
+        x: 384
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3f0864a257d3459f0800000000000000
-      internalID: -480691686792068877
+      spriteID: 3a8e2f9e9c1ceed42a1b26ace93dd025
+      internalID: 1789987226
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleWalk2-Sheet_31
+      name: MaleWalk2-Sheet_walkAnimation_013
       rect:
         serializedVersion: 2
-        x: 996
-        y: 2
-        width: 21
-        height: 39
+        x: 416
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9f0a1e928e5e5c4e0800000000000000
-      internalID: -1961909277352156935
+      spriteID: 2aed402eab09ff843bf1cb852cdce55c
+      internalID: 231724757
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_014
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a663b4eea2d16d949998f86734257d7c
+      internalID: -930682690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_015
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96ea6aa719bc7d14ea1a1f01487e2e31
+      internalID: 352065686
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_016
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3626a9d6d5956a4f968335bf6f4a982
+      internalID: 120399689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_017
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2850cde5dc5ef414ca43521199bb0804
+      internalID: -110535550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_018
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a4cfe1824b08b7d459b76d9452776d31
+      internalID: 1254250442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_019
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 41d470cc9f4a33d4fab57d0d8c1ce45b
+      internalID: 1356321206
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_020
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cffdd28013388e745a6f72ed18703d22
+      internalID: 1346504013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_021
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1f6d1f92cc1511e4a9e16dfbcf2186f4
+      internalID: 312114951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_022
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7786afa92bb7364e9d3419ddbe1267a
+      internalID: -929992690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_023
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96a69d0902f09554ebe5e3fc0927c432
+      internalID: -562541549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_024
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 518af8fd041911040983db110718939a
+      internalID: -1478871335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_025
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ea6cfa0af2f7f24c9c46a53fe1821e8
+      internalID: -812109545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_026
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5ff892691175ea74ea75b2563bbb0733
+      internalID: 225001925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_027
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b6aa8eae6084a94681d6b409dcb3696
+      internalID: -1164854174
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_028
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 92c252b4f95ac5d438a15077a7cf4d6d
+      internalID: -951682825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_029
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e70062c596d7754c9fb4941e3fde23e
+      internalID: 1363648064
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_030
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 586d1bf7bd52475438824316105c8ca4
+      internalID: 290326940
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MaleWalk2-Sheet_walkAnimation_031
+      rect:
+        serializedVersion: 2
+        x: 992
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 547fd1342b3ab6d4abf0253b608d56b6
+      internalID: 731300559
       vertices: []
       indices: 
       edges: []
@@ -900,7 +913,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -942,6 +955,38 @@ TextureImporter:
       MaleWalk2-Sheet_7: -8082641871398878579
       MaleWalk2-Sheet_8: 6296125392090965066
       MaleWalk2-Sheet_9: -8934046462976431329
+      MaleWalk2-Sheet_walkAnimation_000: 1963650409
+      MaleWalk2-Sheet_walkAnimation_001: -1894959279
+      MaleWalk2-Sheet_walkAnimation_002: 916269306
+      MaleWalk2-Sheet_walkAnimation_003: 177337819
+      MaleWalk2-Sheet_walkAnimation_004: 1326735605
+      MaleWalk2-Sheet_walkAnimation_005: -348673924
+      MaleWalk2-Sheet_walkAnimation_006: -361970869
+      MaleWalk2-Sheet_walkAnimation_007: 1690827692
+      MaleWalk2-Sheet_walkAnimation_008: -2005346674
+      MaleWalk2-Sheet_walkAnimation_009: -1458169585
+      MaleWalk2-Sheet_walkAnimation_010: -980575703
+      MaleWalk2-Sheet_walkAnimation_011: -1925537743
+      MaleWalk2-Sheet_walkAnimation_012: 1789987226
+      MaleWalk2-Sheet_walkAnimation_013: 231724757
+      MaleWalk2-Sheet_walkAnimation_014: -930682690
+      MaleWalk2-Sheet_walkAnimation_015: 352065686
+      MaleWalk2-Sheet_walkAnimation_016: 120399689
+      MaleWalk2-Sheet_walkAnimation_017: -110535550
+      MaleWalk2-Sheet_walkAnimation_018: 1254250442
+      MaleWalk2-Sheet_walkAnimation_019: 1356321206
+      MaleWalk2-Sheet_walkAnimation_020: 1346504013
+      MaleWalk2-Sheet_walkAnimation_021: 312114951
+      MaleWalk2-Sheet_walkAnimation_022: -929992690
+      MaleWalk2-Sheet_walkAnimation_023: -562541549
+      MaleWalk2-Sheet_walkAnimation_024: -1478871335
+      MaleWalk2-Sheet_walkAnimation_025: -812109545
+      MaleWalk2-Sheet_walkAnimation_026: 225001925
+      MaleWalk2-Sheet_walkAnimation_027: -1164854174
+      MaleWalk2-Sheet_walkAnimation_028: -951682825
+      MaleWalk2-Sheet_walkAnimation_029: 1363648064
+      MaleWalk2-Sheet_walkAnimation_030: 290326940
+      MaleWalk2-Sheet_walkAnimation_031: 731300559
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

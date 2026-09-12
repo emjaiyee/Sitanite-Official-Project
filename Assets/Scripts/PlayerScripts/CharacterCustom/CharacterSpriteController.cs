@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public enum SpriteSoundEventType
 {
@@ -46,17 +47,25 @@ public class CharacterSpriteController : MonoBehaviour
     [Min(0.01f)]
     [SerializeField] private float runningFramesPerSecond = 12f;
     [Min(0.01f)]
-    [SerializeField] private float attackFramesPerSecond = 10f;
+    [FormerlySerializedAs("attackFramesPerSecond")]
+    [SerializeField] private float meleeFramesPerSecond = 10f;
     [Min(0.01f)]
-    [SerializeField] private float skillFramesPerSecond = 10f;
+    [FormerlySerializedAs("skillFramesPerSecond")]
+    [SerializeField] private float castFramesPerSecond = 10f;
+    [Min(0.01f)]
+    [SerializeField] private float rangedFramesPerSecond = 10f;
     [Min(0.01f)]
     [SerializeField] private float dashFramesPerSecond = 14f;
     [Min(0.01f)]
     [SerializeField] private float deathFramesPerSecond = 6f;
     [Min(0f)]
-    [SerializeField] private float attackDuration = 0.4f;
+    [FormerlySerializedAs("attackDuration")]
+    [SerializeField] private float meleeDuration = 0.4f;
     [Min(0f)]
-    [SerializeField] private float skillDuration = 0.4f;
+    [FormerlySerializedAs("skillDuration")]
+    [SerializeField] private float castDuration = 0.4f;
+    [Min(0f)]
+    [SerializeField] private float rangedDuration = 0.4f;
     [Min(0f)]
     [SerializeField] private float dashDuration = 0.2f;
 
@@ -64,8 +73,11 @@ public class CharacterSpriteController : MonoBehaviour
     [SerializeField] private SpriteAnimationSoundTrack idleSoundEvents;
     [SerializeField] private SpriteAnimationSoundTrack walkSoundEvents;
     [SerializeField] private SpriteAnimationSoundTrack runningSoundEvents;
-    [SerializeField] private SpriteAnimationSoundTrack attackSoundEvents;
-    [SerializeField] private SpriteAnimationSoundTrack skillSoundEvents;
+    [FormerlySerializedAs("attackSoundEvents")]
+    [SerializeField] private SpriteAnimationSoundTrack meleeSoundEvents;
+    [FormerlySerializedAs("skillSoundEvents")]
+    [SerializeField] private SpriteAnimationSoundTrack castSoundEvents;
+    [SerializeField] private SpriteAnimationSoundTrack rangedSoundEvents;
     [SerializeField] private SpriteAnimationSoundTrack dashSoundEvents;
     [SerializeField] private SpriteAnimationSoundTrack deathSoundEvents;
 
@@ -119,14 +131,20 @@ public class CharacterSpriteController : MonoBehaviour
         PlayFrameSoundEvents(frame);
     }
 
-    public void PlayAttack()
+    public void PlayWeaponAction(WeaponAttackType weaponAttackType)
     {
-        PlayAction(CharacterAnimationState.Attack, attackDuration);
-    }
-
-    public void PlaySkill()
-    {
-        PlayAction(CharacterAnimationState.Skill, skillDuration);
+        switch (weaponAttackType)
+        {
+            case WeaponAttackType.Melee:
+                PlayAction(CharacterAnimationState.Melee, meleeDuration);
+                break;
+            case WeaponAttackType.Ranged:
+                PlayAction(CharacterAnimationState.Ranged, rangedDuration);
+                break;
+            case WeaponAttackType.Spell:
+                PlayAction(CharacterAnimationState.Cast, castDuration);
+                break;
+        }
     }
 
     public void PlayDash()
@@ -167,8 +185,9 @@ public class CharacterSpriteController : MonoBehaviour
             CharacterAnimationState.Idle => idleFramesPerSecond,
             CharacterAnimationState.Walk => walkFramesPerSecond,
             CharacterAnimationState.Running => runningFramesPerSecond,
-            CharacterAnimationState.Attack => attackFramesPerSecond,
-            CharacterAnimationState.Skill => skillFramesPerSecond,
+            CharacterAnimationState.Melee => meleeFramesPerSecond,
+            CharacterAnimationState.Cast => castFramesPerSecond,
+            CharacterAnimationState.Ranged => rangedFramesPerSecond,
             CharacterAnimationState.Dash => dashFramesPerSecond,
             CharacterAnimationState.Death => deathFramesPerSecond,
             _ => walkFramesPerSecond
@@ -218,8 +237,9 @@ public class CharacterSpriteController : MonoBehaviour
             CharacterAnimationState.Idle => idleSoundEvents,
             CharacterAnimationState.Walk => walkSoundEvents,
             CharacterAnimationState.Running => runningSoundEvents,
-            CharacterAnimationState.Attack => attackSoundEvents,
-            CharacterAnimationState.Skill => skillSoundEvents,
+            CharacterAnimationState.Melee => meleeSoundEvents,
+            CharacterAnimationState.Cast => castSoundEvents,
+            CharacterAnimationState.Ranged => rangedSoundEvents,
             CharacterAnimationState.Dash => dashSoundEvents,
             CharacterAnimationState.Death => deathSoundEvents,
             _ => null

@@ -130,7 +130,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -168,7 +168,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -206,7 +206,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_0
+      name: FemaleWalk2-Sheet_walkAnimation_000
       rect:
         serializedVersion: 2
         x: 0
@@ -219,16 +219,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8b0174ec214343560800000000000000
-      internalID: 7292510951994495160
+      spriteID: 751cf5425213a134dab9ee53f0493239
+      internalID: -896755312
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_1
+      name: FemaleWalk2-Sheet_walkAnimation_001
       rect:
         serializedVersion: 2
         x: 32
@@ -241,16 +241,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5ca33d0920a2a28f0800000000000000
-      internalID: -564592612773512507
+      spriteID: a85095e57d3a12044a2b12369b9f2d88
+      internalID: 513728072
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_2
+      name: FemaleWalk2-Sheet_walkAnimation_002
       rect:
         serializedVersion: 2
         x: 64
@@ -263,16 +263,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 772573fda55916250800000000000000
-      internalID: 5936190001375564407
+      spriteID: ba4675e49f8e021489fef2b439874dd4
+      internalID: -353969379
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_3
+      name: FemaleWalk2-Sheet_walkAnimation_003
       rect:
         serializedVersion: 2
         x: 96
@@ -285,16 +285,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a46870490ff2ba2f0800000000000000
-      internalID: -960621385191291318
+      spriteID: be21a7c8bdc681b46957a6723e8f7b5d
+      internalID: -146106135
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_4
+      name: FemaleWalk2-Sheet_walkAnimation_004
       rect:
         serializedVersion: 2
         x: 128
@@ -307,16 +307,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 65bfba7efb59deac0800000000000000
-      internalID: -3824235857109583018
+      spriteID: c9a0e551e643b3040acea1aa03f35bd7
+      internalID: -1423900990
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_5
+      name: FemaleWalk2-Sheet_walkAnimation_005
       rect:
         serializedVersion: 2
         x: 160
@@ -329,16 +329,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 53d8c6f986c175e90800000000000000
-      internalID: -7037124657066242763
+      spriteID: b1e5dfb14aa2c2247b2cdc20f0ce7232
+      internalID: 605456743
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_6
+      name: FemaleWalk2-Sheet_walkAnimation_006
       rect:
         serializedVersion: 2
         x: 192
@@ -351,16 +351,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b7c92acdc608a68b0800000000000000
-      internalID: -5158169218153014149
+      spriteID: ee50c89b84f586e4080e303bfcab4c99
+      internalID: 1675502657
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_7
+      name: FemaleWalk2-Sheet_walkAnimation_007
       rect:
         serializedVersion: 2
         x: 224
@@ -373,16 +373,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: db1510388a7c0b9f0800000000000000
-      internalID: -454644035798085187
+      spriteID: 3cf2fa02295b3904aae5a533923ec310
+      internalID: 300452150
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_8
+      name: FemaleWalk2-Sheet_walkAnimation_008
       rect:
         serializedVersion: 2
         x: 256
@@ -395,16 +395,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 33552e3506860b4b0800000000000000
-      internalID: -5426722788047956685
+      spriteID: 46369947a3955b04da25b19b7fdcef86
+      internalID: -1316289336
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_9
+      name: FemaleWalk2-Sheet_walkAnimation_009
       rect:
         serializedVersion: 2
         x: 288
@@ -417,16 +417,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c817ebda22e5302c0800000000000000
-      internalID: -4466622902384561780
+      spriteID: 55bd52ee9b44d1946ab664ea261b13fd
+      internalID: 1995338868
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_10
+      name: FemaleWalk2-Sheet_walkAnimation_010
       rect:
         serializedVersion: 2
         x: 320
@@ -439,16 +439,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ffffad9179c5208a0800000000000000
-      internalID: -6340403521340637185
+      spriteID: 177e34331561d654bb2b11438afca5fa
+      internalID: 2075151923
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_11
+      name: FemaleWalk2-Sheet_walkAnimation_011
       rect:
         serializedVersion: 2
         x: 352
@@ -461,16 +461,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 07df4dfced5c5c410800000000000000
-      internalID: 1496820011930811760
+      spriteID: e23a5a34e1c88784a8b4ba38f675b911
+      internalID: -2084120107
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_12
+      name: FemaleWalk2-Sheet_walkAnimation_012
       rect:
         serializedVersion: 2
         x: 384
@@ -483,16 +483,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b8db2f3d1878c3a60800000000000000
-      internalID: 7655142458299432331
+      spriteID: 0460e895e787b744c9ad2d2e11c11792
+      internalID: -254197917
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_13
+      name: FemaleWalk2-Sheet_walkAnimation_013
       rect:
         serializedVersion: 2
         x: 416
@@ -505,16 +505,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 93e5f78dc42ccccf0800000000000000
-      internalID: -230595845597209031
+      spriteID: c8de8996847055849b352d2b70044909
+      internalID: 1838643294
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_14
+      name: FemaleWalk2-Sheet_walkAnimation_014
       rect:
         serializedVersion: 2
         x: 448
@@ -527,16 +527,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 77894c0241e39f7b0800000000000000
-      internalID: -5190048839397762953
+      spriteID: 8b50edf6892f65d41ad5bc7b9dd78221
+      internalID: 1287459764
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_15
+      name: FemaleWalk2-Sheet_walkAnimation_015
       rect:
         serializedVersion: 2
         x: 480
@@ -549,16 +549,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1e3f15b5442446ce0800000000000000
-      internalID: -1412931521730186271
+      spriteID: 8c2ff27ae271c6241b447244400886aa
+      internalID: 670153591
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_16
+      name: FemaleWalk2-Sheet_walkAnimation_016
       rect:
         serializedVersion: 2
         x: 512
@@ -571,16 +571,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 20dc67a13f9478070800000000000000
-      internalID: 8108530962573741314
+      spriteID: 8ddb1b2a7f558b04bb55a93a9900d557
+      internalID: 1055187969
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_17
+      name: FemaleWalk2-Sheet_walkAnimation_017
       rect:
         serializedVersion: 2
         x: 544
@@ -593,16 +593,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 01deed585576dc230800000000000000
-      internalID: 3660695689137941776
+      spriteID: e758dbe13ffc04245af230063b2550ee
+      internalID: -223670633
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_18
+      name: FemaleWalk2-Sheet_walkAnimation_018
       rect:
         serializedVersion: 2
         x: 576
@@ -615,16 +615,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d8949bda026732130800000000000000
-      internalID: 3540803614768974221
+      spriteID: 8cd0fde2a08801649bc05be074e8dd3e
+      internalID: -1758562848
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_19
+      name: FemaleWalk2-Sheet_walkAnimation_019
       rect:
         serializedVersion: 2
         x: 608
@@ -637,16 +637,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c766a81f46def0800800000000000000
-      internalID: 580943894758975100
+      spriteID: 2550eb52334e3da48a6ff59c5961130e
+      internalID: 770757532
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_20
+      name: FemaleWalk2-Sheet_walkAnimation_020
       rect:
         serializedVersion: 2
         x: 640
@@ -659,16 +659,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1eaa87716c6644030800000000000000
-      internalID: 3478017813220207329
+      spriteID: bcf41f5652027c64287196edd62eabdc
+      internalID: -276161907
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_21
+      name: FemaleWalk2-Sheet_walkAnimation_021
       rect:
         serializedVersion: 2
         x: 672
@@ -681,16 +681,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a4984b604a91ed950800000000000000
-      internalID: 6475641506483177802
+      spriteID: f253f1935893ac14c82e7490fbed0931
+      internalID: -906241659
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_22
+      name: FemaleWalk2-Sheet_walkAnimation_022
       rect:
         serializedVersion: 2
         x: 704
@@ -703,16 +703,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 56775c9e91054a230800000000000000
-      internalID: 3649129670303381349
+      spriteID: 46048d309f1e1734686c48aca406a7a6
+      internalID: 827486729
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_23
+      name: FemaleWalk2-Sheet_walkAnimation_023
       rect:
         serializedVersion: 2
         x: 736
@@ -725,16 +725,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4250801a9f4e94330800000000000000
-      internalID: 3695736730033849636
+      spriteID: 6e823d0451e14274baaef3a4cabf7b0d
+      internalID: 35779816
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_24
+      name: FemaleWalk2-Sheet_walkAnimation_024
       rect:
         serializedVersion: 2
         x: 768
@@ -747,16 +747,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 31f3faea17893a560800000000000000
-      internalID: 7323865033064005395
+      spriteID: b938af489b72e9140bd7ab7d785e03b6
+      internalID: -313285119
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_25
+      name: FemaleWalk2-Sheet_walkAnimation_025
       rect:
         serializedVersion: 2
         x: 800
@@ -769,16 +769,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f007244b79b010370800000000000000
-      internalID: 8286917535530643471
+      spriteID: 9fe2519fd51b995428a78af591804326
+      internalID: -469772341
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_26
+      name: FemaleWalk2-Sheet_walkAnimation_026
       rect:
         serializedVersion: 2
         x: 832
@@ -791,16 +791,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 18ad69a2ae62d1780800000000000000
-      internalID: -8710763317085939071
+      spriteID: e76a22fcff5ddaf49b7be48beff072f8
+      internalID: 1932872498
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_27
+      name: FemaleWalk2-Sheet_walkAnimation_027
       rect:
         serializedVersion: 2
         x: 864
@@ -813,16 +813,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2635787047d9a4890800000000000000
-      internalID: -7472987509999840414
+      spriteID: bb9f30d151f72054bb4a47510fdc8eb9
+      internalID: -1713392395
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_28
+      name: FemaleWalk2-Sheet_walkAnimation_028
       rect:
         serializedVersion: 2
         x: 896
@@ -835,16 +835,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: abd080fcd4b3cb150800000000000000
-      internalID: 5889647618065698234
+      spriteID: b48ddd55d25940d43baa49ec9c3886bf
+      internalID: 2135690492
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_29
+      name: FemaleWalk2-Sheet_walkAnimation_029
       rect:
         serializedVersion: 2
         x: 928
@@ -857,16 +857,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b68f88923a94adff0800000000000000
-      internalID: -10615083989665685
+      spriteID: cda81d1309f2cdd4d9837636497492a6
+      internalID: -1989048631
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_30
+      name: FemaleWalk2-Sheet_walkAnimation_030
       rect:
         serializedVersion: 2
         x: 960
@@ -879,16 +879,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f5ca0083499e1f680800000000000000
-      internalID: -8722934180435940257
+      spriteID: dbde7887363b0e7408654ba05b08f73a
+      internalID: 215741631
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleWalk2-Sheet_31
+      name: FemaleWalk2-Sheet_walkAnimation_031
       rect:
         serializedVersion: 2
         x: 992
@@ -901,10 +901,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0cb8e49be97bc2b40800000000000000
-      internalID: 5416906344161512384
+      spriteID: 1f1dfaa1af67fab4fb1b1a5bc5550cc8
+      internalID: 2076360712
       vertices: []
       indices: 
       edges: []
@@ -957,6 +957,38 @@ TextureImporter:
       FemaleWalk2-Sheet_7: -454644035798085187
       FemaleWalk2-Sheet_8: -5426722788047956685
       FemaleWalk2-Sheet_9: -4466622902384561780
+      FemaleWalk2-Sheet_walkAnimation_000: -896755312
+      FemaleWalk2-Sheet_walkAnimation_001: 513728072
+      FemaleWalk2-Sheet_walkAnimation_002: -353969379
+      FemaleWalk2-Sheet_walkAnimation_003: -146106135
+      FemaleWalk2-Sheet_walkAnimation_004: -1423900990
+      FemaleWalk2-Sheet_walkAnimation_005: 605456743
+      FemaleWalk2-Sheet_walkAnimation_006: 1675502657
+      FemaleWalk2-Sheet_walkAnimation_007: 300452150
+      FemaleWalk2-Sheet_walkAnimation_008: -1316289336
+      FemaleWalk2-Sheet_walkAnimation_009: 1995338868
+      FemaleWalk2-Sheet_walkAnimation_010: 2075151923
+      FemaleWalk2-Sheet_walkAnimation_011: -2084120107
+      FemaleWalk2-Sheet_walkAnimation_012: -254197917
+      FemaleWalk2-Sheet_walkAnimation_013: 1838643294
+      FemaleWalk2-Sheet_walkAnimation_014: 1287459764
+      FemaleWalk2-Sheet_walkAnimation_015: 670153591
+      FemaleWalk2-Sheet_walkAnimation_016: 1055187969
+      FemaleWalk2-Sheet_walkAnimation_017: -223670633
+      FemaleWalk2-Sheet_walkAnimation_018: -1758562848
+      FemaleWalk2-Sheet_walkAnimation_019: 770757532
+      FemaleWalk2-Sheet_walkAnimation_020: -276161907
+      FemaleWalk2-Sheet_walkAnimation_021: -906241659
+      FemaleWalk2-Sheet_walkAnimation_022: 827486729
+      FemaleWalk2-Sheet_walkAnimation_023: 35779816
+      FemaleWalk2-Sheet_walkAnimation_024: -313285119
+      FemaleWalk2-Sheet_walkAnimation_025: -469772341
+      FemaleWalk2-Sheet_walkAnimation_026: 1932872498
+      FemaleWalk2-Sheet_walkAnimation_027: -1713392395
+      FemaleWalk2-Sheet_walkAnimation_028: 2135690492
+      FemaleWalk2-Sheet_walkAnimation_029: -1989048631
+      FemaleWalk2-Sheet_walkAnimation_030: 215741631
+      FemaleWalk2-Sheet_walkAnimation_031: 2076360712
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
