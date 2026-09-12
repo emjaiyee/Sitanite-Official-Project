@@ -62,6 +62,8 @@ public class EnemyRangeChaseState : EnemyRangeState
         {
             Enemy.StopMoving();
 
+            Enemy.SetTakingAim(false);
+
             Enemy.ChangeState(
                 EnemyRange.EnemyState.Search
             );
@@ -86,10 +88,15 @@ public class EnemyRangeChaseState : EnemyRangeState
         {
             Enemy.StopMoving();
 
+            Enemy.SetTakingAim(true);
+
             Enemy.TryShootProjectile();
 
             return;
         }
+
+
+        Enemy.SetTakingAim(false);
 
 
         // -----------------------------------------------------

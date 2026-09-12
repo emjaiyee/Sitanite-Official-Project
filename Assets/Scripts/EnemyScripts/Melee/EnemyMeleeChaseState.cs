@@ -52,6 +52,7 @@ public class EnemyMeleeChaseState : EnemyMeleeState
         if (Enemy.IsPlayerWithinAttackRange())
         {
             Enemy.StopMoving();
+            Enemy.SetTakingAim(true);
             Enemy.TryAttack();
             return;
         }
@@ -67,12 +68,17 @@ public class EnemyMeleeChaseState : EnemyMeleeState
                 "Lost the player. Entering Search."
             );
 
+            Enemy.SetTakingAim(false);
+
             Enemy.ChangeState(
                 EnemyMelee.EnemyState.Search
             );
 
             return;
         }
+
+
+        Enemy.SetTakingAim(false);
 
 
         // -----------------------------------------------------

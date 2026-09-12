@@ -122,6 +122,27 @@ public class EnemyRange : MonoBehaviour
 
 
     // =========================================================
+    // ANIMATION
+    // =========================================================
+
+    private static readonly int IsMovingHash =
+        Animator.StringToHash("IsMoving");
+
+    private static readonly int IsAttackingHash =
+        Animator.StringToHash("IsAttacking");
+
+    private static readonly int MoveXHash =
+        Animator.StringToHash("MoveX");
+
+    private static readonly int MoveYHash =
+        Animator.StringToHash("MoveY");
+
+    private Animator animator;
+
+    public bool takingAim;
+
+
+    // =========================================================
     // REFERENCES
     // =========================================================
 
@@ -218,6 +239,9 @@ public class EnemyRange : MonoBehaviour
 
         enemyElevation =
             GetComponent<EnemyElevationLevel>();
+
+        animator =
+            GetComponent<Animator>();
 
         spawnPosition =
             transform.position;
@@ -345,11 +369,20 @@ public class EnemyRange : MonoBehaviour
             return;
 
 
+        this.SetAnimatorBool(IsAttackingHash, false);
+
+
         // -----------------------------------------------------
         // FSM OWNS THE BEHAVIOUR
         // -----------------------------------------------------
 
         currentState.Tick();
+    }
+
+
+    private void LateUpdate()
+    {
+        this.UpdateAnimationDirection();
     }
 
 
@@ -441,6 +474,9 @@ public class EnemyRange : MonoBehaviour
 
         if (currentState != null)
             currentState.Exit();
+
+
+        takingAim = false;
 
 
         nextAttackTime = 0f;
@@ -599,6 +635,9 @@ public class EnemyRange : MonoBehaviour
             return false;
 
 
+        this.SetAnimatorBool(IsAttackingHash, true);
+
+
         // -----------------------------------------------------
         // ATTACK POINT
         // -----------------------------------------------------
@@ -683,6 +722,7 @@ public class EnemyRange : MonoBehaviour
     {
         currentPath = null;
         currentPathIndex = 0;
+        this.SetAnimatorBool(IsMovingHash, false);
     }
 
 
@@ -690,6 +730,9 @@ public class EnemyRange : MonoBehaviour
         bool paused)
     {
         movementPaused = paused;
+
+        if (paused)
+            this.SetAnimatorBool(IsMovingHash, false);
     }
 
 
@@ -719,8 +762,12 @@ public class EnemyRange : MonoBehaviour
         if (movementPaused ||
             !HasPath)
         {
+            this.SetAnimatorBool(IsMovingHash, false);
             return;
         }
+
+
+        this.SetAnimatorBool(IsMovingHash, true);
 
 
         Vector3 target =
@@ -746,6 +793,56 @@ public class EnemyRange : MonoBehaviour
 
             currentPathIndex++;
         }
+    }
+
+
+    public void SetTakingAim(bool isAiming)
+    {
+        takingAim = isAiming;
+    }
+
+
+    private void UpdateAnimationDirection()
+    {
+        if (animator == null)
+            return;
+
+
+        Vector2 direction;
+
+        if (takingAim && player != null)
+        {
+            direction =
+                (Vector2)player.position -
+                (Vector2)transform.position;
+        }
+        else if (HasPath && !movementPaused)
+        {
+            direction =
+                (Vector2)currentPath[currentPathIndex] -
+                (Vector2)transform.position;
+        }
+        else
+        {
+            return;
+        }
+
+
+        if (direction.sqrMagnitude <= 0.0001f)
+            return;
+
+
+        direction.Normalize();
+
+        animator.SetFloat(MoveXHash, Mathf.Round(direction.x));
+        animator.SetFloat(MoveYHash, Mathf.Round(direction.y));
+    }
+
+
+    private void SetAnimatorBool(int parameterHash, bool value)
+    {
+        if (animator != null)
+            animator.SetBool(parameterHash, value);
     }
 
 
