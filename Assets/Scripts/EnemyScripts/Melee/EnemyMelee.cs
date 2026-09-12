@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyLevelXP))]
 [RequireComponent(typeof(EnemyHealth))]
 public class EnemyMelee : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class EnemyMelee : MonoBehaviour
         Idle,
         Chase,
         Search,
+        Locate,
         Death
     }
 
@@ -45,8 +47,16 @@ public class EnemyMelee : MonoBehaviour
     [Tooltip("Detection distance measured in A* grid cells.")]
     [SerializeField] private int detectionRadius = 6;
 
+    [Min(0f)] [SerializeField] private float alertedDuration = 15f;
+
+    public bool Alerted { get; private set; }
+
+    private float alertedUntilTime;
+
     public int DetectionRadius =>
-        detectionRadius;
+        Alerted
+            ? Mathf.CeilToInt(detectionRadius * 1.5f)
+            : detectionRadius;
 
 
     // =========================================================
@@ -61,10 +71,109 @@ public class EnemyMelee : MonoBehaviour
         moveSpeed;
 
 
+    // =========================================================
+    // ATTACK
+    // =========================================================
+
+    [Header("Attack")]
+    [SerializeField] private float attackRange = 0.8f;
+    [SerializeField] private DamageType attackDamageType = DamageType.Slash;
+    [Min(0f)] [SerializeField] private float damage = 5f;
+    [Min(0.01f)] [SerializeField] private float attackCooldown = 1.5f;
+    [SerializeField] private bool useChargedAttack;
+
+    [Header("Charged Attack")]
+    [Min(0f)] [SerializeField] private float chargedAttackRange = 1.2f;
+    [SerializeField] private DamageType chargedAttackDamageType = DamageType.Blunt;
+    [Min(0f)] [SerializeField] private float chargedDamage = 10f;
+    [Min(0.01f)] [SerializeField] private float chargedAttackCooldown = 2.5f;
+    [Min(0f)] [SerializeField] private float chargedAttackTime = 0.75f;
+    [Min(0f)] [SerializeField] private float chargedAttackMultiplier = 2f;
+
+    private float nextAttackTime;
+    private float chargedAttackTimer;
+    private bool chargingAttack;
+    private bool baseStatsCached;
+    private float baseMoveSpeed;
+    private float baseDamage;
+    private float baseChargedDamage;
+
+
+    // =========================================================
+    // ANIMATION
+    // =========================================================
+
+    private static readonly int IsMovingHash =
+        Animator.StringToHash("IsMoving");
+
+    private static readonly int IsAttackingHash =
+        Animator.StringToHash("IsAttacking");
+
+    private static readonly int MoveXHash =
+        Animator.StringToHash("MoveX");
+
+    private static readonly int MoveYHash =
+        Animator.StringToHash("MoveY");
+
+    private Animator animator;
+
+    public bool takingAim;
+
+    public float AttackRange => useChargedAttack ? chargedAttackRange : attackRange;
+    public float AttackCooldown => attackCooldown;
+    public bool UseChargedAttack => useChargedAttack;
+
+
     [SerializeField] private int idleWanderRadius = 4;
 
     public int IdleWanderRadius =>
         idleWanderRadius;
+
+    // =========================================================
+    // LOCATE (damage origin)
+    // =========================================================
+
+    [Header("Locate")]
+    [Tooltip("How long the enemy lingers at the damage origin before giving up.")]
+    [Min(0f)] [SerializeField] private float locateWaitDuration = 2.5f;
+
+    public float LocateWaitDuration => locateWaitDuration;
+
+    // Last known position that damage came from.
+    public Vector3? DamageSourcePosition { get; private set; }
+    public Vector3? LastKnownPlayerPosition { get; private set; }
+
+    /// <summary>
+    /// Called by EnemyHealth when this enemy takes damage.
+    /// Moves the FSM to Locate unless already chasing or dead.
+    /// </summary>
+    public void NotifyDamaged(Vector3? damageSource)
+    {
+        if (!damageSource.HasValue)
+            return;
+
+        if (CurrentState == EnemyState.Death)
+            return;
+
+        // Already chasing the player: no need to investigate.
+        if (CurrentState == EnemyState.Chase)
+            return;
+
+        DamageSourcePosition = damageSource.Value;
+
+        if (CurrentState == EnemyState.Locate)
+        {
+            EnemyMeleeLocateState locateState =
+                currentState as EnemyMeleeLocateState;
+
+            if (locateState != null)
+                locateState.RefreshDestination();
+
+            return;
+        }
+
+        ChangeState(EnemyState.Locate);
+    }
 
 
     // =========================================================
@@ -98,7 +207,9 @@ public class EnemyMelee : MonoBehaviour
     // =========================================================
 
     private EnemyHealth enemyHealth;
+    private EnemyElevationLevel enemyElevation;
     private Transform player;
+    private PlayerStats playerStats;
 
     private Vector3 spawnPosition;
 
@@ -112,6 +223,14 @@ public class EnemyMelee : MonoBehaviour
     public Vector3 SpawnPosition =>
         spawnPosition;
 
+    public int ElevationLevel =>
+        enemyElevation != null ? enemyElevation.CurrentLevel : 0;
+
+    public void SetIdleOrigin(Vector3 position)
+    {
+        spawnPosition = position;
+    }
+
 
     // =========================================================
     // PATH
@@ -119,6 +238,12 @@ public class EnemyMelee : MonoBehaviour
 
     private List<Vector3> currentPath;
     private int currentPathIndex;
+    private bool movementPaused;
+
+    public bool IsOnStairLink =>
+        AStarManager.Instance != null &&
+        AStarManager.Instance.GetStairLinkAtPosition(
+            transform.position) != null;
 
 
     public bool HasPath =>
@@ -135,6 +260,19 @@ public class EnemyMelee : MonoBehaviour
         enemyHealth =
             GetComponent<EnemyHealth>();
 
+        enemyElevation =
+            GetComponent<EnemyElevationLevel>();
+
+        animator =
+            GetComponent<Animator>();
+
+        CacheBaseStats();
+
+        EnemyAttackScript legacyContactDamage =
+            GetComponent<EnemyAttackScript>();
+        if (legacyContactDamage != null)
+            legacyContactDamage.enabled = false;
+
         spawnPosition =
             transform.position;
 
@@ -150,6 +288,8 @@ public class EnemyMelee : MonoBehaviour
         {
             player =
                 playerObject.transform;
+            playerStats =
+                FindPlayerStats(playerObject);
         }
         else
         {
@@ -160,43 +300,68 @@ public class EnemyMelee : MonoBehaviour
         }
     }
 
+    public void ApplyLevelScaling(int level)
+    {
+        CacheBaseStats();
+
+        level = Mathf.Max(1, level);
+
+        moveSpeed = baseMoveSpeed + GetMovementSpeedBonus(level, 0.005f);
+        damage = baseDamage + GetScaledBonus(level, 5f);
+        chargedDamage = baseChargedDamage + GetScaledBonus(level, 5f);
+    }
+
+    public void ApplyDamageModifier(float modifier)
+    {
+        CacheBaseStats();
+        baseDamage = Mathf.Max(0f, baseDamage + modifier);
+        baseChargedDamage = Mathf.Max(0f, baseChargedDamage + modifier);
+        damage = Mathf.Max(0f, damage + modifier);
+        chargedDamage = Mathf.Max(0f, chargedDamage + modifier);
+    }
+
 
     private void OnEnable()
     {
         if (enemyHealth != null)
         {
             enemyHealth.OnEnemyDied += HandleEnemyDied;
+            enemyHealth.OnDamaged += HandleDamaged;
         }
     }
 
 
     private void Start()
     {
+        EnemyAttackScript legacyContactDamage =
+            GetComponent<EnemyAttackScript>();
+        if (legacyContactDamage != null)
+            legacyContactDamage.enabled = false;
+
+        nextAttackTime = Time.time + attackCooldown;
+
         // -----------------------------------------------------
         // CHECK A* SPAWN TILE
         // -----------------------------------------------------
 
         if (AStarManager.Instance == null)
         {
-            Debug.LogError(
+            Debug.LogWarning(
                 $"[EnemyMelee] {name} could not find " +
-                "an AStarManager."
+                "an AStarManager. Starting FSM without pathfinding."
             );
-
-            return;
         }
 
-
-        if (!AStarManager.Instance.IsPositionWalkable(
-                transform.position))
+        if (AStarManager.Instance != null &&
+            !AStarManager.Instance.IsPositionWalkable(
+                transform.position,
+                ElevationLevel))
         {
-            Debug.LogError(
+            Debug.LogWarning(
                 $"[EnemyMelee] {name} spawned on a " +
-                $"NON-WALKABLE A* tile at " +
-                $"{transform.position}."
+                $"NON-WALKABLE A* tile at {transform.position}. " +
+                "Starting FSM anyway."
             );
-
-            return;
         }
 
 
@@ -215,16 +380,102 @@ public class EnemyMelee : MonoBehaviour
         if (enemyHealth != null)
         {
             enemyHealth.OnEnemyDied -= HandleEnemyDied;
+            enemyHealth.OnDamaged -= HandleDamaged;
         }
     }
 
 
     private void Update()
     {
+        if (Alerted && Time.time >= alertedUntilTime)
+            Alerted = false;
+
+        if (player == null)
+        {
+            GameObject playerObject =
+                GameObject.FindGameObjectWithTag("Player");
+
+            if (playerObject != null)
+            {
+                player = playerObject.transform;
+                playerStats = FindPlayerStats(playerObject);
+            }
+        }
+
+        Diagnose();
+
         if (currentState == null)
             return;
 
+
+        SetAnimatorBool(IsAttackingHash, false);
+
+        if (chargingAttack)
+        {
+            chargedAttackTimer += Time.deltaTime;
+            if (chargedAttackTimer >= chargedAttackTime)
+                CompleteAttack();
+
+            return;
+        }
+
+        if (CurrentState != EnemyState.Death &&
+            IsPlayerWithinAttackRange())
+        {
+            PauseMovement(true);
+            SetTakingAim(CurrentState == EnemyState.Chase);
+            TryAttack();
+            return;
+        }
+
+        PauseMovement(false);
+        SetTakingAim(false);
+
         currentState.Tick();
+    }
+
+
+    private void LateUpdate()
+    {
+        UpdateAnimationDirection();
+    }
+
+
+    // =========================================================
+    // PLAYER STATS LOOKUP
+    // =========================================================
+
+    /// <summary>
+    /// Finds PlayerStats whether it sits on the tagged root,
+    /// a parent, or a child object.
+    /// </summary>
+    private PlayerStats FindPlayerStats(GameObject playerObject)
+    {
+        if (playerObject == null)
+            return null;
+
+        PlayerStats stats =
+            playerObject.GetComponentInParent<PlayerStats>();
+
+        if (stats == null)
+            stats = playerObject.GetComponentInChildren<PlayerStats>();
+
+        return stats;
+    }
+
+    // =========================================================
+    // TEMP DIAGNOSTIC — remove after fixing
+    // =========================================================
+
+    private float nextDiagTime;
+
+    private void Diagnose()
+    {
+        if (Time.time < nextDiagTime)
+            return;
+
+        nextDiagTime = Time.time + 2f;
+
     }
 
 
@@ -238,6 +489,15 @@ public class EnemyMelee : MonoBehaviour
         ChangeState(
             EnemyState.Death
         );
+    }
+
+    private void HandleDamaged(
+        EnemyHealth source,
+        Vector3? damageSource)
+    {
+        Alerted = true;
+        alertedUntilTime = Time.time + alertedDuration;
+        NotifyDamaged(damageSource);
     }
 
 
@@ -266,6 +526,12 @@ public class EnemyMelee : MonoBehaviour
             currentState.Exit();
         }
 
+        takingAim = false;
+
+        // Cancel any pending charged attack when the state changes
+        // (e.g. the enemy dies mid-charge).
+        chargingAttack = false;
+        chargedAttackTimer = 0f;
 
         // -----------------------------------------------------
         // SET NEW STATE
@@ -312,6 +578,9 @@ public class EnemyMelee : MonoBehaviour
             case EnemyState.Search:
                 return new EnemyMeleeSearchState(this);
 
+            case EnemyState.Locate:
+                return new EnemyMeleeLocateState(this);
+
             case EnemyState.Death:
                 return new EnemyMeleeDeathState(this);
 
@@ -339,12 +608,107 @@ public class EnemyMelee : MonoBehaviour
             return false;
 
 
-        return AStarManager.Instance
+        bool detected = AStarManager.Instance
             .IsPositionWithinDetectionRadius(
                 transform.position,
                 player.position,
-                detectionRadius
+                DetectionRadius,
+                ElevationLevel
             );
+
+        if (detected)
+            LastKnownPlayerPosition = player.position;
+
+        return detected;
+    }
+
+    public bool IsPlayerWithinAttackRange()
+    {
+        if (player == null)
+            return false;
+
+        float range = useChargedAttack ? chargedAttackRange : attackRange;
+        return ((Vector2)player.position - (Vector2)transform.position)
+            .sqrMagnitude <= range * range;
+    }
+
+    public void TryAttack()
+    {
+        if (CurrentState != EnemyState.Chase ||
+            player == null ||
+            !IsPlayerDetected() ||
+            !IsPlayerWithinAttackRange() ||
+            Time.time < nextAttackTime)
+            return;
+
+        if (playerStats == null)
+            playerStats = FindPlayerStats(player.gameObject);
+
+        if (playerStats == null)
+        {
+            Debug.LogWarning(
+                $"[EnemyMelee] {name}: PlayerStats NOT FOUND on player " +
+                "hierarchy. Enemy cannot deal damage. " +
+                "Put PlayerStats on the object tagged 'Player' or a child."
+            );
+
+            // Don't spam: push the next attempt out by the cooldown.
+            nextAttackTime = Time.time + attackCooldown;
+            return;
+        }
+
+        if (useChargedAttack)
+        {
+            chargingAttack = true;
+            chargedAttackTimer = 0f;
+            StopMoving();
+            return;
+        }
+
+        CompleteAttack();
+    }
+
+    private void CompleteAttack()
+    {
+        chargingAttack = false;
+        chargedAttackTimer = 0f;
+
+        if (player == null || !IsPlayerWithinAttackRange())
+            return;
+
+        if (playerStats == null)
+            playerStats = FindPlayerStats(player.gameObject);
+
+        if (playerStats == null)
+        {
+            Debug.LogWarning(
+                $"[EnemyMelee] {name} could not find PlayerStats " +
+                "on the player. Attack deals no damage."
+            );
+            return;
+        }
+
+        DamageType damageType = useChargedAttack
+            ? chargedAttackDamageType
+            : attackDamageType;
+        float damageAmount = useChargedAttack
+            ? chargedDamage
+            : damage;
+        if (useChargedAttack)
+            damageAmount *= chargedAttackMultiplier;
+
+        if (damageAmount <= 0f)
+            return;
+
+        float cooldown = useChargedAttack
+            ? chargedAttackCooldown
+            : attackCooldown;
+        nextAttackTime = Time.time + cooldown;
+        SetAnimatorBool(IsAttackingHash, true);
+        playerStats.TakeDamage(
+            damageAmount,
+            damageType
+        );
     }
 
 
@@ -356,6 +720,17 @@ public class EnemyMelee : MonoBehaviour
     {
         currentPath = null;
         currentPathIndex = 0;
+        movementPaused = false;
+        SetAnimatorBool(IsMovingHash, false);
+    }
+
+
+    public void PauseMovement(bool paused)
+    {
+        movementPaused = paused;
+
+        if (paused)
+            SetAnimatorBool(IsMovingHash, false);
     }
 
 
@@ -382,18 +757,23 @@ public class EnemyMelee : MonoBehaviour
 
     public void FollowCurrentPath()
     {
-        if (!HasPath)
+        if (movementPaused)
+        {
+            SetAnimatorBool(IsMovingHash, false);
             return;
+        }
+
+        if (!HasPath)
+        {
+            SetAnimatorBool(IsMovingHash, false);
+            return;
+        }
+
+
+        SetAnimatorBool(IsMovingHash, true);
 
         Vector3 target =
             currentPath[currentPathIndex];
-
-        Debug.Log(
-            $"[PATH] {name} moving toward " +
-            $"index {currentPathIndex}/{currentPath.Count} " +
-            $"target={target} " +
-            $"current={transform.position}"
-        );
 
         transform.position =
             Vector3.MoveTowards(
@@ -408,12 +788,57 @@ public class EnemyMelee : MonoBehaviour
         {
             transform.position = target;
             currentPathIndex++;
-
-            Debug.Log(
-                $"[PATH] {name} reached waypoint. " +
-                $"Next index = {currentPathIndex}"
-            );
         }
+    }
+
+
+    public void SetTakingAim(bool aiming)
+    {
+        takingAim = aiming;
+    }
+
+
+    private void UpdateAnimationDirection()
+    {
+        if (animator == null)
+            return;
+
+
+        Vector2 direction;
+
+        if (takingAim && player != null)
+        {
+            direction =
+                (Vector2)player.position -
+                (Vector2)transform.position;
+        }
+        else if (HasPath && !movementPaused)
+        {
+            direction =
+                (Vector2)currentPath[currentPathIndex] -
+                (Vector2)transform.position;
+        }
+        else
+        {
+            return;
+        }
+
+
+        if (direction.sqrMagnitude <= 0.0001f)
+            return;
+
+
+        direction.Normalize();
+
+        animator.SetFloat(MoveXHash, Mathf.Round(direction.x));
+        animator.SetFloat(MoveYHash, Mathf.Round(direction.y));
+    }
+
+
+    private void SetAnimatorBool(int parameterHash, bool value)
+    {
+        if (animator != null)
+            animator.SetBool(parameterHash, value);
     }
 
 
@@ -452,6 +877,9 @@ public class EnemyMelee : MonoBehaviour
         // DETECTION CELLS
         // -----------------------------------------------------
 
+        int effectiveDetectionRadius =
+            DetectionRadius;
+
         Gizmos.color =
             new Color(
                 1f,
@@ -461,12 +889,12 @@ public class EnemyMelee : MonoBehaviour
             );
 
 
-        for (int x = -detectionRadius;
-            x <= detectionRadius;
+        for (int x = -effectiveDetectionRadius;
+            x <= effectiveDetectionRadius;
             x++)
         {
-            for (int y = -detectionRadius;
-                y <= detectionRadius;
+            for (int y = -effectiveDetectionRadius;
+                y <= effectiveDetectionRadius;
                 y++)
             {
                 int squaredDistance =
@@ -475,8 +903,8 @@ public class EnemyMelee : MonoBehaviour
 
 
                 int squaredRadius =
-                    detectionRadius *
-                    detectionRadius;
+                    effectiveDetectionRadius *
+                    effectiveDetectionRadius;
 
 
                 if (squaredDistance >
@@ -512,4 +940,83 @@ public class EnemyMelee : MonoBehaviour
             }
         }
     }
+
+    private void CacheBaseStats()
+    {
+        if (baseStatsCached)
+            return;
+
+        baseStatsCached = true;
+    baseMoveSpeed = moveSpeed;
+        baseDamage = damage;
+        baseChargedDamage = chargedDamage;
+    }
+
+    private static float GetScaledBonus(int level, float perLevelBonus)
+    {
+        if (level <= 1)
+            return 0f;
+
+        float bonus = 0f;
+        float specialBonus = perLevelBonus * 2f;
+        float followUpBonus = Mathf.Ceil(specialBonus * 0.75f);
+
+        for (int currentLevel = 2; currentLevel <= level; currentLevel++)
+        {
+            int levelInCycle = currentLevel % 5;
+
+            if (levelInCycle == 0)
+            {
+                bonus += specialBonus;
+                continue;
+            }
+
+            if (levelInCycle == 1)
+            {
+                bonus += followUpBonus;
+
+                specialBonus = followUpBonus * 2f;
+                followUpBonus = Mathf.Ceil(specialBonus * 0.75f);
+                continue;
+            }
+
+            bonus += perLevelBonus;
+        }
+
+        return bonus;
+    }
+
+    private static float GetMovementSpeedBonus(int level, float perLevelBonus)
+    {
+        if (level <= 1)
+            return 0f;
+
+        float bonus = 0f;
+        float specialBonus = perLevelBonus * 2f;
+        float followUpBonus = specialBonus * 0.75f;
+
+        for (int currentLevel = 2; currentLevel <= level; currentLevel++)
+        {
+            int levelInCycle = currentLevel % 5;
+
+            if (levelInCycle == 0)
+            {
+                bonus += specialBonus;
+                continue;
+            }
+
+            if (levelInCycle == 1)
+            {
+                bonus += followUpBonus;
+                specialBonus = followUpBonus * 2f;
+                followUpBonus = specialBonus * 0.75f;
+                continue;
+            }
+
+            bonus += perLevelBonus;
+        }
+
+        return bonus;
+    }
+
 }

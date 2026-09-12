@@ -9,6 +9,8 @@ public class Gateway : MonoBehaviour
     [Header("Destination")]
     [SerializeField] private Transform destination;
 
+    private bool floorGatewayConsumed;
+
     public GatewayDirection Direction => direction;
     public GatewayFlow Flow => flow;
     public Transform Destination => destination;
@@ -21,6 +23,24 @@ public class Gateway : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player"))
+            return;
+
+        if (flow == GatewayFlow.Floor)
+        {
+            if (RoomTransitionManager.Instance != null &&
+                RoomTransitionManager.Instance.IsTransitioning)
+                return;
+
+            if (floorGatewayConsumed)
+                return;
+
+            floorGatewayConsumed = true;
+        }
+
+        RoomManager roomManager =
+            GetComponentInParent<RoomManager>();
+
+        if (roomManager != null && roomManager.HandleGatewayEntered(this))
             return;
 
         if (destination == null)

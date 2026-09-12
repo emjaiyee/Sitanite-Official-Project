@@ -21,7 +21,7 @@ public class RampElevationTrigger : MonoBehaviour
         // =====================================================
 
         PlayerElevationLevel playerElevation =
-            other.GetComponent<PlayerElevationLevel>();
+            other.GetComponentInParent<PlayerElevationLevel>();
 
 
         if (playerElevation != null)
@@ -39,7 +39,7 @@ public class RampElevationTrigger : MonoBehaviour
         // =====================================================
 
         EnemyElevationLevel enemyElevation =
-            other.GetComponent<EnemyElevationLevel>();
+            other.GetComponentInParent<EnemyElevationLevel>();
 
 
         if (enemyElevation != null)

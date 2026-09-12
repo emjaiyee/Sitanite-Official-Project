@@ -6,8 +6,14 @@ public class AStarManager : MonoBehaviour
 {
     public static AStarManager Instance { get; private set; }
 
-    private readonly List<Tilemap> walkableTilemaps =
+    private readonly List<AStarWalkableMap> walkableMaps =
+        new List<AStarWalkableMap>();
+
+    private readonly List<Tilemap> detectionTilemaps =
         new List<Tilemap>();
+
+    private readonly List<AStarStairLink> stairLinks =
+        new List<AStarStairLink>();
 
 
     // =========================================================
@@ -31,29 +37,80 @@ public class AStarManager : MonoBehaviour
     // =========================================================
 
     public void RegisterWalkableTilemap(
-        Tilemap tilemap)
+        AStarWalkableMap walkableMap)
     {
-        if (tilemap == null)
+        if (walkableMap == null || walkableMap.Tilemap == null)
             return;
 
-        if (walkableTilemaps.Contains(tilemap))
+        if (walkableMaps.Contains(walkableMap))
             return;
 
-        walkableTilemaps.Add(tilemap);
+        walkableMaps.Add(walkableMap);
 
         Debug.Log(
-            $"[AStarManager] Registered: {tilemap.name}"
+            $"[AStarManager] Registered: {walkableMap.Tilemap.name} " +
+            $"(elevation {walkableMap.ElevationLevel})"
         );
     }
 
 
     public void UnregisterWalkableTilemap(
+        AStarWalkableMap walkableMap)
+    {
+        if (walkableMap == null)
+            return;
+
+        walkableMaps.Remove(walkableMap);
+    }
+
+
+    public void RegisterDetectionTilemap(
         Tilemap tilemap)
     {
         if (tilemap == null)
             return;
 
-        walkableTilemaps.Remove(tilemap);
+        if (detectionTilemaps.Contains(tilemap))
+            return;
+
+        detectionTilemaps.Add(tilemap);
+
+        Debug.Log(
+            $"[AStarManager] Registered detection: {tilemap.name}"
+        );
+    }
+
+
+    public void UnregisterDetectionTilemap(
+        Tilemap tilemap)
+    {
+        if (tilemap == null)
+            return;
+
+        detectionTilemaps.Remove(tilemap);
+    }
+
+
+    public void RegisterStairLink(
+        AStarStairLink stairLink)
+    {
+        if (stairLink == null)
+            return;
+
+        if (stairLinks.Contains(stairLink))
+            return;
+
+        stairLinks.Add(stairLink);
+    }
+
+
+    public void UnregisterStairLink(
+        AStarStairLink stairLink)
+    {
+        if (stairLink == null)
+            return;
+
+        stairLinks.Remove(stairLink);
     }
 
 
@@ -64,7 +121,59 @@ public class AStarManager : MonoBehaviour
     public Tilemap GetTilemapAtPosition(
         Vector3 worldPosition)
     {
-        foreach (Tilemap tilemap in walkableTilemaps)
+        return GetWalkableTilemapAtPosition(
+            worldPosition);
+    }
+
+
+    public Tilemap GetWalkableTilemapAtPosition(
+        Vector3 worldPosition)
+    {
+        foreach (AStarWalkableMap walkableMap in walkableMaps)
+        {
+            if (walkableMap == null || walkableMap.Tilemap == null)
+                continue;
+
+            Vector3Int cell =
+                walkableMap.Tilemap.WorldToCell(worldPosition);
+
+            if (walkableMap.Tilemap.HasTile(cell))
+            {
+                return walkableMap.Tilemap;
+            }
+        }
+
+        return null;
+    }
+
+
+    public Tilemap GetWalkableTilemapAtPosition(
+        Vector3 worldPosition,
+        int elevationLevel)
+    {
+        foreach (AStarWalkableMap walkableMap in walkableMaps)
+        {
+            if (walkableMap == null || walkableMap.Tilemap == null)
+                continue;
+
+            if (walkableMap.ElevationLevel != elevationLevel)
+                continue;
+
+            Vector3Int cell =
+                walkableMap.Tilemap.WorldToCell(worldPosition);
+
+            if (walkableMap.Tilemap.HasTile(cell))
+                return walkableMap.Tilemap;
+        }
+
+        return null;
+    }
+
+
+    public Tilemap GetDetectionTilemapAtPosition(
+        Vector3 worldPosition)
+    {
+        foreach (Tilemap tilemap in detectionTilemaps)
         {
             if (tilemap == null)
                 continue;
@@ -82,11 +191,108 @@ public class AStarManager : MonoBehaviour
     }
 
 
+    public AStarStairLink GetStairLinkAtPosition(
+        Vector3 worldPosition)
+    {
+        foreach (AStarStairLink stairLink in stairLinks)
+        {
+            if (stairLink == null)
+                continue;
+
+            if (stairLink.Contains(worldPosition))
+                return stairLink;
+        }
+
+        return null;
+    }
+
+
+    public AStarStairLink GetNearestStairLink(
+        Vector3 worldPosition)
+    {
+        AStarStairLink bestLink = null;
+        float bestDistance = float.MaxValue;
+
+        foreach (AStarStairLink stairLink in stairLinks)
+        {
+            if (stairLink == null)
+                continue;
+
+            float entryDistance =
+                Vector3.Distance(
+                    worldPosition,
+                    stairLink.EntryPosition);
+
+            float exitDistance =
+                Vector3.Distance(
+                    worldPosition,
+                    stairLink.ExitPosition);
+
+            float linkDistance = Mathf.Min(
+                entryDistance,
+                exitDistance);
+
+            if (linkDistance < bestDistance)
+            {
+                bestDistance = linkDistance;
+                bestLink = stairLink;
+            }
+        }
+
+        return bestLink;
+    }
+
+
     public bool IsPositionWalkable(
         Vector3 worldPosition)
     {
-        return GetTilemapAtPosition(
-            worldPosition) != null;
+        return GetWalkableTilemapAtPosition(
+            worldPosition) != null ||
+            GetStairLinkAtPosition(worldPosition) != null;
+    }
+
+
+    public bool IsPositionWalkable(
+        Vector3 worldPosition,
+        int elevationLevel)
+    {
+        return GetWalkableTilemapAtPosition(
+            worldPosition,
+            elevationLevel) != null ||
+            GetStairLinkAtPosition(worldPosition) != null;
+    }
+
+
+    public Vector3? GetWalkableCellCenter(
+        Vector3 worldPosition)
+    {
+        Tilemap tilemap =
+            GetWalkableTilemapAtPosition(worldPosition);
+
+        if (tilemap == null)
+            return null;
+
+        return tilemap.GetCellCenterWorld(
+            tilemap.WorldToCell(worldPosition)
+        );
+    }
+
+
+    public Vector3? GetWalkableCellCenter(
+        Vector3 worldPosition,
+        int elevationLevel)
+    {
+        Tilemap tilemap =
+            GetWalkableTilemapAtPosition(
+                worldPosition,
+                elevationLevel);
+
+        if (tilemap == null)
+            return null;
+
+        return tilemap.GetCellCenterWorld(
+            tilemap.WorldToCell(worldPosition)
+        );
     }
 
 
@@ -98,10 +304,59 @@ public class AStarManager : MonoBehaviour
         Vector3 startWorldPosition,
         Vector3 targetWorldPosition)
     {
-        Tilemap tilemap =
-            GetTilemapAtPosition(startWorldPosition);
+        Tilemap startTilemap =
+            GetWalkableTilemapAtPosition(
+                startWorldPosition);
 
-        if (tilemap == null)
+        if (startTilemap == null)
+        {
+            Debug.LogWarning(
+                $"[AStarManager] Start position " +
+                $"{startWorldPosition} is not walkable."
+            );
+
+            return null;
+        }
+
+        return FindPath(
+            startWorldPosition,
+            targetWorldPosition,
+            GetWalkableElevationLevel(startTilemap)
+        );
+    }
+
+
+    public List<Vector3> FindPath(
+        Vector3 startWorldPosition,
+        Vector3 targetWorldPosition,
+        int elevationLevel)
+    {
+        return FindPath(
+            startWorldPosition,
+            targetWorldPosition,
+            elevationLevel,
+            elevationLevel
+        );
+    }
+
+
+    public List<Vector3> FindPath(
+        Vector3 startWorldPosition,
+        Vector3 targetWorldPosition,
+        int startElevationLevel,
+        int targetElevationLevel)
+    {
+        Vector3 resolvedStartWorldPosition =
+            ResolvePathStartPosition(
+                startWorldPosition,
+                startElevationLevel);
+
+        Tilemap startTilemap =
+            GetWalkableTilemapAtPosition(
+                resolvedStartWorldPosition,
+                startElevationLevel);
+
+        if (startTilemap == null)
         {
             Debug.LogWarning(
                 $"[AStarManager] Start position " +
@@ -112,20 +367,141 @@ public class AStarManager : MonoBehaviour
         }
 
 
-        Vector3Int startCell =
-            tilemap.WorldToCell(
-                startWorldPosition);
+        AStarStairLink targetStairLink =
+            GetStairLinkAtPosition(targetWorldPosition);
 
-        Vector3Int targetCell =
-            tilemap.WorldToCell(
-                targetWorldPosition);
+        if (targetStairLink == null)
+        {
+            Tilemap targetWalkableTilemap =
+                GetWalkableTilemapAtPosition(
+                    targetWorldPosition,
+                    targetElevationLevel);
+
+            if (targetWalkableTilemap == null)
+            {
+                return null;
+            }
+        }
+
+        if (targetStairLink != null)
+        {
+            return BuildPathToStairLink(
+                startTilemap,
+                resolvedStartWorldPosition,
+                targetStairLink
+            );
+        }
 
 
-        if (!tilemap.HasTile(targetCell))
+        Tilemap targetTilemap =
+            GetWalkableTilemapAtPosition(
+                targetWorldPosition,
+                targetElevationLevel);
+
+        if (targetTilemap == null)
         {
             return null;
         }
 
+
+        if (targetTilemap == startTilemap)
+        {
+            return BuildPathOnTilemap(
+                startTilemap,
+                resolvedStartWorldPosition,
+                targetWorldPosition
+            );
+        }
+
+
+        return BuildCrossMapPath(
+            startTilemap,
+            resolvedStartWorldPosition,
+            targetTilemap,
+            targetWorldPosition
+        );
+    }
+
+
+    private Vector3 ResolvePathStartPosition(
+        Vector3 startWorldPosition,
+        int elevationLevel)
+    {
+        if (GetWalkableTilemapAtPosition(
+                startWorldPosition,
+                elevationLevel) != null)
+            return startWorldPosition;
+
+        AStarStairLink stairLink =
+            GetStairLinkAtPosition(startWorldPosition);
+
+        if (stairLink == null)
+            stairLink = GetNearestStairLink(startWorldPosition);
+
+        if (stairLink == null)
+            return startWorldPosition;
+
+
+        bool entryMatchesElevation =
+            GetWalkableTilemapAtPosition(
+                stairLink.EntryPosition,
+                elevationLevel) != null;
+
+
+        bool exitMatchesElevation =
+            GetWalkableTilemapAtPosition(
+                stairLink.ExitPosition,
+                elevationLevel) != null;
+
+
+        if (entryMatchesElevation && !exitMatchesElevation)
+            return stairLink.EntryPosition;
+
+
+        if (exitMatchesElevation && !entryMatchesElevation)
+            return stairLink.ExitPosition;
+
+
+        return stairLink.IsCloserToEntry(startWorldPosition)
+            ? stairLink.EntryPosition
+            : stairLink.ExitPosition;
+    }
+
+
+    private int GetWalkableElevationLevel(Tilemap tilemap)
+    {
+        if (tilemap == null)
+            return 0;
+
+        foreach (AStarWalkableMap walkableMap in walkableMaps)
+        {
+            if (walkableMap == null || walkableMap.Tilemap == null)
+                continue;
+
+            if (walkableMap.Tilemap == tilemap)
+                return walkableMap.ElevationLevel;
+        }
+
+        return 0;
+    }
+
+
+    private List<Vector3> BuildPathOnTilemap(
+        Tilemap tilemap,
+        Vector3 startWorldPosition,
+        Vector3 targetWorldPosition)
+    {
+        if (tilemap == null)
+            return null;
+
+        Vector3Int startCell =
+            tilemap.WorldToCell(startWorldPosition);
+
+        Vector3Int targetCell =
+            tilemap.WorldToCell(targetWorldPosition);
+
+        if (!tilemap.HasTile(targetCell))
+            return null;
 
         return CalculateAStar(
             tilemap,
@@ -133,12 +509,174 @@ public class AStarManager : MonoBehaviour
             targetCell);
     }
 
+
+    private List<Vector3> BuildPathToStairLink(
+        Tilemap startTilemap,
+        Vector3 startWorldPosition,
+        AStarStairLink stairLink)
+    {
+        if (stairLink == null)
+            return null;
+
+        bool useEntrySide =
+            Vector3.Distance(
+                startWorldPosition,
+                stairLink.EntryPosition
+            ) <=
+            Vector3.Distance(
+                startWorldPosition,
+                stairLink.ExitPosition
+            );
+
+        Vector3 approachPoint =
+            useEntrySide
+                ? stairLink.EntryPosition
+                : stairLink.ExitPosition;
+
+        List<Vector3> path =
+            BuildPathOnTilemap(
+                startTilemap,
+                startWorldPosition,
+                approachPoint
+            );
+
+        if (path == null)
+            return null;
+
+        AppendWorldPoints(
+            path,
+            stairLink.BuildTraversalPoints(
+                useEntrySide
+            )
+        );
+
+        return path;
+    }
+
+
+    private List<Vector3> BuildCrossMapPath(
+        Tilemap startTilemap,
+        Vector3 startWorldPosition,
+        Tilemap targetTilemap,
+        Vector3 targetWorldPosition)
+    {
+        List<Vector3> bestPath = null;
+        int bestCost = int.MaxValue;
+
+        foreach (AStarStairLink stairLink in stairLinks)
+        {
+            TryBuildCrossMapPath(
+                startTilemap,
+                startWorldPosition,
+                targetTilemap,
+                targetWorldPosition,
+                stairLink,
+                true,
+                ref bestPath,
+                ref bestCost
+            );
+
+            TryBuildCrossMapPath(
+                startTilemap,
+                startWorldPosition,
+                targetTilemap,
+                targetWorldPosition,
+                stairLink,
+                false,
+                ref bestPath,
+                ref bestCost
+            );
+        }
+
+        return bestPath;
+    }
+
+
+    private void TryBuildCrossMapPath(
+        Tilemap startTilemap,
+        Vector3 startWorldPosition,
+        Tilemap targetTilemap,
+        Vector3 targetWorldPosition,
+        AStarStairLink stairLink,
+        bool fromEntryToExit,
+        ref List<Vector3> bestPath,
+        ref int bestCost)
+    {
+        if (stairLink == null)
+            return;
+
+        Vector3 approachPoint = fromEntryToExit
+            ? stairLink.EntryPosition
+            : stairLink.ExitPosition;
+
+        Vector3 arrivalPoint = fromEntryToExit
+            ? stairLink.ExitPosition
+            : stairLink.EntryPosition;
+
+        List<Vector3> approachSegment =
+            BuildPathOnTilemap(
+                startTilemap,
+                startWorldPosition,
+                approachPoint
+            );
+
+        if (approachSegment == null)
+            return;
+
+        List<Vector3> targetSegment =
+            BuildPathOnTilemap(
+                targetTilemap,
+                arrivalPoint,
+                targetWorldPosition
+            );
+
+        if (targetSegment == null)
+            return;
+
+        List<Vector3> candidatePath =
+            new List<Vector3>();
+
+        AppendWorldPoints(candidatePath, approachSegment);
+        AppendWorldPoints(
+            candidatePath,
+            stairLink.BuildTraversalPoints(fromEntryToExit)
+        );
+        AppendWorldPoints(candidatePath, targetSegment);
+
+        if (candidatePath.Count < bestCost)
+        {
+            bestCost = candidatePath.Count;
+            bestPath = candidatePath;
+        }
+    }
+
+
+    private void AppendWorldPoints(
+        List<Vector3> path,
+        IEnumerable<Vector3> points)
+    {
+        foreach (Vector3 point in points)
+        {
+            if (path.Count > 0 &&
+                Vector3.Distance(
+                    path[path.Count - 1],
+                    point
+                ) <= 0.001f)
+            {
+                continue;
+            }
+
+            path.Add(point);
+        }
+    }
+
+
     public Vector3? GetRandomWalkablePositionNear(
     Vector3 originWorldPosition,
     int radius)
     {
         Tilemap tilemap =
-            GetTilemapAtPosition(
+            GetWalkableTilemapAtPosition(
                 originWorldPosition);
 
         if (tilemap == null)
@@ -196,65 +734,113 @@ public class AStarManager : MonoBehaviour
             chosenCell);
     }
 
-    public bool IsPositionWithinDetectionRadius(
-    Vector3 enemyWorldPosition,
-    Vector3 playerWorldPosition,
-    int radius)
+
+    public Vector3? GetRandomWalkablePositionNear(
+        Vector3 originWorldPosition,
+        int radius,
+        int elevationLevel)
     {
-        Tilemap enemyTilemap =
-            GetTilemapAtPosition(
-                enemyWorldPosition
-            );
+        Tilemap tilemap =
+            GetWalkableTilemapAtPosition(
+                originWorldPosition,
+                elevationLevel);
 
-        if (enemyTilemap == null)
+        if (tilemap == null)
+            return null;
+
+        Vector3Int originCell =
+            tilemap.WorldToCell(originWorldPosition);
+
+        List<Vector3Int> possibleCells =
+            new List<Vector3Int>();
+
+        for (int x = -radius; x <= radius; x++)
+        {
+            for (int y = -radius; y <= radius; y++)
+            {
+                Vector3Int cell =
+                    originCell + new Vector3Int(x, y, 0);
+
+                if (!tilemap.HasTile(cell))
+                    continue;
+
+                if (cell == originCell)
+                    continue;
+
+                possibleCells.Add(cell);
+            }
+        }
+
+        if (possibleCells.Count == 0)
+            return null;
+
+        Vector3Int chosenCell =
+            possibleCells[
+                Random.Range(0, possibleCells.Count)
+            ];
+
+        return tilemap.GetCellCenterWorld(chosenCell);
+    }
+
+    public bool IsPositionWithinDetectionRadius(
+        Vector3 enemyWorldPosition,
+        Vector3 playerWorldPosition,
+        int radius,
+        int elevationLevel)
+    {
+        if (GetWalkableTilemapAtPosition(
+                enemyWorldPosition,
+                elevationLevel) == null)
+        {
             return false;
+        }
 
-
-        Tilemap playerTilemap =
-            GetTilemapAtPosition(
-                playerWorldPosition
-            );
-
-        if (playerTilemap == null)
+        if (GetWalkableTilemapAtPosition(playerWorldPosition) == null &&
+            GetDetectionTilemapAtPosition(playerWorldPosition) == null)
+        {
             return false;
+        }
+
+        float worldRadius =
+            radius *
+            GetApproximateCellSize(enemyWorldPosition);
+
+        return Vector3.Distance(
+            enemyWorldPosition,
+            playerWorldPosition
+        ) <= worldRadius;
+    }
 
 
-        if (playerTilemap != enemyTilemap)
-            return false;
+    private float GetApproximateCellSize(
+        Vector3 worldPosition)
+    {
+        Tilemap tilemap =
+            GetWalkableTilemapAtPosition(worldPosition);
 
+        if (tilemap == null)
+        {
+            tilemap =
+                GetDetectionTilemapAtPosition(
+                    worldPosition);
+        }
 
-        Vector3Int enemyCell =
-            enemyTilemap.WorldToCell(
-                enemyWorldPosition
-            );
+        if (tilemap == null)
+            return 1f;
 
+        Vector3Int cell =
+            tilemap.WorldToCell(worldPosition);
 
-        Vector3Int playerCell =
-            enemyTilemap.WorldToCell(
-                playerWorldPosition
-            );
+        Vector3 center =
+            tilemap.GetCellCenterWorld(cell);
 
+        Vector3 neighbour =
+            tilemap.GetCellCenterWorld(
+                cell + Vector3Int.right);
 
-        int deltaX =
-            playerCell.x -
-            enemyCell.x;
+        float size = Vector3.Distance(center, neighbour);
 
-
-        int deltaY =
-            playerCell.y -
-            enemyCell.y;
-
-
-        int squaredDistance =
-            deltaX * deltaX +
-            deltaY * deltaY;
-
-
-        int squaredRadius =
-            radius * radius;
-
-
-        return squaredDistance <= squaredRadius;
+        return size > 0.0001f ? size : 1f;
     }
 
     // =========================================================

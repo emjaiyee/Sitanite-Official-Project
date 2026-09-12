@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyMeleeSearchState : EnemyMeleeState
@@ -20,13 +21,23 @@ public class EnemyMeleeSearchState : EnemyMeleeState
 
     public override void Enter()
     {
-        // -----------------------------------------------------
-        // STOP AT LAST KNOWN POSITION
-        // -----------------------------------------------------
-
-        Enemy.StopMoving();
-
         searchTimer = 0f;
+
+        if (Enemy.LastKnownPlayerPosition.HasValue &&
+            AStarManager.Instance != null)
+        {
+            List<Vector3> path = AStarManager.Instance.FindPath(
+                Enemy.transform.position,
+                Enemy.LastKnownPlayerPosition.Value,
+                Enemy.ElevationLevel
+            );
+
+            Enemy.SetPath(path);
+        }
+        else if (!Enemy.IsOnStairLink)
+        {
+            Enemy.StopMoving();
+        }
 
         Debug.Log(
             $"[Search] {Enemy.name}: " +
@@ -41,6 +52,12 @@ public class EnemyMeleeSearchState : EnemyMeleeState
 
     public override void Tick()
     {
+        if (Enemy.HasPath)
+        {
+            Enemy.FollowCurrentPath();
+            return;
+        }
+
         // -----------------------------------------------------
         // PLAYER EXISTS?
         // -----------------------------------------------------
@@ -108,7 +125,8 @@ public class EnemyMeleeSearchState : EnemyMeleeState
 
     public override void Exit()
     {
-        Enemy.StopMoving();
+        if (!Enemy.IsOnStairLink)
+            Enemy.StopMoving();
 
         Debug.Log(
             $"[Search] {Enemy.name}: " +

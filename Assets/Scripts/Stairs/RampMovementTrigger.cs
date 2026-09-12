@@ -3,16 +3,37 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class RampMovementTrigger : MonoBehaviour
 {
+    private enum RampForwardPreset
+    {
+        NorthWest,
+        NorthEast
+    }
+
     [Header("Movement")]
     [SerializeField] private bool enableRampMovement = true;
+
+    [SerializeField] private RampForwardPreset rampForwardPreset =
+        RampForwardPreset.NorthEast;
 
     [Tooltip("Direction pointing UP the ramp.")]
     [SerializeField]
     private Vector2 rampForward = new Vector2(1f, 0.5f);
 
+    public Collider2D RampCollider =>
+        GetComponent<Collider2D>();
+
+    public Vector2 RampForward =>
+        rampForward.normalized;
+
     private void Reset()
     {
         GetComponent<Collider2D>().isTrigger = true;
+        ApplyRampPreset();
+    }
+
+    private void OnValidate()
+    {
+        ApplyRampPreset();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -32,6 +53,19 @@ public class RampMovementTrigger : MonoBehaviour
 
         if (movement != null)
             movement.ExitRamp();
+    }
+
+    private void ApplyRampPreset()
+    {
+        switch (rampForwardPreset)
+        {
+            case RampForwardPreset.NorthWest:
+                rampForward = new Vector2(-7f, 12f);
+                break;
+            case RampForwardPreset.NorthEast:
+                rampForward = new Vector2(1f, 1.6f);
+                break;
+        }
     }
 
 #if UNITY_EDITOR

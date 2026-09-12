@@ -48,6 +48,15 @@ public class EnemyMeleeChaseState : EnemyMeleeState
         }
 
 
+        // Attack range is a direct combat check and does not depend on A*.
+        if (Enemy.IsPlayerWithinAttackRange())
+        {
+            Enemy.StopMoving();
+            Enemy.SetTakingAim(true);
+            Enemy.TryAttack();
+            return;
+        }
+
         // -----------------------------------------------------
         // PLAYER STILL DETECTED?
         // -----------------------------------------------------
@@ -59,6 +68,8 @@ public class EnemyMeleeChaseState : EnemyMeleeState
                 "Lost the player. Entering Search."
             );
 
+            Enemy.SetTakingAim(false);
+
             Enemy.ChangeState(
                 EnemyMelee.EnemyState.Search
             );
@@ -67,13 +78,17 @@ public class EnemyMeleeChaseState : EnemyMeleeState
         }
 
 
+        Enemy.SetTakingAim(false);
+
+
         // -----------------------------------------------------
         // REPATH
         // -----------------------------------------------------
 
         repathTimer += Time.deltaTime;
 
-        if (repathTimer >= RepathInterval)
+        if (!Enemy.IsOnStairLink &&
+            repathTimer >= RepathInterval)
         {
             repathTimer = 0f;
 
@@ -105,7 +120,11 @@ public class EnemyMeleeChaseState : EnemyMeleeState
         List<Vector3> path =
             AStarManager.Instance.FindPath(
                 Enemy.transform.position,
-                Enemy.Player.position
+                Enemy.Player.position,
+                Enemy.ElevationLevel,
+                PlayerElevationLevel.Instance != null
+                    ? PlayerElevationLevel.Instance.CurrentLevel
+                    : Enemy.ElevationLevel
             );
 
 

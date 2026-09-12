@@ -21,11 +21,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
 
     public override void Enter()
     {
-        Enemy.StopMoving();
-
-        Debug.Log(
-            $"[IDLE] {Enemy.name} ENTERED IDLE."
-        );
+        if (!Enemy.IsOnStairLink)
+            Enemy.StopMoving();
 
 
         if (AStarManager.Instance == null)
@@ -43,14 +40,10 @@ public class EnemyMeleeIdleState : EnemyMeleeState
 
         hasValidSpawnTile =
             AStarManager.Instance.IsPositionWalkable(
-                Enemy.transform.position
-            );
+                Enemy.transform.position,
+                Enemy.ElevationLevel) ||
+            Enemy.IsOnStairLink;
 
-
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            $"Spawn tile walkable = {hasValidSpawnTile}"
-        );
 
 
         if (!hasValidSpawnTile)
@@ -118,35 +111,17 @@ public class EnemyMeleeIdleState : EnemyMeleeState
         {
             waitTimer += Time.deltaTime;
 
-
             if (waitTimer >= WaitDuration)
             {
                 waitingForNewDestination = false;
-
-                Debug.Log(
-                    $"[IDLE] {Enemy.name}: " +
-                    "Choosing new destination..."
-                );
-
                 ChooseNewDestination();
             }
 
             return;
         }
 
-
-        // =====================================================
-        // PATH FINISHED
-        // =====================================================
-
         waitingForNewDestination = true;
         waitTimer = 0f;
-
-
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            "Reached destination."
-        );
     }
 
 
@@ -160,7 +135,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
             AStarManager.Instance
                 .GetRandomWalkablePositionNear(
                     Enemy.SpawnPosition,
-                    Enemy.IdleWanderRadius
+                    Enemy.IdleWanderRadius,
+                    Enemy.ElevationLevel
                 );
 
 
@@ -177,13 +153,6 @@ public class EnemyMeleeIdleState : EnemyMeleeState
             return;
         }
 
-
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            $"Destination found at {destination.Value}"
-        );
-
-
         // =====================================================
         // FIND A* PATH
         // =====================================================
@@ -191,7 +160,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
         List<Vector3> path =
             AStarManager.Instance.FindPath(
                 Enemy.transform.position,
-                destination.Value
+                destination.Value,
+                Enemy.ElevationLevel
             );
 
 
@@ -201,6 +171,8 @@ public class EnemyMeleeIdleState : EnemyMeleeState
                 $"[IDLE] {Enemy.name}: " +
                 "A* RETURNED NULL PATH!"
             );
+
+            SetCurrentCellAsIdleOrigin();
 
             waitingForNewDestination = true;
             waitTimer = 0f;
@@ -216,18 +188,13 @@ public class EnemyMeleeIdleState : EnemyMeleeState
                 "A* returned an EMPTY path."
             );
 
+            SetCurrentCellAsIdleOrigin();
+
             waitingForNewDestination = true;
             waitTimer = 0f;
 
             return;
         }
-
-
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            $"A* path found! " +
-            $"Length = {path.Count}"
-        );
 
 
         // =====================================================
@@ -245,17 +212,28 @@ public class EnemyMeleeIdleState : EnemyMeleeState
                 "Enemy rejected the A* path!"
             );
 
+            SetCurrentCellAsIdleOrigin();
+
             waitingForNewDestination = true;
             waitTimer = 0f;
 
             return;
         }
 
+    }
+    private void SetCurrentCellAsIdleOrigin()
+    {
+        if (AStarManager.Instance == null)
+            return;
 
-        Debug.Log(
-            $"[IDLE] {Enemy.name}: " +
-            "Started following path."
-        );
+        Vector3? currentCell =
+            AStarManager.Instance.GetWalkableCellCenter(
+                Enemy.transform.position,
+                Enemy.ElevationLevel
+            );
+
+        if (currentCell.HasValue)
+            Enemy.SetIdleOrigin(currentCell.Value);
     }
 
 

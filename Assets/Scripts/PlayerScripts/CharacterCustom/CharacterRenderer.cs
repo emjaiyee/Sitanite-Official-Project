@@ -16,8 +16,24 @@ public class CharacterRenderer : MonoBehaviour
     [SerializeField] private SpriteRenderer hairRenderer;
     [SerializeField] private SpriteRenderer headwearRenderer;
     [SerializeField] private SpriteRenderer weaponOverRenderer;
+    [SerializeField] private SpriteRenderer shieldRenderer;
 
     private CharacterDirection currentDirection = CharacterDirection.SouthWest;
+    private CharacterAnimationState currentAnimationState = CharacterAnimationState.Idle;
+    private int currentAnimationFrame;
+
+    public CharacterDirection CurrentDirection
+    {
+        get => currentDirection;
+        set
+        {
+            if (currentDirection == value)
+                return;
+
+            currentDirection = value;
+            UpdateAppearance();
+        }
+    }
 
     private void Awake()
     {
@@ -33,6 +49,7 @@ public class CharacterRenderer : MonoBehaviour
         UpdateHair();
         UpdateHeadwear();
         UpdateWeapon();
+        UpdateShield();
     }
 
     private void UpdateBody()
@@ -87,13 +104,35 @@ public class CharacterRenderer : MonoBehaviour
         }
 
         headwearRenderer.enabled = true;
-        headwearRenderer.sprite =
-            appearance.headwear.GetSprite(currentDirection);
+        headwearRenderer.sprite = appearance.headwear.GetSprite(
+            currentDirection,
+            currentAnimationState,
+            currentAnimationFrame
+        );
     }
 
     private void UpdateWeapon()
     {
-        // We'll handle weapon layering separately.
+        bool weaponIsUnder = currentDirection == CharacterDirection.SouthWest ||
+            currentDirection == CharacterDirection.South ||
+            currentDirection == CharacterDirection.SouthEast ||
+            currentDirection == CharacterDirection.East ||
+            currentDirection == CharacterDirection.West;
+
+        SetSprite(
+            weaponUnderRenderer,
+            weaponIsUnder ? appearance.weapon : null
+        );
+
+        SetSprite(
+            weaponOverRenderer,
+            weaponIsUnder ? null : appearance.weapon
+        );
+    }
+
+    private void UpdateShield()
+    {
+        SetSprite(shieldRenderer, appearance.shield);
     }
 
     private void SetSprite(
@@ -111,10 +150,28 @@ public class CharacterRenderer : MonoBehaviour
         }
 
         renderer.enabled = true;
-        renderer.sprite = definition.GetSprite(currentDirection);
+        renderer.sprite = definition.GetSprite(
+            currentDirection,
+            currentAnimationState,
+            currentAnimationFrame
+        );
     }
+
     public void Refresh()
     {
+        UpdateAppearance();
+    }
+
+    public void SetAnimationState(
+        CharacterAnimationState animationState,
+        int frame)
+    {
+        if (currentAnimationState == animationState &&
+            currentAnimationFrame == frame)
+            return;
+
+        currentAnimationState = animationState;
+        currentAnimationFrame = frame;
         UpdateAppearance();
     }
 }
