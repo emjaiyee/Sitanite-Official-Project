@@ -130,7 +130,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -196,16 +196,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 1
-        width: 19
-        height: 41
+        x: 0
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 5e9fa506ff8bc83d0800000000000000
@@ -218,16 +226,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_1
       rect:
         serializedVersion: 2
-        x: 35
+        x: 32
         y: 0
-        width: 25
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: e91dd6b86449a1fa0800000000000000
@@ -240,16 +256,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_2
       rect:
         serializedVersion: 2
-        x: 71
-        y: 1
-        width: 19
-        height: 41
+        x: 64
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: bc99c5ad292ffe730800000000000000
@@ -262,16 +286,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_3
       rect:
         serializedVersion: 2
-        x: 101
-        y: 2
-        width: 20
-        height: 39
+        x: 96
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 0fc70bf158ddeb5c0800000000000000
@@ -284,16 +316,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_4
       rect:
         serializedVersion: 2
-        x: 135
-        y: 2
-        width: 19
-        height: 40
+        x: 128
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 42bcae0c7237f76e0800000000000000
@@ -306,16 +346,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_5
       rect:
         serializedVersion: 2
-        x: 168
+        x: 160
         y: 0
-        width: 16
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 2de179444994ed010800000000000000
@@ -328,16 +376,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_6
       rect:
         serializedVersion: 2
-        x: 199
-        y: 2
-        width: 19
-        height: 40
+        x: 192
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 7d04a33d8e91534c0800000000000000
@@ -350,16 +406,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_7
       rect:
         serializedVersion: 2
-        x: 233
+        x: 224
         y: 0
-        width: 16
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: d824298aa00b4df80800000000000000
@@ -372,16 +436,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_8
       rect:
         serializedVersion: 2
-        x: 263
-        y: 1
-        width: 19
-        height: 41
+        x: 256
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: a4426e09fa4506750800000000000000
@@ -394,16 +466,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_9
       rect:
         serializedVersion: 2
-        x: 293
+        x: 288
         y: 0
-        width: 25
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: f1b64779314e30480800000000000000
@@ -416,16 +496,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_10
       rect:
         serializedVersion: 2
-        x: 327
-        y: 1
-        width: 19
-        height: 41
+        x: 320
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 0887ca970a09b82a0800000000000000
@@ -438,16 +526,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_11
       rect:
         serializedVersion: 2
-        x: 360
-        y: 2
-        width: 20
-        height: 39
+        x: 352
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 69141306731c66cb0800000000000000
@@ -460,16 +556,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_12
       rect:
         serializedVersion: 2
-        x: 394
-        y: 2
-        width: 14
-        height: 40
+        x: 384
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 330b0892e07a56c60800000000000000
@@ -482,16 +586,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_13
       rect:
         serializedVersion: 2
-        x: 421
-        y: 1
-        width: 23
-        height: 40
+        x: 416
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 8d2453b8a66bdc3e0800000000000000
@@ -504,16 +616,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_14
       rect:
         serializedVersion: 2
-        x: 458
-        y: 2
-        width: 14
-        height: 40
+        x: 448
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 361043aabb39d9340800000000000000
@@ -526,16 +646,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_15
       rect:
         serializedVersion: 2
-        x: 487
-        y: 2
-        width: 21
-        height: 39
+        x: 480
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 85356087d8cfffde0800000000000000
@@ -548,16 +676,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_16
       rect:
         serializedVersion: 2
-        x: 520
-        y: 2
-        width: 19
-        height: 40
+        x: 512
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: ef7040f5a3b92d850800000000000000
@@ -570,16 +706,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_17
       rect:
         serializedVersion: 2
-        x: 549
+        x: 544
         y: 0
-        width: 24
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: ca33bda62e0f4fdb0800000000000000
@@ -592,16 +736,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_18
       rect:
         serializedVersion: 2
-        x: 584
-        y: 2
-        width: 19
-        height: 40
+        x: 576
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 8af669333fbf01cd0800000000000000
@@ -614,16 +766,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_19
       rect:
         serializedVersion: 2
-        x: 616
-        y: 2
-        width: 19
-        height: 39
+        x: 608
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 25e65498d524d7ac0800000000000000
@@ -636,16 +796,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_20
       rect:
         serializedVersion: 2
-        x: 647
-        y: 4
-        width: 19
-        height: 38
+        x: 640
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 334cc59cfd3e00dd0800000000000000
@@ -658,16 +826,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_21
       rect:
         serializedVersion: 2
-        x: 682
+        x: 672
         y: 0
-        width: 14
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 3fef4be65d82d8b20800000000000000
@@ -680,16 +856,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_22
       rect:
         serializedVersion: 2
-        x: 711
-        y: 4
-        width: 19
-        height: 38
+        x: 704
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 049c054c791f94850800000000000000
@@ -702,16 +886,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_23
       rect:
         serializedVersion: 2
-        x: 745
+        x: 736
         y: 0
-        width: 14
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: ef4c662d2f0ecf4b0800000000000000
@@ -724,16 +916,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_24
       rect:
         serializedVersion: 2
-        x: 774
-        y: 2
-        width: 19
-        height: 40
+        x: 768
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 1c32c6b5feb881df0800000000000000
@@ -746,16 +946,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_25
       rect:
         serializedVersion: 2
-        x: 804
+        x: 800
         y: 0
-        width: 24
-        height: 41
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 51809a18b58cddc70800000000000000
@@ -768,16 +976,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_26
       rect:
         serializedVersion: 2
-        x: 838
-        y: 2
-        width: 19
-        height: 40
+        x: 832
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 004b7d17b85af12c0800000000000000
@@ -790,16 +1006,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_27
       rect:
         serializedVersion: 2
-        x: 870
-        y: 2
-        width: 19
-        height: 39
+        x: 864
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: d0fa09f85e28021b0800000000000000
@@ -812,16 +1036,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_28
       rect:
         serializedVersion: 2
-        x: 904
-        y: 2
-        width: 14
-        height: 40
+        x: 896
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: fd4eb73c84dc30280800000000000000
@@ -834,16 +1066,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_29
       rect:
         serializedVersion: 2
-        x: 932
-        y: 1
-        width: 23
-        height: 40
+        x: 928
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 026605513d6dcc0c0800000000000000
@@ -856,16 +1096,24 @@ TextureImporter:
       name: MaleWalk2-Sheet_30
       rect:
         serializedVersion: 2
-        x: 968
-        y: 2
-        width: 14
-        height: 40
+        x: 960
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
       tessellationDetail: -1
       bones: []
       spriteID: 3f0864a257d3459f0800000000000000
@@ -878,19 +1126,27 @@ TextureImporter:
       name: MaleWalk2-Sheet_31
       rect:
         serializedVersion: 2
-        x: 996
-        y: 2
-        width: 21
-        height: 39
+        x: 992
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
+      outline:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      physicsShape:
+      - - {x: 0, y: -24}
+        - {x: 16, y: 0}
+        - {x: 0, y: 24}
+        - {x: -16, y: 0}
+      tessellationDetail: 0
       bones: []
-      spriteID: 9f0a1e928e5e5c4e0800000000000000
+      spriteID: 2e6f388aa43447a4caa756ff813a57f4
       internalID: -1961909277352156935
       vertices: []
       indices: 
@@ -900,7 +1156,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 946bcfa8e781980408c0b413e87cc9b3
     internalID: 0
     vertices: []
     indices: 
@@ -908,7 +1164,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":48.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":3,"keepEmptyRects":false,"isAlternate":false}'
+      - key: SpriteEditor.SliceOnImport
+        value: False
     nameFileIdTable:
       MaleWalk2-Sheet_0: -3202981827994519067
       MaleWalk2-Sheet_1: -5829183736969834082
