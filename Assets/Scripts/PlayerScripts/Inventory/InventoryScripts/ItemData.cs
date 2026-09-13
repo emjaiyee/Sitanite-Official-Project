@@ -97,6 +97,7 @@ public enum WeaponSkillType
     AreaDamage,
     ArrowRain,
     ChargedArrow,
+    Stab,
     Beam
 }
 

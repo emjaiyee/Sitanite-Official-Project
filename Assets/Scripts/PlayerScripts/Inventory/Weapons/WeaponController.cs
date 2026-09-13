@@ -238,29 +238,33 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
 
         switch (data.WeaponSkillType)
-        {
-            case WeaponSkillType.AreaDamage:
-                UseAreaDamageSkill();
-                break;
+{
+    case WeaponSkillType.AreaDamage:
+        UseAreaDamageSkill();
+        break;
 
-            case WeaponSkillType.ArrowRain:
-                UseArrowRainSkill(direction);
-                break;
+    case WeaponSkillType.ArrowRain:
+        UseArrowRainSkill(direction);
+        break;
 
-            case WeaponSkillType.ChargedArrow:
-                StartCharging(direction);
-                break;
+    case WeaponSkillType.ChargedArrow:
+        StartCharging(direction);
+        break;
 
-            case WeaponSkillType.Beam:
-                StartCharging(direction);
-                break;
+    case WeaponSkillType.Beam:
+        StartCharging(direction);
+        break;
 
-            default:
-                Debug.LogWarning(
-                    $"{WeaponId}: skill behavior is not implemented."
-                );
-                break;
-        }
+    case WeaponSkillType.Stab:
+        UseStabSkill(direction);
+        break;
+
+    default:
+        Debug.LogWarning(
+            $"{WeaponId}: skill behavior is not implemented."
+        );
+        break;
+}
     }
 
     // =========================================================
@@ -290,7 +294,120 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             radius * 2f,
             0.5f
         );
+    }  
+    // =========================================================
+// STAB
+// =========================================================
+
+private void UseStabSkill(Vector2 direction)
+{
+    if (attackPoint == null)
+    {
+        Debug.LogWarning(
+            $"{WeaponId}: attack point is not assigned."
+        );
+
+        return;
     }
+
+    if (direction.sqrMagnitude <= 0.0001f)
+        return;
+
+    direction.Normalize();
+
+    Vector2 origin =
+        (Vector2)transform.root.position;
+
+    // Short forward reach for the dagger stab.
+    Vector2 stabPosition =
+        origin + direction * data.SkillRange;
+
+    float stabRadius =
+        Mathf.Max(0.1f, data.SkillRadius);
+
+    Collider2D[] hits =
+        Physics2D.OverlapCircleAll(
+            stabPosition,
+            stabRadius,
+            data.SkillHittableLayers
+        );
+
+    IDamageable closestTarget = null;
+    float closestDistance = float.MaxValue;
+
+    foreach (Collider2D hit in hits)
+    {
+        if (hit == null)
+            continue;
+
+        IDamageable target =
+            hit.GetComponentInParent<IDamageable>();
+
+        if (target == null)
+            continue;
+
+        if (!PlayerElevationLevel.CanAffectTarget(
+            (target as MonoBehaviour)?.transform))
+        {
+            continue;
+        }
+
+        float distance =
+            Vector2.Distance(
+                origin,
+                (target as MonoBehaviour).transform.position
+            );
+
+        if (distance < closestDistance)
+        {
+            closestDistance = distance;
+            closestTarget = target;
+        }
+    }
+
+    if (closestTarget != null)
+    {
+        ApplySkillDamage(
+            closestTarget,
+            DamageSlot.Primary
+        );
+
+        ApplySkillDamage(
+            closestTarget,
+            DamageSlot.Secondary
+        );
+
+        ApplySkillDamage(
+            closestTarget,
+            DamageSlot.Tertiary
+        );
+    }
+
+    // Optional stab visual.
+    if (data.SkillVisualPrefab != null)
+    {
+        float angle =
+            Mathf.Atan2(
+                direction.y,
+                direction.x
+            ) * Mathf.Rad2Deg;
+
+        GameObject visual =
+            Instantiate(
+                data.SkillVisualPrefab,
+                stabPosition,
+                Quaternion.Euler(0f, 0f, angle)
+            );
+
+        visual.transform.localScale =
+            Vector3.one * data.SkillRadius * 2f;
+
+        Destroy(
+            visual,
+            data.SkillVisualDuration
+        );
+    }
+}
 
     // =========================================================
     // ARROW RAIN
