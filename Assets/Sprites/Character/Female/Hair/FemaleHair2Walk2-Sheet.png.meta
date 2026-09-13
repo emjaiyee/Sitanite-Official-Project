@@ -130,7 +130,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -168,7 +168,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -189,709 +189,722 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_0
+      name: FemaleHair2Walk2-Sheet_walkAnimation_000
       rect:
         serializedVersion: 2
-        x: 7
-        y: 25
-        width: 18
-        height: 20
+        x: 0
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: abe16cf9dbcf16f20800000000000000
-      internalID: 3414287883883126458
+      spriteID: dd242c1ba3a0f834582399834fcb6f5e
+      internalID: -1153924402
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_1
+      name: FemaleHair2Walk2-Sheet_walkAnimation_001
       rect:
         serializedVersion: 2
-        x: 39
-        y: 24
-        width: 18
-        height: 20
+        x: 32
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 40c10dc289b343160800000000000000
-      internalID: 7004288845240867844
+      spriteID: 1e7f8fcb4cc76fe40903b1d5985faf50
+      internalID: -1935890360
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_2
+      name: FemaleHair2Walk2-Sheet_walkAnimation_002
       rect:
         serializedVersion: 2
-        x: 71
-        y: 25
-        width: 18
-        height: 20
+        x: 64
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9d6790ef9a1cf4210800000000000000
-      internalID: 1319486151698511577
+      spriteID: 7ec3c9b9fa293d6478bf3faf6a6f29f6
+      internalID: 1757568001
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_3
+      name: FemaleHair2Walk2-Sheet_walkAnimation_003
       rect:
         serializedVersion: 2
-        x: 103
-        y: 24
-        width: 18
-        height: 20
+        x: 96
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dc2e26a1996480270800000000000000
-      internalID: 8216895143524098765
+      spriteID: 294fa012979bf5a45b13d8324953d023
+      internalID: -156242866
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_4
+      name: FemaleHair2Walk2-Sheet_walkAnimation_004
       rect:
         serializedVersion: 2
-        x: 135
-        y: 25
-        width: 19
-        height: 20
+        x: 128
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1aded4a3823afd180800000000000000
-      internalID: -9088366129838166623
+      spriteID: 40b7f013699791744b7311788d83ecb3
+      internalID: -659229458
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_5
+      name: FemaleHair2Walk2-Sheet_walkAnimation_005
       rect:
         serializedVersion: 2
-        x: 167
-        y: 24
-        width: 19
-        height: 20
+        x: 160
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bf2753706a4f44980800000000000000
-      internalID: -8555444398174407941
+      spriteID: 409fde7350c51104fbe68da0fdd53151
+      internalID: -1395334267
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_6
+      name: FemaleHair2Walk2-Sheet_walkAnimation_006
       rect:
         serializedVersion: 2
-        x: 199
-        y: 25
-        width: 19
-        height: 20
+        x: 192
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e0526838d287e93b0800000000000000
-      internalID: -5503829557724699378
+      spriteID: 7375fbd6b6274944a95b671a59b13f84
+      internalID: 1200886887
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_7
+      name: FemaleHair2Walk2-Sheet_walkAnimation_007
       rect:
         serializedVersion: 2
-        x: 231
-        y: 24
-        width: 19
-        height: 20
+        x: 224
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ea6667ef6df0af920800000000000000
-      internalID: 3024747515799299758
+      spriteID: 6204afdf11e74a449aa055e2dbdb42b7
+      internalID: -1860976977
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_8
+      name: FemaleHair2Walk2-Sheet_walkAnimation_008
       rect:
         serializedVersion: 2
-        x: 264
-        y: 25
-        width: 18
-        height: 20
+        x: 256
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bb282f4be42cb8400800000000000000
-      internalID: 327569041213522619
+      spriteID: dcfc573d6d1c2e54aa869849976c68d3
+      internalID: -444353860
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_9
+      name: FemaleHair2Walk2-Sheet_walkAnimation_009
       rect:
         serializedVersion: 2
-        x: 296
-        y: 24
-        width: 18
-        height: 20
+        x: 288
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1f0e3c1c02e8d6570800000000000000
-      internalID: 8461575546239967473
+      spriteID: ba9de131fe34d4d4eaf93af6937c41dd
+      internalID: 1509004463
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_10
+      name: FemaleHair2Walk2-Sheet_walkAnimation_010
       rect:
         serializedVersion: 2
-        x: 328
-        y: 25
-        width: 18
-        height: 20
+        x: 320
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 91e8641915a935d70800000000000000
-      internalID: 9030731352928325145
+      spriteID: c3eca0f1b10e44645ac4b4143b617a5c
+      internalID: 1878066437
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_11
+      name: FemaleHair2Walk2-Sheet_walkAnimation_011
       rect:
         serializedVersion: 2
-        x: 360
-        y: 24
-        width: 18
-        height: 20
+        x: 352
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bc024e24626524160800000000000000
-      internalID: 7008258692472905931
+      spriteID: ab58889e0f9d0e34fa00b725e88a9e84
+      internalID: 1494538175
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_12
+      name: FemaleHair2Walk2-Sheet_walkAnimation_012
       rect:
         serializedVersion: 2
-        x: 393
-        y: 25
-        width: 17
-        height: 20
+        x: 384
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7fb639691413a09b0800000000000000
-      internalID: -5113220269156897801
+      spriteID: 605289920f238fa4a8e2b361bb3d4a70
+      internalID: -38344825
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_13
+      name: FemaleHair2Walk2-Sheet_walkAnimation_013
       rect:
         serializedVersion: 2
-        x: 425
-        y: 24
-        width: 17
-        height: 20
+        x: 416
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2870a2ce8b0123300800000000000000
-      internalID: 230264917371520898
+      spriteID: 4222792521818a345be91231bb08dadf
+      internalID: 1741340484
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_14
+      name: FemaleHair2Walk2-Sheet_walkAnimation_014
       rect:
         serializedVersion: 2
-        x: 457
-        y: 25
-        width: 17
-        height: 20
+        x: 448
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e293e659e5c77d290800000000000000
-      internalID: -7865681478503483090
+      spriteID: 0f6123d224e5da64c9f612ac46428de5
+      internalID: -1780602822
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_15
+      name: FemaleHair2Walk2-Sheet_walkAnimation_015
       rect:
         serializedVersion: 2
-        x: 489
-        y: 24
-        width: 17
-        height: 20
+        x: 480
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 338136f2f8b36bb20800000000000000
-      internalID: 3149770475553626163
+      spriteID: 623a74f5536a39c418b417311d2c1ecc
+      internalID: -1688195753
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_16
+      name: FemaleHair2Walk2-Sheet_walkAnimation_016
       rect:
         serializedVersion: 2
-        x: 521
-        y: 27
-        width: 18
-        height: 18
+        x: 512
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ef55965fb455ffa50800000000000000
-      internalID: 6557053367202960894
+      spriteID: 8af5685b2262c7a47ac3a27506e50844
+      internalID: 94781857
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_17
+      name: FemaleHair2Walk2-Sheet_walkAnimation_017
       rect:
         serializedVersion: 2
-        x: 553
-        y: 26
-        width: 18
-        height: 18
+        x: 544
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c3dafa3471c1e3f10800000000000000
-      internalID: 2251267749977238844
+      spriteID: 8c70740b1a8b9ec4ba9b6b4086c2757a
+      internalID: 686310446
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_18
+      name: FemaleHair2Walk2-Sheet_walkAnimation_018
       rect:
         serializedVersion: 2
-        x: 585
-        y: 27
-        width: 18
-        height: 18
+        x: 576
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fb06a3937d5190ba0800000000000000
-      internalID: -6122338204311199553
+      spriteID: bc7cc383c1f399c4f8af50e78948f6ae
+      internalID: -1982148416
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_19
+      name: FemaleHair2Walk2-Sheet_walkAnimation_019
       rect:
         serializedVersion: 2
-        x: 617
-        y: 26
-        width: 18
-        height: 18
+        x: 608
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7ea4a70b385209250800000000000000
-      internalID: 5949296355288173287
+      spriteID: 354f83352c611cd479eca4c37290dbe8
+      internalID: 1369204873
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_20
+      name: FemaleHair2Walk2-Sheet_walkAnimation_020
       rect:
         serializedVersion: 2
-        x: 647
-        y: 27
-        width: 19
-        height: 18
+        x: 640
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b7ad1dda29cbdf050800000000000000
-      internalID: 5836028030309489275
+      spriteID: a2b4679983230df43ab52d38bd8257c6
+      internalID: 1524757094
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_21
+      name: FemaleHair2Walk2-Sheet_walkAnimation_021
       rect:
         serializedVersion: 2
-        x: 679
-        y: 26
-        width: 19
-        height: 18
+        x: 672
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: dabdc18801f53e390800000000000000
-      internalID: -7790278405813118035
+      spriteID: ca6f0504fe6368443a1c9c6c6e8fea63
+      internalID: -413490462
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_22
+      name: FemaleHair2Walk2-Sheet_walkAnimation_022
       rect:
         serializedVersion: 2
-        x: 711
-        y: 27
-        width: 19
-        height: 18
+        x: 704
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3eaa72879f68c8530800000000000000
-      internalID: 3858607386770516707
+      spriteID: 2491e8b0b26358b46a7c923eb778acf9
+      internalID: -1333554140
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_23
+      name: FemaleHair2Walk2-Sheet_walkAnimation_023
       rect:
         serializedVersion: 2
-        x: 743
-        y: 26
-        width: 19
-        height: 18
+        x: 736
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f747b315e0041be30800000000000000
-      internalID: 4517462331465888895
+      spriteID: 88fbfe5c1bbae0741a73b9d1e28b2e10
+      internalID: 909922682
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_24
+      name: FemaleHair2Walk2-Sheet_walkAnimation_024
       rect:
         serializedVersion: 2
-        x: 774
-        y: 27
-        width: 18
-        height: 18
+        x: 768
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a414c1f64bf582a50800000000000000
-      internalID: 6496547691044815178
+      spriteID: d98de073b6f92f341b076b4212713a3a
+      internalID: 1457866558
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_25
+      name: FemaleHair2Walk2-Sheet_walkAnimation_025
       rect:
         serializedVersion: 2
-        x: 806
-        y: 26
-        width: 18
-        height: 18
+        x: 800
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 46922f707a17fdbc0800000000000000
-      internalID: -3756158601996916380
+      spriteID: a439448be83698142a9138c54afa3e80
+      internalID: 1396143810
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_26
+      name: FemaleHair2Walk2-Sheet_walkAnimation_026
       rect:
         serializedVersion: 2
-        x: 838
-        y: 27
-        width: 18
-        height: 18
+        x: 832
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 59ba3a4993f40b8c0800000000000000
-      internalID: -3985598561497404523
+      spriteID: 6b9fd866b3c22c4449227495899eae9e
+      internalID: 865715785
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_27
+      name: FemaleHair2Walk2-Sheet_walkAnimation_027
       rect:
         serializedVersion: 2
-        x: 870
-        y: 26
-        width: 18
-        height: 18
+        x: 864
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c18d5a8c193528dc0800000000000000
-      internalID: -3638253663360264164
+      spriteID: 9703825a07506624a9c8a6a04959599a
+      internalID: -2094406821
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_28
+      name: FemaleHair2Walk2-Sheet_walkAnimation_028
       rect:
         serializedVersion: 2
-        x: 902
-        y: 25
-        width: 17
-        height: 20
+        x: 896
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: be5263efbbc55fff0800000000000000
-      internalID: -2994262250215957
+      spriteID: df34a6b4af60ba04fa52c68e2e6e1096
+      internalID: 18867114
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_29
+      name: FemaleHair2Walk2-Sheet_walkAnimation_029
       rect:
         serializedVersion: 2
-        x: 934
-        y: 24
-        width: 17
-        height: 20
+        x: 928
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7510d0dab6853fc60800000000000000
-      internalID: 7850715794924962135
+      spriteID: 38e8f532f51e6fc41b6032f6cb96d255
+      internalID: -1270080599
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_30
+      name: FemaleHair2Walk2-Sheet_walkAnimation_030
       rect:
         serializedVersion: 2
-        x: 966
-        y: 25
-        width: 17
-        height: 20
+        x: 960
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 277874d6e2ebda5a0800000000000000
-      internalID: -6508336779869321358
+      spriteID: c60826f6777df6443abb70579c5bdca4
+      internalID: -920647307
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: FemaleHair2Walk2-Sheet_31
+      name: FemaleHair2Walk2-Sheet_walkAnimation_031
       rect:
         serializedVersion: 2
-        x: 998
-        y: 24
-        width: 17
-        height: 20
+        x: 992
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fae22c2d49b2f51a0800000000000000
-      internalID: -6818683392624546129
+      spriteID: 6d50642bc7e20f946ac2f04c2403d070
+      internalID: 762054318
       vertices: []
       indices: 
       edges: []
@@ -900,7 +913,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -942,6 +955,38 @@ TextureImporter:
       FemaleHair2Walk2-Sheet_7: 3024747515799299758
       FemaleHair2Walk2-Sheet_8: 327569041213522619
       FemaleHair2Walk2-Sheet_9: 8461575546239967473
+      FemaleHair2Walk2-Sheet_walkAnimation_000: -1153924402
+      FemaleHair2Walk2-Sheet_walkAnimation_001: -1935890360
+      FemaleHair2Walk2-Sheet_walkAnimation_002: 1757568001
+      FemaleHair2Walk2-Sheet_walkAnimation_003: -156242866
+      FemaleHair2Walk2-Sheet_walkAnimation_004: -659229458
+      FemaleHair2Walk2-Sheet_walkAnimation_005: -1395334267
+      FemaleHair2Walk2-Sheet_walkAnimation_006: 1200886887
+      FemaleHair2Walk2-Sheet_walkAnimation_007: -1860976977
+      FemaleHair2Walk2-Sheet_walkAnimation_008: -444353860
+      FemaleHair2Walk2-Sheet_walkAnimation_009: 1509004463
+      FemaleHair2Walk2-Sheet_walkAnimation_010: 1878066437
+      FemaleHair2Walk2-Sheet_walkAnimation_011: 1494538175
+      FemaleHair2Walk2-Sheet_walkAnimation_012: -38344825
+      FemaleHair2Walk2-Sheet_walkAnimation_013: 1741340484
+      FemaleHair2Walk2-Sheet_walkAnimation_014: -1780602822
+      FemaleHair2Walk2-Sheet_walkAnimation_015: -1688195753
+      FemaleHair2Walk2-Sheet_walkAnimation_016: 94781857
+      FemaleHair2Walk2-Sheet_walkAnimation_017: 686310446
+      FemaleHair2Walk2-Sheet_walkAnimation_018: -1982148416
+      FemaleHair2Walk2-Sheet_walkAnimation_019: 1369204873
+      FemaleHair2Walk2-Sheet_walkAnimation_020: 1524757094
+      FemaleHair2Walk2-Sheet_walkAnimation_021: -413490462
+      FemaleHair2Walk2-Sheet_walkAnimation_022: -1333554140
+      FemaleHair2Walk2-Sheet_walkAnimation_023: 909922682
+      FemaleHair2Walk2-Sheet_walkAnimation_024: 1457866558
+      FemaleHair2Walk2-Sheet_walkAnimation_025: 1396143810
+      FemaleHair2Walk2-Sheet_walkAnimation_026: 865715785
+      FemaleHair2Walk2-Sheet_walkAnimation_027: -2094406821
+      FemaleHair2Walk2-Sheet_walkAnimation_028: 18867114
+      FemaleHair2Walk2-Sheet_walkAnimation_029: -1270080599
+      FemaleHair2Walk2-Sheet_walkAnimation_030: -920647307
+      FemaleHair2Walk2-Sheet_walkAnimation_031: 762054318
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

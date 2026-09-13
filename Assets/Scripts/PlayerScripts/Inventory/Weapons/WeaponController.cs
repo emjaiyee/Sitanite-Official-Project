@@ -116,6 +116,18 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         direction.Normalize();
         nextAttackTime = Time.time + GetCooldown(data.AttackCooldown);
 
+        Vector3 visualPosition = attackPoint == null
+            ? transform.root.position
+            : attackPoint.position;
+        float visualAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        CreateVisual(
+            data.AttackVisualPrefab,
+            visualPosition,
+            1f,
+            0.5f,
+            visualAngle
+        );
+
         switch (data.WeaponAttackType)
         {
             case WeaponAttackType.Melee:
@@ -255,12 +267,66 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
                 StartCharging(direction);
                 break;
 
+            case WeaponSkillType.Slash:
+                UseSlashSkill(direction);
+                break;
+
             default:
                 Debug.LogWarning(
                     $"{WeaponId}: skill behavior is not implemented."
                 );
                 break;
         }
+    }
+
+    // =========================================================
+    // SLASH
+    // =========================================================
+
+    private void UseSlashSkill(Vector2 direction)
+    {
+        Vector3 origin = attackPoint == null
+            ? transform.root.position
+            : attackPoint.position;
+        float radius = data.SkillRadius * data.SkillRadiusMultiplier;
+        float halfAngle = data.SlashAngle * 0.5f;
+        float minimumDot = Mathf.Cos(halfAngle * Mathf.Deg2Rad);
+        HashSet<IDamageable> targets = new HashSet<IDamageable>();
+
+        foreach (Collider2D hit in Physics2D.OverlapCircleAll(
+                     origin,
+                     radius,
+                     data.SkillHittableLayers))
+        {
+            IDamageable target = hit == null
+                ? null
+                : hit.GetComponentInParent<IDamageable>();
+
+            if (target == null)
+                continue;
+
+            Vector2 targetDirection = (Vector2)hit.ClosestPoint(origin) - (Vector2)origin;
+            if (targetDirection.sqrMagnitude > 0.0001f &&
+                Vector2.Dot(direction, targetDirection.normalized) < minimumDot)
+                continue;
+
+            targets.Add(target);
+        }
+
+        foreach (IDamageable target in targets)
+        {
+            ApplySkillDamage(target, DamageSlot.Primary);
+            ApplySkillDamage(target, DamageSlot.Secondary);
+            ApplySkillDamage(target, DamageSlot.Tertiary);
+        }
+
+        CreateVisual(
+            data.SkillVisualPrefab,
+            origin,
+            radius * 2f,
+            data.SkillVisualDuration,
+            Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg
+        );
     }
 
     // =========================================================
@@ -495,7 +561,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         else
         {
             FireProjectile(
-                data.SkillProjectilePrefab,
+                data.ChargedSkillProjectilePrefab,
                 data.SkillRange,
                 damage,
                 data.ProjectileSpeed *
@@ -520,7 +586,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         int damage,
         Vector2 direction)
     {
-        if (data.SkillProjectilePrefab == null ||
+        if (data.ChargedSkillProjectilePrefab == null ||
             firePoint == null)
         {
             Debug.LogWarning(
@@ -543,7 +609,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
         GameObject beamObject =
             Instantiate(
-                data.SkillProjectilePrefab,
+                data.ChargedSkillProjectilePrefab,
                 firePoint.position,
                 Quaternion.Euler(
                     0f,
@@ -761,25 +827,26 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     // =========================================================
 
     /// <summary>
-    /// Skill damage = raw skill damage
-    ///              + the weapon's primary damage modifier
-    ///              + 20% of the player's runtime base damage of the
-    ///                primary type (base + attribute/trait scaling,
-    ///                before equipment).
-    /// The skill's damage type comes from that primary modifier.
+    /// Skill damage = the player's runtime base damage
+    ///              + damage modifiers from equipped armor
+    ///              + the weapon skill's configured damage value.
     /// </summary>
     private int CalculateSkillDamage(int rawDamage)
     {
-        int damage = rawDamage + data.GetDamage(DamageSlot.Primary);
+        if (playerStats == null)
+            return rawDamage;
 
-        if (playerStats != null)
+        float baseDamage = playerStats.GetPreEquipmentDamage(data.PrimaryDamageType);
+        if (EquipmentManager.Instance != null)
         {
-            damage += Mathf.RoundToInt(
-                playerStats.GetPreEquipmentDamage(data.PrimaryDamageType) * 0.2f
+            baseDamage = EquipmentManager.Instance.GetModifiedStat(
+                baseDamage,
+                StatType.Damage,
+                data.PrimaryDamageType
             );
         }
 
-        return damage;
+        return Mathf.RoundToInt(baseDamage) + rawDamage;
     }
 
     /// <summary>
@@ -864,7 +931,8 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         GameObject prefab,
         Vector3 position,
         float scale,
-        float lifetime)
+        float lifetime,
+        float rotation = 0f)
     {
         if (prefab == null)
             return;
@@ -873,16 +941,14 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             Instantiate(
                 prefab,
                 position,
-                Quaternion.identity
+                Quaternion.Euler(0f, 0f, rotation)
             );
 
         visual.transform.localScale =
             Vector3.one * scale;
 
-        Destroy(
-            visual,
-            lifetime
-        );
+        if (visual.GetComponent<SpriteArrayVisual>() == null && lifetime > 0f)
+            Destroy(visual, lifetime);
     }
 
     // =========================================================

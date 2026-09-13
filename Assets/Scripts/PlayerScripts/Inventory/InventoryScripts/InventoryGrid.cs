@@ -137,6 +137,27 @@ public class InventoryGrid : MonoBehaviour
         }
     }
 
+    /// <summary>Consumes one item from a consumable stack and removes it when empty.</summary>
+    public bool TryConsumeItem(InventoryItem item)
+    {
+        if (item == null || item.Data == null ||
+            item.Data.EquipmentType != EquipmentType.Consumable ||
+            item.Quantity <= 0)
+            return false;
+
+        item.Quantity--;
+        if (item.Quantity == 0)
+        {
+            RemoveItem(item);
+        }
+        else
+        {
+            OnItemUpdated?.Invoke(item);
+        }
+
+        return true;
+    }
+
     public void Clear()
     {
         System.Collections.Generic.HashSet<InventoryItem> items =

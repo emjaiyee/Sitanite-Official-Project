@@ -289,10 +289,10 @@ public class PlayerAttributesNTraits : MonoBehaviour
         float modifier = 0f;
 
         if ((damageType & (DamageType.Slash | DamageType.Blunt | DamageType.Physical)) != 0)
-            modifier += strengthModifier * 5f;
+            modifier += strengthModifier * 3f;
 
         if ((damageType & (DamageType.Pierce | DamageType.Stab)) != 0)
-            modifier += dexterityModifier * 5f;
+            modifier += dexterityModifier * 3f;
 
         if ((damageType & (DamageType.Slash | DamageType.Blunt | DamageType.Stab | DamageType.Physical)) != 0)
             modifier += Mundane - 1;

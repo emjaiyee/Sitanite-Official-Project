@@ -130,7 +130,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -168,7 +168,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -189,709 +189,722 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_0
+      name: WarriorHeadwearRun-Sheet_runningAnimation_000
       rect:
         serializedVersion: 2
-        x: 7
-        y: 24
-        width: 14
-        height: 16
+        x: 0
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 15f4af3c348d2a040800000000000000
-      internalID: 4657522750216884049
+      spriteID: 746fa9440fa1d8a4ab425e17b239b78c
+      internalID: -551398534
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_1
+      name: WarriorHeadwearRun-Sheet_runningAnimation_001
       rect:
         serializedVersion: 2
-        x: 39
-        y: 25
-        width: 14
-        height: 16
+        x: 32
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: bc70039be2521b170800000000000000
-      internalID: 8192370079769298891
+      spriteID: 8358be83efdee89428d6b8698428e87f
+      internalID: -631523788
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_2
+      name: WarriorHeadwearRun-Sheet_runningAnimation_002
       rect:
         serializedVersion: 2
-        x: 71
-        y: 24
-        width: 14
-        height: 16
+        x: 64
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3cc5d814c8f8d8e00800000000000000
-      internalID: 1048652120805170371
+      spriteID: a42a90ded54b26d4f9c646da8da7db0a
+      internalID: -545843644
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_3
+      name: WarriorHeadwearRun-Sheet_runningAnimation_003
       rect:
         serializedVersion: 2
-        x: 103
-        y: 25
-        width: 14
-        height: 16
+        x: 96
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e77d3349225453920800000000000000
-      internalID: 2969355544138340222
+      spriteID: eb03f1d0176c294439f7366d9391de27
+      internalID: 1430594465
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_4
+      name: WarriorHeadwearRun-Sheet_runningAnimation_004
       rect:
         serializedVersion: 2
-        x: 138
-        y: 25
-        width: 13
-        height: 16
+        x: 128
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f63b21de9d30eac70800000000000000
-      internalID: 8984122541170930543
+      spriteID: 06f0ddec3ca047747b129f8a4b5728b4
+      internalID: 611688324
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_5
+      name: WarriorHeadwearRun-Sheet_runningAnimation_005
       rect:
         serializedVersion: 2
-        x: 170
-        y: 26
-        width: 13
-        height: 16
+        x: 160
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 050fa1fb3da1bdd00800000000000000
-      internalID: 998421239139332176
+      spriteID: 729617691377e4941a6cbc4cfb73e97f
+      internalID: 22016056
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_6
+      name: WarriorHeadwearRun-Sheet_runningAnimation_006
       rect:
         serializedVersion: 2
-        x: 202
-        y: 25
-        width: 13
-        height: 16
+        x: 192
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8469b4d961d3cb570800000000000000
-      internalID: 8483722965396723272
+      spriteID: d197453167ff68841895e219dad6ebbf
+      internalID: -1078614537
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_7
+      name: WarriorHeadwearRun-Sheet_runningAnimation_007
       rect:
         serializedVersion: 2
-        x: 234
-        y: 26
-        width: 13
-        height: 16
+        x: 224
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6ef08b76969a67c50800000000000000
-      internalID: 6662698968918003686
+      spriteID: cd9387090bd310449b347e8beaa04f61
+      internalID: 508349567
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_8
+      name: WarriorHeadwearRun-Sheet_runningAnimation_008
       rect:
         serializedVersion: 2
-        x: 268
-        y: 24
-        width: 14
-        height: 16
+        x: 256
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 070da12c9bb18bbe0800000000000000
-      internalID: -1461387594442289040
+      spriteID: be6743653345606438c9267bc870ae77
+      internalID: -1117497489
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_9
+      name: WarriorHeadwearRun-Sheet_runningAnimation_009
       rect:
         serializedVersion: 2
-        x: 300
-        y: 25
-        width: 14
-        height: 16
+        x: 288
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8243a55eafa854a00800000000000000
-      internalID: 740150523966665768
+      spriteID: 65faf8819adb7f242a80e90642b72a1f
+      internalID: 1107494193
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_10
+      name: WarriorHeadwearRun-Sheet_runningAnimation_010
       rect:
         serializedVersion: 2
-        x: 332
-        y: 24
-        width: 14
-        height: 16
+        x: 320
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1242132c30793ed80800000000000000
-      internalID: -8222562452249697247
+      spriteID: ffabe519ef443794ea724dc575471be2
+      internalID: -1882737012
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_11
+      name: WarriorHeadwearRun-Sheet_runningAnimation_011
       rect:
         serializedVersion: 2
-        x: 364
-        y: 25
-        width: 14
-        height: 16
+        x: 352
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 82cdb6e6c89c462f0800000000000000
-      internalID: -980437213874758616
+      spriteID: 7168783d0e94a7144801be44600a7338
+      internalID: 575915721
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_12
+      name: WarriorHeadwearRun-Sheet_runningAnimation_012
       rect:
         serializedVersion: 2
-        x: 396
-        y: 25
-        width: 14
-        height: 16
+        x: 384
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f9a9fe17ce7d2a7b0800000000000000
-      internalID: -5214368008017831265
+      spriteID: 925ced0bba0f35a40b164bf855ac4793
+      internalID: 566341579
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_13
+      name: WarriorHeadwearRun-Sheet_runningAnimation_013
       rect:
         serializedVersion: 2
-        x: 428
-        y: 26
-        width: 14
-        height: 16
+        x: 416
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a98828f39334e6020800000000000000
-      internalID: 2336879169809582234
+      spriteID: 3dd9dde4198fb6749a730ca96ece2784
+      internalID: -1407080835
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_14
+      name: WarriorHeadwearRun-Sheet_runningAnimation_014
       rect:
         serializedVersion: 2
-        x: 460
-        y: 25
-        width: 14
-        height: 16
+        x: 448
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ab4dec4d97928f550800000000000000
-      internalID: 6194746890686223546
+      spriteID: b68e77123e4ef0f45b868b2b3b7b5be2
+      internalID: 1377785126
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_15
+      name: WarriorHeadwearRun-Sheet_runningAnimation_015
       rect:
         serializedVersion: 2
-        x: 492
-        y: 26
-        width: 14
-        height: 16
+        x: 480
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3583bd1e90b6fa620800000000000000
-      internalID: 2787564384553744467
+      spriteID: 719861f98e115ab448388492edb52048
+      internalID: 2006759257
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_16
+      name: WarriorHeadwearRun-Sheet_runningAnimation_016
       rect:
         serializedVersion: 2
-        x: 523
-        y: 25
-        width: 13
-        height: 16
+        x: 512
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fc44ea7d2545688a0800000000000000
-      internalID: -6303257913675856689
+      spriteID: e60b5fbec25a54d4cac1f05cec18d320
+      internalID: -97396088
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_17
+      name: WarriorHeadwearRun-Sheet_runningAnimation_017
       rect:
         serializedVersion: 2
-        x: 555
-        y: 26
-        width: 13
-        height: 16
+        x: 544
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 26c0d52de96264a00800000000000000
-      internalID: 740321652325026914
+      spriteID: 80564908ef7e23c469d7b277d6dfd34b
+      internalID: 1500940805
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_18
+      name: WarriorHeadwearRun-Sheet_runningAnimation_018
       rect:
         serializedVersion: 2
-        x: 587
-        y: 25
-        width: 13
-        height: 16
+        x: 576
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fe568402fbbe80230800000000000000
-      internalID: 3605390707822978543
+      spriteID: 5bfa8922f2e324d419f677e027feff51
+      internalID: 1841283161
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_19
+      name: WarriorHeadwearRun-Sheet_runningAnimation_019
       rect:
         serializedVersion: 2
-        x: 619
-        y: 26
-        width: 13
-        height: 16
+        x: 608
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 57f8a08eb920055f0800000000000000
-      internalID: -770112667644162187
+      spriteID: 5f4c7161fba9ca546838c8934c1481a9
+      internalID: 177458804
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_20
+      name: WarriorHeadwearRun-Sheet_runningAnimation_020
       rect:
         serializedVersion: 2
-        x: 650
-        y: 25
-        width: 13
-        height: 16
+        x: 640
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 083dcb63a5d1666b0800000000000000
-      internalID: -5303519237879573632
+      spriteID: 12a24e8b09b46c641b0378c1ec53a2ff
+      internalID: -1355524538
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_21
+      name: WarriorHeadwearRun-Sheet_runningAnimation_021
       rect:
         serializedVersion: 2
-        x: 682
-        y: 24
-        width: 13
-        height: 16
+        x: 672
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 68745ee1320abfa70800000000000000
-      internalID: 8861852764484224902
+      spriteID: 10d11d4b08ec7c34b92d55e008331334
+      internalID: -873642614
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_22
+      name: WarriorHeadwearRun-Sheet_runningAnimation_022
       rect:
         serializedVersion: 2
-        x: 714
-        y: 25
-        width: 13
-        height: 16
+        x: 704
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a0d98682ed2aa4360800000000000000
-      internalID: 7154710033075838218
+      spriteID: 25ebac5526bbdf045979eeda5ae3ae2f
+      internalID: 1365501500
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_23
+      name: WarriorHeadwearRun-Sheet_runningAnimation_023
       rect:
         serializedVersion: 2
-        x: 746
-        y: 24
-        width: 13
-        height: 16
+        x: 736
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0da026551b2d90e00800000000000000
-      internalID: 1011571250404920016
+      spriteID: 7fa630b089d90484b950b5f6709cc0bf
+      internalID: 1652752507
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_24
+      name: WarriorHeadwearRun-Sheet_runningAnimation_024
       rect:
         serializedVersion: 2
-        x: 777
-        y: 25
-        width: 13
-        height: 16
+        x: 768
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f64547b4f5b5b1ae0800000000000000
-      internalID: -1577566779617291153
+      spriteID: eb00d2a5192219b4791bd458addd11f4
+      internalID: 582086902
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_25
+      name: WarriorHeadwearRun-Sheet_runningAnimation_025
       rect:
         serializedVersion: 2
-        x: 809
-        y: 26
-        width: 13
-        height: 16
+        x: 800
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a26b54f2748ca1f70800000000000000
-      internalID: 9158853000272655914
+      spriteID: 7d372d98a4d407c478ef8d010becadcb
+      internalID: 2034289426
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_26
+      name: WarriorHeadwearRun-Sheet_runningAnimation_026
       rect:
         serializedVersion: 2
-        x: 841
-        y: 25
-        width: 13
-        height: 16
+        x: 832
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 896b6231989495f50800000000000000
-      internalID: 6870603559611053720
+      spriteID: c00b6aaa7146082469b8fdac1d586d50
+      internalID: 1796462868
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_27
+      name: WarriorHeadwearRun-Sheet_runningAnimation_027
       rect:
         serializedVersion: 2
-        x: 873
-        y: 26
-        width: 13
-        height: 16
+        x: 864
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d4e0acc8171b83b10800000000000000
-      internalID: 1961512738971323981
+      spriteID: d7000636a70c47f4e85b81a9abd30a9b
+      internalID: 901988495
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_28
+      name: WarriorHeadwearRun-Sheet_runningAnimation_028
       rect:
         serializedVersion: 2
-        x: 902
-        y: 25
-        width: 14
-        height: 16
+        x: 896
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a07c0c0f084af9250800000000000000
-      internalID: 5953658106109019914
+      spriteID: 35fda88ece4a8be46b247efe1b5ec0a6
+      internalID: -189006428
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_29
+      name: WarriorHeadwearRun-Sheet_runningAnimation_029
       rect:
         serializedVersion: 2
-        x: 934
-        y: 26
-        width: 14
-        height: 16
+        x: 928
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 771a54e1460edee50800000000000000
-      internalID: 6840370129654882679
+      spriteID: 16682c520feb64540a1a1d8e642ff3a3
+      internalID: -298166589
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_30
+      name: WarriorHeadwearRun-Sheet_runningAnimation_030
       rect:
         serializedVersion: 2
-        x: 966
-        y: 25
-        width: 14
-        height: 16
+        x: 960
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d4649a0de41ac7430800000000000000
-      internalID: 3782075146964649549
+      spriteID: 5694887b38c62ac4c881ee92a3b1da7d
+      internalID: 1277902724
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorHeadwearRun-Sheet_31
+      name: WarriorHeadwearRun-Sheet_runningAnimation_031
       rect:
         serializedVersion: 2
-        x: 998
-        y: 26
-        width: 14
-        height: 16
+        x: 992
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6051ae0cd34794fb0800000000000000
-      internalID: -4663068130587044602
+      spriteID: 4de3d85b82e415e4d99e143172be1a4b
+      internalID: -1233600182
       vertices: []
       indices: 
       edges: []
@@ -900,7 +913,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: d7d51ef025c8d0e43b07bb44fe23d7d2
     internalID: 0
     vertices: []
     indices: 
@@ -942,6 +955,38 @@ TextureImporter:
       WarriorHeadwearRun-Sheet_7: 6662698968918003686
       WarriorHeadwearRun-Sheet_8: -1461387594442289040
       WarriorHeadwearRun-Sheet_9: 740150523966665768
+      WarriorHeadwearRun-Sheet_runningAnimation_000: -551398534
+      WarriorHeadwearRun-Sheet_runningAnimation_001: -631523788
+      WarriorHeadwearRun-Sheet_runningAnimation_002: -545843644
+      WarriorHeadwearRun-Sheet_runningAnimation_003: 1430594465
+      WarriorHeadwearRun-Sheet_runningAnimation_004: 611688324
+      WarriorHeadwearRun-Sheet_runningAnimation_005: 22016056
+      WarriorHeadwearRun-Sheet_runningAnimation_006: -1078614537
+      WarriorHeadwearRun-Sheet_runningAnimation_007: 508349567
+      WarriorHeadwearRun-Sheet_runningAnimation_008: -1117497489
+      WarriorHeadwearRun-Sheet_runningAnimation_009: 1107494193
+      WarriorHeadwearRun-Sheet_runningAnimation_010: -1882737012
+      WarriorHeadwearRun-Sheet_runningAnimation_011: 575915721
+      WarriorHeadwearRun-Sheet_runningAnimation_012: 566341579
+      WarriorHeadwearRun-Sheet_runningAnimation_013: -1407080835
+      WarriorHeadwearRun-Sheet_runningAnimation_014: 1377785126
+      WarriorHeadwearRun-Sheet_runningAnimation_015: 2006759257
+      WarriorHeadwearRun-Sheet_runningAnimation_016: -97396088
+      WarriorHeadwearRun-Sheet_runningAnimation_017: 1500940805
+      WarriorHeadwearRun-Sheet_runningAnimation_018: 1841283161
+      WarriorHeadwearRun-Sheet_runningAnimation_019: 177458804
+      WarriorHeadwearRun-Sheet_runningAnimation_020: -1355524538
+      WarriorHeadwearRun-Sheet_runningAnimation_021: -873642614
+      WarriorHeadwearRun-Sheet_runningAnimation_022: 1365501500
+      WarriorHeadwearRun-Sheet_runningAnimation_023: 1652752507
+      WarriorHeadwearRun-Sheet_runningAnimation_024: 582086902
+      WarriorHeadwearRun-Sheet_runningAnimation_025: 2034289426
+      WarriorHeadwearRun-Sheet_runningAnimation_026: 1796462868
+      WarriorHeadwearRun-Sheet_runningAnimation_027: 901988495
+      WarriorHeadwearRun-Sheet_runningAnimation_028: -189006428
+      WarriorHeadwearRun-Sheet_runningAnimation_029: -298166589
+      WarriorHeadwearRun-Sheet_runningAnimation_030: 1277902724
+      WarriorHeadwearRun-Sheet_runningAnimation_031: -1233600182
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

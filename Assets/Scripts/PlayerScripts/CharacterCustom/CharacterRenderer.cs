@@ -119,6 +119,13 @@ public class CharacterRenderer : MonoBehaviour
             currentDirection == CharacterDirection.East ||
             currentDirection == CharacterDirection.West;
 
+        if (currentAnimationState == CharacterAnimationState.Melee ||
+            currentAnimationState == CharacterAnimationState.Cast ||
+            currentAnimationState == CharacterAnimationState.Ranged)
+        {
+            weaponIsUnder = !weaponIsUnder;
+        }
+
         SetSprite(
             weaponUnderRenderer,
             weaponIsUnder ? appearance.weapon : null

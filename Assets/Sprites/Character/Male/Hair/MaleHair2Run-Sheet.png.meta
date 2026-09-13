@@ -130,7 +130,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -168,7 +168,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -189,709 +189,722 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_0
+      name: MaleHair2Run-Sheet_runningAnimation_000
       rect:
         serializedVersion: 2
-        x: 4
-        y: 29
-        width: 19
-        height: 13
+        x: 0
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f216a2e3ebedb9af0800000000000000
-      internalID: -388472034169298641
+      spriteID: 2a9e0321a5641a14d83a1e05718e35a2
+      internalID: 1615392286
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_1
+      name: MaleHair2Run-Sheet_runningAnimation_001
       rect:
         serializedVersion: 2
-        x: 36
-        y: 30
-        width: 19
-        height: 13
+        x: 32
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ae186158ee480bef0800000000000000
-      internalID: -94429432204852758
+      spriteID: 12e12ddf80eb87741b7527b81634e47c
+      internalID: -819959055
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_2
+      name: MaleHair2Run-Sheet_runningAnimation_002
       rect:
         serializedVersion: 2
-        x: 68
-        y: 29
-        width: 19
-        height: 13
+        x: 64
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9f8943d3f688b76d0800000000000000
-      internalID: -2991647516107958023
+      spriteID: b614d54fc6a38b642b53e0f315609cb1
+      internalID: -1246465216
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_3
+      name: MaleHair2Run-Sheet_runningAnimation_003
       rect:
         serializedVersion: 2
-        x: 100
-        y: 30
-        width: 19
-        height: 13
+        x: 96
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7c0716fbdfc4365f0800000000000000
-      internalID: -764682859001581369
+      spriteID: ba65e7efe65ab904ab3244e348b16996
+      internalID: -1620071921
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_4
+      name: MaleHair2Run-Sheet_runningAnimation_004
       rect:
         serializedVersion: 2
-        x: 135
-        y: 29
-        width: 20
-        height: 13
+        x: 128
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: eded5ad2ec5ec08d0800000000000000
-      internalID: -2878673388104720674
+      spriteID: d0347dcd478963147b14affee2eaac0e
+      internalID: 2055246872
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_5
+      name: MaleHair2Run-Sheet_runningAnimation_005
       rect:
         serializedVersion: 2
-        x: 167
-        y: 30
-        width: 20
-        height: 13
+        x: 160
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 381ec346e0a6ebc60800000000000000
-      internalID: 7835817011715039619
+      spriteID: b8afbb55c48796948bce15ed993eff67
+      internalID: 1543427914
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_6
+      name: MaleHair2Run-Sheet_runningAnimation_006
       rect:
         serializedVersion: 2
-        x: 199
-        y: 29
-        width: 20
-        height: 13
+        x: 192
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: b7d2aacb17db503f0800000000000000
-      internalID: -935133051415286405
+      spriteID: ad35c5e23a2751e4abed4751b323af3c
+      internalID: -1155512928
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_7
+      name: MaleHair2Run-Sheet_runningAnimation_007
       rect:
         serializedVersion: 2
-        x: 231
-        y: 30
-        width: 20
-        height: 13
+        x: 224
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a26f3eb6949c6c610800000000000000
-      internalID: 1641220431403021866
+      spriteID: 9e4b7f4f64d78e94a897533d4de2762b
+      internalID: -1489567091
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_8
+      name: MaleHair2Run-Sheet_runningAnimation_008
       rect:
         serializedVersion: 2
-        x: 265
-        y: 29
-        width: 19
-        height: 13
+        x: 256
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1878db89f5a01b3b0800000000000000
-      internalID: -5498602264341936255
+      spriteID: b4ee824d6ae716d42aa5006257464c03
+      internalID: 944164478
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_9
+      name: MaleHair2Run-Sheet_runningAnimation_009
       rect:
         serializedVersion: 2
-        x: 297
-        y: 30
-        width: 19
-        height: 13
+        x: 288
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3778a9b59ec14d590800000000000000
-      internalID: -7650458078405818509
+      spriteID: c08bbfb439719d746a9533910580f7fc
+      internalID: 578515057
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_10
+      name: MaleHair2Run-Sheet_runningAnimation_010
       rect:
         serializedVersion: 2
-        x: 329
-        y: 29
-        width: 19
-        height: 13
+        x: 320
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 8bf31031b654c80f0800000000000000
-      internalID: -1113438681684688968
+      spriteID: f1b157de73eaa6c40a32c24906d043be
+      internalID: 1597195140
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_11
+      name: MaleHair2Run-Sheet_runningAnimation_011
       rect:
         serializedVersion: 2
-        x: 361
-        y: 30
-        width: 19
-        height: 13
+        x: 352
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 42bb38dfdf6c873f0800000000000000
-      internalID: -902752931105490140
+      spriteID: 17a8bd63dfd3f794485062591574dfee
+      internalID: -1050087899
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_12
+      name: MaleHair2Run-Sheet_runningAnimation_012
       rect:
         serializedVersion: 2
-        x: 393
-        y: 27
-        width: 20
-        height: 15
+        x: 384
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c0dc63000a8035080800000000000000
-      internalID: -9200000130496410356
+      spriteID: fd51b4db25ba69049ab59e6f3560a6b9
+      internalID: 1201172999
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_13
+      name: MaleHair2Run-Sheet_runningAnimation_013
       rect:
         serializedVersion: 2
-        x: 425
-        y: 28
-        width: 20
-        height: 15
+        x: 416
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3eaddaa31d482ab20800000000000000
-      internalID: 3144221524025531107
+      spriteID: 3a1b42854c84d8b459ea4db5c4f5962a
+      internalID: -1272385594
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_14
+      name: MaleHair2Run-Sheet_runningAnimation_014
       rect:
         serializedVersion: 2
-        x: 457
-        y: 27
-        width: 20
-        height: 15
+        x: 448
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 62b08c7a108d90570800000000000000
-      internalID: 8433509278849436454
+      spriteID: e83d2fe90b896fc48aa0ffded25832ab
+      internalID: -2463997
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_15
+      name: MaleHair2Run-Sheet_runningAnimation_015
       rect:
         serializedVersion: 2
-        x: 489
-        y: 28
-        width: 20
-        height: 15
+        x: 480
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ddee6243b6456c790800000000000000
-      internalID: -7510222509180522787
+      spriteID: 0b09b8004759a48429bcf834c0554969
+      internalID: -1569362462
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_16
+      name: MaleHair2Run-Sheet_runningAnimation_016
       rect:
         serializedVersion: 2
-        x: 521
-        y: 26
-        width: 19
-        height: 16
+        x: 512
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fa7f6950d21a004a0800000000000000
-      internalID: -6629121436749989969
+      spriteID: 8c02d4ee89625a0449882095d1060e47
+      internalID: 295412489
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_17
+      name: MaleHair2Run-Sheet_runningAnimation_017
       rect:
         serializedVersion: 2
-        x: 553
-        y: 27
-        width: 19
-        height: 16
+        x: 544
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4219e57edb9c1bea0800000000000000
-      internalID: -5858679822764568284
+      spriteID: 90e373168607f3d4e87ad19e28ae2289
+      internalID: -610094455
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_18
+      name: MaleHair2Run-Sheet_runningAnimation_018
       rect:
         serializedVersion: 2
-        x: 585
-        y: 26
-        width: 19
-        height: 16
+        x: 576
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: fe344ee75bc95e820800000000000000
-      internalID: 2946933834515760111
+      spriteID: 2cc25ec0eb31b3b4787c781725947da1
+      internalID: 1546655141
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_19
+      name: MaleHair2Run-Sheet_runningAnimation_019
       rect:
         serializedVersion: 2
-        x: 617
-        y: 27
-        width: 19
-        height: 16
+        x: 608
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ebc60004f3f502d10800000000000000
-      internalID: 2098782151615999166
+      spriteID: 0d6eb509ee694bd44a02d7971b34c95a
+      internalID: -1761605013
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_20
+      name: MaleHair2Run-Sheet_runningAnimation_020
       rect:
         serializedVersion: 2
-        x: 647
-        y: 26
-        width: 19
-        height: 16
+        x: 640
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2d33f04e966ae7620800000000000000
-      internalID: 2773837394234782674
+      spriteID: 1c9d1cc6fd4432447ac5ac2d133bad45
+      internalID: -1791673128
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_21
+      name: MaleHair2Run-Sheet_runningAnimation_021
       rect:
         serializedVersion: 2
-        x: 679
-        y: 25
-        width: 19
-        height: 16
+        x: 672
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 61180d32d2d516040800000000000000
-      internalID: 4639091539624100118
+      spriteID: e0e135713b078054d8919d6de80a8342
+      internalID: -254789550
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_22
+      name: MaleHair2Run-Sheet_runningAnimation_022
       rect:
         serializedVersion: 2
-        x: 711
-        y: 26
-        width: 19
-        height: 16
+        x: 704
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 33755c95a5117f1b0800000000000000
-      internalID: -5623006529997940941
+      spriteID: 1022dcedbcac90a4d964ff17c26a568c
+      internalID: -1020565925
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_23
+      name: MaleHair2Run-Sheet_runningAnimation_023
       rect:
         serializedVersion: 2
-        x: 743
-        y: 25
-        width: 19
-        height: 16
+        x: 736
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ef0ba58e7ec5cd1a0800000000000000
-      internalID: -6783444787621351170
+      spriteID: 4c17c719e7e14784e8be5d4ac4db9302
+      internalID: -697789104
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_24
+      name: MaleHair2Run-Sheet_runningAnimation_024
       rect:
         serializedVersion: 2
-        x: 773
-        y: 26
-        width: 19
-        height: 16
+        x: 768
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: cbb6383866adfb170800000000000000
-      internalID: 8196509980665539516
+      spriteID: 97fd5cfcc79431543a7b5d9c7a40d995
+      internalID: 1894507081
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_25
+      name: MaleHair2Run-Sheet_runningAnimation_025
       rect:
         serializedVersion: 2
-        x: 805
-        y: 27
-        width: 19
-        height: 16
+        x: 800
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5920caf4a28902040800000000000000
-      internalID: 4620860525174850197
+      spriteID: 32a1c8ec716409a4c862e31d29fea12c
+      internalID: -1275569538
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_26
+      name: MaleHair2Run-Sheet_runningAnimation_026
       rect:
         serializedVersion: 2
-        x: 837
-        y: 26
-        width: 19
-        height: 16
+        x: 832
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 91b60a9901c54b910800000000000000
-      internalID: 1852206573122775833
+      spriteID: ccb43d42493044b469073dc35b87d98d
+      internalID: 934528019
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_27
+      name: MaleHair2Run-Sheet_runningAnimation_027
       rect:
         serializedVersion: 2
-        x: 869
-        y: 27
-        width: 19
-        height: 16
+        x: 864
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 04abdcbaf854da1a0800000000000000
-      internalID: -6796699779267184064
+      spriteID: e0f5ee7367a39ec44bb69358022abf03
+      internalID: -1870190140
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_28
+      name: MaleHair2Run-Sheet_runningAnimation_028
       rect:
         serializedVersion: 2
-        x: 899
-        y: 27
-        width: 20
-        height: 15
+        x: 896
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: c279605f9f638e450800000000000000
-      internalID: 6118200540968425260
+      spriteID: 5f34e9ebcdd5cfc47bedc8c2afeed7a7
+      internalID: -1249747044
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_29
+      name: MaleHair2Run-Sheet_runningAnimation_029
       rect:
         serializedVersion: 2
-        x: 931
-        y: 28
-        width: 20
-        height: 15
+        x: 928
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 27bd5ab78e49bc1c0800000000000000
-      internalID: -4482325277889406094
+      spriteID: 21d646eb2a0f7f14186ad1eaf5f16b64
+      internalID: 1941131210
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_30
+      name: MaleHair2Run-Sheet_runningAnimation_030
       rect:
         serializedVersion: 2
-        x: 963
-        y: 27
-        width: 20
-        height: 15
+        x: 960
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 84ee8f3d9d4f44c60800000000000000
-      internalID: 7801629670913928776
+      spriteID: 9c90e18b62435e54098f9acc4e8a56d3
+      internalID: -2093609377
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: MaleHair2Run-Sheet_31
+      name: MaleHair2Run-Sheet_runningAnimation_031
       rect:
         serializedVersion: 2
-        x: 995
-        y: 28
-        width: 20
-        height: 15
+        x: 992
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 2241bb682edf00c30800000000000000
-      internalID: 4323734791640519714
+      spriteID: 7e113331e8fea5b4c96877756aa4b0aa
+      internalID: -671308433
       vertices: []
       indices: 
       edges: []
@@ -900,7 +913,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -942,6 +955,38 @@ TextureImporter:
       MaleHair2Run-Sheet_7: 1641220431403021866
       MaleHair2Run-Sheet_8: -5498602264341936255
       MaleHair2Run-Sheet_9: -7650458078405818509
+      MaleHair2Run-Sheet_runningAnimation_000: 1615392286
+      MaleHair2Run-Sheet_runningAnimation_001: -819959055
+      MaleHair2Run-Sheet_runningAnimation_002: -1246465216
+      MaleHair2Run-Sheet_runningAnimation_003: -1620071921
+      MaleHair2Run-Sheet_runningAnimation_004: 2055246872
+      MaleHair2Run-Sheet_runningAnimation_005: 1543427914
+      MaleHair2Run-Sheet_runningAnimation_006: -1155512928
+      MaleHair2Run-Sheet_runningAnimation_007: -1489567091
+      MaleHair2Run-Sheet_runningAnimation_008: 944164478
+      MaleHair2Run-Sheet_runningAnimation_009: 578515057
+      MaleHair2Run-Sheet_runningAnimation_010: 1597195140
+      MaleHair2Run-Sheet_runningAnimation_011: -1050087899
+      MaleHair2Run-Sheet_runningAnimation_012: 1201172999
+      MaleHair2Run-Sheet_runningAnimation_013: -1272385594
+      MaleHair2Run-Sheet_runningAnimation_014: -2463997
+      MaleHair2Run-Sheet_runningAnimation_015: -1569362462
+      MaleHair2Run-Sheet_runningAnimation_016: 295412489
+      MaleHair2Run-Sheet_runningAnimation_017: -610094455
+      MaleHair2Run-Sheet_runningAnimation_018: 1546655141
+      MaleHair2Run-Sheet_runningAnimation_019: -1761605013
+      MaleHair2Run-Sheet_runningAnimation_020: -1791673128
+      MaleHair2Run-Sheet_runningAnimation_021: -254789550
+      MaleHair2Run-Sheet_runningAnimation_022: -1020565925
+      MaleHair2Run-Sheet_runningAnimation_023: -697789104
+      MaleHair2Run-Sheet_runningAnimation_024: 1894507081
+      MaleHair2Run-Sheet_runningAnimation_025: -1275569538
+      MaleHair2Run-Sheet_runningAnimation_026: 934528019
+      MaleHair2Run-Sheet_runningAnimation_027: -1870190140
+      MaleHair2Run-Sheet_runningAnimation_028: -1249747044
+      MaleHair2Run-Sheet_runningAnimation_029: 1941131210
+      MaleHair2Run-Sheet_runningAnimation_030: -2093609377
+      MaleHair2Run-Sheet_runningAnimation_031: -671308433
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

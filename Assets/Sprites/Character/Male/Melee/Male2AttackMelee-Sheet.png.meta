@@ -58,7 +58,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -96,7 +96,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -117,181 +117,194 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Male2AttackMelee-Sheet_0
+      name: Male2AttackMelee-Sheet_meleeAnimation_000
       rect:
         serializedVersion: 2
-        x: 3
-        y: 2
-        width: 22
-        height: 36
+        x: 0
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9db819a92ccfad2d0800000000000000
-      internalID: -3253009868074677287
+      spriteID: 1c82bde275c710b468e4d2752670b458
+      internalID: 940535462
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Male2AttackMelee-Sheet_1
+      name: Male2AttackMelee-Sheet_meleeAnimation_001
       rect:
         serializedVersion: 2
-        x: 41
-        y: 1
-        width: 16
-        height: 36
+        x: 32
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 11705ecf8fe982200800000000000000
-      internalID: 155548979376228113
+      spriteID: 700476da5fbe4c545854c0ed11d85eac
+      internalID: -502576858
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Male2AttackMelee-Sheet_2
+      name: Male2AttackMelee-Sheet_meleeAnimation_002
       rect:
         serializedVersion: 2
-        x: 72
-        y: 2
-        width: 22
-        height: 36
+        x: 64
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f5e525f20d04bc110800000000000000
-      internalID: 1282189781808340575
+      spriteID: 07aba6ee635a36247869957d4f02d07f
+      internalID: 1497955521
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Male2AttackMelee-Sheet_3
+      name: Male2AttackMelee-Sheet_meleeAnimation_003
       rect:
         serializedVersion: 2
-        x: 100
-        y: 2
-        width: 28
-        height: 37
+        x: 96
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6f95d45ddaf2a8350800000000000000
-      internalID: 6019676275588553206
+      spriteID: 4999fd35fe2e5714bb6e75694fa579aa
+      internalID: 284912560
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Male2AttackMelee-Sheet_4
+      name: Male2AttackMelee-Sheet_meleeAnimation_004
       rect:
         serializedVersion: 2
-        x: 136
-        y: 2
-        width: 23
-        height: 39
+        x: 128
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ca7cc6d4b7484eeb0800000000000000
-      internalID: -4691479246698395732
+      spriteID: dda6f4adf12f7854a89e02cb468e9902
+      internalID: 744057840
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Male2AttackMelee-Sheet_5
+      name: Male2AttackMelee-Sheet_meleeAnimation_005
       rect:
         serializedVersion: 2
-        x: 169
-        y: 3
-        width: 15
-        height: 37
+        x: 160
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: e299ff36f62b5ead0800000000000000
-      internalID: -2673534612285712082
+      spriteID: 97082d88d84cd884c8164776eeb5c978
+      internalID: -753531046
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Male2AttackMelee-Sheet_6
+      name: Male2AttackMelee-Sheet_meleeAnimation_006
       rect:
         serializedVersion: 2
-        x: 194
-        y: 2
-        width: 23
-        height: 39
+        x: 192
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ebf6e76a60cdc2830800000000000000
-      internalID: 4047852086220451774
+      spriteID: a93eb0b86e51fbe44a74ce810c76d604
+      internalID: -1304990528
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Male2AttackMelee-Sheet_7
+      name: Male2AttackMelee-Sheet_meleeAnimation_007
       rect:
         serializedVersion: 2
         x: 224
-        y: 2
-        width: 28
-        height: 37
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 939759b5165c77b30800000000000000
-      internalID: 4285110592405338425
+      spriteID: d65a150d7475a2847825fa6dff7344f6
+      internalID: -620297790
       vertices: []
       indices: 
       edges: []
@@ -300,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -318,6 +331,14 @@ TextureImporter:
       Male2AttackMelee-Sheet_5: -2673534612285712082
       Male2AttackMelee-Sheet_6: 4047852086220451774
       Male2AttackMelee-Sheet_7: 4285110592405338425
+      Male2AttackMelee-Sheet_meleeAnimation_000: 940535462
+      Male2AttackMelee-Sheet_meleeAnimation_001: -502576858
+      Male2AttackMelee-Sheet_meleeAnimation_002: 1497955521
+      Male2AttackMelee-Sheet_meleeAnimation_003: 284912560
+      Male2AttackMelee-Sheet_meleeAnimation_004: 744057840
+      Male2AttackMelee-Sheet_meleeAnimation_005: -753531046
+      Male2AttackMelee-Sheet_meleeAnimation_006: -1304990528
+      Male2AttackMelee-Sheet_meleeAnimation_007: -620297790
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

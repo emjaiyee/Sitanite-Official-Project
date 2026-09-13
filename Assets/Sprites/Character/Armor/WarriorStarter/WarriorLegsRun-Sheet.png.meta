@@ -130,7 +130,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -168,7 +168,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -189,709 +189,722 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_0
+      name: WarriorLegsRun-Sheet_runningAnimation_000
       rect:
         serializedVersion: 2
-        x: 7
+        x: 0
         y: 0
-        width: 14
-        height: 17
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 349fcc30843fe2b00800000000000000
-      internalID: 805848873972857155
+      spriteID: f3e48b4c20c64cf47aa0979dfaba088d
+      internalID: 1106582205
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_1
+      name: WarriorLegsRun-Sheet_runningAnimation_001
       rect:
         serializedVersion: 2
-        x: 43
-        y: 1
-        width: 10
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: c1a20a1228f7502e0800000000000000
-      internalID: -2160180249367664100
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_2
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 1
-        width: 19
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4865a39bde7728a90800000000000000
-      internalID: -7313150981997701500
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_3
-      rect:
-        serializedVersion: 2
-        x: 103
-        y: 3
-        width: 15
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: be800f5be23b120f0800000000000000
-      internalID: -1143435817173120789
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_4
-      rect:
-        serializedVersion: 2
-        x: 138
+        x: 32
         y: 0
-        width: 12
-        height: 16
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 297898b0758a4a8a0800000000000000
-      internalID: -6294721287347927150
+      spriteID: 1c6f1467c52981f4faf68cebfb72eeaf
+      internalID: 1937691381
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_5
+      name: WarriorLegsRun-Sheet_runningAnimation_002
       rect:
         serializedVersion: 2
-        x: 169
-        y: 1
-        width: 13
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 96fdae63852a99650800000000000000
-      internalID: 6240197258460716905
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_6
-      rect:
-        serializedVersion: 2
-        x: 203
+        x: 64
         y: 0
-        width: 12
-        height: 16
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3dd282086724b86f0800000000000000
-      internalID: -681377841892807213
+      spriteID: 62a45854db18d8446995394ee8cb97be
+      internalID: 650547107
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_7
+      name: WarriorLegsRun-Sheet_runningAnimation_003
       rect:
         serializedVersion: 2
-        x: 235
-        y: 1
-        width: 13
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 72d7e05ba37af7aa0800000000000000
-      internalID: -6161021894631981785
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_8
-      rect:
-        serializedVersion: 2
-        x: 268
+        x: 96
         y: 0
-        width: 14
-        height: 17
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 03c304b977aaf92f0800000000000000
-      internalID: -963864364551488464
+      spriteID: 70ecbba054014a24fad5b1678bfaa88e
+      internalID: 1521586605
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_9
+      name: WarriorLegsRun-Sheet_runningAnimation_004
       rect:
         serializedVersion: 2
-        x: 300
-        y: 1
-        width: 10
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 25377f7b33014e090800000000000000
-      internalID: -8006256423242075310
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_10
-      rect:
-        serializedVersion: 2
-        x: 329
-        y: 1
-        width: 19
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ee51920f1c9a34970800000000000000
-      internalID: 8738014352451900910
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_11
-      rect:
-        serializedVersion: 2
-        x: 363
-        y: 3
-        width: 15
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 099cd9866c0506e40800000000000000
-      internalID: 5647602745811519888
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_12
-      rect:
-        serializedVersion: 2
-        x: 390
-        y: 1
-        width: 21
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bd275cfa4f0f59980800000000000000
-      internalID: -8532648985271897381
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_13
-      rect:
-        serializedVersion: 2
-        x: 428
-        y: 1
-        width: 11
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 1948ddefe1f0651c0800000000000000
-      internalID: -4515404950592977775
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_14
-      rect:
-        serializedVersion: 2
-        x: 454
-        y: 3
-        width: 24
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 55e248ebc6b4f4e40800000000000000
-      internalID: 5642811788543405653
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_15
-      rect:
-        serializedVersion: 2
-        x: 491
-        y: 2
-        width: 13
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5db0c5dfea0c826a0800000000000000
-      internalID: -6473712606537577515
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_16
-      rect:
-        serializedVersion: 2
-        x: 519
-        y: 1
-        width: 19
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 43e95df8eb8442350800000000000000
-      internalID: 5990993387603729972
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_17
-      rect:
-        serializedVersion: 2
-        x: 556
-        y: 1
-        width: 11
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b4e1e2e12ee3104b0800000000000000
-      internalID: -5476026531015942581
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_18
-      rect:
-        serializedVersion: 2
-        x: 584
-        y: 1
-        width: 20
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4cdd7e987e6857120800000000000000
-      internalID: 2410981504536010180
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_19
-      rect:
-        serializedVersion: 2
-        x: 618
-        y: 3
-        width: 16
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3a65a07be890fb450800000000000000
-      internalID: 6106610128298596003
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_20
-      rect:
-        serializedVersion: 2
-        x: 651
+        x: 128
         y: 0
-        width: 13
-        height: 17
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d104ce58b9d5d70a0800000000000000
-      internalID: -6882241733004083171
+      spriteID: 60d36b01b66e6c940a61c866918e03a8
+      internalID: -677461420
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_21
+      name: WarriorLegsRun-Sheet_runningAnimation_005
       rect:
         serializedVersion: 2
-        x: 681
-        y: 1
-        width: 15
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 5ac59fb47a1d4d210800000000000000
-      internalID: 1356939904209738917
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_22
-      rect:
-        serializedVersion: 2
-        x: 713
+        x: 160
         y: 0
-        width: 13
-        height: 17
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f63994efbf4e740e0800000000000000
-      internalID: -2285606514913078417
+      spriteID: 1abd8853a8b59d54caae3c7776758545
+      internalID: 1154929932
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_23
+      name: WarriorLegsRun-Sheet_runningAnimation_006
       rect:
         serializedVersion: 2
-        x: 745
-        y: 1
-        width: 15
-        height: 15
+        x: 192
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 653ad0076736b9b30800000000000000
-      internalID: 4295136029965132630
+      spriteID: 62069db38173f8d48bf47283c78f4dd0
+      internalID: 819384434
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_24
+      name: WarriorLegsRun-Sheet_runningAnimation_007
       rect:
         serializedVersion: 2
-        x: 775
-        y: 1
-        width: 19
-        height: 16
+        x: 224
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: ff586cc8b275fcd30800000000000000
-      internalID: 4453874401049740799
+      spriteID: 4b3de6a45f55f05428e2b439ff18e92a
+      internalID: 1965203052
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_25
+      name: WarriorLegsRun-Sheet_runningAnimation_008
       rect:
         serializedVersion: 2
-        x: 810
-        y: 1
-        width: 11
-        height: 17
+        x: 256
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0acca590c7eac25a0800000000000000
-      internalID: -6544664310720050016
+      spriteID: 0da7c289ea4cd4b4e8dd6ad46d7c9c39
+      internalID: -205231522
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_26
+      name: WarriorLegsRun-Sheet_runningAnimation_009
       rect:
         serializedVersion: 2
-        x: 837
-        y: 1
-        width: 20
-        height: 16
+        x: 288
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 87fff00c2dfc1ac60800000000000000
-      internalID: 7827766131418988408
+      spriteID: 8a47026d3678d9f498ca5e1b43348ea1
+      internalID: -646256486
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_27
+      name: WarriorLegsRun-Sheet_runningAnimation_010
       rect:
         serializedVersion: 2
-        x: 871
-        y: 3
-        width: 16
-        height: 15
+        x: 320
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 7bf157a720d51c200800000000000000
-      internalID: 198542123806826423
+      spriteID: dca3d60fd3f527a489c778588cfb1504
+      internalID: 558759268
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_28
+      name: WarriorLegsRun-Sheet_runningAnimation_011
       rect:
         serializedVersion: 2
-        x: 901
-        y: 1
-        width: 21
-        height: 17
+        x: 352
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3c39b340595b86300800000000000000
-      internalID: 245645831317459907
+      spriteID: bc9a810c4c18aa949a00f113beec88eb
+      internalID: 333288069
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_29
+      name: WarriorLegsRun-Sheet_runningAnimation_012
       rect:
         serializedVersion: 2
-        x: 937
-        y: 1
-        width: 11
-        height: 18
+        x: 384
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0ade0389c03ede280800000000000000
-      internalID: -9012297636066038368
+      spriteID: 11a4c81b815465c42a3aa28a89d0a987
+      internalID: 1320910431
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_30
+      name: WarriorLegsRun-Sheet_runningAnimation_013
       rect:
         serializedVersion: 2
-        x: 962
-        y: 3
-        width: 24
-        height: 16
+        x: 416
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 80cf83db5680c23f0800000000000000
-      internalID: -924354590458446840
+      spriteID: b77a80533047b304696bbdb30372ea1c
+      internalID: 520797538
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: WarriorLegsRun-Sheet_31
+      name: WarriorLegsRun-Sheet_runningAnimation_014
       rect:
         serializedVersion: 2
-        x: 1000
-        y: 2
-        width: 13
-        height: 17
+        x: 448
+        y: 0
+        width: 32
+        height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 9a897815cf547cf30800000000000000
-      internalID: 4595718894756796585
+      spriteID: 39591590190c2ed4e84c74f4dc4a49cd
+      internalID: 977036013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_015
+      rect:
+        serializedVersion: 2
+        x: 480
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec89828827b32694b95dd5fa02c362c7
+      internalID: -447617469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_016
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e87524e44e0e4ce4b8c0a9a722c7650a
+      internalID: -1406733553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_017
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8060c1e4a502d5745b51632c0f6a06e0
+      internalID: 1092314435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_018
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da9047ca5fb0046428cd55b83ddec845
+      internalID: -242657435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_019
+      rect:
+        serializedVersion: 2
+        x: 608
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 358eb4f148058b04ba1042284b3d5a41
+      internalID: -1693900232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_020
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 37b33b3f7fc2de44d97f064c0454db6f
+      internalID: -402901415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_021
+      rect:
+        serializedVersion: 2
+        x: 672
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2391ec0ce3b869a4492354da2e4fcee2
+      internalID: 1877955090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_022
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e5be2e6bf9825954e8437c4345d9ee58
+      internalID: 1055643867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_023
+      rect:
+        serializedVersion: 2
+        x: 736
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd81bbfb0ac8532488ef8b71d49aa91f
+      internalID: -568556642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_024
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: de096d8c7fb977444b927d3e8a76701e
+      internalID: 773753858
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_025
+      rect:
+        serializedVersion: 2
+        x: 800
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39d79bd884a1b514e9c8a7519ef7794a
+      internalID: -925228640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_026
+      rect:
+        serializedVersion: 2
+        x: 832
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb18cf8e99635ed4b9ef6a51c81dcae8
+      internalID: 1467464580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_027
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd99cdeb07d1d9c4db1df248fc1d195d
+      internalID: 1198269330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_028
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1938b5f24aee0734f9354d2b42f790f1
+      internalID: -2140651562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_029
+      rect:
+        serializedVersion: 2
+        x: 928
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34d5faffe497a9f419028f5e498cbf22
+      internalID: -2085342432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_030
+      rect:
+        serializedVersion: 2
+        x: 960
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09cc1d02d9eecc54b9ec1695845945b3
+      internalID: -669031038
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WarriorLegsRun-Sheet_runningAnimation_031
+      rect:
+        serializedVersion: 2
+        x: 992
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a047ad9de6c526446bf59bf0bda5ca51
+      internalID: 1833201433
       vertices: []
       indices: 
       edges: []
@@ -900,7 +913,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 32c3ebcd7cd248549abe55afb670a404
     internalID: 0
     vertices: []
     indices: 
@@ -942,6 +955,38 @@ TextureImporter:
       WarriorLegsRun-Sheet_7: -6161021894631981785
       WarriorLegsRun-Sheet_8: -963864364551488464
       WarriorLegsRun-Sheet_9: -8006256423242075310
+      WarriorLegsRun-Sheet_runningAnimation_000: 1106582205
+      WarriorLegsRun-Sheet_runningAnimation_001: 1937691381
+      WarriorLegsRun-Sheet_runningAnimation_002: 650547107
+      WarriorLegsRun-Sheet_runningAnimation_003: 1521586605
+      WarriorLegsRun-Sheet_runningAnimation_004: -677461420
+      WarriorLegsRun-Sheet_runningAnimation_005: 1154929932
+      WarriorLegsRun-Sheet_runningAnimation_006: 819384434
+      WarriorLegsRun-Sheet_runningAnimation_007: 1965203052
+      WarriorLegsRun-Sheet_runningAnimation_008: -205231522
+      WarriorLegsRun-Sheet_runningAnimation_009: -646256486
+      WarriorLegsRun-Sheet_runningAnimation_010: 558759268
+      WarriorLegsRun-Sheet_runningAnimation_011: 333288069
+      WarriorLegsRun-Sheet_runningAnimation_012: 1320910431
+      WarriorLegsRun-Sheet_runningAnimation_013: 520797538
+      WarriorLegsRun-Sheet_runningAnimation_014: 977036013
+      WarriorLegsRun-Sheet_runningAnimation_015: -447617469
+      WarriorLegsRun-Sheet_runningAnimation_016: -1406733553
+      WarriorLegsRun-Sheet_runningAnimation_017: 1092314435
+      WarriorLegsRun-Sheet_runningAnimation_018: -242657435
+      WarriorLegsRun-Sheet_runningAnimation_019: -1693900232
+      WarriorLegsRun-Sheet_runningAnimation_020: -402901415
+      WarriorLegsRun-Sheet_runningAnimation_021: 1877955090
+      WarriorLegsRun-Sheet_runningAnimation_022: 1055643867
+      WarriorLegsRun-Sheet_runningAnimation_023: -568556642
+      WarriorLegsRun-Sheet_runningAnimation_024: 773753858
+      WarriorLegsRun-Sheet_runningAnimation_025: -925228640
+      WarriorLegsRun-Sheet_runningAnimation_026: 1467464580
+      WarriorLegsRun-Sheet_runningAnimation_027: 1198269330
+      WarriorLegsRun-Sheet_runningAnimation_028: -2140651562
+      WarriorLegsRun-Sheet_runningAnimation_029: -2085342432
+      WarriorLegsRun-Sheet_runningAnimation_030: -669031038
+      WarriorLegsRun-Sheet_runningAnimation_031: 1833201433
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
