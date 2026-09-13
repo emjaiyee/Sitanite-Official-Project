@@ -94,12 +94,18 @@ public class PlayerAttack : MonoBehaviour
     private void OnAttackPerformed(
         InputAction.CallbackContext context)
     {
+        if (!CombatInputGate.IsCombatInputAllowed)
+            return;
+
         Attack();
     }
 
 
     private void Attack()
     {
+        if (!CombatInputGate.IsCombatInputAllowed)
+            return;
+
         if (attackActive)
             return;
 

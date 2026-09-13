@@ -149,6 +149,9 @@ public class PlayerSkill : MonoBehaviour
     private void OnSkillStarted(
         InputAction.CallbackContext context)
     {
+        if (!CombatInputGate.IsCombatInputAllowed)
+            return;
+
         StartWeaponSkill();
     }
 
@@ -158,6 +161,9 @@ public class PlayerSkill : MonoBehaviour
 
     private void StartWeaponSkill()
     {
+        if (!CombatInputGate.IsCombatInputAllowed)
+            return;
+
         if(skillActive)
             return;
 

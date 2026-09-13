@@ -458,6 +458,9 @@ public class ItemData : ScriptableObject
 
     /// <summary>Read-only collection of stat modifiers</summary>
     public IReadOnlyList<EquipmentStat> StatModifiers => statModifiers;
+    public IReadOnlyList<WeaponDamage> WeaponDamages => weaponStats.Attack.Damages;
+    public WeaponDamage SkillDamageEntry => weaponStats.Skill.Damage;
+    public WeaponDamage ChargedSkillDamageEntry => weaponStats.ChargedSkill.Damage;
 
     public bool MeetsStatCap(PlayerAttributesNTraits attributes)
     {

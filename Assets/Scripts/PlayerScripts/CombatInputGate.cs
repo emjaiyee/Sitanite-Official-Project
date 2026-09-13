@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 [DefaultExecutionOrder(-100)]
 public class CombatInputGate : MonoBehaviour
 {
+    public static bool IsCombatInputAllowed { get; private set; } = true;
+
     [Header("Behaviours To Gate")]
     [SerializeField] private PlayerAttack playerAttack;
     [SerializeField] private PlayerSkill playerSkill;
@@ -65,6 +67,8 @@ public class CombatInputGate : MonoBehaviour
 
     private void Apply()
     {
+        FindCombatBehaviours();
+
         if (!sceneAllowsCombat)
         {
             SetCombatEnabled(false);
@@ -88,8 +92,19 @@ public class CombatInputGate : MonoBehaviour
         SetCombatEnabled(!uiOpen && !hoveringUI);
     }
 
+    private void FindCombatBehaviours()
+    {
+        if (playerAttack == null)
+            playerAttack = FindFirstObjectByType<PlayerAttack>();
+
+        if (playerSkill == null)
+            playerSkill = FindFirstObjectByType<PlayerSkill>();
+    }
+
     private void SetCombatEnabled(bool enabled)
     {
+        IsCombatInputAllowed = enabled;
+
         if (playerAttack != null && playerAttack.enabled != enabled)
             playerAttack.enabled = enabled;
 
