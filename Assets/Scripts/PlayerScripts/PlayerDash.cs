@@ -94,6 +94,13 @@ public class PlayerDash : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            return;
+        }
+
         TrackMovementDirection();
 
 
@@ -132,6 +139,13 @@ public class PlayerDash : MonoBehaviour
     private void OnDashPerformed(
         InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            return;
+        }
+
         StartDash();
     }
 

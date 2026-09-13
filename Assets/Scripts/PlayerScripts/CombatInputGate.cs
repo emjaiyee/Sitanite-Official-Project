@@ -79,7 +79,13 @@ public class CombatInputGate : MonoBehaviour
         if (inventory == null)
             inventory = FindFirstObjectByType<PlayerInventory>();
 
+        bool isPaused =
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen) ||
+            Time.timeScale == 0f;
+
         bool uiOpen =
+            isPaused ||
             (statsUI != null && statsUI.IsOpen) ||
             (inventory != null && inventory.IsOpen);
 

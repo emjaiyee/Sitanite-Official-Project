@@ -94,6 +94,13 @@ public class PlayerAttack : MonoBehaviour
     private void OnAttackPerformed(
         InputAction.CallbackContext context)
     {
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            return;
+        }
+
         Attack();
     }
 

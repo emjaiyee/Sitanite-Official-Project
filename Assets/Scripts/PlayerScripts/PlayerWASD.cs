@@ -79,6 +79,16 @@ public class PlayerWASD : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            input = Vector2.zero;
+            movement = Vector2.zero;
+            IsSprinting = false;
+            return;
+        }
+
         ReadMovementInput();
         UpdateSprintState();
     }
@@ -202,6 +212,13 @@ public class PlayerWASD : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            return;
+        }
+
         // PlayerDash or another system currently controls
         // the Rigidbody.
         if (movementLocked)
