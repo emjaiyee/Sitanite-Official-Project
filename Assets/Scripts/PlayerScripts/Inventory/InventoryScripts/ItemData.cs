@@ -227,6 +227,7 @@ public enum WeaponSkillType
     ArrowRain,
     ChargedArrow,
     Beam,
+    Stab,
     Slash
 }
 
