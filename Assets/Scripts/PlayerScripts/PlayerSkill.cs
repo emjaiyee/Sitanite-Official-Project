@@ -28,6 +28,11 @@ public class PlayerSkill : MonoBehaviour
 
     private Coroutine skillRecovery;
 
+    public bool IsTargetingSkill =>
+        skillActive &&
+        equipment != null &&
+        equipment.CurrentWeapon != null &&
+        equipment.CurrentWeapon.IsTargetingSkill;
 
 
 
@@ -120,10 +125,55 @@ public class PlayerSkill : MonoBehaviour
 
     private void Update()
     {
-        if(!skillActive ||
-           activeChargeable == null)
+        if (!skillActive || equipment == null || equipment.CurrentWeapon == null)
             return;
 
+        if (skillActive &&
+            equipment.CurrentWeaponData != null &&
+            equipment.CurrentWeaponData.WeaponSkillType ==
+                WeaponSkillType.Stab &&
+            !equipment.CurrentWeapon.IsTargetingSkill)
+        {
+            if (skillRecovery == null)
+            {
+                skillRecovery =
+                    StartCoroutine(
+                        EndSkillMovementLockAfterDelay()
+                    );
+            }
+
+            return;
+        }
+
+        if (IsStabTargeting())
+        {
+            UpdateStabTargeting();
+            return;
+        }
+
+        if (equipment.CurrentWeapon.IsTargetingSkill)
+        {
+            UpdateSkillTarget();
+
+            if (Mouse.current != null &&
+                Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                equipment.CurrentWeapon.ConfirmSkill();
+
+                if (skillRecovery == null)
+                {
+                    skillRecovery =
+                        StartCoroutine(
+                            EndSkillMovementLockAfterDelay()
+                        );
+                }
+            }
+
+            return;
+        }
+
+        if (activeChargeable == null)
+            return;
 
         Vector2 direction =
             GetMouseDirection();
@@ -199,7 +249,18 @@ public class PlayerSkill : MonoBehaviour
         ItemData weaponData =
             equipment.CurrentWeaponData;
 
+        if (weaponData.WeaponSkillType == WeaponSkillType.Stab)
+        {
+            if (Mouse.current == null || Camera.main == null)
+                return;
 
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(
+                Mouse.current.position.ReadValue()
+            );
+
+            if (!equipment.CurrentWeapon.TrySelectSkillTarget(mousePosition))
+                return;
+        }
 
         if(!stats.UseResource(
             weaponData.SkillCost,
@@ -217,7 +278,10 @@ public class PlayerSkill : MonoBehaviour
 
 
         Vector2 skillDirection =
-            GetMouseDirection();
+            weaponData.WeaponSkillType == WeaponSkillType.Stab
+                ? equipment.CurrentWeapon.GetSkillTargetPosition() -
+                  transform.position
+                : GetMouseDirection();
 
 
 
@@ -257,8 +321,9 @@ public class PlayerSkill : MonoBehaviour
 
 
 
-        // PLAY SKILL ANIMATION
-        if(animationController != null)
+        // Dagger animation starts only after approaching the selected target.
+        if(animationController != null &&
+           weaponData.WeaponSkillType != WeaponSkillType.Stab)
         {
             animationController.PlaySkill();
         }
@@ -286,7 +351,8 @@ public class PlayerSkill : MonoBehaviour
 
 
 
-        if(activeChargeable == null)
+        if(activeChargeable == null &&
+           !equipment.CurrentWeapon.IsTargetingSkill)
         {
             skillRecovery =
                 StartCoroutine(
@@ -304,6 +370,12 @@ public class PlayerSkill : MonoBehaviour
     private void OnSkillCanceled(
         InputAction.CallbackContext context)
     {
+        if (IsStabTargeting() ||
+            equipment != null &&
+            equipment.CurrentWeapon != null &&
+            equipment.CurrentWeapon.IsTargetingSkill)
+            return;
+
         ReleaseWeaponSkill();
     }
 
@@ -479,5 +551,66 @@ public class PlayerSkill : MonoBehaviour
 
 
         return direction.normalized;
+    }
+
+    private void UpdateSkillTarget()
+    {
+        if (Mouse.current == null || Camera.main == null)
+            return;
+
+        Vector3 mousePosition =
+            Camera.main.ScreenToWorldPoint(
+                Mouse.current.position.ReadValue()
+            );
+
+        equipment.CurrentWeapon.UpdateSkillTarget(mousePosition);
+    }
+
+    private bool IsStabTargeting()
+    {
+        return skillActive &&
+            equipment != null &&
+            equipment.CurrentWeaponData != null &&
+            equipment.CurrentWeaponData.WeaponSkillType ==
+                WeaponSkillType.Stab &&
+            equipment.CurrentWeapon.IsTargetingSkill;
+    }
+
+    private void UpdateStabTargeting()
+    {
+        Vector3 targetPosition =
+            equipment.CurrentWeapon.GetSkillTargetPosition();
+
+        Vector3 approachPosition =
+            equipment.CurrentWeapon.GetSkillApproachPosition();
+
+        if (Vector2.Distance(transform.position, targetPosition) <=
+            Mathf.Max(0.1f, equipment.CurrentWeaponData.SkillRange))
+        {
+            if (animationController != null)
+                animationController.PlaySkill();
+
+            equipment.CurrentWeapon.ConfirmSkill();
+
+            if (skillRecovery == null)
+            {
+                skillRecovery =
+                    StartCoroutine(
+                        EndSkillMovementLockAfterDelay()
+                    );
+            }
+
+            return;
+        }
+
+        transform.position = Vector3.MoveTowards(
+            transform.position,
+            approachPosition,
+            stats.MoveSpeed * Time.deltaTime
+        );
+
+        Vector2 direction = targetPosition - transform.position;
+        if (direction.sqrMagnitude > 0.0001f && movement != null)
+            movement.FaceDirection(direction);
     }
 }

@@ -16,6 +16,7 @@ public class PlayerAttack : MonoBehaviour
     private PlayerDash dash;
     private PlayerStats stats;
     private PlayerAnimationController animationController;
+    private PlayerSkill playerSkill;
 
     private bool attackActive;
     private Coroutine attackRecovery;
@@ -28,6 +29,7 @@ public class PlayerAttack : MonoBehaviour
         dash = GetComponent<PlayerDash>();
         stats = GetComponent<PlayerStats>();
         animationController = GetComponent<PlayerAnimationController>();
+        playerSkill = GetComponent<PlayerSkill>();
 
         if (equipment == null)
         {
@@ -95,6 +97,9 @@ public class PlayerAttack : MonoBehaviour
         InputAction.CallbackContext context)
     {
         if (!CombatInputGate.IsCombatInputAllowed)
+            return;
+
+        if (playerSkill != null && playerSkill.IsTargetingSkill)
             return;
 
         Attack();
