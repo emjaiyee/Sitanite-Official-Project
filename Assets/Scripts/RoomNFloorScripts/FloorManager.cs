@@ -63,6 +63,8 @@ public class FloorManager : MonoBehaviour
         roomManager.GenerateFloor(
             configuration
         );
+
+        FloorTextManager.ShowFloor(currentFloor);
     }
 
     public void EnterNextFloor()
