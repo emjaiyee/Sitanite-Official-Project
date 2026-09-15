@@ -276,6 +276,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2437f8e4e52c3104c83f2b243a853249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRange
+  startingState: 0
+  detectionRadius: 12
+  moveSpeed: 3
+  idleWanderRadius: 4
+  locateWaitDuration: 2.5
+  attackRange: 4
+  projectileDamageType: 256
+  projectileDamage: 5
+  attackCooldown: 1.5
+  projectileSpeed: 7
+  projectileLifetime: 4
+  attackPoint: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  takingAim: 0
+  deathAnimationDelay: 0.5
+  deathFadeDuration: 0.75
 --- !u!1 &613588052
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,71 +881,6 @@ MonoBehaviour:
     precision: 1
     fortitude: 1
     willpower: 2
---- !u!1001 &8625871277445153989
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 644558589115014614, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_SpriteHash
-      value: 617101044
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -253.55997
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -88.19018
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8622274762974194684, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -8238080067246585256, guid: eb24af4481fb18949ae65c25257373be, type: 3}
-    - target: {fileID: 8748001588763141578, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-      propertyPath: m_Name
-      value: 'Goblin (CrossBow) '
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -937,4 +888,3 @@ SceneRoots:
   - {fileID: 613588055}
   - {fileID: 1772655847}
   - {fileID: 447995791}
-  - {fileID: 8625871277445153989}
