@@ -79,16 +79,7 @@ public class DisableCombatOnUIHover : MonoBehaviour, IPointerEnterHandler, IPoin
 
     private void UpdateCombatState()
     {
-        bool shouldDisable = hoverCount > 0;
-
-        if (disableAttack && playerAttack != null)
-        {
-            playerAttack.enabled = !shouldDisable;
-        }
-
-        if (disableSkill && playerSkill != null)
-        {
-            playerSkill.enabled = !shouldDisable;
-        }
+        // CombatInputGate owns the final enabled state so leaving a UI element
+        // cannot re-enable combat in a blocked scene or while a window is open.
     }
 }

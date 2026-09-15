@@ -16,28 +16,20 @@ public class HeadsUpTextManager : MonoBehaviour, IHeadsUpText
     [Min(0f)]
     [SerializeField] private float fadeOutDuration = 0.25f;
 
-    [Header("Layout")]
-    [SerializeField] private Vector2 anchoredPosition = new Vector2(0f, -90f);
-    [SerializeField] private Vector2 padding = new Vector2(36f, 18f);
-    [Min(100f)]
-    [SerializeField] private float maxWidth = 900f;
+    [Header("Appearance")]
     [SerializeField] private Color backgroundColor = new Color(0f, 0f, 0f, 0.8f);
     [SerializeField] private Color textColor = Color.white;
     [SerializeField] private TMP_FontAsset fontAsset;
     [Min(1)]
     [SerializeField] private int fontSize = 32;
-    [SerializeField] private int sortingOrder = 2000;
     [SerializeField] private bool useUnscaledTime = true;
-    [Tooltip("Optional prefab that contains the actual canvas, background image, and TMP text. Leave empty to build the UI at runtime.")]
-    [SerializeField] private HeadsUpTextView headsUpTextPrefab;
+    [Header("Scene References")]
+    [Tooltip("Scene-local view whose RectTransform controls the notification position and size.")]
+    [SerializeField] private HeadsUpTextView headsUpTextView;
 
-    private Canvas canvas;
     private CanvasGroup canvasGroup;
     private Image backgroundImage;
     private TextMeshProUGUI messageText;
-    private RectTransform rootRect;
-    private RectTransform messageRect;
-    private HeadsUpTextView runtimeView;
     private readonly Queue<string> pendingMessages = new Queue<string>();
     private Coroutine playbackRoutine;
 
@@ -63,8 +55,11 @@ public class HeadsUpTextManager : MonoBehaviour, IHeadsUpText
         if (existing != null)
             return existing;
 
-        GameObject managerObject = new GameObject(nameof(HeadsUpTextManager));
-        return managerObject.AddComponent<HeadsUpTextManager>();
+        Debug.LogWarning(
+            "HeadsUpTextManager could not find a scene-local instance. " +
+            "Add one to the active scene and assign its HeadsUpTextView."
+        );
+        return null;
     }
 
     private void Awake()
@@ -76,7 +71,6 @@ public class HeadsUpTextManager : MonoBehaviour, IHeadsUpText
         }
 
         Current = this;
-        DontDestroyOnLoad(gameObject);
         EnsureUi();
         SetVisible(false);
     }
@@ -128,128 +122,36 @@ public class HeadsUpTextManager : MonoBehaviour, IHeadsUpText
 
     private void EnsureUi()
     {
-        if (headsUpTextPrefab != null)
+        if (headsUpTextView == null)
+            headsUpTextView = FindFirstObjectByType<HeadsUpTextView>();
+
+        if (headsUpTextView == null)
         {
-            runtimeView = Instantiate(headsUpTextPrefab, transform);
-            runtimeView.transform.localPosition = Vector3.zero;
-            runtimeView.transform.localRotation = Quaternion.identity;
-            runtimeView.transform.localScale = Vector3.one;
-
-            canvas = runtimeView.GetComponent<Canvas>();
-            if (canvas == null)
-                canvas = runtimeView.gameObject.AddComponent<Canvas>();
-
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            canvas.sortingOrder = sortingOrder;
-
-            CanvasScaler scaler = runtimeView.GetComponent<CanvasScaler>();
-            if (scaler == null)
-                scaler = runtimeView.gameObject.AddComponent<CanvasScaler>();
-
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-            scaler.matchWidthOrHeight = 0.5f;
-
-            if (runtimeView.GetComponent<GraphicRaycaster>() == null)
-                runtimeView.gameObject.AddComponent<GraphicRaycaster>();
-
-            canvasGroup = runtimeView.CanvasGroup;
-            if (canvasGroup == null)
-                canvasGroup = runtimeView.gameObject.AddComponent<CanvasGroup>();
-
-            canvasGroup.alpha = 0f;
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
-
-            backgroundImage = runtimeView.BackgroundImage;
-            if (backgroundImage != null)
-            {
-                backgroundImage.color = backgroundColor;
-                backgroundImage.raycastTarget = false;
-            }
-
-            rootRect = runtimeView.BackgroundRect;
-            messageText = runtimeView.MessageText;
-
-            if (messageText != null)
-            {
-                messageRect = messageText.rectTransform;
-                messageRect.anchorMin = Vector2.zero;
-                messageRect.anchorMax = Vector2.one;
-                messageRect.offsetMin = padding;
-                messageRect.offsetMax = -padding;
-
-                messageText.alignment = TextAlignmentOptions.Center;
-                messageText.textWrappingMode = TextWrappingModes.Normal;
-                messageText.raycastTarget = false;
-                messageText.color = textColor;
-                messageText.fontSize = fontSize;
-
-                if (fontAsset != null)
-                    messageText.font = fontAsset;
-            }
-
+            Debug.LogError(
+                "HeadsUpTextManager requires a scene-local HeadsUpTextView."
+            );
             return;
         }
 
-        canvas = GetComponent<Canvas>();
-        if (canvas == null)
-            canvas = gameObject.AddComponent<Canvas>();
+        canvasGroup = headsUpTextView.CanvasGroup;
+        backgroundImage = headsUpTextView.BackgroundImage;
+        messageText = headsUpTextView.MessageText;
 
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = sortingOrder;
-
-        CanvasScaler scalerFallback = GetComponent<CanvasScaler>();
-        if (scalerFallback == null)
-            scalerFallback = gameObject.AddComponent<CanvasScaler>();
-
-        scalerFallback.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scalerFallback.referenceResolution = new Vector2(1920f, 1080f);
-        scalerFallback.matchWidthOrHeight = 0.5f;
-
-        if (GetComponent<GraphicRaycaster>() == null)
-            gameObject.AddComponent<GraphicRaycaster>();
-
-        canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        if (canvasGroup == null || backgroundImage == null ||
+            messageText == null)
+        {
+            Debug.LogError(
+                "HeadsUpTextView is missing a CanvasGroup, Image, or " +
+                "TextMeshProUGUI reference."
+            );
+            return;
+        }
 
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
-
-        rootRect = GetComponent<RectTransform>();
-        if (rootRect == null)
-            rootRect = gameObject.AddComponent<RectTransform>();
-
-        rootRect.anchorMin = new Vector2(0.5f, 1f);
-        rootRect.anchorMax = new Vector2(0.5f, 1f);
-        rootRect.pivot = new Vector2(0.5f, 1f);
-        rootRect.anchoredPosition = anchoredPosition;
-
-        backgroundImage = GetComponent<Image>();
-        if (backgroundImage == null)
-            backgroundImage = gameObject.AddComponent<Image>();
-
-        backgroundImage.sprite = Resources.GetBuiltinResource<Sprite>("UI/Skin/UISprite.psd");
-        backgroundImage.type = Image.Type.Sliced;
         backgroundImage.color = backgroundColor;
         backgroundImage.raycastTarget = false;
-
-        messageText = GetComponentInChildren<TextMeshProUGUI>(true);
-        if (messageText == null)
-        {
-            GameObject textObject = new GameObject("HeadsUpText");
-            textObject.transform.SetParent(transform, false);
-            messageText = textObject.AddComponent<TextMeshProUGUI>();
-        }
-
-        messageRect = messageText.rectTransform;
-        messageRect.SetParent(transform, false);
-        messageRect.anchorMin = Vector2.zero;
-        messageRect.anchorMax = Vector2.one;
-        messageRect.offsetMin = padding;
-        messageRect.offsetMax = -padding;
 
         messageText.alignment = TextAlignmentOptions.Center;
         messageText.textWrappingMode = TextWrappingModes.Normal;
@@ -263,35 +165,10 @@ public class HeadsUpTextManager : MonoBehaviour, IHeadsUpText
 
     private void SetMessage(string message)
     {
-        if (messageText == null || backgroundImage == null)
+        if (messageText == null)
             return;
 
         messageText.text = message;
-        float contentWidth = Mathf.Max(0f, maxWidth - padding.x * 2f);
-        messageRect.SetSizeWithCurrentAnchors(
-            RectTransform.Axis.Horizontal,
-            contentWidth
-        );
-
-        messageText.ForceMeshUpdate();
-
-        float preferredWidth = Mathf.Min(contentWidth, messageText.preferredWidth);
-        float preferredHeight = messageText.preferredHeight;
-
-        float width = Mathf.Clamp(
-            Mathf.Max(preferredWidth, 240f) + padding.x * 2f,
-            240f,
-            maxWidth
-        );
-
-        float height = Mathf.Max(
-            preferredHeight + padding.y * 2f,
-            56f
-        );
-
-        rootRect.sizeDelta = new Vector2(width, height);
-        messageRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, contentWidth);
-        messageRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, preferredHeight);
     }
 
     private IEnumerator FadeTo(float targetAlpha, float duration)

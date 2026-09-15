@@ -11,7 +11,10 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 {
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform firePoint;
-
+    /// <summary>
+    /// <forsounds>
+    private WeaponAudioController weaponAudio;
+   
     [Header("Full Charge Indicator")]
     [SerializeField] private GameObject fullyChargedIndicatorPrefab;
     [SerializeField] private float indicatorRotationSpeed = 180f;
@@ -31,6 +34,17 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private SpriteRenderer[] chargeVisualSprites;
     private SpriteRenderer[] indicatorSprites;
     private bool hasReachedFullCharge;
+    private bool arrowRainTargeting;
+    private GameObject activeArrowRainPreview;
+    private Vector3 arrowRainTargetPosition;
+    private IDamageable selectedStabTarget;
+    private SpriteRenderer[] selectedStabRenderers;
+    private Color[] selectedStabOriginalColors;
+
+    [Header("Dagger Targeting")]
+    [Min(0.1f)]
+    [SerializeField] private float stabTargetingRange = 2f;
+    [SerializeField] private Color selectedStabColor = Color.yellow;
     private float fullChargeReachedTime;
     private float indicatorPulseTimer;
     private float nextAttackTime;
@@ -44,6 +58,10 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     public bool CanAttack => data != null && Time.time >= nextAttackTime;
     public bool CanUseSkill => data != null && Time.time >= nextSkillTime;
+    public bool IsTargetingSkill =>
+        arrowRainTargeting ||
+        selectedStabTarget != null &&
+        (selectedStabTarget as MonoBehaviour) != null;
 
     public float ChargePercent =>
         isCharging && data != null
@@ -54,13 +72,22 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             : 0f;
 
     private void Awake()
+{
+    playerStats = GetComponentInParent<PlayerStats>();
+
+    weaponAudio = GetComponentInParent<WeaponAudioController>();
+
+    if (weaponAudio == null)
     {
-        playerStats = GetComponentInParent<PlayerStats>();
+        weaponAudio = transform.root.GetComponentInChildren<WeaponAudioController>(true);
     }
+}
 
     public void Configure(ItemData weaponData)
     {
         StopCharging();
+        ClearArrowRainPreview();
+        ClearStabTarget();
         data = weaponData;
         nextAttackTime = 0f;
         nextSkillTime = 0f;
@@ -105,60 +132,73 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     // ATTACK
     // =========================================================
 
-    public void Attack(Vector2 direction)
+ 
+public void Attack(Vector2 direction)
+{
+    if (!IsConfigured() || !CanAttack)
+        return;
+
+    if (direction.sqrMagnitude <= 0.0001f)
+        return;
+
+    direction.Normalize();
+
+    nextAttackTime = Time.time + GetCooldown(data.AttackCooldown);
+
+    // Play weapon-specific attack SFX
+    weaponAudio?.PlayAttackSound();
+
+    Vector3 visualPosition = attackPoint == null
+        ? transform.root.position
+        : attackPoint.position;
+
+    float visualAngle =
+        Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+    CreateVisual(
+        data.AttackVisualPrefab,
+        visualPosition,
+        1f,
+        0.5f,
+        visualAngle
+    );
+
+    switch (data.WeaponAttackType)
     {
-        if (!IsConfigured() || !CanAttack)
-            return;
+        case WeaponAttackType.Melee:
 
-        if (direction.sqrMagnitude <= 0.0001f)
-            return;
+            AttackMelee(direction);
 
-        direction.Normalize();
-        nextAttackTime = Time.time + GetCooldown(data.AttackCooldown);
+            break;
 
-        Vector3 visualPosition = attackPoint == null
-            ? transform.root.position
-            : attackPoint.position;
-        float visualAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        CreateVisual(
-            data.AttackVisualPrefab,
-            visualPosition,
-            1f,
-            0.5f,
-            visualAngle
-        );
+        case WeaponAttackType.Ranged:
+        case WeaponAttackType.Spell:
 
-        switch (data.WeaponAttackType)
-        {
-            case WeaponAttackType.Melee:
-                AttackMelee(direction);
-                break;
+            float projectileSpeed =
+                data.WeaponAttackType == WeaponAttackType.Spell
+                    ? data.SpellProjectileSpeed
+                    : data.ProjectileSpeed;
 
-            case WeaponAttackType.Ranged:
-            case WeaponAttackType.Spell:
+            FireProjectile(
+                data.ProjectilePrefab,
+                data.AttackRange,
+                GetPrimaryDamage(),
+                projectileSpeed,
+                direction
+            );
 
-                float projectileSpeed =
-                    data.WeaponAttackType == WeaponAttackType.Spell
-                        ? data.SpellProjectileSpeed
-                        : data.ProjectileSpeed;
+            break;
 
-                FireProjectile(
-                    data.ProjectilePrefab,
-                    data.AttackRange,
-                    GetPrimaryDamage(),
-                    projectileSpeed,
-                    direction
-                );
+        default:
 
-                break;
+            Debug.LogWarning(
+                $"{WeaponId}: attack behavior is not implemented."
+            );
 
-            default:
-                Debug.LogWarning(
-                    $"{WeaponId}: attack behavior is not implemented."
-                );
-                break;
-        }
+            break;
     }
+}
+
 
     private void AttackMelee(Vector2 direction)
     {
@@ -238,46 +278,455 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     // SKILL
     // =========================================================
 
-    public void UseSkill(Vector2 direction)
+ 
+
+public void UseSkill(Vector2 direction)
+{
+    if (!IsConfigured() || !CanUseSkill)
+        return;
+
+    if (direction.sqrMagnitude <= 0.0001f)
+        return;
+
+    direction.Normalize();
+
+    switch (data.WeaponSkillType)
     {
-        if (!IsConfigured() || !CanUseSkill)
-            return;
+        case WeaponSkillType.AreaDamage:
 
-        if (direction.sqrMagnitude <= 0.0001f)
-            return;
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            weaponAudio?.PlaySkillSound();
+            UseAreaDamageSkill();
 
-        direction.Normalize();
-        nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            break;
 
-        switch (data.WeaponSkillType)
+        case WeaponSkillType.ArrowRain:
+
+            BeginArrowRainTargeting(direction);
+
+            break;
+
+        case WeaponSkillType.ChargedArrow:
+
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            StartCharging(direction);
+
+            break;
+
+        case WeaponSkillType.Beam:
+
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            StartCharging(direction);
+
+            break;
+         case WeaponSkillType.CrossbowExplosion:
+            weaponAudio?.PlaySkillSound();
+            UseCrossbowExplosionSkill(direction);
+            break;
+        case WeaponSkillType.Stab:
+
+            if (selectedStabTarget == null)
+            {
+                nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+                weaponAudio?.PlaySkillSound();
+                UseStabSkill(direction);
+            }
+
+            break;
+        
+
+        case WeaponSkillType.Slash:
+
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            weaponAudio?.PlaySkillSound();
+            UseSlashSkill(direction);
+
+            break;
+
+        default:
+
+            Debug.LogWarning(
+                $"{WeaponId}: skill behavior is not implemented."
+            );
+
+            break;
+    }
+
+}
+
+        public bool TrySelectSkillTarget(Vector3 worldPosition)
         {
-            case WeaponSkillType.AreaDamage:
-                UseAreaDamageSkill();
-                break;
+            if (!IsConfigured() ||
+                data.WeaponSkillType != WeaponSkillType.Stab)
+                return false;
 
-            case WeaponSkillType.ArrowRain:
-                UseArrowRainSkill(direction);
-                break;
+            Vector2 playerPosition = transform.root.position;
+            Collider2D[] hits = Physics2D.OverlapPointAll(
+                worldPosition,
+                data.SkillHittableLayers
+            );
 
-            case WeaponSkillType.ChargedArrow:
-                StartCharging(direction);
-                break;
+            IDamageable closestTarget = null;
+            float closestDistance = float.MaxValue;
 
-            case WeaponSkillType.Beam:
-                StartCharging(direction);
-                break;
+            foreach (Collider2D hit in hits)
+            {
+                IDamageable target =
+                    hit == null
+                        ? null
+                        : hit.GetComponentInParent<IDamageable>();
 
-            case WeaponSkillType.Slash:
-                UseSlashSkill(direction);
-                break;
+                if (target == null ||
+                    !PlayerElevationLevel.CanAffectTarget(
+                        (target as MonoBehaviour)?.transform))
+                    continue;
 
-            default:
-                Debug.LogWarning(
-                    $"{WeaponId}: skill behavior is not implemented."
+                float playerDistance = Vector2.Distance(
+                    playerPosition,
+                    (target as MonoBehaviour).transform.position
                 );
-                break;
+
+                if (playerDistance > stabTargetingRange)
+                    continue;
+
+                float distance = Vector2.Distance(
+                    worldPosition,
+                    (target as MonoBehaviour).transform.position
+                );
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestTarget = target;
+                }
+            }
+
+            ClearStabTarget();
+            selectedStabTarget = closestTarget;
+            HighlightStabTarget();
+            return selectedStabTarget != null;
+        }
+
+        public Vector3 GetSkillTargetPosition()
+        {
+            return (selectedStabTarget as MonoBehaviour)?.transform.position
+                ?? transform.root.position;
+        }
+
+        public Vector3 GetSkillApproachPosition()
+        {
+            Vector3 origin = transform.root.position;
+            Vector3 targetPosition = GetSkillTargetPosition();
+            Vector2 direction = (targetPosition - origin);
+
+            if (direction.sqrMagnitude <= 0.0001f)
+                return origin;
+
+            float approachDistance = Mathf.Max(0.1f, data.SkillRange * 0.75f);
+            return targetPosition - (Vector3)direction.normalized * approachDistance;
+        }
+
+        public void UpdateSkillTarget(Vector3 targetPosition)
+        {
+            if (!IsTargetingSkill || data == null)
+                return;
+
+            Vector3 origin = transform.root.position;
+            Vector2 offset = (Vector2)(targetPosition - origin);
+            float range = Mathf.Max(0f, data.SkillRange);
+
+            if (offset.sqrMagnitude > range * range)
+                offset = offset.normalized * range;
+
+            arrowRainTargetPosition =
+                origin + new Vector3(offset.x, offset.y, 0f);
+
+            if (activeArrowRainPreview != null)
+                activeArrowRainPreview.transform.position = arrowRainTargetPosition;
+        }
+
+        public void ConfirmSkill()
+        {
+            if (selectedStabTarget != null &&
+                (selectedStabTarget as MonoBehaviour) != null)
+            {
+                Vector3 targetPosition = GetSkillTargetPosition();
+                Vector2 direction = targetPosition - transform.root.position;
+
+                ClearStabTarget();
+                nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+                weaponAudio?.PlaySkillSound();
+                UseStabSkill(direction);
+                return;
+            }
+
+            if (!IsTargetingSkill || data == null)
+                return;
+
+            Vector3 arrowRainPosition = arrowRainTargetPosition;
+            ClearArrowRainPreview();
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            weaponAudio?.PlaySkillSound();
+            UseArrowRainSkill(arrowRainPosition);
+        }
+
+        private void HighlightStabTarget()
+        {
+            MonoBehaviour targetBehaviour =
+                selectedStabTarget as MonoBehaviour;
+
+            if (targetBehaviour == null)
+                return;
+
+            selectedStabRenderers =
+                targetBehaviour.GetComponentsInChildren<SpriteRenderer>();
+
+            selectedStabOriginalColors =
+                new Color[selectedStabRenderers.Length];
+
+            for (int index = 0; index < selectedStabRenderers.Length; index++)
+            {
+                SpriteRenderer renderer = selectedStabRenderers[index];
+                selectedStabOriginalColors[index] = renderer.color;
+                renderer.color = selectedStabColor;
+            }
+        }
+
+        private void ClearStabTarget()
+        {
+            if (selectedStabRenderers != null &&
+                selectedStabOriginalColors != null)
+            {
+                for (int index = 0;
+                     index < selectedStabRenderers.Length &&
+                     index < selectedStabOriginalColors.Length;
+                     index++)
+                {
+                    if (selectedStabRenderers[index] != null)
+                        selectedStabRenderers[index].color =
+                            selectedStabOriginalColors[index];
+                }
+            }
+
+            selectedStabTarget = null;
+            selectedStabRenderers = null;
+            selectedStabOriginalColors = null;
+        }
+
+
+
+
+    // =========================================================
+// STAB
+// =========================================================
+
+private void UseCrossbowExplosionSkill(Vector2 direction)
+{
+    if (data.SkillProjectilePrefab == null)
+        return;
+
+    Vector3 spawnPosition =
+        firePoint != null
+            ? firePoint.position
+            : transform.root.position;
+
+    Vector2 shootDirection = direction.normalized;
+
+    if (shootDirection.sqrMagnitude <= 0.001f)
+        shootDirection = Vector2.right;
+
+    GameObject projectile =
+        Instantiate(
+            data.SkillProjectilePrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
+
+    projectile.transform.right = shootDirection;
+
+    CrossbowExplosiveArrow explosiveArrow =
+        projectile.GetComponent<CrossbowExplosiveArrow>();
+
+    if (explosiveArrow == null)
+    {
+        Debug.LogError(
+            "Crossbow Explosion skill requires a CrossbowExplosiveArrow component.",
+            projectile
+        );
+
+        Destroy(projectile);
+        return;
+    }
+
+    int primaryDamage =
+        data.GetSkillDamage(
+            DamageSlot.Primary,
+            CalculateSkillDamage(data.SkillDamage)
+        );
+
+    DamageType primaryDamageType =
+        data.GetDamageType(DamageSlot.Primary);
+
+    int secondaryDamage =
+        data.GetSkillDamage(
+            DamageSlot.Secondary,
+            CalculateSkillDamage(data.SkillDamage)
+        );
+
+    DamageType secondaryDamageType =
+        data.GetDamageType(DamageSlot.Secondary);
+
+    int tertiaryDamage =
+        data.GetSkillDamage(
+            DamageSlot.Tertiary,
+            CalculateSkillDamage(data.SkillDamage)
+        );
+
+    DamageType tertiaryDamageType =
+        data.GetDamageType(DamageSlot.Tertiary);
+
+    // DEBUG
+    Debug.Log(
+        $"CROSSBOW DATA DEBUG | " +
+        $"Item: {data.name} | " +
+        $"WeaponId: {data.WeaponId} | " +
+        $"Skill Type: {data.WeaponSkillType} | " +
+        $"Skill Projectile: {data.SkillProjectilePrefab} | " +
+        $"Fire Area: {data.FireAreaPrefab} | " +
+        $"Fire Duration: {data.FireDuration} | " +
+        $"Fire Damage: {data.FireDamage} | " +
+        $"Fire Radius: {data.FireRadius}"
+    );
+
+    explosiveArrow.InitializeExplosive(
+        primaryDamage,
+        primaryDamageType,
+        secondaryDamage,
+        secondaryDamageType,
+        tertiaryDamage,
+        tertiaryDamageType,
+        data.ProjectileSpeed,
+        data.SkillRange,
+        data.Homing,
+        data.SkillHittableLayers,
+        data.SkillRadius,
+        data.FireAreaPrefab,
+        data.FireDuration,
+        data.FireDamageInterval,
+        data.FireDamage,
+        data.FireRadius
+    );
+}
+
+private void UseStabSkill(Vector2 direction)
+{
+    if (attackPoint == null)
+    {
+        Debug.LogWarning(
+            $"{WeaponId}: attack point is not assigned."
+        );
+
+        return;
+    }
+
+    if (direction.sqrMagnitude <= 0.0001f)
+        return;
+
+    direction.Normalize();
+
+    Vector2 origin =
+        (Vector2)transform.root.position;
+
+    // Short forward reach for the dagger stab.
+    Vector2 stabPosition =
+        origin + direction * data.SkillRange;
+
+    float stabRadius =
+        Mathf.Max(0.1f, data.SkillRadius);
+
+    Collider2D[] hits =
+        Physics2D.OverlapCircleAll(
+            stabPosition,
+            stabRadius,
+            data.SkillHittableLayers
+        );
+
+    IDamageable closestTarget = null;
+    float closestDistance = float.MaxValue;
+
+    foreach (Collider2D hit in hits)
+    {
+        if (hit == null)
+            continue;
+
+        IDamageable target =
+            hit.GetComponentInParent<IDamageable>();
+
+        if (target == null)
+            continue;
+
+        if (!PlayerElevationLevel.CanAffectTarget(
+            (target as MonoBehaviour)?.transform))
+        {
+            continue;
+        }
+
+        float distance =
+            Vector2.Distance(
+                origin,
+                (target as MonoBehaviour).transform.position
+            );
+
+        if (distance < closestDistance)
+        {
+            closestDistance = distance;
+            closestTarget = target;
         }
     }
+
+    if (closestTarget != null)
+    {
+        ApplySkillDamage(
+            closestTarget,
+            DamageSlot.Primary
+        );
+
+        ApplySkillDamage(
+            closestTarget,
+            DamageSlot.Secondary
+        );
+
+        ApplySkillDamage(
+            closestTarget,
+            DamageSlot.Tertiary
+        );
+    }
+
+    // Optional stab visual.
+    if (data.SkillVisualPrefab != null)
+    {
+        float angle =
+            Mathf.Atan2(
+                direction.y,
+                direction.x
+            ) * Mathf.Rad2Deg;
+
+        GameObject visual =
+            Instantiate(
+                data.SkillVisualPrefab,
+                stabPosition,
+                Quaternion.Euler(0f, 0f, angle)
+            );
+
+        visual.transform.localScale =
+            Vector3.one * data.SkillRadius * 2f;
+
+        Destroy(
+            visual,
+            data.SkillVisualDuration
+        );
+    }
+}
 
     // =========================================================
     // SLASH
@@ -362,14 +811,32 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     // ARROW RAIN
     // =========================================================
 
-    private void UseArrowRainSkill(Vector2 direction)
+    private void BeginArrowRainTargeting(Vector2 direction)
     {
+        if (arrowRainTargeting)
+            return;
+
+        arrowRainTargeting = true;
         Vector3 origin = transform.root.position;
-
         Vector3 targetPosition =
-            origin +
-            (Vector3)(direction.normalized * data.SkillRange);
+            origin + (Vector3)(direction.normalized * data.SkillRange);
 
+        if (data.SkillVisualPrefab != null)
+        {
+            activeArrowRainPreview = Instantiate(
+                data.SkillVisualPrefab,
+                targetPosition,
+                Quaternion.identity
+            );
+            activeArrowRainPreview.transform.localScale =
+                Vector3.one * data.SkillRadius * 2f;
+        }
+
+        UpdateSkillTarget(targetPosition);
+    }
+
+    private void UseArrowRainSkill(Vector3 targetPosition)
+    {
         CreateVisual(
             data.SkillVisualPrefab,
             targetPosition,
@@ -380,6 +847,15 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         StartCoroutine(
             ArrowRain(targetPosition)
         );
+    }
+
+    private void ClearArrowRainPreview()
+    {
+        if (activeArrowRainPreview != null)
+            Destroy(activeArrowRainPreview);
+
+        activeArrowRainPreview = null;
+        arrowRainTargeting = false;
     }
 
     private IEnumerator ArrowRain(Vector3 targetPosition)
@@ -438,44 +914,52 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     // CHARGING
     // =========================================================
 
-    private void StartCharging(Vector2 direction)
+   
+private void StartCharging(Vector2 direction)
+{
+    if (isCharging)
+        return;
+
+    isCharging = true;
+    hasReachedFullCharge = false;
+    indicatorPulseTimer = 0f;
+
+    chargeStartTime = Time.time;
+
+    skillDirection = direction.normalized;
+
+    // Play charge-start SFX
+    weaponAudio?.PlayChargeStartSound();
+
+    // Start looping charge SFX
+    weaponAudio?.StartChargeLoop();
+
+    if (data.ChargeVisualPrefab != null)
     {
-        if (isCharging)
-            return;
+        activeChargeVisual =
+            Instantiate(
+                data.ChargeVisualPrefab,
+                firePoint == null
+                    ? transform.root.position
+                    : firePoint.position,
+                Quaternion.Euler(
+                    0f,
+                    0f,
+                    Mathf.Atan2(
+                        direction.y,
+                        direction.x
+                    ) * Mathf.Rad2Deg
+                )
+            );
 
-        isCharging = true;
-        hasReachedFullCharge = false;
-        indicatorPulseTimer = 0f;
+        activeChargeVisual.transform.localScale =
+            Vector3.one * data.StartChargeVisualScale;
 
-        chargeStartTime = Time.time;
-
-        skillDirection = direction.normalized;
-
-        if (data.ChargeVisualPrefab != null)
-        {
-            activeChargeVisual =
-                Instantiate(
-                    data.ChargeVisualPrefab,
-                    firePoint == null
-                        ? transform.root.position
-                        : firePoint.position,
-                    Quaternion.Euler(
-                        0f,
-                        0f,
-                        Mathf.Atan2(
-                            direction.y,
-                            direction.x
-                        ) * Mathf.Rad2Deg
-                    )
-                );
-
-            activeChargeVisual.transform.localScale =
-                Vector3.one * data.StartChargeVisualScale;
-
-            chargeVisualSprites =
-                activeChargeVisual.GetComponentsInChildren<SpriteRenderer>();
-        }
+        chargeVisualSprites =
+            activeChargeVisual.GetComponentsInChildren<SpriteRenderer>();
     }
+}
+
 
     // =========================================================
     // AIM WHILE CHARGING
@@ -520,63 +1004,68 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     // RELEASE CHARGED SKILL
     // =========================================================
 
-    public void ReleaseSkill(bool fullyCharged)
-    {
-        if (!isCharging || data == null)
-            return;
+   
+public void ReleaseSkill(bool fullyCharged)
+{
+    if (!isCharging || data == null)
+        return;
 
-        // A max-charge release that couldn't pay the extra cost
-        // fires just below maximum instead.
-        float chargePercent =
-            fullyCharged
-                ? 1f
-                : Mathf.Min(ChargePercent, 0.99f);
+    // A max-charge release that couldn't pay the extra cost
+    // fires just below maximum instead.
+    float chargePercent =
+        fullyCharged
+            ? 1f
+            : Mathf.Min(ChargePercent, 0.99f);
 
-        int rawDamage =
-            Mathf.RoundToInt(
-                Mathf.Lerp(
-                    data.MinimumSkillDamage,
-                    data.MaximumSkillDamage,
-                    chargePercent
-                )
-            );
-
-        int damage = CalculateChargedSkillDamage(rawDamage);
-
-        Debug.Log(
-            $"[WeaponController] {WeaponId} skill released: " +
-            $"charge={chargePercent:P0} raw={rawDamage} " +
-            $"bonus={damage - rawDamage} final={damage} " +
-            $"(min={data.MinimumSkillDamage} max={data.MaximumSkillDamage} " +
-            $"ticksPerSec={data.DamageTicksPerSecond})"
+    int rawDamage =
+        Mathf.RoundToInt(
+            Mathf.Lerp(
+                data.MinimumSkillDamage,
+                data.MaximumSkillDamage,
+                chargePercent
+            )
         );
 
-        if (data.WeaponSkillType == WeaponSkillType.Beam)
-        {
-            FireBeam(
-                damage,
-                skillDirection
-            );
-        }
-        else
-        {
-            FireProjectile(
-                data.ChargedSkillProjectilePrefab,
-                data.SkillRange,
-                damage,
-                data.ProjectileSpeed *
-                    Mathf.Lerp(
-                        1f,
-                        1.75f,
-                        chargePercent
-                    ),
-                skillDirection,
-                true
-            );
-        }
+    int damage = CalculateChargedSkillDamage(rawDamage);
 
-        StopCharging();
+    Debug.Log(
+        $"[WeaponController] {WeaponId} skill released: " +
+        $"charge={chargePercent:P0} raw={rawDamage} " +
+        $"bonus={damage - rawDamage} final={damage} " +
+        $"(min={data.MinimumSkillDamage} max={data.MaximumSkillDamage} " +
+        $"ticksPerSec={data.DamageTicksPerSecond})"
+    );
+
+    // Play release SFX and stop the looping charge sound
+    weaponAudio?.PlayChargeReleaseSound();
+    weaponAudio?.StopChargeLoop();
+
+    if (data.WeaponSkillType == WeaponSkillType.Beam)
+    {
+        FireBeam(
+            damage,
+            skillDirection
+        );
     }
+    else
+    {
+        FireProjectile(
+            data.ChargedSkillProjectilePrefab,
+            data.SkillRange,
+            damage,
+            data.ProjectileSpeed *
+                Mathf.Lerp(
+                    1f,
+                    1.75f,
+                    chargePercent
+                ),
+            skillDirection,
+            true
+        );
+    }
+
+    StopCharging();
+}
 
     // =========================================================
     // BEAM
