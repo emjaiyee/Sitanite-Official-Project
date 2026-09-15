@@ -34,6 +34,17 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private SpriteRenderer[] chargeVisualSprites;
     private SpriteRenderer[] indicatorSprites;
     private bool hasReachedFullCharge;
+    private bool arrowRainTargeting;
+    private GameObject activeArrowRainPreview;
+    private Vector3 arrowRainTargetPosition;
+    private IDamageable selectedStabTarget;
+    private SpriteRenderer[] selectedStabRenderers;
+    private Color[] selectedStabOriginalColors;
+
+    [Header("Dagger Targeting")]
+    [Min(0.1f)]
+    [SerializeField] private float stabTargetingRange = 2f;
+    [SerializeField] private Color selectedStabColor = Color.yellow;
     private float fullChargeReachedTime;
     private float indicatorPulseTimer;
     private float nextAttackTime;
@@ -47,6 +58,10 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     public bool CanAttack => data != null && Time.time >= nextAttackTime;
     public bool CanUseSkill => data != null && Time.time >= nextSkillTime;
+    public bool IsTargetingSkill =>
+        arrowRainTargeting ||
+        selectedStabTarget != null &&
+        (selectedStabTarget as MonoBehaviour) != null;
 
     public float ChargePercent =>
         isCharging && data != null
@@ -71,6 +86,8 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     public void Configure(ItemData weaponData)
     {
         StopCharging();
+        ClearArrowRainPreview();
+        ClearStabTarget();
         data = weaponData;
         nextAttackTime = 0f;
         nextSkillTime = 0f;
@@ -273,12 +290,11 @@ public void UseSkill(Vector2 direction)
 
     direction.Normalize();
 
-    nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
-
     switch (data.WeaponSkillType)
     {
         case WeaponSkillType.AreaDamage:
 
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
             weaponAudio?.PlaySkillSound();
             UseAreaDamageSkill();
 
@@ -286,32 +302,42 @@ public void UseSkill(Vector2 direction)
 
         case WeaponSkillType.ArrowRain:
 
-            weaponAudio?.PlaySkillSound();
-            UseArrowRainSkill(direction);
+            BeginArrowRainTargeting(direction);
 
             break;
 
         case WeaponSkillType.ChargedArrow:
 
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
             StartCharging(direction);
 
             break;
 
         case WeaponSkillType.Beam:
 
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
             StartCharging(direction);
 
             break;
-
+         case WeaponSkillType.CrossbowExplosion:
+            weaponAudio?.PlaySkillSound();
+            UseCrossbowExplosionSkill(direction);
+            break;
         case WeaponSkillType.Stab:
 
-            weaponAudio?.PlaySkillSound();
-            UseStabSkill(direction);
+            if (selectedStabTarget == null)
+            {
+                nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+                weaponAudio?.PlaySkillSound();
+                UseStabSkill(direction);
+            }
 
             break;
+        
 
         case WeaponSkillType.Slash:
 
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
             weaponAudio?.PlaySkillSound();
             UseSlashSkill(direction);
 
@@ -325,7 +351,167 @@ public void UseSkill(Vector2 direction)
 
             break;
     }
+
 }
+
+        public bool TrySelectSkillTarget(Vector3 worldPosition)
+        {
+            if (!IsConfigured() ||
+                data.WeaponSkillType != WeaponSkillType.Stab)
+                return false;
+
+            Vector2 playerPosition = transform.root.position;
+            Collider2D[] hits = Physics2D.OverlapPointAll(
+                worldPosition,
+                data.SkillHittableLayers
+            );
+
+            IDamageable closestTarget = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (Collider2D hit in hits)
+            {
+                IDamageable target =
+                    hit == null
+                        ? null
+                        : hit.GetComponentInParent<IDamageable>();
+
+                if (target == null ||
+                    !PlayerElevationLevel.CanAffectTarget(
+                        (target as MonoBehaviour)?.transform))
+                    continue;
+
+                float playerDistance = Vector2.Distance(
+                    playerPosition,
+                    (target as MonoBehaviour).transform.position
+                );
+
+                if (playerDistance > stabTargetingRange)
+                    continue;
+
+                float distance = Vector2.Distance(
+                    worldPosition,
+                    (target as MonoBehaviour).transform.position
+                );
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestTarget = target;
+                }
+            }
+
+            ClearStabTarget();
+            selectedStabTarget = closestTarget;
+            HighlightStabTarget();
+            return selectedStabTarget != null;
+        }
+
+        public Vector3 GetSkillTargetPosition()
+        {
+            return (selectedStabTarget as MonoBehaviour)?.transform.position
+                ?? transform.root.position;
+        }
+
+        public Vector3 GetSkillApproachPosition()
+        {
+            Vector3 origin = transform.root.position;
+            Vector3 targetPosition = GetSkillTargetPosition();
+            Vector2 direction = (targetPosition - origin);
+
+            if (direction.sqrMagnitude <= 0.0001f)
+                return origin;
+
+            float approachDistance = Mathf.Max(0.1f, data.SkillRange * 0.75f);
+            return targetPosition - (Vector3)direction.normalized * approachDistance;
+        }
+
+        public void UpdateSkillTarget(Vector3 targetPosition)
+        {
+            if (!IsTargetingSkill || data == null)
+                return;
+
+            Vector3 origin = transform.root.position;
+            Vector2 offset = (Vector2)(targetPosition - origin);
+            float range = Mathf.Max(0f, data.SkillRange);
+
+            if (offset.sqrMagnitude > range * range)
+                offset = offset.normalized * range;
+
+            arrowRainTargetPosition =
+                origin + new Vector3(offset.x, offset.y, 0f);
+
+            if (activeArrowRainPreview != null)
+                activeArrowRainPreview.transform.position = arrowRainTargetPosition;
+        }
+
+        public void ConfirmSkill()
+        {
+            if (selectedStabTarget != null &&
+                (selectedStabTarget as MonoBehaviour) != null)
+            {
+                Vector3 targetPosition = GetSkillTargetPosition();
+                Vector2 direction = targetPosition - transform.root.position;
+
+                ClearStabTarget();
+                nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+                weaponAudio?.PlaySkillSound();
+                UseStabSkill(direction);
+                return;
+            }
+
+            if (!IsTargetingSkill || data == null)
+                return;
+
+            Vector3 arrowRainPosition = arrowRainTargetPosition;
+            ClearArrowRainPreview();
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            weaponAudio?.PlaySkillSound();
+            UseArrowRainSkill(arrowRainPosition);
+        }
+
+        private void HighlightStabTarget()
+        {
+            MonoBehaviour targetBehaviour =
+                selectedStabTarget as MonoBehaviour;
+
+            if (targetBehaviour == null)
+                return;
+
+            selectedStabRenderers =
+                targetBehaviour.GetComponentsInChildren<SpriteRenderer>();
+
+            selectedStabOriginalColors =
+                new Color[selectedStabRenderers.Length];
+
+            for (int index = 0; index < selectedStabRenderers.Length; index++)
+            {
+                SpriteRenderer renderer = selectedStabRenderers[index];
+                selectedStabOriginalColors[index] = renderer.color;
+                renderer.color = selectedStabColor;
+            }
+        }
+
+        private void ClearStabTarget()
+        {
+            if (selectedStabRenderers != null &&
+                selectedStabOriginalColors != null)
+            {
+                for (int index = 0;
+                     index < selectedStabRenderers.Length &&
+                     index < selectedStabOriginalColors.Length;
+                     index++)
+                {
+                    if (selectedStabRenderers[index] != null)
+                        selectedStabRenderers[index].color =
+                            selectedStabOriginalColors[index];
+                }
+            }
+
+            selectedStabTarget = null;
+            selectedStabRenderers = null;
+            selectedStabOriginalColors = null;
+        }
 
 
 
@@ -333,6 +519,104 @@ public void UseSkill(Vector2 direction)
     // =========================================================
 // STAB
 // =========================================================
+
+private void UseCrossbowExplosionSkill(Vector2 direction)
+{
+    if (data.SkillProjectilePrefab == null)
+        return;
+
+    Vector3 spawnPosition =
+        firePoint != null
+            ? firePoint.position
+            : transform.root.position;
+
+    Vector2 shootDirection = direction.normalized;
+
+    if (shootDirection.sqrMagnitude <= 0.001f)
+        shootDirection = Vector2.right;
+
+    GameObject projectile =
+        Instantiate(
+            data.SkillProjectilePrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
+
+    projectile.transform.right = shootDirection;
+
+    CrossbowExplosiveArrow explosiveArrow =
+        projectile.GetComponent<CrossbowExplosiveArrow>();
+
+    if (explosiveArrow == null)
+    {
+        Debug.LogError(
+            "Crossbow Explosion skill requires a CrossbowExplosiveArrow component.",
+            projectile
+        );
+
+        Destroy(projectile);
+        return;
+    }
+
+    int primaryDamage =
+        data.GetSkillDamage(
+            DamageSlot.Primary,
+            CalculateSkillDamage(data.SkillDamage)
+        );
+
+    DamageType primaryDamageType =
+        data.GetDamageType(DamageSlot.Primary);
+
+    int secondaryDamage =
+        data.GetSkillDamage(
+            DamageSlot.Secondary,
+            CalculateSkillDamage(data.SkillDamage)
+        );
+
+    DamageType secondaryDamageType =
+        data.GetDamageType(DamageSlot.Secondary);
+
+    int tertiaryDamage =
+        data.GetSkillDamage(
+            DamageSlot.Tertiary,
+            CalculateSkillDamage(data.SkillDamage)
+        );
+
+    DamageType tertiaryDamageType =
+        data.GetDamageType(DamageSlot.Tertiary);
+
+    // DEBUG
+    Debug.Log(
+        $"CROSSBOW DATA DEBUG | " +
+        $"Item: {data.name} | " +
+        $"WeaponId: {data.WeaponId} | " +
+        $"Skill Type: {data.WeaponSkillType} | " +
+        $"Skill Projectile: {data.SkillProjectilePrefab} | " +
+        $"Fire Area: {data.FireAreaPrefab} | " +
+        $"Fire Duration: {data.FireDuration} | " +
+        $"Fire Damage: {data.FireDamage} | " +
+        $"Fire Radius: {data.FireRadius}"
+    );
+
+    explosiveArrow.InitializeExplosive(
+        primaryDamage,
+        primaryDamageType,
+        secondaryDamage,
+        secondaryDamageType,
+        tertiaryDamage,
+        tertiaryDamageType,
+        data.ProjectileSpeed,
+        data.SkillRange,
+        data.Homing,
+        data.SkillHittableLayers,
+        data.SkillRadius,
+        data.FireAreaPrefab,
+        data.FireDuration,
+        data.FireDamageInterval,
+        data.FireDamage,
+        data.FireRadius
+    );
+}
 
 private void UseStabSkill(Vector2 direction)
 {
@@ -527,14 +811,32 @@ private void UseStabSkill(Vector2 direction)
     // ARROW RAIN
     // =========================================================
 
-    private void UseArrowRainSkill(Vector2 direction)
+    private void BeginArrowRainTargeting(Vector2 direction)
     {
+        if (arrowRainTargeting)
+            return;
+
+        arrowRainTargeting = true;
         Vector3 origin = transform.root.position;
-
         Vector3 targetPosition =
-            origin +
-            (Vector3)(direction.normalized * data.SkillRange);
+            origin + (Vector3)(direction.normalized * data.SkillRange);
 
+        if (data.SkillVisualPrefab != null)
+        {
+            activeArrowRainPreview = Instantiate(
+                data.SkillVisualPrefab,
+                targetPosition,
+                Quaternion.identity
+            );
+            activeArrowRainPreview.transform.localScale =
+                Vector3.one * data.SkillRadius * 2f;
+        }
+
+        UpdateSkillTarget(targetPosition);
+    }
+
+    private void UseArrowRainSkill(Vector3 targetPosition)
+    {
         CreateVisual(
             data.SkillVisualPrefab,
             targetPosition,
@@ -545,6 +847,15 @@ private void UseStabSkill(Vector2 direction)
         StartCoroutine(
             ArrowRain(targetPosition)
         );
+    }
+
+    private void ClearArrowRainPreview()
+    {
+        if (activeArrowRainPreview != null)
+            Destroy(activeArrowRainPreview);
+
+        activeArrowRainPreview = null;
+        arrowRainTargeting = false;
     }
 
     private IEnumerator ArrowRain(Vector3 targetPosition)

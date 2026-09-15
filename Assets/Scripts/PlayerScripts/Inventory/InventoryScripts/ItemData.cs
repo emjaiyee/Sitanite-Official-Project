@@ -129,6 +129,13 @@ public class WeaponSkillSettings
     public int Cost => cost;
     public ResourceType ResourceType => resourceType;
     public WeaponDamage Damage => damage;
+    [Header("Crossbow Fire")]
+public GameObject FireAreaPrefab;
+public float FireDuration = 4f;
+public float FireDamageInterval = 0.5f;
+public int FireDamage = 10;
+public float FireRadius = 2f;
+
 }
 
 [Serializable]
@@ -228,6 +235,7 @@ public enum WeaponSkillType
     ChargedArrow,
     Beam,
     Stab,
+    CrossbowExplosion,
     Slash
 }
 
@@ -238,6 +246,7 @@ public enum WeaponSkillType
 [CreateAssetMenu(fileName = "NewItemData", menuName = "Inventory/Item Data")]
 public class ItemData : ScriptableObject
 {
+
     #region Serialized Fields
     [Header("Display Settings")]
     [Tooltip("Display name shown in UI tooltips and inspect panels.")]
@@ -379,8 +388,25 @@ public class ItemData : ScriptableObject
     public float BeamWidth => weaponStats.ChargedSkill.BeamWidth;
     public float DamageTicksPerSecond => weaponStats.ChargedSkill.DamageTicksPerSecond;
     public int SkillCost => weaponStats.Skill.Cost;
-    public ResourceType SkillResourceType => weaponStats.Skill.ResourceType;
-    public int MaxChargeSkillCost => weaponStats.ChargedSkill.MaxCost;
+public ResourceType SkillResourceType => weaponStats.Skill.ResourceType;
+
+public GameObject FireAreaPrefab =>
+    weaponStats.Skill.FireAreaPrefab;
+
+public float FireDuration =>
+    weaponStats.Skill.FireDuration;
+
+public float FireDamageInterval =>
+    weaponStats.Skill.FireDamageInterval;
+
+public int FireDamage =>
+    weaponStats.Skill.FireDamage;
+
+public float FireRadius =>
+    weaponStats.Skill.FireRadius;
+
+public int MaxChargeSkillCost =>
+    weaponStats.ChargedSkill.MaxCost;
     public int AttackCost => weaponStats.Attack.Cost;
     public ResourceType AttackResourceType => weaponStats.Attack.ResourceType;
 
