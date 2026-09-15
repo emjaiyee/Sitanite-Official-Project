@@ -82,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 18
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -155,6 +155,9 @@ MonoBehaviour:
   itemData: {fileID: 0}
   quantity: 1
   spriteRenderer: {fileID: 5247334863221687476}
+  showOutline: 1
+  outlineWidth: 0.025
+  outlineColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!50 &5586287418466994479
 Rigidbody2D:
   serializedVersion: 5

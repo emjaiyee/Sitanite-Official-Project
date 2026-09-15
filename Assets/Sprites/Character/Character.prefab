@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8117855276665226801}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Range
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8329789945758800289}
   - component: {fileID: 53923350455531113}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -122,6 +122,62 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1160656442888320940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3759872893080482509}
+  - component: {fileID: 804187546746558350}
+  m_Layer: 7
+  m_Name: WeaponAudioController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3759872893080482509
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160656442888320940}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2826949009369197633}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &804187546746558350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160656442888320940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a3fe7befbe6244c93f5ddbac4ce69c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAudioController
+  playerEquipment: {fileID: 705827018461203480}
+  audioSource: {fileID: 2461000000000000001}
+  weaponProfiles:
+  - weaponId: Dagger
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 5
+      skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
 --- !u!1 &1199253049118536975
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,7 +188,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2562117481583580720}
   - component: {fileID: 7951432704904123107}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WeaponUnder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,7 +279,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5700263183971444938}
   - component: {fileID: 9107765637611900218}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EquippedWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,6 +324,91 @@ MonoBehaviour:
   indicatorPulseMax: 1.1
   rotateIndicator: 1
   pulseIndicator: 1
+  stabTargetingRange: 2
+  selectedStabColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!1 &2822445528674101521
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2011306400676518913}
+  - component: {fileID: 2821444996922668626}
+  m_Layer: 7
+  m_Name: WeaponAudioController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2011306400676518913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2822445528674101521}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2826949009369197633}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2821444996922668626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2822445528674101521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a3fe7befbe6244c93f5ddbac4ce69c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAudioController
+  playerEquipment: {fileID: 705827018461203480}
+  audioSource: {fileID: 2461000000000000001}
+  weaponProfiles:
+  - weaponId: Dagger
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 5
+      skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: Dagger
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 5
+      skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: TomeLightning
+    attackSound: {fileID: 8300000, guid: fcd7fa5459535584c836413de73a4eaf, type: 3}
+    skills:
+    - skillType: 4
+      skillSound: {fileID: 0}
+      chargeStartSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+      chargeLoopSound: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
+      fullyChargedSound: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
+      chargeReleaseSound: {fileID: 8300000, guid: 1ab5f6a9a6c75c94bb4ae08d6cd00ba8, type: 3}
+  - weaponId: ShortBow
+    attackSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+    skills:
+    - skillType: 1
+      skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
+      chargeStartSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+      chargeLoopSound: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
+      fullyChargedSound: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
+      chargeReleaseSound: {fileID: 8300000, guid: 1ab5f6a9a6c75c94bb4ae08d6cd00ba8, type: 3}
 --- !u!1 &3652299398545989156
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,7 +419,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1456467461481940635}
   - component: {fileID: 5367698063950960230}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Torso
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -368,7 +509,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3371824977953561613}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Melee
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -421,7 +562,12 @@ GameObject:
   - component: {fileID: 1263847002192746248}
   - component: {fileID: 2461000000000000001}
   - component: {fileID: 2461000000000000002}
-  m_Layer: 0
+  - component: {fileID: 5004489628805899625}
+  - component: {fileID: 4325966279283331615}
+  - component: {fileID: 7101310602471255051}
+  - component: {fileID: 883713577534690513}
+  - component: {fileID: 5551288465383920434}
+  m_Layer: 7
   m_Name: Character
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -450,6 +596,8 @@ Transform:
   - {fileID: 7690639867013062086}
   - {fileID: 5536741838045283725}
   - {fileID: 5700263183971444938}
+  - {fileID: 2011306400676518913}
+  - {fileID: 3759872893080482509}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2092788580339462318
@@ -493,7 +641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWASD
   moveAction: {fileID: -7623319301975187240, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
   sprintAction: {fileID: 9047545557421842618, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
-  useIsometricMovement: 0
+  useIsometricMovement: 1
   diagonalAxisScale: 0.5
 --- !u!70 &6600023078225743897
 CapsuleCollider2D:
@@ -667,7 +815,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5054948953897289759}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ed5734506543ed44b4db3008308dea4, type: 3}
   m_Name: 
@@ -772,7 +920,7 @@ MonoBehaviour:
   playerClass: 0
   movement: {fileID: 5539229426081354734}
   attributes: {fileID: 3176237796533987833}
-  moveSpeed: 1.2
+  moveSpeed: 0.6
   sprintSpeed: 1.8
   effectiveMoveSpeed: 0
   effectiveSprintSpeed: 0
@@ -927,20 +1075,24 @@ MonoBehaviour:
   femaleEyes: {fileID: 11400000, guid: e331e31d1d836b749930212226edf0d2, type: 2}
   femaleHair: {fileID: 11400000, guid: ee115ab25dc7d0945bf1036a6ab7e054, type: 2}
   startingClass: 0
-  attributes: {fileID: 0}
-  playerStats: {fileID: 0}
+  attributes: {fileID: 3176237796533987833}
+  playerStats: {fileID: 8549833145988909020}
   warriorStartingGear:
-  - {fileID: 11400000, guid: 7420c82adfcd121419c29d473304b588, type: 2}
   - {fileID: 11400000, guid: c1b1708b113e1e944b9cc4f8fdb1114b, type: 2}
   - {fileID: 11400000, guid: 03c6e9d0387ccac40bd2d370f99c3857, type: 2}
-  rangerStartingGear: []
+  - {fileID: 11400000, guid: 7420c82adfcd121419c29d473304b588, type: 2}
+  - {fileID: 11400000, guid: 80d107fb911d022438723e0719533275, type: 2}
+  rangerStartingGear:
+  - {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
   mageStartingGear:
-  - {fileID: 11400000, guid: 270df18fdaa71794091bf2e795e09db7, type: 2}
+  - {fileID: 11400000, guid: 05209c6759f80f44980eb67a74c3320b, type: 2}
   - {fileID: 11400000, guid: 12b486c90eeea3841a4f7554aefebdd0, type: 2}
   - {fileID: 11400000, guid: d3ec1a675e1627b49a2bb7cd282e4739, type: 2}
   - {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
-  warriorStartingItems: []
-  rangerStartingItems: []
+  warriorStartingItems:
+  - {fileID: 11400000, guid: 88aacabff38dfc74ab06ec183864d69e, type: 2}
+  rangerStartingItems:
+  - {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
   mageStartingItems: []
 --- !u!114 &1614004183530562516
 MonoBehaviour:
@@ -973,15 +1125,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSpriteController
   playerWASD: {fileID: 5539229426081354734}
   characterRenderer: {fileID: 6783837840638991853}
+  playerSoundHelper: {fileID: 2461000000000000002}
   idleFramesPerSecond: 4
-  walkFramesPerSecond: 8
+  walkFramesPerSecond: 4
   runningFramesPerSecond: 12
-  attackFramesPerSecond: 10
-  skillFramesPerSecond: 10
+  meleeFramesPerSecond: 10
+  castFramesPerSecond: 10
+  rangedFramesPerSecond: 10
   dashFramesPerSecond: 14
   deathFramesPerSecond: 6
-  attackDuration: 0.4
-  skillDuration: 0.4
+  meleeDuration: 0.4
+  castDuration: 0.4
+  rangedDuration: 0.4
   dashDuration: 0.2
   idleSoundEvents:
     frameCount: 1
@@ -990,16 +1145,28 @@ MonoBehaviour:
   walkSoundEvents:
     frameCount: 4
     loop: 1
-    events: []
+    events:
+    - frame: 1
+      sound: 0
+    - frame: 3
+      sound: 0
   runningSoundEvents:
     frameCount: 4
     loop: 1
-    events: []
-  attackSoundEvents:
+    events:
+    - frame: 1
+      sound: 0
+    - frame: 3
+      sound: 0
+  meleeSoundEvents:
     frameCount: 1
     loop: 0
     events: []
-  skillSoundEvents:
+  castSoundEvents:
+    frameCount: 1
+    loop: 0
+    events: []
+  rangedSoundEvents:
     frameCount: 1
     loop: 0
     events: []
@@ -1051,7 +1218,7 @@ Animator:
   m_GameObject: {fileID: 5054948953897289759}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: da619ca6a692c4c44ae6614ec63ad395, type: 2}
+  m_Controller: {fileID: 9100000, guid: df65e8cab4498d541842efc3153d7bbe, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1100,7 +1267,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1117,25 +1284,70 @@ AudioSource:
   BypassReverbZones: 0
   rolloffCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   panLevelCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   spreadCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   reverbZoneMixCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -1152,12 +1364,141 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerSoundHelper
   audioSource: {fileID: 2461000000000000001}
-  footstepClips: []
+  footstepClips:
+  - {fileID: 8300000, guid: 45175981829e18c4ca3d74e6c0aba917, type: 3}
+  - {fileID: 8300000, guid: a929c9abf7cda0141a257733dbcb4304, type: 3}
+  - {fileID: 8300000, guid: 766e1e2db00c8b84f850f0501d2a722a, type: 3}
+  - {fileID: 8300000, guid: fc29a506d11f7804587981883c6cf2b1, type: 3}
+  - {fileID: 8300000, guid: e8447020657cb944fa9ae9383e5f5f98, type: 3}
+  - {fileID: 8300000, guid: 60bba958a64f3c14ab9477360f74f562, type: 3}
+  - {fileID: 8300000, guid: da951194069bd024f82c24d0d08a6500, type: 3}
+  - {fileID: 8300000, guid: 06e783238f2339e4585e8cf231decf34, type: 3}
   attackClips: []
   skillClips: []
   dashClips: []
   hurtClips: []
   deathClips: []
+--- !u!114 &5004489628805899625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5054948953897289759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de14258bbd6b4214babef5ff570e3a49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerResourceUI
+  healthSlider: {fileID: 0}
+  staminaSlider: {fileID: 0}
+  experienceSlider: {fileID: 0}
+  manaBars:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  experienceFillImage: {fileID: 0}
+  experienceFillSprites: []
+  experienceFillSpriteFrameDuration: 0.08
+  experienceHandleImage: {fileID: 0}
+  experienceHandleSprites: []
+  experienceHandleSpriteFrameDuration: 0.08
+  experienceSliderAnimationDuration: 0.2
+--- !u!114 &4325966279283331615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5054948953897289759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed5734506543ed44b4db3008308dea4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  attackAction: {fileID: 1120369429361536294, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  attackMovementLockDuration: 0.2
+--- !u!70 &7101310602471255051
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5054948953897289759}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.15, y: 0.4}
+  m_Direction: 0
+--- !u!114 &883713577534690513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5054948953897289759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de14258bbd6b4214babef5ff570e3a49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerResourceUI
+  healthSlider: {fileID: 0}
+  staminaSlider: {fileID: 0}
+  experienceSlider: {fileID: 0}
+  manaBars:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  experienceFillImage: {fileID: 0}
+  experienceFillSprites: []
+  experienceFillSpriteFrameDuration: 0.08
+  experienceHandleImage: {fileID: 0}
+  experienceHandleSprites: []
+  experienceHandleSpriteFrameDuration: 0.08
+  experienceSliderAnimationDuration: 0.2
+--- !u!114 &5551288465383920434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5054948953897289759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed5734506543ed44b4db3008308dea4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
+  attackAction: {fileID: 1120369429361536294, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  attackMovementLockDuration: 0.2
 --- !u!1 &5246304247548789014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1168,7 +1509,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7690639867013062086}
   - component: {fileID: 7266763579535133445}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Headwear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1259,7 +1600,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8270009767373276342}
   - component: {fileID: 8009545131767036029}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1350,7 +1691,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2665722754575717680}
   - component: {fileID: 7586370554039716126}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1441,7 +1782,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6213420931129277828}
   - component: {fileID: 7354886033935330507}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1517,7 +1858,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.32, y: 0.48}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -1532,7 +1873,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5536741838045283725}
   - component: {fileID: 2491044693711779770}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WeaponOver
   m_TagString: Untagged
   m_Icon: {fileID: 0}

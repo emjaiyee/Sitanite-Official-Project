@@ -8,7 +8,7 @@ public class ItemDataEditor : Editor
     {
         serializedObject.Update();
 
-        DrawSection("Display Settings", "itemName", "itemDescription", "inventoryIcon", "equipmentIcon");
+        DrawSection("Display Settings", "itemName", "itemDescription", "inventoryIcon", "lootIcon", "equipmentIcon");
         DrawSection("Classification", "equipmentType", "characterDefinition");
         DrawSection("Stat Cap", "statCapType", "statCapAttribute", "statCapTrait", "statCapValue");
 

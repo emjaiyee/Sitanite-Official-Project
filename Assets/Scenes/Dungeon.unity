@@ -431,6 +431,7 @@ Transform:
   - {fileID: 1435930602}
   - {fileID: 1969959509}
   - {fileID: 1454998427}
+  - {fileID: 1954027254}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &510210121
@@ -842,7 +843,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorTextManager
   transitionDuration: 0.8
-  centerHoldDuration: 1.5
+  centerHoldDuration: 2
   announcementScale: 2
   useUnscaledTime: 1
   floorTextView: {fileID: 1314340840}
@@ -1071,10 +1072,10 @@ MonoBehaviour:
   fadeOutDuration: 0.25
   backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
   textColor: {r: 1, g: 1, b: 1, a: 1}
-  fontAsset: {fileID: 11400000, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
+  fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
   fontSize: 32
   useUnscaledTime: 1
-  headsUpTextView: {fileID: 1982812899}
+  headsUpTextView: {fileID: 1982812897}
 --- !u!4 &953241683
 Transform:
   m_ObjectHideFlags: 0
@@ -1461,8 +1462,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Testing
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
-  m_sharedMaterial: {fileID: -1302548172749785638, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
+  m_sharedMaterial: {fileID: 141220442338065599, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3306,6 +3307,62 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1 &1954027253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1954027254}
+  - component: {fileID: 1954027255}
+  m_Layer: 0
+  m_Name: BreakablePotManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1954027254
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954027253}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 457963315}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1954027255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1954027253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8994e01dc7a521d45af240dfbc0c3b60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BreakablePotManager
+  floorManager: {fileID: 1969959510}
+  lootPrefab: {fileID: 7909839741886251486, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
+  lootConfigurations:
+  - minimumFloor: 1
+    maximumFloor: 3
+    lootChance: 0.5
+    lootPool:
+    - itemData: {fileID: 11400000, guid: 5a1ee342f87185e4c9b0e31db271ab64, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+  spawnSearchRadius: 1
+  spawnSearchAttempts: 8
 --- !u!1 &1969959508
 GameObject:
   m_ObjectHideFlags: 0
@@ -3554,7 +3611,7 @@ PrefabInstance:
     - target: {fileID: 2731509330052907329, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
+      objectReference: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
     - target: {fileID: 2731509330052907329, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
       propertyPath: m_fontSizeBase
       value: 128
@@ -3562,7 +3619,7 @@ PrefabInstance:
     - target: {fileID: 2731509330052907329, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: -1302548172749785638, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
+      objectReference: {fileID: 141220442338065599, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
     - target: {fileID: 2731509330052907329, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
@@ -3577,34 +3634,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7614090934892483736, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
       propertyPath: m_Alpha
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4908444444735738153, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1982812898}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
---- !u!1 &1982812897 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4908444444735738153, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
-  m_PrefabInstance: {fileID: 1982812896}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1982812898
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1982812897}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d5c765b7852b14f9692be37a676c25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UISuppressor
---- !u!114 &1982812899 stripped
+--- !u!114 &1982812897 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5725121369384389183, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
   m_PrefabInstance: {fileID: 1982812896}

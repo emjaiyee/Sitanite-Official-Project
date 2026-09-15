@@ -263,6 +263,16 @@ public class PlayerStatsUI : MonoBehaviour
         return GetPendingTrait(trait) > 0;
     }
 
+    public bool HasRemainingAttributePoints()
+    {
+        return GetRemainingAttributePoints() > 0;
+    }
+
+    public bool HasRemainingTraitPoints()
+    {
+        return GetRemainingTraitPoints() > 0;
+    }
+
     public void ApplyAllocatedPoints()
     {
         if (attributes == null)

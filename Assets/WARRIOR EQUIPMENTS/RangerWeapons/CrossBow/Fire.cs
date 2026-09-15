@@ -77,7 +77,7 @@ public class Fire : MonoBehaviour
                 continue;
 
             IDamageable target =
-                hit.GetComponentInParent<EnemyHealth>();
+                hit.GetComponentInParent<IDamageable>();
 
             if (target == null)
                 continue;

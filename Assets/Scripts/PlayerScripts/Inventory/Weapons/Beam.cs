@@ -120,7 +120,7 @@ public class Beam : MonoBehaviour
         {
             IDamageable target = hit == null
                 ? null
-                : hit.GetComponentInParent<EnemyHealth>();
+                : hit.GetComponentInParent<IDamageable>();
             if (target == null)
                 continue;
 

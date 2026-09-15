@@ -148,9 +148,10 @@ public void Attack(Vector2 direction)
     // Play weapon-specific attack SFX
     weaponAudio?.PlayAttackSound();
 
-    Vector3 visualPosition = attackPoint == null
+    Vector3 attackOrigin = attackPoint == null
         ? transform.root.position
         : attackPoint.position;
+    Vector3 visualPosition = attackOrigin + (Vector3)(direction * data.AttackRange);
 
     float visualAngle =
         Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
@@ -227,7 +228,7 @@ public void Attack(Vector2 direction)
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             attackPosition,
             data.AttackRange,
-            data.HittableLayers
+            Physics2D.AllLayers
         );
 
         int primaryDamage = GetPrimaryDamage();
@@ -363,7 +364,7 @@ public void UseSkill(Vector2 direction)
             Vector2 playerPosition = transform.root.position;
             Collider2D[] hits = Physics2D.OverlapPointAll(
                 worldPosition,
-                data.SkillHittableLayers
+                Physics2D.AllLayers
             );
 
             IDamageable closestTarget = null;
@@ -608,7 +609,7 @@ private void UseCrossbowExplosionSkill(Vector2 direction)
         data.ProjectileSpeed,
         data.SkillRange,
         data.Homing,
-        data.SkillHittableLayers,
+        Physics2D.AllLayers,
         data.SkillRadius,
         data.FireAreaPrefab,
         data.FireDuration,
@@ -648,7 +649,7 @@ private void UseStabSkill(Vector2 direction)
         Physics2D.OverlapCircleAll(
             stabPosition,
             stabRadius,
-            data.SkillHittableLayers
+            Physics2D.AllLayers
         );
 
     IDamageable closestTarget = null;
@@ -745,7 +746,7 @@ private void UseStabSkill(Vector2 direction)
         foreach (Collider2D hit in Physics2D.OverlapCircleAll(
                      origin,
                      radius,
-                     data.SkillHittableLayers))
+                     Physics2D.AllLayers))
         {
             IDamageable target = hit == null
                 ? null
@@ -794,7 +795,7 @@ private void UseStabSkill(Vector2 direction)
             Physics2D.OverlapCircleAll(
                 origin,
                 radius,
-                data.SkillHittableLayers
+                Physics2D.AllLayers
             );
 
         DamageTargets(hits);
@@ -900,7 +901,7 @@ private void UseStabSkill(Vector2 direction)
                 Physics2D.OverlapCircleAll(
                     landingPosition,
                     0.35f,
-                    data.HittableLayers
+                    Physics2D.AllLayers
                 );
 
             DamageTargets(hits);
@@ -1145,7 +1146,7 @@ public void ReleaseSkill(bool fullyCharged)
             data.SkillRange,
             data.BeamWidth,
             data.BeamDuration,
-            data.SkillHittableLayers,
+            Physics2D.AllLayers,
             data.DamageTicksPerSecond
         );
     }
@@ -1234,7 +1235,7 @@ public void ReleaseSkill(bool fullyCharged)
                 speed,
                 range,
                 data.Homing,
-                data.HittableLayers
+                Physics2D.AllLayers
             );
         }
         else
@@ -1245,7 +1246,7 @@ public void ReleaseSkill(bool fullyCharged)
                 speed,
                 range,
                 data.Homing,
-                data.HittableLayers
+                Physics2D.AllLayers
             );
         }
     }

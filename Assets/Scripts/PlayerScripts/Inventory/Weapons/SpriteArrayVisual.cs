@@ -8,9 +8,11 @@ public class SpriteArrayVisual : MonoBehaviour
     [SerializeField] private bool destroyWhenFinished = true;
     [SerializeField] private bool fadeWhenFinished;
     [Min(0.01f)] [SerializeField] private float fadeDuration = 0.25f;
+    [SerializeField] private bool randomizeRotation;
 
     private SpriteRenderer[] spriteRenderers;
     private Color[] initialColors;
+    private Quaternion initialLocalRotation;
     private float startTime;
     private float fadeStartTime;
     private bool isFading;
@@ -19,6 +21,7 @@ public class SpriteArrayVisual : MonoBehaviour
     {
         spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
         initialColors = new Color[spriteRenderers.Length];
+        initialLocalRotation = transform.localRotation;
 
         for (int index = 0; index < spriteRenderers.Length; index++)
             initialColors[index] = spriteRenderers[index].color;
@@ -28,6 +31,9 @@ public class SpriteArrayVisual : MonoBehaviour
     {
         startTime = Time.time;
         isFading = false;
+        transform.localRotation = randomizeRotation
+            ? initialLocalRotation * Quaternion.Euler(0f, 0f, Random.Range(0f, 360f))
+            : initialLocalRotation;
         RestoreInitialColors();
         ApplyFrame(0);
 

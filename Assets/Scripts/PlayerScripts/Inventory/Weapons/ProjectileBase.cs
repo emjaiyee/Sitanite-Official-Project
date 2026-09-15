@@ -179,7 +179,7 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
         // Find damageable target
         IDamageable target =
-            other.GetComponentInParent<EnemyHealth>();
+            other.GetComponentInParent<IDamageable>();
 
         if (target == null)
             return;
@@ -305,7 +305,7 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
             IDamageable target =
                 candidate == null
                     ? null
-                    : candidate.GetComponentInParent<EnemyHealth>();
+                    : candidate.GetComponentInParent<IDamageable>();
 
             MonoBehaviour targetBehaviour =
                 target as MonoBehaviour;

@@ -259,6 +259,9 @@ public class ItemData : ScriptableObject
     [Tooltip("Icon sprite displayed inside inventory grid")]
     public Sprite inventoryIcon;
 
+    [Tooltip("Icon sprite displayed by world loot pickups.")]
+    public Sprite lootIcon;
+
     [Tooltip("Icon sprite displayed inside equipment slot (32px, 32px)")]
     public Sprite equipmentIcon;
 

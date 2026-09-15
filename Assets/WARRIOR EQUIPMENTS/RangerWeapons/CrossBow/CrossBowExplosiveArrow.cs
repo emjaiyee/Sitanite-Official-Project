@@ -118,7 +118,7 @@ private void Detonate(Vector3 position)
             Physics2D.OverlapCircleAll(
                 position,
                 explosionRadius,
-                HittableLayers
+                Physics2D.AllLayers
             );
 
         foreach (Collider2D hit in hits)
@@ -244,7 +244,7 @@ private void Detonate(Vector3 position)
         fireRadius,
         fireDuration,
         fireTickInterval,
-        HittableLayers
+        Physics2D.AllLayers
     );
 
     Debug.Log(
