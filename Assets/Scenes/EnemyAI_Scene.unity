@@ -249,6 +249,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 10
+  basePierceResistance: 0
+  baseStabResistance: 0
+  baseSlashResistance: 0
+  baseBluntResistance: 0
+  baseFrostResistance: 0
+  basePoisonResistance: 0
+  baseLightningResistance: 0
+  basePsychicResistance: 0
+  baseNecrosisResistance: 0
+  baseWaterResistance: 0
+  baseEarthResistance: 0
+  baseFireResistance: 0
+  baseAirResistance: 0
+  basePhysicalResistance: 0
+  runtimeCurrentHealth: 0
 --- !u!114 &447995795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,6 +558,8 @@ GameObject:
   - component: {fileID: 1772655846}
   - component: {fileID: 1772655849}
   - component: {fileID: 1772655848}
+  - component: {fileID: 1772655851}
+  - component: {fileID: 1772655850}
   m_Layer: 0
   m_Name: characterplaceholderNM
   m_TagString: Player
@@ -636,9 +653,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 032508b2ba8160e4e8a71891a4ee5243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWASD
-  moveSpeed: 5
   moveAction: {fileID: -7623319301975187240, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
+  sprintAction: {fileID: 0}
   useIsometricMovement: 1
+  diagonalAxisScale: 0.5
 --- !u!50 &1772655849
 Rigidbody2D:
   serializedVersion: 5
@@ -666,6 +684,249 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1772655850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772655845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a663d7e5969d88640b09f53c27274db3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
+  maxHealth: 100
+  maxMana: 75
+  maxStamina: 75
+  effectiveMaxHealth: 0
+  effectiveMaxMana: 0
+  effectiveMaxStamina: 0
+  basePierceDamage: 0
+  baseStabDamage: 0
+  baseSlashDamage: 0
+  baseBluntDamage: 0
+  baseFrostDamage: 0
+  basePoisonDamage: 0
+  baseLightningDamage: 0
+  basePsychicDamage: 0
+  baseNecrosisDamage: 0
+  baseWaterDamage: 0
+  baseEarthDamage: 0
+  baseFireDamage: 0
+  baseAirDamage: 0
+  basePhysicalDamage: 0
+  effectivePierceDamage: 0
+  effectiveStabDamage: 0
+  effectiveSlashDamage: 0
+  effectiveBluntDamage: 0
+  effectiveFrostDamage: 0
+  effectivePoisonDamage: 0
+  effectiveLightningDamage: 0
+  effectivePsychicDamage: 0
+  effectiveNecrosisDamage: 0
+  effectiveWaterDamage: 0
+  effectiveEarthDamage: 0
+  effectiveFireDamage: 0
+  effectiveAirDamage: 0
+  effectivePhysicalDamage: 0
+  basePierceResistance: 0
+  baseStabResistance: 0
+  baseSlashResistance: 0
+  baseBluntResistance: 0
+  baseFrostResistance: 0
+  basePoisonResistance: 0
+  baseLightningResistance: 0
+  basePsychicResistance: 0
+  baseNecrosisResistance: 0
+  baseWaterResistance: 0
+  baseEarthResistance: 0
+  baseFireResistance: 0
+  baseAirResistance: 0
+  basePhysicalResistance: 0
+  effectivePierceResistance: 0
+  effectiveStabResistance: 0
+  effectiveSlashResistance: 0
+  effectiveBluntResistance: 0
+  effectiveFrostResistance: 0
+  effectivePoisonResistance: 0
+  effectiveLightningResistance: 0
+  effectivePsychicResistance: 0
+  effectiveNecrosisResistance: 0
+  effectiveWaterResistance: 0
+  effectiveEarthResistance: 0
+  effectiveFireResistance: 0
+  effectiveAirResistance: 0
+  effectivePhysicalResistance: 0
+  currentHealth: 0
+  currentMana: 0
+  currentStamina: 0
+  level: 1
+  experiencePoints: 0
+  experienceToNextLevel: 100
+  characterName: 
+  gender: 0
+  playerClass: 0
+  movement: {fileID: 0}
+  attributes: {fileID: 0}
+  moveSpeed: 1.2
+  sprintSpeed: 1.8
+  effectiveMoveSpeed: 0
+  effectiveSprintSpeed: 0
+  dashSpeed: 2
+  dashDuration: 0.2
+  dashCost: 20
+  effectiveDashSpeed: 0
+  sprintCostPerSecond: 4
+  exhaustedSpeedMultiplier: 0.35
+  regenerationCooldown: 0.5
+  healthRegen: 1
+  manaRegen: 0
+  staminaRegen: 3
+  effectiveHealthRegen: 0
+  effectiveManaRegen: 0
+  effectiveStaminaRegen: 0
+  deadPlayerOpacity: 0.5
+--- !u!114 &1772655851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772655845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c79c9ef22d437a04989cd472afb4ae57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttributesNTraits
+  starterAttributePoints: 5
+  starterTraitPoints: 5
+  availableAttributePoints: 0
+  availableTraitPoints: 0
+  strength: 5
+  dexterity: 5
+  intelligence: 5
+  vitality: 1
+  focus: 1
+  endurance: 1
+  agility: 1
+  vigor: 1
+  haste: 1
+  attunement: 1
+  mundane: 1
+  arcane: 1
+  elemental: 1
+  precision: 1
+  fortitude: 1
+  willpower: 1
+  warriorDefaults:
+    strength: 7
+    dexterity: 5
+    intelligence: 5
+    vitality: 2
+    focus: 1
+    endurance: 1
+    agility: 1
+    vigor: 2
+    haste: 1
+    attunement: 1
+    mundane: 2
+    arcane: 1
+    elemental: 1
+    precision: 1
+    fortitude: 2
+    willpower: 1
+  rangerDefaults:
+    strength: 5
+    dexterity: 7
+    intelligence: 5
+    vitality: 1
+    focus: 1
+    endurance: 1
+    agility: 2
+    vigor: 1
+    haste: 2
+    attunement: 1
+    mundane: 1
+    arcane: 1
+    elemental: 1
+    precision: 2
+    fortitude: 1
+    willpower: 1
+  mageDefaults:
+    strength: 5
+    dexterity: 5
+    intelligence: 7
+    vitality: 1
+    focus: 2
+    endurance: 1
+    agility: 1
+    vigor: 1
+    haste: 1
+    attunement: 2
+    mundane: 1
+    arcane: 2
+    elemental: 2
+    precision: 1
+    fortitude: 1
+    willpower: 2
+--- !u!1001 &8625871277445153989
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -253.55997
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -88.19018
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8748001588763141578, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_Name
+      value: 'Goblin (CrossBow) '
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -673,3 +934,4 @@ SceneRoots:
   - {fileID: 613588055}
   - {fileID: 1772655847}
   - {fileID: 447995791}
+  - {fileID: 8625871277445153989}
