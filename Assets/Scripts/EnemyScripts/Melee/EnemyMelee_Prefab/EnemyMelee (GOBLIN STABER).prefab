@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 7063439070302486606}
   - component: {fileID: 95327859484872687}
   - component: {fileID: 4259996642940716189}
+  - component: {fileID: 6450712593730380577}
   m_Layer: 6
   m_Name: EnemyMelee (GOBLIN STABER)
   m_TagString: Enemy
@@ -294,3 +295,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &6450712593730380577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5945256498423393129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e90d813c7cd54014a8d68e3e4f1e7654, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySFX
+  walkSFX: []
+  attackSFX: []
+  deathSFX: {fileID: 0}

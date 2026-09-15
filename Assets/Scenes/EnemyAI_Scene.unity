@@ -276,11 +276,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2437f8e4e52c3104c83f2b243a853249, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRange
-  startingState: 0
-  detectionRange: 12
-  moveSpeed: 3
-  attackRange: 10
-  returnThreshold: 0.1
 --- !u!1 &613588052
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,6 +873,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 644558589115014614, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_SpriteHash
+      value: 617101044
+      objectReference: {fileID: 0}
     - target: {fileID: 5021102793304823103, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
       propertyPath: m_LocalPosition.x
       value: -253.55997
@@ -918,6 +917,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8622274762974194684, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -8238080067246585256, guid: eb24af4481fb18949ae65c25257373be, type: 3}
     - target: {fileID: 8748001588763141578, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
       propertyPath: m_Name
       value: 'Goblin (CrossBow) '
