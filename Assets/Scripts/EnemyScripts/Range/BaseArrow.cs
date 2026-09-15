@@ -17,6 +17,7 @@ public class BaseArrow : MonoBehaviour
     private Vector3 startPosition;
     private float destroyTime;
     private bool initialized;
+    private bool hasHitPlayer;
 
     public void Launch(
         Vector3 direction,
@@ -211,6 +212,11 @@ public class BaseArrow : MonoBehaviour
 
             return;
         }
+
+        if (hasHitPlayer)
+            return;
+
+        hasHitPlayer = true;
 
         if (enableDebugLogs)
         {
