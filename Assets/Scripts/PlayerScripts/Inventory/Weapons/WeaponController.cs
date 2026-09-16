@@ -49,6 +49,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private float indicatorPulseTimer;
     private float nextAttackTime;
     private float nextSkillTime;
+    private Coroutine spinAxeRoutine;
 
     // Direction captured when the skill begins charging.
     private Vector2 skillDirection = Vector2.right;
@@ -85,6 +86,12 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     public void Configure(ItemData weaponData)
     {
+        if (spinAxeRoutine != null)
+        {
+            StopCoroutine(spinAxeRoutine);
+            spinAxeRoutine = null;
+        }
+
         StopCharging();
         ClearArrowRainPreview();
         ClearStabTarget();
@@ -341,6 +348,14 @@ public void UseSkill(Vector2 direction)
             nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
             weaponAudio?.PlaySkillSound();
             UseSlashSkill(direction);
+
+            break;
+
+        case WeaponSkillType.SpinAxe:
+
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            weaponAudio?.PlaySkillSound();
+            StartSpinAxeSkill();
 
             break;
 
@@ -777,6 +792,55 @@ private void UseStabSkill(Vector2 direction)
             data.SkillVisualDuration,
             Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg
         );
+    }
+
+    private void StartSpinAxeSkill()
+    {
+        if (spinAxeRoutine != null)
+            StopCoroutine(spinAxeRoutine);
+
+        spinAxeRoutine = StartCoroutine(SpinAxeSkill());
+    }
+
+    private IEnumerator SpinAxeSkill()
+    {
+        float duration = Mathf.Max(0f, data.SkillDuration);
+        float radius = data.SkillRadius * data.SkillRadiusMultiplier;
+        float tickInterval =
+            1f / Mathf.Max(0.1f, data.SkillDamageTicksPerSecond);
+        float elapsed = 0f;
+
+        GameObject visual = null;
+        if (data.SkillVisualPrefab != null)
+        {
+            visual = Instantiate(
+                data.SkillVisualPrefab,
+                transform.root.position,
+                Quaternion.identity,
+                transform.root
+            );
+            visual.transform.localPosition = Vector3.zero;
+            visual.transform.localScale = Vector3.one * radius * 2f;
+        }
+
+        while (elapsed < duration)
+        {
+            DamageTargets(
+                Physics2D.OverlapCircleAll(
+                    transform.root.position,
+                    radius,
+                    Physics2D.AllLayers
+                )
+            );
+
+            yield return new WaitForSeconds(tickInterval);
+            elapsed += tickInterval;
+        }
+
+        if (visual != null)
+            Destroy(visual);
+
+        spinAxeRoutine = null;
     }
 
     // =========================================================

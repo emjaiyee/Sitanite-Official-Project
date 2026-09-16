@@ -110,6 +110,7 @@ public class WeaponSkillSettings
     [Min(0f)] [SerializeField] public float range = 8f;
     [Min(0)] [SerializeField] public int projectileCount = 12;
     [Min(0f)] [SerializeField] public float duration = 0.6f;
+    [Min(0.1f)] [SerializeField] public float damageTicksPerSecond = 10f;
     [Min(0f)] [SerializeField] public float visualDuration = 0.8f;
     [Min(0f)] [SerializeField] public float cooldown = 1f;
     [Min(0)] [SerializeField] public int cost = 25;
@@ -124,6 +125,7 @@ public class WeaponSkillSettings
     public float Range => range;
     public int ProjectileCount => projectileCount;
     public float Duration => duration;
+    public float DamageTicksPerSecond => damageTicksPerSecond;
     public float VisualDuration => visualDuration;
     public float Cooldown => cooldown;
     public int Cost => cost;
@@ -236,7 +238,8 @@ public enum WeaponSkillType
     Beam,
     Stab,
     CrossbowExplosion,
-    Slash
+    Slash,
+    SpinAxe
 }
 
 /// <summary>
@@ -375,6 +378,7 @@ public class ItemData : ScriptableObject
     public float SkillRange => weaponStats.Skill.Range;
     public int SkillProjectileCount => weaponStats.Skill.ProjectileCount;
     public float SkillDuration => weaponStats.Skill.Duration;
+    public float SkillDamageTicksPerSecond => weaponStats.Skill.DamageTicksPerSecond;
     public float SkillVisualDuration => weaponStats.Skill.VisualDuration;
     public GameObject SkillProjectilePrefab => weaponStats.Skill.ProjectilePrefab;
     public GameObject ChargeVisualPrefab => weaponStats.ChargedSkill.VisualPrefab;
