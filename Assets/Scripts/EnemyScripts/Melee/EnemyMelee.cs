@@ -98,6 +98,27 @@ public class EnemyMelee : MonoBehaviour
     private float baseDamage;
     private float baseChargedDamage;
 
+
+    // =========================================================
+    // ANIMATION
+    // =========================================================
+
+    private static readonly int IsMovingHash =
+        Animator.StringToHash("IsMoving");
+
+    private static readonly int IsAttackingHash =
+        Animator.StringToHash("IsAttacking");
+
+    private static readonly int MoveXHash =
+        Animator.StringToHash("MoveX");
+
+    private static readonly int MoveYHash =
+        Animator.StringToHash("MoveY");
+
+    private Animator animator;
+
+    public bool takingAim;
+
     public float AttackRange => useChargedAttack ? chargedAttackRange : attackRange;
     public float AttackCooldown => attackCooldown;
     public bool UseChargedAttack => useChargedAttack;
@@ -242,6 +263,9 @@ public class EnemyMelee : MonoBehaviour
         enemyElevation =
             GetComponent<EnemyElevationLevel>();
 
+        animator =
+            GetComponent<Animator>();
+
         CacheBaseStats();
 
         EnemyAttackScript legacyContactDamage =
@@ -383,6 +407,9 @@ public class EnemyMelee : MonoBehaviour
         if (currentState == null)
             return;
 
+
+        SetAnimatorBool(IsAttackingHash, false);
+
         if (chargingAttack)
         {
             chargedAttackTimer += Time.deltaTime;
@@ -396,13 +423,21 @@ public class EnemyMelee : MonoBehaviour
             IsPlayerWithinAttackRange())
         {
             PauseMovement(true);
+            SetTakingAim(CurrentState == EnemyState.Chase);
             TryAttack();
             return;
         }
 
         PauseMovement(false);
+        SetTakingAim(false);
 
         currentState.Tick();
+    }
+
+
+    private void LateUpdate()
+    {
+        UpdateAnimationDirection();
     }
 
 
@@ -490,6 +525,8 @@ public class EnemyMelee : MonoBehaviour
         {
             currentState.Exit();
         }
+
+        takingAim = false;
 
         // Cancel any pending charged attack when the state changes
         // (e.g. the enemy dies mid-charge).
@@ -667,6 +704,7 @@ public class EnemyMelee : MonoBehaviour
             ? chargedAttackCooldown
             : attackCooldown;
         nextAttackTime = Time.time + cooldown;
+        SetAnimatorBool(IsAttackingHash, true);
         playerStats.TakeDamage(
             damageAmount,
             damageType
@@ -683,12 +721,16 @@ public class EnemyMelee : MonoBehaviour
         currentPath = null;
         currentPathIndex = 0;
         movementPaused = false;
+        SetAnimatorBool(IsMovingHash, false);
     }
 
 
     public void PauseMovement(bool paused)
     {
         movementPaused = paused;
+
+        if (paused)
+            SetAnimatorBool(IsMovingHash, false);
     }
 
 
@@ -716,10 +758,19 @@ public class EnemyMelee : MonoBehaviour
     public void FollowCurrentPath()
     {
         if (movementPaused)
+        {
+            SetAnimatorBool(IsMovingHash, false);
             return;
+        }
 
         if (!HasPath)
+        {
+            SetAnimatorBool(IsMovingHash, false);
             return;
+        }
+
+
+        SetAnimatorBool(IsMovingHash, true);
 
         Vector3 target =
             currentPath[currentPathIndex];
@@ -738,6 +789,56 @@ public class EnemyMelee : MonoBehaviour
             transform.position = target;
             currentPathIndex++;
         }
+    }
+
+
+    public void SetTakingAim(bool aiming)
+    {
+        takingAim = aiming;
+    }
+
+
+    private void UpdateAnimationDirection()
+    {
+        if (animator == null)
+            return;
+
+
+        Vector2 direction;
+
+        if (takingAim && player != null)
+        {
+            direction =
+                (Vector2)player.position -
+                (Vector2)transform.position;
+        }
+        else if (HasPath && !movementPaused)
+        {
+            direction =
+                (Vector2)currentPath[currentPathIndex] -
+                (Vector2)transform.position;
+        }
+        else
+        {
+            return;
+        }
+
+
+        if (direction.sqrMagnitude <= 0.0001f)
+            return;
+
+
+        direction.Normalize();
+
+        animator.SetFloat(MoveXHash, Mathf.Round(direction.x));
+        animator.SetFloat(MoveYHash, Mathf.Round(direction.y));
+    }
+
+
+    private void SetAnimatorBool(int parameterHash, bool value)
+    {
+        if (animator != null)
+            animator.SetBool(parameterHash, value);
     }
 
 

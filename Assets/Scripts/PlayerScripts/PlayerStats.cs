@@ -987,9 +987,36 @@ public class PlayerStats : MonoBehaviour
 
     private void HandlePlayerDied()
     {
+        sprintDrainAccumulator = 0f;
+
+        PlayerAttack playerAttack = GetComponent<PlayerAttack>();
+        if (playerAttack != null)
+            playerAttack.enabled = false;
+
+        PlayerSkill playerSkill = GetComponent<PlayerSkill>();
+        if (playerSkill != null)
+            playerSkill.enabled = false;
+
+        PlayerDash playerDash = GetComponent<PlayerDash>();
+        if (playerDash != null)
+            playerDash.LockDash();
+
+        if (movement != null)
+        {
+            movement.LockMovement();
+            movement.LockFacingDirection();
+        }
+
         DisableMovement();
 
-        sprintDrainAccumulator = 0f;
+        Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
+        if (rigidbody != null)
+            rigidbody.linearVelocity = Vector2.zero;
+
+        PlayerAnimationController animationController =
+            GetComponent<PlayerAnimationController>();
+        if (animationController != null)
+            animationController.PlayDeath();
 
         SpriteRenderer[] renderers =
             GetComponentsInChildren<SpriteRenderer>(true);

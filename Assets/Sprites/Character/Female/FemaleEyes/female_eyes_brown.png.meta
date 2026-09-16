@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: female_eyes_brown_0
+      name: female_eyes_brown_idleAnimation_000
       rect:
         serializedVersion: 2
         x: 0
@@ -126,16 +126,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1031b89c8970e1090800000000000000
-      internalID: -8061997930148850943
+      spriteID: 881bfbece27038c43bbb1e8f716f1388
+      internalID: -514329842
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: female_eyes_brown_1
+      name: female_eyes_brown_idleAnimation_001
       rect:
         serializedVersion: 2
         x: 32
@@ -150,14 +150,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 93b22da33c2cc094ca52a00ccd65f24b
-      internalID: -507875066
+      spriteID: 1fb725f4bf5d4504d867288fbf5ce560
+      internalID: -66379172
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: female_eyes_brown_2
+      name: female_eyes_brown_idleAnimation_002
       rect:
         serializedVersion: 2
         x: 64
@@ -172,14 +172,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 676861cda1c6c174490c50f9b919aa32
-      internalID: 1175307419
+      spriteID: 0cc65dc512d0bd34fb78e24e8fc0cf21
+      internalID: -376763694
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: female_eyes_brown_3
+      name: female_eyes_brown_idleAnimation_003
       rect:
         serializedVersion: 2
         x: 96
@@ -194,14 +194,80 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: eb6ad4ec6a2ca554b98f82ceb2f9dcdc
-      internalID: -26623628
+      spriteID: 3cc9982c9c9ce4c428b33e3a87800a87
+      internalID: -743015108
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: female_eyes_brown_4
+      name: female_eyes_brown_idleAnimation_004
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f412ab9d4b1ca004590de37b969ad60a
+      internalID: -1873238481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: female_eyes_brown_idleAnimation_005
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33781cf8e8333ca468d28e47cd041be6
+      internalID: 939852219
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: female_eyes_brown_idleAnimation_006
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef7a389f447dd2946b888ee9b233a265
+      internalID: -100665289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: female_eyes_brown_idleAnimation_007
       rect:
         serializedVersion: 2
         x: 224
@@ -216,8 +282,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ca3f96b1fc5c12b4bab0c47b5015414a
-      internalID: 261324489
+      spriteID: a3c20fbbd5ba32741929b48a0705c8eb
+      internalID: -1940708806
       vertices: []
       indices: 
       edges: []
@@ -243,6 +309,14 @@ TextureImporter:
       female_eyes_brown_2: 1175307419
       female_eyes_brown_3: -26623628
       female_eyes_brown_4: 261324489
+      female_eyes_brown_idleAnimation_000: -514329842
+      female_eyes_brown_idleAnimation_001: -66379172
+      female_eyes_brown_idleAnimation_002: -376763694
+      female_eyes_brown_idleAnimation_003: -743015108
+      female_eyes_brown_idleAnimation_004: -1873238481
+      female_eyes_brown_idleAnimation_005: 939852219
+      female_eyes_brown_idleAnimation_006: -100665289
+      female_eyes_brown_idleAnimation_007: -1940708806
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

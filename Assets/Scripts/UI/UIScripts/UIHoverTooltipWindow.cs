@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UIHoverTooltipWindow : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UIHoverTooltipWindow : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private TMP_Text descriptionText;
 
@@ -15,6 +15,7 @@ public class UIHoverTooltipWindow : MonoBehaviour, IPointerEnterHandler, IPointe
     public RectTransform RectTransform { get; private set; }
 
     private UIHoverTooltip owner;
+    private Button ownerButton;
     private bool pointerInside;
     private Coroutine closeRoutine;
 
@@ -29,17 +30,18 @@ public class UIHoverTooltipWindow : MonoBehaviour, IPointerEnterHandler, IPointe
     public void Initialize(string description, UIHoverTooltip tooltipOwner)
     {
         owner = tooltipOwner;
+        ownerButton = owner == null ? null : owner.GetComponent<Button>();
+        SetRaycastTargets(ownerButton != null);
+        SetDescription(description);
+    }
 
-            SetDescription(description);
-        }
+    public void SetDescription(string description)
+    {
+        if (descriptionText == null)
+            return;
 
-        public void SetDescription(string description)
-        {
-            if (descriptionText == null)
-                return;
-
-            descriptionText.text = description;
-            ResizeToDescription();
+        descriptionText.text = description;
+        ResizeToDescription();
     }
 
     private void ResizeToDescription()
@@ -69,6 +71,15 @@ public class UIHoverTooltipWindow : MonoBehaviour, IPointerEnterHandler, IPointe
         BeginClose();
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left &&
+            ownerButton != null && ownerButton.interactable)
+        {
+            ownerButton.onClick.Invoke();
+        }
+    }
+
     public void BeginClose()
     {
         if (closeRoutine == null)
@@ -86,5 +97,11 @@ public class UIHoverTooltipWindow : MonoBehaviour, IPointerEnterHandler, IPointe
         }
 
         closeRoutine = null;
+    }
+
+    private void SetRaycastTargets(bool enabled)
+    {
+        foreach (Graphic graphic in GetComponentsInChildren<Graphic>(true))
+            graphic.raycastTarget = enabled;
     }
 }

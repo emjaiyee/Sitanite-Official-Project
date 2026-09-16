@@ -113,23 +113,177 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: male_eyes_blue_0
+      name: male_eyes_blue_idleAnimation_000
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 256
+        width: 32
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 823fd52c60ab79300800000000000000
-      internalID: 258880041790599976
+      spriteID: efafa93d4de9df946854ac453a1d4931
+      internalID: -260386753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_eyes_blue_idleAnimation_001
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f92ef1297d6fb84592ca6fa2e36a9b8
+      internalID: -1024854725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_eyes_blue_idleAnimation_002
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe5f3ad4fc4f5e34a868ca2356d13b84
+      internalID: 1622268955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_eyes_blue_idleAnimation_003
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c52572fd52a9074eb4bac7e31515e60
+      internalID: -2001790234
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_eyes_blue_idleAnimation_004
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd66863500df1eb44906a844b4d7ff05
+      internalID: 529185168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_eyes_blue_idleAnimation_005
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77c06710c06743a42ab82b2f68f2b9f8
+      internalID: -1085362781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_eyes_blue_idleAnimation_006
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 773ef5680aa3f564395e07cc80b45f8e
+      internalID: -1075462140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: male_eyes_blue_idleAnimation_007
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdb0b8894015f134e96edd207c76063b
+      internalID: 2003664778
       vertices: []
       indices: 
       edges: []
@@ -138,7 +292,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 8fd3051094c382e4db7cb8fba2ada24e
     internalID: 0
     vertices: []
     indices: 
@@ -149,6 +303,14 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       male_eyes_blue_0: 258880041790599976
+      male_eyes_blue_idleAnimation_000: -260386753
+      male_eyes_blue_idleAnimation_001: -1024854725
+      male_eyes_blue_idleAnimation_002: 1622268955
+      male_eyes_blue_idleAnimation_003: -2001790234
+      male_eyes_blue_idleAnimation_004: 529185168
+      male_eyes_blue_idleAnimation_005: -1085362781
+      male_eyes_blue_idleAnimation_006: -1075462140
+      male_eyes_blue_idleAnimation_007: 2003664778
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

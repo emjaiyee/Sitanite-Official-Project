@@ -174,7 +174,49 @@ public class ItemUIController : MonoBehaviour
             modifierNumber++;
         }
 
+        if (data.EquipmentType == EquipmentType.Weapon)
+        {
+            int damageNumber = 1;
+            foreach (WeaponDamage damage in data.WeaponDamages)
+            {
+                text.AppendLine();
+                text.AppendLine($"Attack Damage {damageNumber}:");
+                text.AppendLine(FormatWeaponDamage(damage));
+                damageNumber++;
+            }
+
+            if (data.WeaponSkillType != WeaponSkillType.None)
+            {
+                text.AppendLine();
+                text.AppendLine("Skill Damage:");
+                text.AppendLine(FormatWeaponDamage(data.SkillDamageEntry));
+            }
+
+            if (data.WeaponSkillType == WeaponSkillType.ChargedArrow ||
+                data.WeaponSkillType == WeaponSkillType.Beam)
+            {
+                text.AppendLine();
+                text.AppendLine("Charged Skill Damage Type:");
+                text.AppendLine(FormatWeaponDamage(data.ChargedSkillDamageEntry));
+            }
+        }
+
         return text.ToString().TrimEnd();
+    }
+
+    private string FormatWeaponDamage(WeaponDamage damage)
+    {
+        StringBuilder text = new StringBuilder(FormatDamageType(damage.damageType));
+        text.Append($" ({FormatEnum(damage.damageSlot)})");
+
+        if (damage.lingeringDamage)
+            text.Append($" [Lingering: {damage.lingeringBaseValue:0.##} base]");
+
+        string sign = damage.value > 0f ? "+" : string.Empty;
+        string suffix = damage.modifierType == StatModifierType.Percent ? "%" : string.Empty;
+        text.Append($": {sign}{damage.value:0.##}{suffix}");
+
+        return $"<color=#00FF00>{text}</color>";
     }
 
     private string FormatModifier(EquipmentStat modifier)
