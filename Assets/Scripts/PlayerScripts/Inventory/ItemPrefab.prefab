@@ -235,6 +235,7 @@ MonoBehaviour:
   gridBackgroundImage: {fileID: 3333253972933032835}
   gridBackgroundSprite: {fileID: 21300000, guid: 2d12b5eea169c4e47a11bbe4fa1bd75d, type: 3}
   stackText: {fileID: 6825724008393676977}
+  actionMenuPrefab: {fileID: 246105839330326591, guid: 8659c28e8465f92498a722ec1bc00425, type: 3}
   rectTransform: {fileID: 2011060415236228498}
 --- !u!1 &8836678419088148228
 GameObject:
@@ -303,15 +304,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 1
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
+  m_sharedMaterial: {fileID: 141220442338065599, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294901791
-  m_fontColor: {r: 0.12220478, g: 0, b: 1, a: 1}
+    rgba: 4289068962
+  m_fontColor: {r: 0.6367924, g: 1, b: 0.64676285, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -336,7 +337,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 1
   m_HorizontalAlignment: 4
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 4096
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_characterHorizontalScale: 1

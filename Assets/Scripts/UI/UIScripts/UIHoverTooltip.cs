@@ -1,10 +1,12 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class UIHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
+    private static readonly HashSet<UIHoverTooltip> Instances = new HashSet<UIHoverTooltip>();
     [Header("Tooltip")]
     [TextArea(2, 6)]
     [SerializeField] private string description;
@@ -24,6 +26,7 @@ public class UIHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private void Awake()
     {
+        Instances.Add(this);
         Canvas canvas = GetComponentInParent<Canvas>();
         if (canvas != null)
         {
@@ -32,6 +35,17 @@ public class UIHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitH
                 ? null
                 : canvas.worldCamera;
         }
+    }
+
+    private void OnDestroy()
+    {
+        Instances.Remove(this);
+    }
+
+    public static void HideAll()
+    {
+        foreach (UIHoverTooltip tooltip in new List<UIHoverTooltip>(Instances))
+            tooltip.HideTooltip();
     }
 
     public void OnPointerEnter(PointerEventData eventData)

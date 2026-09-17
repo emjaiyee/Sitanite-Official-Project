@@ -80,6 +80,17 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
     /// <param name="eventData">Pointer event containing button input.</param>
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            if (EquippedItem != null && DragDropManager.Instance.HeldItem == null &&
+                equippedVisual != null &&
+                equippedVisual.TryGetComponent<ItemUIController>(out var controller))
+            {
+                controller.ShowActionMenu(EquippedItem, null, this, eventData.position);
+            }
+            return;
+        }
+
         if (eventData.button != PointerEventData.InputButton.Left) return;
 
         if (dropHandled)

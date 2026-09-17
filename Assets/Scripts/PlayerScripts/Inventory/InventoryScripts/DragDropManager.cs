@@ -176,14 +176,34 @@ public class DragDropManager : MonoBehaviour
             // Attempt restoration to original origin position; fallback to any available space if blocked
             if (!SourceGrid.GridModel.PlaceItem(HeldItem, HeldItem.OriginPosition.x, HeldItem.OriginPosition.y))
             {
-                SourceGrid.GridModel.FindSpaceForItem(HeldItem, out Vector2Int fallbackPos);
-                SourceGrid.GridModel.PlaceItem(HeldItem, fallbackPos.x, fallbackPos.y);
+                if (SourceGrid.GridModel.FindSpaceForItem(HeldItem, out Vector2Int fallbackPos))
+                {
+                    SourceGrid.GridModel.PlaceItem(HeldItem, fallbackPos.x, fallbackPos.y);
+                }
+                else
+                {
+                    if (heldItemVisual != null)
+                        Destroy(heldItemVisual.gameObject);
+
+                    FindFirstObjectByType<PlayerInventory>()?.DropItem(HeldItem);
+                }
             }
         }
         else if (SourceSlot != null && EquipmentManager.Instance != null)
         {
-            EquipmentManager.Instance.Equip(SourceSlot.SlotType, HeldItem, out _);
-            SourceSlot.SyncVisualFromManager();
+            PlayerInventory playerInventory = FindFirstObjectByType<PlayerInventory>();
+            InventoryGrid inventory = playerInventory != null ? playerInventory.MainBackPack : null;
+
+            if (inventory != null && inventory.TryAddItem(HeldItem))
+            {
+                ClearHeldItem();
+                return;
+            }
+
+            if (heldItemVisual != null)
+                Destroy(heldItemVisual.gameObject);
+
+            playerInventory?.DropItem(HeldItem);
         }
 
         ClearHeldItem();

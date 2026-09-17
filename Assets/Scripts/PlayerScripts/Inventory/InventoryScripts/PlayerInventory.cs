@@ -44,6 +44,9 @@ public class PlayerInventory : MonoBehaviour
     [Tooltip("Scene-local UI elements that are automatically hidden while the inventory is open.")]
     [SerializeField] private UISuppressor[] suppressedUIs;
 
+    [Header("World Drops")]
+    [SerializeField] private Loot lootPrefab;
+
     private PlayerStatsUI statsUI;
 
     private readonly List<SavedInventoryItem> savedItems = new List<SavedInventoryItem>();
@@ -228,9 +231,16 @@ public class PlayerInventory : MonoBehaviour
             DragDropManager.Instance.CancelDrag();
         }
 
+        if (!isOpen)
+        {
+            UIHoverTooltip.HideAll();
+            InventoryItemActionMenu.CloseActive();
+        }
+
         inventoryPanel.SetActive(isOpen);
 
         SetSuppressedUIState(isOpen);
+        SetCameraAimInput(!isOpen);
     }
 
     /// <summary>
@@ -246,6 +256,21 @@ public class PlayerInventory : MonoBehaviour
             return false;
 
         return item.TryPickup(mainBackpack);
+    }
+
+    public void DropItem(InventoryItem item)
+    {
+        if (item == null || item.Data == null || item.Quantity <= 0)
+            return;
+
+        Vector3 position = transform.position;
+        Loot droppedLoot = lootPrefab != null
+            ? Instantiate(lootPrefab, position, Quaternion.identity)
+            : new GameObject("Loot").AddComponent<Loot>();
+
+        droppedLoot.transform.position = position;
+        droppedLoot.Setup(item.Data, item.Quantity);
+        droppedLoot.PreventOwnerPickupUntilExit(this);
     }
 
     private void SaveInventory()
@@ -372,5 +397,12 @@ public class PlayerInventory : MonoBehaviour
                 suppressor.Restore();
             }
         }
+    }
+
+    private void SetCameraAimInput(bool enabled)
+    {
+        CameraAim cameraAim = FindFirstObjectByType<CameraAim>(FindObjectsInactive.Include);
+        if (cameraAim != null)
+            cameraAim.SetInputEnabled(enabled);
     }
 }
