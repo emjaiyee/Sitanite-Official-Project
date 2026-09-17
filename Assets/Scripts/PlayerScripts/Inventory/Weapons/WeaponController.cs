@@ -37,14 +37,6 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private bool arrowRainTargeting;
     private GameObject activeArrowRainPreview;
     private Vector3 arrowRainTargetPosition;
-    private IDamageable selectedStabTarget;
-    private SpriteRenderer[] selectedStabRenderers;
-    private Color[] selectedStabOriginalColors;
-
-    [Header("Dagger Targeting")]
-    [Min(0.1f)]
-    [SerializeField] private float stabTargetingRange = 2f;
-    [SerializeField] private Color selectedStabColor = Color.yellow;
     private float fullChargeReachedTime;
     private float indicatorPulseTimer;
     private float nextAttackTime;
@@ -60,9 +52,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     public bool CanAttack => data != null && Time.time >= nextAttackTime;
     public bool CanUseSkill => data != null && Time.time >= nextSkillTime;
     public bool IsTargetingSkill =>
-        arrowRainTargeting ||
-        selectedStabTarget != null &&
-        (selectedStabTarget as MonoBehaviour) != null;
+        arrowRainTargeting;
 
     public float ChargePercent =>
         isCharging && data != null
@@ -94,7 +84,6 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
         StopCharging();
         ClearArrowRainPreview();
-        ClearStabTarget();
         data = weaponData;
         nextAttackTime = 0f;
         nextSkillTime = 0f;
@@ -333,12 +322,9 @@ public void UseSkill(Vector2 direction)
             break;
         case WeaponSkillType.Stab:
 
-            if (selectedStabTarget == null)
-            {
-                nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
-                weaponAudio?.PlaySkillSound();
-                UseStabSkill(direction);
-            }
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            weaponAudio?.PlaySkillSound();
+            UseStabSkill(direction);
 
             break;
         
@@ -370,78 +356,6 @@ public void UseSkill(Vector2 direction)
 
 }
 
-        public bool TrySelectSkillTarget(Vector3 worldPosition)
-        {
-            if (!IsConfigured() ||
-                data.WeaponSkillType != WeaponSkillType.Stab)
-                return false;
-
-            Vector2 playerPosition = transform.root.position;
-            Collider2D[] hits = Physics2D.OverlapPointAll(
-                worldPosition,
-                Physics2D.AllLayers
-            );
-
-            IDamageable closestTarget = null;
-            float closestDistance = float.MaxValue;
-
-            foreach (Collider2D hit in hits)
-            {
-                IDamageable target =
-                    hit == null
-                        ? null
-                        : hit.GetComponentInParent<IDamageable>();
-
-                if (target == null ||
-                    !PlayerElevationLevel.CanAffectTarget(
-                        (target as MonoBehaviour)?.transform))
-                    continue;
-
-                float playerDistance = Vector2.Distance(
-                    playerPosition,
-                    (target as MonoBehaviour).transform.position
-                );
-
-                if (playerDistance > stabTargetingRange)
-                    continue;
-
-                float distance = Vector2.Distance(
-                    worldPosition,
-                    (target as MonoBehaviour).transform.position
-                );
-
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    closestTarget = target;
-                }
-            }
-
-            ClearStabTarget();
-            selectedStabTarget = closestTarget;
-            HighlightStabTarget();
-            return selectedStabTarget != null;
-        }
-
-        public Vector3 GetSkillTargetPosition()
-        {
-            return (selectedStabTarget as MonoBehaviour)?.transform.position
-                ?? transform.root.position;
-        }
-
-        public Vector3 GetSkillApproachPosition()
-        {
-            Vector3 origin = transform.root.position;
-            Vector3 targetPosition = GetSkillTargetPosition();
-            Vector2 direction = (targetPosition - origin);
-
-            if (direction.sqrMagnitude <= 0.0001f)
-                return origin;
-
-            float approachDistance = Mathf.Max(0.1f, data.SkillRange * 0.75f);
-            return targetPosition - (Vector3)direction.normalized * approachDistance;
-        }
-
         public void UpdateSkillTarget(Vector3 targetPosition)
         {
             if (!IsTargetingSkill || data == null)
@@ -463,19 +377,6 @@ public void UseSkill(Vector2 direction)
 
         public void ConfirmSkill()
         {
-            if (selectedStabTarget != null &&
-                (selectedStabTarget as MonoBehaviour) != null)
-            {
-                Vector3 targetPosition = GetSkillTargetPosition();
-                Vector2 direction = targetPosition - transform.root.position;
-
-                ClearStabTarget();
-                nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
-                weaponAudio?.PlaySkillSound();
-                UseStabSkill(direction);
-                return;
-            }
-
             if (!IsTargetingSkill || data == null)
                 return;
 
@@ -484,49 +385,6 @@ public void UseSkill(Vector2 direction)
             nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
             weaponAudio?.PlaySkillSound();
             UseArrowRainSkill(arrowRainPosition);
-        }
-
-        private void HighlightStabTarget()
-        {
-            MonoBehaviour targetBehaviour =
-                selectedStabTarget as MonoBehaviour;
-
-            if (targetBehaviour == null)
-                return;
-
-            selectedStabRenderers =
-                targetBehaviour.GetComponentsInChildren<SpriteRenderer>();
-
-            selectedStabOriginalColors =
-                new Color[selectedStabRenderers.Length];
-
-            for (int index = 0; index < selectedStabRenderers.Length; index++)
-            {
-                SpriteRenderer renderer = selectedStabRenderers[index];
-                selectedStabOriginalColors[index] = renderer.color;
-                renderer.color = selectedStabColor;
-            }
-        }
-
-        private void ClearStabTarget()
-        {
-            if (selectedStabRenderers != null &&
-                selectedStabOriginalColors != null)
-            {
-                for (int index = 0;
-                     index < selectedStabRenderers.Length &&
-                     index < selectedStabOriginalColors.Length;
-                     index++)
-                {
-                    if (selectedStabRenderers[index] != null)
-                        selectedStabRenderers[index].color =
-                            selectedStabOriginalColors[index];
-                }
-            }
-
-            selectedStabTarget = null;
-            selectedStabRenderers = null;
-            selectedStabOriginalColors = null;
         }
 
 
@@ -636,15 +494,6 @@ private void UseCrossbowExplosionSkill(Vector2 direction)
 
 private void UseStabSkill(Vector2 direction)
 {
-    if (attackPoint == null)
-    {
-        Debug.LogWarning(
-            $"{WeaponId}: attack point is not assigned."
-        );
-
-        return;
-    }
-
     if (direction.sqrMagnitude <= 0.0001f)
         return;
 
@@ -681,6 +530,15 @@ private void UseStabSkill(Vector2 direction)
         if (target == null)
             continue;
 
+        Vector2 targetDirection =
+            (Vector2)hit.ClosestPoint(origin) - origin;
+
+        if (targetDirection.sqrMagnitude <= 0.0001f ||
+            Vector2.Dot(direction, targetDirection.normalized) <= 0f)
+        {
+            continue;
+        }
+
         if (!PlayerElevationLevel.CanAffectTarget(
             (target as MonoBehaviour)?.transform))
         {
@@ -692,6 +550,9 @@ private void UseStabSkill(Vector2 direction)
                 origin,
                 (target as MonoBehaviour).transform.position
             );
+
+        if (distance > data.SkillRange)
+            continue;
 
         if (distance < closestDistance)
         {
@@ -718,30 +579,13 @@ private void UseStabSkill(Vector2 direction)
         );
     }
 
-    // Optional stab visual.
-    if (data.SkillVisualPrefab != null)
-    {
-        float angle =
-            Mathf.Atan2(
-                direction.y,
-                direction.x
-            ) * Mathf.Rad2Deg;
-
-        GameObject visual =
-            Instantiate(
-                data.SkillVisualPrefab,
-                stabPosition,
-                Quaternion.Euler(0f, 0f, angle)
-            );
-
-        visual.transform.localScale =
-            Vector3.one * data.SkillRadius * 2f;
-
-        Destroy(
-            visual,
-            data.SkillVisualDuration
-        );
-    }
+    CreateVisual(
+        data.SkillVisualPrefab,
+        stabPosition,
+        stabRadius * 2f,
+        data.SkillVisualDuration,
+        Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg
+    );
 }
 
     // =========================================================
@@ -1501,7 +1345,8 @@ public void ReleaseSkill(bool fullyCharged)
         visual.transform.localScale =
             Vector3.one * scale;
 
-        if (visual.GetComponent<SpriteArrayVisual>() == null && lifetime > 0f)
+        if (visual.GetComponentInChildren<SpriteArrayVisual>() == null &&
+            lifetime > 0f)
             Destroy(visual, lifetime);
     }
 

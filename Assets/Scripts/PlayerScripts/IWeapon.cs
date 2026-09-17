@@ -10,9 +10,6 @@ public interface IWeapon
     void Attack(Vector2 direction);
 
     void UseSkill(Vector2 direction);
-    bool TrySelectSkillTarget(Vector3 worldPosition);
-    Vector3 GetSkillTargetPosition();
-    Vector3 GetSkillApproachPosition();
     void UpdateSkillTarget(Vector3 targetPosition);
     void ConfirmSkill();
 }

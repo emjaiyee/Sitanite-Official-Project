@@ -31,6 +31,17 @@ public enum StatCapType
 }
 
 /// <summary>
+/// Item rarity used for classification and inventory presentation.
+/// </summary>
+public enum ItemRarity
+{
+    Common,
+    Uncommon,
+    Rare,
+    Legendary
+}
+
+/// <summary>
 /// Determines how the stat calculation applies.
 /// </summary>
 public enum StatModifierType
@@ -272,6 +283,9 @@ public class ItemData : ScriptableObject
     [Tooltip("Target equipment slot.")]
     [SerializeField] private EquipmentType equipmentType = EquipmentType.None;
 
+    [Tooltip("Rarity classification used by item data and inventory presentation.")]
+    [SerializeField] private ItemRarity rarity = ItemRarity.Common;
+
     [Tooltip("Character definition applied while this item is equipped.")]
     [SerializeField] private CharacterPartDefinition characterDefinition;
 
@@ -349,6 +363,9 @@ public class ItemData : ScriptableObject
     #region Properties
     /// <summary>Get designated equipment</summary>
     public EquipmentType EquipmentType => equipmentType;
+
+    /// <summary>Get the item's rarity classification.</summary>
+    public ItemRarity Rarity => rarity;
 
     /// <summary>Get the character definition applied by this item.</summary>
     public CharacterPartDefinition CharacterDefinition => characterDefinition;

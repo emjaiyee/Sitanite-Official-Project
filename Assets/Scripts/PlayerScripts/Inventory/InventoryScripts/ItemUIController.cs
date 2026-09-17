@@ -147,7 +147,8 @@ public class ItemUIController : MonoBehaviour
     private string BuildTooltipText(ItemData data)
     {
         StringBuilder text = new StringBuilder();
-        text.AppendLine($"<color=#FFFF00>{data.itemName}</color>");
+        text.AppendLine($"<color={GetRarityColor(data.Rarity)}>{data.itemName}</color>");
+        text.AppendLine($"Rarity: {FormatEnum(data.Rarity)}");
 
         if (!string.IsNullOrWhiteSpace(data.itemDescription))
             text.AppendLine(data.itemDescription);
@@ -202,6 +203,17 @@ public class ItemUIController : MonoBehaviour
         }
 
         return text.ToString().TrimEnd();
+    }
+
+    private string GetRarityColor(ItemRarity rarity)
+    {
+        return rarity switch
+        {
+            ItemRarity.Uncommon => "#66FF66",
+            ItemRarity.Rare => "#66B3FF",
+            ItemRarity.Legendary => "#FFB347",
+            _ => "#FFFFFF"
+        };
     }
 
     private string FormatWeaponDamage(WeaponDamage damage)

@@ -9,7 +9,7 @@ public class ItemDataEditor : Editor
         serializedObject.Update();
 
         DrawSection("Display Settings", "itemName", "itemDescription", "inventoryIcon", "lootIcon", "equipmentIcon");
-        DrawSection("Classification", "equipmentType", "characterDefinition");
+        DrawSection("Classification", "equipmentType", "rarity", "characterDefinition");
         DrawSection("Stat Cap", "statCapType", "statCapAttribute", "statCapTrait", "statCapValue");
 
         EquipmentType equipmentType = (EquipmentType)serializedObject

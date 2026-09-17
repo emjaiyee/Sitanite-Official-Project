@@ -7825,21 +7825,45 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: weaponProfiles.Array.data[4].weaponId
+      propertyPath: weaponProfiles.Array.data[1].weaponId
       value: GreatSword
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: weaponProfiles.Array.data[5].weaponId
+      propertyPath: weaponProfiles.Array.data[2].weaponId
       value: BattleAxe
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].weaponId
+      value: IronSword
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].weaponId
+      value: TomeLightning
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].weaponId
+      value: ShortBow
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[6].weaponId
       value: CrossBow
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: weaponProfiles.Array.data[4].attackSound
+      propertyPath: weaponProfiles.Array.data[1].attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[2].attackSound
       value: 
       objectReference: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: fcd7fa5459535584c836413de73a4eaf, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].attackSound
       value: 
@@ -7861,25 +7885,89 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: weaponProfiles.Array.data[5].attackSounds.Array.size
+      propertyPath: weaponProfiles.Array.data[0].attackSounds.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[1].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[2].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].attackSounds.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[6].attackSounds.Array.size
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: 'weaponProfiles.Array.data[5].attackSounds.Array.data[0]'
+      propertyPath: 'weaponProfiles.Array.data[0].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[0].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[0].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[1].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[1].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[1].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[2].attackSounds.Array.data[0]'
       value: 
       objectReference: {fileID: 8300000, guid: 01d267fcac7ae6f4c9683ba9bac13dd5, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: 'weaponProfiles.Array.data[5].attackSounds.Array.data[1]'
+      propertyPath: 'weaponProfiles.Array.data[2].attackSounds.Array.data[1]'
       value: 
       objectReference: {fileID: 8300000, guid: 5da2630e84fd85d40b2fc2451e0e6e8b, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: 'weaponProfiles.Array.data[5].attackSounds.Array.data[2]'
+      propertyPath: 'weaponProfiles.Array.data[2].attackSounds.Array.data[2]'
       value: 
       objectReference: {fileID: 8300000, guid: 83917e694569d99479e544d119509e0e, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[3].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[3].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[3].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[5].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 12f11e7170d00e94491a4815c9bd4cb2, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[5].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 55db909a546333b45b34dddd2ca54ac4, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[5].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: a0b4092e6552e7d4493cc658f3a90209, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: 'weaponProfiles.Array.data[6].attackSounds.Array.data[0]'
       value: 
@@ -7893,12 +7981,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: a0b4092e6552e7d4493cc658f3a90209, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: weaponProfiles.Array.data[4].skills.Array.data[0].skillType
+      propertyPath: weaponProfiles.Array.data[1].skills.Array.data[0].skillType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].skillType
+      propertyPath: weaponProfiles.Array.data[2].skills.Array.data[0].skillType
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].skills.Array.data[0].skillType
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].skills.Array.data[0].skillType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].skillType
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[1].skillType
@@ -7913,13 +8013,21 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[2].skills.Array.data[0].skillSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].skills.Array.data[0].skillSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[4].skills.Array.data[0].skillSound
       value: 
-      objectReference: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].skillSound
       value: 
-      objectReference: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+      objectReference: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[1].skillSound
       value: 
@@ -7933,13 +8041,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[1].skills.Array.data[0].chargeLoopSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[2].skills.Array.data[0].chargeLoopSound
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].skills.Array.data[0].chargeLoopSound
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[4].skills.Array.data[0].chargeLoopSound
       value: 
       objectReference: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].chargeLoopSound
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[1].chargeLoopSound
       value: 
@@ -7953,13 +8073,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[1].skills.Array.data[0].chargeStartSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[2].skills.Array.data[0].chargeStartSound
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].skills.Array.data[0].chargeStartSound
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[4].skills.Array.data[0].chargeStartSound
       value: 
       objectReference: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].chargeStartSound
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[1].chargeStartSound
       value: 
@@ -7973,13 +8105,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[1].skills.Array.data[0].fullyChargedSound
+      value: 
+      objectReference: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[2].skills.Array.data[0].fullyChargedSound
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].skills.Array.data[0].fullyChargedSound
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[4].skills.Array.data[0].fullyChargedSound
       value: 
       objectReference: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].fullyChargedSound
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[1].fullyChargedSound
       value: 
@@ -7993,13 +8137,25 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[1].skills.Array.data[0].chargeReleaseSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 1ab5f6a9a6c75c94bb4ae08d6cd00ba8, type: 3}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[2].skills.Array.data[0].chargeReleaseSound
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].skills.Array.data[0].chargeReleaseSound
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[4].skills.Array.data[0].chargeReleaseSound
       value: 
       objectReference: {fileID: 8300000, guid: 1ab5f6a9a6c75c94bb4ae08d6cd00ba8, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].chargeReleaseSound
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 8300000, guid: 1ab5f6a9a6c75c94bb4ae08d6cd00ba8, type: 3}
     - target: {fileID: 2821444996922668626, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: weaponProfiles.Array.data[5].skills.Array.data[1].chargeReleaseSound
       value: 
@@ -8117,45 +8273,93 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 05209c6759f80f44980eb67a74c3320b, type: 2}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: rangerStartingItems.Array.size
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: 'mageStartingGear.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 63a619380b08d55479ad76b7672ee149, type: 2}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: warriorStartingGear.Array.size
+      propertyPath: 'mageStartingGear.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: ab59b5d8b1b1fdc49aab773d0628d828, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'mageStartingGear.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6edc49bc30a7c0947a2fa7c6eb015509, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: rangerStartingItems.Array.size
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
-      propertyPath: warriorStartingItems.Array.size
+      propertyPath: warriorStartingGear.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: warriorStartingItems.Array.size
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: 'rangerStartingGear.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'rangerStartingGear.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 98b34c695b8599b43a323e82e9a78c9d, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'rangerStartingGear.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 87b967588346274428222f3313067917, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'rangerStartingGear.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: fe86ba7c94620e94ba442d5ee32e2b48, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: 'rangerStartingItems.Array.data[0]'
       value: 
       objectReference: {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'rangerStartingItems.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 42ba12dcb2e121c45a7d530dde9cf369, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'rangerStartingItems.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 4a029611aa1038e41aab833074469383, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'rangerStartingItems.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 10e1a5d6c5c06474da44bbaaf0c4befb, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: 'warriorStartingGear.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: c1b1708b113e1e944b9cc4f8fdb1114b, type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: 'warriorStartingGear.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 03c6e9d0387ccac40bd2d370f99c3857, type: 2}
+      objectReference: {fileID: 11400000, guid: 10e1a5d6c5c06474da44bbaaf0c4befb, type: 2}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: 'warriorStartingGear.Array.data[2]'
       value: 
-      objectReference: {fileID: 11400000, guid: 7420c82adfcd121419c29d473304b588, type: 2}
+      objectReference: {fileID: 11400000, guid: 5a1ee342f87185e4c9b0e31db271ab64, type: 2}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: 'warriorStartingGear.Array.data[3]'
       value: 
-      objectReference: {fileID: 11400000, guid: 7f9d2c1a4e6b48d0a13f5c8e9b027641, type: 2}
+      objectReference: {fileID: 11400000, guid: 5a1ee342f87185e4c9b0e31db271ab64, type: 2}
     - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: 'warriorStartingItems.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 7f9d2c1a4e6b48d0a13f5c8e9b027641, type: 2}
+      objectReference: {fileID: 11400000, guid: 80d107fb911d022438723e0719533275, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'warriorStartingItems.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: bc9289adc1905c4449a8ce613ad4f215, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'warriorStartingItems.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: d469020feb09ff04a8f46220fd81761c, type: 2}
+    - target: {fileID: 8044024218569010500, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+      propertyPath: 'warriorStartingItems.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 1f399959a8f4f9f41ad25435ea30a6d2, type: 2}
     - target: {fileID: 8104287118109228845, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -12509,7 +12713,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RectMask2D
   m_Padding: {x: -8, y: -5, z: -8, w: -5}
   m_Softness: {x: 0, y: 0}
---- !u!43 &1946504414
+--- !u!1 &2009571786
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2009571787}
+  - component: {fileID: 2009571788}
+  m_Layer: 0
+  m_Name: HeadsUpTextManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2009571787
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009571786}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1302.9794, y: 568.468, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2009571788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009571786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d4d86c0e76d2294d9b8b07664d5a4d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HeadsUpTextManager
+  fadeInDuration: 0.25
+  holdDuration: 3
+  fadeOutDuration: 0.25
+  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  fontAsset: {fileID: 11400000, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
+  fontSize: 32
+  useUnscaledTime: 1
+  headsUpTextView: {fileID: 0}
+--- !u!43 &2024796348
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12687,59 +12944,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!1 &2009571786
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2009571787}
-  - component: {fileID: 2009571788}
-  m_Layer: 0
-  m_Name: HeadsUpTextManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2009571787
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2009571786}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1302.9794, y: 568.468, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2009571788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2009571786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d4d86c0e76d2294d9b8b07664d5a4d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HeadsUpTextManager
-  fadeInDuration: 0.25
-  holdDuration: 3
-  fadeOutDuration: 0.25
-  backgroundColor: {r: 0, g: 0, b: 0, a: 0.8}
-  textColor: {r: 1, g: 1, b: 1, a: 1}
-  fontAsset: {fileID: 11400000, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
-  fontSize: 32
-  useUnscaledTime: 1
-  headsUpTextView: {fileID: 0}
 --- !u!1 &2060724004
 GameObject:
   m_ObjectHideFlags: 0
