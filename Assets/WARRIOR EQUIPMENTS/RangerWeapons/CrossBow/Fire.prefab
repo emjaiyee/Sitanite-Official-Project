@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3663639908011843880}
   - component: {fileID: 8597325665813676257}
   - component: {fileID: -2264829619270079158}
+  - component: {fileID: 1633110448366583866}
   m_Layer: 0
   m_Name: Fire
   m_TagString: Untagged
@@ -92,9 +93,9 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4123475054659131201, guid: 2d7f86b19e3280646a6543445577cea5, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 0.6320754, g: 0.49790847, b: 0.49790847, a: 0.9490196}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,5 +103,37 @@ SpriteRenderer:
   m_Size: {x: 0.76, y: 0.73}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1633110448366583866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1204842434327493669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f89e21cfed465054b820312c7679cc6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteArrayVisual
+  sprites:
+  - {fileID: 21300000, guid: 8a06a1fc1589d5e42b42f600987487b2, type: 3}
+  - {fileID: 21300000, guid: 46034311bfb205d4192a8bf886d04a8e, type: 3}
+  - {fileID: 21300000, guid: 84be4df052c879a46a71ce5c11ff9b04, type: 3}
+  - {fileID: 21300000, guid: e3e26f19df7ae2d4591b75c228307be4, type: 3}
+  - {fileID: 21300000, guid: 6c6052967e4aecf43b346f9eaad6d28c, type: 3}
+  - {fileID: 21300000, guid: 88b68b3865dd0674faf9d63e3453d3f5, type: 3}
+  - {fileID: 21300000, guid: 3a5b820bbf0b3164ca05d25af56a0cbe, type: 3}
+  - {fileID: 21300000, guid: 872c32144dff7754ea7eeebbf2eca57e, type: 3}
+  - {fileID: 21300000, guid: 278e203a08f1cec43b8ee32928e62d86, type: 3}
+  - {fileID: 8280846402120443238, guid: f9f56e6c8ff0fd74f8babb10c7057f0e, type: 3}
+  - {fileID: 21300000, guid: 872c32144dff7754ea7eeebbf2eca57e, type: 3}
+  - {fileID: 21300000, guid: 872c32144dff7754ea7eeebbf2eca57e, type: 3}
+  - {fileID: 21300000, guid: 872c32144dff7754ea7eeebbf2eca57e, type: 3}
+  - {fileID: 21300000, guid: 872c32144dff7754ea7eeebbf2eca57e, type: 3}
+  framesPerSecond: 8
+  destroyWhenFinished: 1
+  fadeWhenFinished: 0
+  fadeDuration: 0.25
+  randomizeRotation: 0

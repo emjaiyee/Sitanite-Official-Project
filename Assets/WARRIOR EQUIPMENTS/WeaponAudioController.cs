@@ -30,6 +30,11 @@ public class WeaponAudioController : MonoBehaviour
         public string weaponId;
 
         [Header("Normal Attack")]
+        [Tooltip("Played in order for each normal attack, then repeated from the first clip.")]
+        public List<AudioClip> attackSounds =
+            new List<AudioClip>();
+
+        [Tooltip("Fallback used when no normal attack clips are configured.")]
         public AudioClip attackSound;
 
         [Header("Skill Sounds")]
@@ -82,6 +87,7 @@ public class WeaponAudioController : MonoBehaviour
     private WeaponAudioProfile currentWeaponProfile;
 
     private AudioSource chargeLoopSource;
+    private int normalAttackSoundIndex;
 
 
     // =========================================================
@@ -146,6 +152,9 @@ public class WeaponAudioController : MonoBehaviour
 
     private void RefreshCurrentWeapon()
     {
+        WeaponAudioProfile previousWeaponProfile =
+            currentWeaponProfile;
+
         StopChargeLoop();
 
         currentWeaponProfile = null;
@@ -163,6 +172,13 @@ public class WeaponAudioController : MonoBehaviour
             FindWeaponProfile(
                 weaponData.WeaponId
             );
+
+        if (!ReferenceEquals(
+                previousWeaponProfile,
+                currentWeaponProfile))
+        {
+            normalAttackSoundIndex = 0;
+        }
 
         if (currentWeaponProfile == null)
         {
@@ -205,14 +221,48 @@ public class WeaponAudioController : MonoBehaviour
     // =========================================================
 
     public void PlayAttackSound()
-{
-    RefreshCurrentWeapon();
+    {
+        RefreshCurrentWeapon();
 
-    if (currentWeaponProfile == null)
-        return;
+        if (currentWeaponProfile == null)
+            return;
 
-    PlayOneShot(currentWeaponProfile.attackSound);
-}
+        AudioClip attackSound =
+            GetNextAttackSound(currentWeaponProfile);
+
+        PlayOneShot(attackSound);
+    }
+
+
+    private AudioClip GetNextAttackSound(
+        WeaponAudioProfile weaponProfile)
+    {
+        if (weaponProfile.attackSounds != null &&
+            weaponProfile.attackSounds.Count > 0)
+        {
+            int clipCount =
+                weaponProfile.attackSounds.Count;
+
+            for (int checkedClips = 0;
+                 checkedClips < clipCount;
+                 checkedClips++)
+            {
+                int clipIndex =
+                    normalAttackSoundIndex % clipCount;
+
+                normalAttackSoundIndex =
+                    (clipIndex + 1) % clipCount;
+
+                AudioClip attackSound =
+                    weaponProfile.attackSounds[clipIndex];
+
+                if (attackSound != null)
+                    return attackSound;
+            }
+        }
+
+        return weaponProfile.attackSound;
+    }
 
 
     // =========================================================
