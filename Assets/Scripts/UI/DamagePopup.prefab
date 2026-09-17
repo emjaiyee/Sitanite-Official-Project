@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 473194047322713053}
   - component: {fileID: 9143908331600663870}
+  - component: {fileID: 7008587318093639292}
   m_Layer: 0
   m_Name: DamagePopup
   m_TagString: Untagged
@@ -49,3 +50,16 @@ MonoBehaviour:
   horizontalJitter: {x: -0.12, y: 0.12}
   fontSize: 3
   font: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
+--- !u!114 &7008587318093639292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3529221546907205804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0ba87cb429d4ae42a5afd8a5fe3653f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPFontApplier
+  fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}

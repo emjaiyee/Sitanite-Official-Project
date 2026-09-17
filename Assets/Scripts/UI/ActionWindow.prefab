@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6654865028863259784}
   - component: {fileID: 3185190389313717850}
   - component: {fileID: 4584625741793268162}
+  - component: {fileID: -1612967273591273752}
   m_Layer: 5
   m_Name: ActionWindow
   m_TagString: Untagged
@@ -124,6 +125,19 @@ MonoBehaviour:
   equipButtonLabel: {fileID: 1588201601061963528}
   dropButton: {fileID: 4095693855914264271}
   cancelButton: {fileID: 6405536328809862093}
+--- !u!114 &-1612967273591273752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 246105839330326591}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0ba87cb429d4ae42a5afd8a5fe3653f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPFontApplier
+  fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
 --- !u!1 &863454397208038128
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,7 +329,7 @@ MonoBehaviour:
 '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
-  m_sharedMaterial: {fileID: 141220442338065599, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
+  m_sharedMaterial: {fileID: 2105801154918903820, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -694,7 +708,7 @@ MonoBehaviour:
   m_text: Use
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
-  m_sharedMaterial: {fileID: 141220442338065599, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
+  m_sharedMaterial: {fileID: 2105801154918903820, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -831,7 +845,7 @@ MonoBehaviour:
   m_text: Drop
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
-  m_sharedMaterial: {fileID: 141220442338065599, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
+  m_sharedMaterial: {fileID: 2105801154918903820, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1089,7 +1103,7 @@ MonoBehaviour:
   m_text: Equip
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
-  m_sharedMaterial: {fileID: 141220442338065599, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
+  m_sharedMaterial: {fileID: 2105801154918903820, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

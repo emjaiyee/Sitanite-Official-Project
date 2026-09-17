@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2990992907017571688}
   - component: {fileID: 819569233847710246}
   - component: {fileID: 310724338680095311}
+  - component: {fileID: -4036189645751265100}
   m_Layer: 5
   m_Name: TooltipWindow
   m_TagString: Untagged
@@ -91,6 +92,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UIHoverTooltipWindow
   descriptionText: {fileID: 4708034052396964259}
   verticalPadding: 36
+--- !u!114 &-4036189645751265100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666295983187340662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0ba87cb429d4ae42a5afd8a5fe3653f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPFontApplier
+  fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
 --- !u!1 &3512275396133390894
 GameObject:
   m_ObjectHideFlags: 0
@@ -159,7 +173,7 @@ MonoBehaviour:
   m_text: dadadada
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
-  m_sharedMaterial: {fileID: 141220442338065599, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
+  m_sharedMaterial: {fileID: 2105801154918903820, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

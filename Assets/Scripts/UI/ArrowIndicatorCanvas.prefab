@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FloorGatewayDirectionIndicator
   arrowTransform: {fileID: 787358489142185832}
   canvasGroup: {fileID: 130861352490500756}
+  canvas: {fileID: 0}
   fadeDuration: 0.25
   screenEdgeInset: 64
   onScreenVerticalOffset: 96
@@ -119,6 +120,7 @@ GameObject:
   - component: {fileID: 1669473446688172503}
   - component: {fileID: 3421696494823404423}
   - component: {fileID: 687567518771265268}
+  - component: {fileID: 2128722444204545014}
   m_Layer: 5
   m_Name: ArrowIndicatorCanvas
   m_TagString: Untagged
@@ -217,3 +219,16 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6594197522261079590}
   m_CullTransparentMesh: 1
+--- !u!114 &2128722444204545014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6594197522261079590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0ba87cb429d4ae42a5afd8a5fe3653f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPFontApplier
+  fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}

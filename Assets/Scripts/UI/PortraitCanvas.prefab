@@ -2358,6 +2358,7 @@ GameObject:
   - component: {fileID: 6049185272039990632}
   - component: {fileID: 7359748496740173670}
   - component: {fileID: 7745815578109370008}
+  - component: {fileID: 2835900254052346674}
   m_Layer: 0
   m_Name: PortraitCanvas
   m_TagString: Untagged
@@ -2449,6 +2450,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &2835900254052346674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7488227042878717351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0ba87cb429d4ae42a5afd8a5fe3653f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPFontApplier
+  fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
 --- !u!1 &7727571591497200266
 GameObject:
   m_ObjectHideFlags: 0
