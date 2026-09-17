@@ -25,8 +25,14 @@ public class Loot : MonoBehaviour
     [Min(0f)] [SerializeField] private float outlineWidth = 0.025f;
     [SerializeField] private Color outlineColor = Color.white;
 
+    [Header("Drop Pickup Delay")]
+    [Min(0f)] [SerializeField] private float ownerPickupGracePeriod = 1.5f;
+
     private SpriteRenderer[] outlineRenderers;
     private bool pickupInProgress;
+    private PlayerInventory dropOwner;
+    private bool waitingForOwnerExit;
+    private float pickupAllowedTime;
     #endregion
 
     #region Properties
@@ -61,14 +67,20 @@ public class Loot : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player"))
-            return;
+        TryPickupByPlayer(other);
+    }
 
-        if (other.TryGetComponent<PlayerInventory>(out var playerInventory) || 
-            other.GetComponentInParent<PlayerInventory>() != null)
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        TryPickupByPlayer(other);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (waitingForOwnerExit && GetPlayerInventory(other) == dropOwner)
         {
-            playerInventory = playerInventory ?? other.GetComponentInParent<PlayerInventory>();
-            playerInventory.Pickup(this);
+            waitingForOwnerExit = false;
+            pickupAllowedTime = Time.time + ownerPickupGracePeriod;
         }
     }
     #endregion
@@ -79,6 +91,13 @@ public class Loot : MonoBehaviour
         itemData = data;
         quantity = Mathf.Max(1, initialQuantity);
         UpdateVisuals();
+    }
+
+    public void PreventOwnerPickupUntilExit(PlayerInventory owner)
+    {
+        dropOwner = owner;
+        waitingForOwnerExit = owner != null;
+        pickupAllowedTime = float.PositiveInfinity;
     }
 
     public bool TryPickup(InventoryGrid playerInventory)
@@ -111,6 +130,28 @@ public class Loot : MonoBehaviour
     #endregion
 
     #region Helpers
+    private void TryPickupByPlayer(Collider2D other)
+    {
+        if (!other.CompareTag("Player") || !CanBePickedUp())
+            return;
+
+        PlayerInventory playerInventory = GetPlayerInventory(other);
+        if (playerInventory != null)
+            playerInventory.Pickup(this);
+    }
+
+    private bool CanBePickedUp()
+    {
+        return !waitingForOwnerExit && Time.time >= pickupAllowedTime;
+    }
+
+    private static PlayerInventory GetPlayerInventory(Collider2D collider)
+    {
+        return collider.TryGetComponent(out PlayerInventory inventory)
+            ? inventory
+            : collider.GetComponentInParent<PlayerInventory>();
+    }
+
     private void UpdateVisuals()
     {
         if (spriteRenderer == null) return;

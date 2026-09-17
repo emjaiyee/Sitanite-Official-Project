@@ -24,6 +24,9 @@ public class ItemUIController : MonoBehaviour
     [Tooltip("TextMeshPro displaying stack amount.")]
     [SerializeField] private TextMeshProUGUI stackText;
 
+    [Tooltip("Prefab containing the InventoryItemActionMenu and its action buttons.")]
+    [SerializeField] private GameObject actionMenuPrefab;
+
     [Tooltip("RectTransform of the prefab")]
     [SerializeField] private RectTransform rectTransform;
 
@@ -125,6 +128,13 @@ public class ItemUIController : MonoBehaviour
         }
 
         UpdateStackText(item);
+    }
+
+    public void ShowActionMenu(InventoryItem item, InventoryGrid sourceGrid,
+        EquipmentSlotUI sourceSlot, Vector2 screenPosition)
+    {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        InventoryItemActionMenu.Show(actionMenuPrefab, canvas, item, sourceGrid, sourceSlot, screenPosition);
     }
     #endregion
 
@@ -263,6 +273,9 @@ public class ItemUIController : MonoBehaviour
                 break;
             case StatType.TraitReduction:
                 text.Append($" ({FormatEnum(modifier.reducedTrait)})");
+                break;
+            case StatType.Rejuvenation:
+                text.Append($" ({FormatEnum(modifier.rejuvenationType)})");
                 break;
         }
 

@@ -39,6 +39,9 @@ public class RoomManager : MonoBehaviour
 
     public int CurrentRoomNumber => currentRoomNumber;
     public bool LockNextRoomUntilCleared => lockNextRoomUntilCleared;
+    public Gateway ActiveFloorGateway => selectedFloorGateway;
+    public bool IsFloorGatewayUnlocked => floorGatewayUnlocked;
+    public RoomInstance CurrentPlayerRoom => currentPlayerRoom;
 
     private readonly List<RoomInstance> generatedRooms =
         new List<RoomInstance>();
@@ -54,6 +57,9 @@ public class RoomManager : MonoBehaviour
     private readonly HashSet<Gateway> validFloorGateways =
         new HashSet<Gateway>();
 
+    private Gateway selectedFloorGateway;
+    private bool floorGatewayUnlocked;
+    private RoomInstance currentPlayerRoom;
     private Gateway validSecretGateway;
     private RoomInstance secretUnlockRoom;
 
@@ -141,6 +147,7 @@ public class RoomManager : MonoBehaviour
         }
 
         ClearGeneratedRooms();
+        currentRoomNumber = 1;
 
         EnemySpawnerManager enemySpawnerManager =
             FindFirstObjectByType<EnemySpawnerManager>();
@@ -611,6 +618,9 @@ public class RoomManager : MonoBehaviour
         MarkDestinationRoomVisited(gateway);
 
         if (gateway.Flow != GatewayFlow.Floor)
+            SetCurrentPlayerRoom(gateway.Destination);
+
+        if (gateway.Flow != GatewayFlow.Floor)
             return false;
 
         if (!validFloorGateways.Contains(gateway))
@@ -657,6 +667,18 @@ public class RoomManager : MonoBehaviour
         HandleRoomCleared(destinationRoom);
     }
 
+    private void SetCurrentPlayerRoom(Transform destination)
+    {
+        if (destination == null)
+            return;
+
+        RoomInstance destinationRoom =
+            destination.GetComponentInParent<RoomInstance>();
+
+        if (destinationRoom != null)
+            currentPlayerRoom = destinationRoom;
+    }
+
     private void ConfigureSpecialGateways()
     {
         List<Gateway> floorGateways = new List<Gateway>();
@@ -679,6 +701,8 @@ public class RoomManager : MonoBehaviour
         }
 
         validFloorGateways.Clear();
+        selectedFloorGateway = null;
+        floorGatewayUnlocked = false;
 
         foreach (Gateway gateway in floorGateways)
             SetGatewayVisible(gateway, false);
@@ -688,10 +712,8 @@ public class RoomManager : MonoBehaviour
             Gateway selectedGateway =
                 floorGateways[Random.Range(0, floorGateways.Count)];
 
+            selectedFloorGateway = selectedGateway;
             validFloorGateways.Add(selectedGateway);
-
-            if (currentRoomNumber > generatedRooms.Count)
-                SetGatewayVisible(selectedGateway, true);
         }
 
         validSecretGateway = null;
@@ -1078,6 +1100,8 @@ public class RoomManager : MonoBehaviour
 
         RoomInstance firstRoom =
             generatedRooms[0];
+
+        currentPlayerRoom = firstRoom;
 
         RoomSpawnPoint spawnPoint =
             firstRoom.GetComponentInChildren<RoomSpawnPoint>();
@@ -1548,6 +1572,8 @@ public class RoomManager : MonoBehaviour
             foreach (Gateway gateway in validFloorGateways)
                 SetGatewayVisible(gateway, true);
 
+            floorGatewayUnlocked = true;
+
             if (GameManager.Instance != null)
             {
                 // Replace 1 with your actual floor ID later.
@@ -1641,6 +1667,9 @@ public class RoomManager : MonoBehaviour
         clearedSpawnPoints.Clear();
         clearedRooms.Clear();
         validFloorGateways.Clear();
+        selectedFloorGateway = null;
+        floorGatewayUnlocked = false;
+        currentPlayerRoom = null;
         validSecretGateway = null;
         secretUnlockRoom = null;
 

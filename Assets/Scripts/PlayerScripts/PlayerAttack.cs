@@ -99,6 +99,13 @@ public class PlayerAttack : MonoBehaviour
         if (!CombatInputGate.IsCombatInputAllowed)
             return;
 
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            return;
+        }
+
         if (playerSkill != null && playerSkill.IsTargetingSkill)
             return;
 

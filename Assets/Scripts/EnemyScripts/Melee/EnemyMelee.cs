@@ -387,6 +387,13 @@ public class EnemyMelee : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            return;
+        }
+
         if (Alerted && Time.time >= alertedUntilTime)
             Alerted = false;
 
@@ -437,6 +444,13 @@ public class EnemyMelee : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            return;
+        }
+
         UpdateAnimationDirection();
     }
 

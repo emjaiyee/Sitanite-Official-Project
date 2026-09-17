@@ -405,10 +405,10 @@ public class CharacterCustomizationController : MonoBehaviour
             if (data == null)
                 continue;
 
-            if (data.EquipmentType != EquipmentType.None && equipmentManager == null)
+            if (IsWearableEquipment(data) && equipmentManager == null)
                 return -1;
 
-            if (data.EquipmentType == EquipmentType.None &&
+            if (!IsWearableEquipment(data) &&
                 (playerInventory == null || playerInventory.MainBackPack == null))
             {
                 return -1;
@@ -422,7 +422,7 @@ public class CharacterCustomizationController : MonoBehaviour
                 continue;
 
             InventoryItem item = new InventoryItem(data);
-            if (data.EquipmentType != EquipmentType.None)
+            if (IsWearableEquipment(data))
             {
                 if (equipmentManager != null &&
                     equipmentManager.Equip(data.EquipmentType, item, out _))
@@ -449,6 +449,12 @@ public class CharacterCustomizationController : MonoBehaviour
         }
 
         return spawnedCount;
+    }
+
+    private static bool IsWearableEquipment(ItemData data)
+    {
+        return data.EquipmentType != EquipmentType.None &&
+            data.EquipmentType != EquipmentType.Consumable;
     }
 
     public CharacterAppearance GetAppearance()

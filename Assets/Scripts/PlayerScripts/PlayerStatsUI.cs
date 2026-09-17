@@ -197,6 +197,10 @@ public class PlayerStatsUI : MonoBehaviour
         statsWindow.SetActive(isOpen);
         SetSuppressedUIState(isOpen);
 
+        CameraAim cameraAim = FindFirstObjectByType<CameraAim>(FindObjectsInactive.Include);
+        if (cameraAim != null)
+            cameraAim.SetInputEnabled(!isOpen);
+
         if (isOpen)
             RefreshAllUI();
     }

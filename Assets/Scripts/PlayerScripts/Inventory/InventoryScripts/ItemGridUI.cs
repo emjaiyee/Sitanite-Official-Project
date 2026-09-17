@@ -104,6 +104,9 @@ public class ItemGridUI : MonoBehaviour
         {
             HandleMouseClick();
         }
+
+        if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
+            HandleContextClick();
     }
     #endregion
 
@@ -170,6 +173,9 @@ public class ItemGridUI : MonoBehaviour
     #region Event Handlers
     private void HandleMouseClick()
     {
+        if (InventoryItemActionMenu.IsOpen)
+            return;
+
         Vector2Int gridPos = GetGridPosition(Mouse.current.position.ReadValue());
         if (!gridManager.IsWithinBounds(gridPos.x, gridPos.y)) return;
 
@@ -180,6 +186,14 @@ public class ItemGridUI : MonoBehaviour
             InventoryItem clickedItem = gridManager.GetItem(gridPos.x, gridPos.y);
             if (clickedItem != null)
             {
+                if (Keyboard.current != null && Keyboard.current.ctrlKey.isPressed &&
+                    gridManager.TrySplitStack(clickedItem, out InventoryItem splitItem))
+                {
+                    RectTransform splitVisual = CreateItemVisual(splitItem);
+                    dragManager.PickUpItem(splitItem, this, splitVisual);
+                    return;
+                }
+
                 itemVisualMap.TryGetValue(clickedItem, out RectTransform visual);
                 if (dragManager.PickUpItem(clickedItem, this, visual))
                 {
@@ -190,6 +204,22 @@ public class ItemGridUI : MonoBehaviour
         else
         {
             dragManager.PlaceHeldItemIntoGrid(gridManager, gridPos.x, gridPos.y);
+        }
+    }
+
+    private void HandleContextClick()
+    {
+        Vector2 screenPosition = Mouse.current.position.ReadValue();
+        Vector2Int gridPos = GetGridPosition(screenPosition);
+        if (!gridManager.IsWithinBounds(gridPos.x, gridPos.y))
+            return;
+
+        InventoryItem clickedItem = gridManager.GetItem(gridPos.x, gridPos.y);
+        if (clickedItem != null && DragDropManager.Instance.HeldItem == null &&
+            itemVisualMap.TryGetValue(clickedItem, out RectTransform visual) &&
+            visual.TryGetComponent<ItemUIController>(out var controller))
+        {
+            controller.ShowActionMenu(clickedItem, gridManager, null, screenPosition);
         }
     }
 

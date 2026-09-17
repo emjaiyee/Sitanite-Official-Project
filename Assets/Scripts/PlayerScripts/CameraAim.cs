@@ -18,6 +18,7 @@ public class CameraAim : MonoBehaviour
 
     private Camera cam;
     private Vector3 velocity;
+    private bool inputEnabled = true;
 
     private void Awake()
     {
@@ -62,7 +63,7 @@ public class CameraAim : MonoBehaviour
         Vector3 desiredPosition =
             target.position;
 
-        if (
+        if (inputEnabled &&
             cameraLookAction != null &&
             cameraLookAction.action.IsPressed()
         )
@@ -104,6 +105,11 @@ public class CameraAim : MonoBehaviour
                 ref velocity,
                 smoothTime
             );
+    }
+
+    public void SetInputEnabled(bool enabled)
+    {
+        inputEnabled = enabled;
     }
 
     private void FindPlayerTarget()

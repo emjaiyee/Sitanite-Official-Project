@@ -158,6 +158,19 @@ public class InventoryGrid : MonoBehaviour
         return true;
     }
 
+    public bool TrySplitStack(InventoryItem item, out InventoryItem splitItem)
+    {
+        splitItem = null;
+
+        if (item == null || item.Data == null || !item.Data.isStackable || item.Quantity <= 1)
+            return false;
+
+        item.Quantity--;
+        splitItem = new InventoryItem(item.Data);
+        OnItemUpdated?.Invoke(item);
+        return true;
+    }
+
     public void Clear()
     {
         System.Collections.Generic.HashSet<InventoryItem> items =

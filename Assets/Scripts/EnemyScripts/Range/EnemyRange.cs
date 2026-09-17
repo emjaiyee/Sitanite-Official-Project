@@ -345,6 +345,13 @@ public class EnemyRange : MonoBehaviour
 
     private void Update()
     {
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            return;
+        }
+
         // -----------------------------------------------------
         // FIND PLAYER IF MISSING
         // -----------------------------------------------------
@@ -382,6 +389,13 @@ public class EnemyRange : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (Time.timeScale == 0f ||
+            (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
+            (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
+        {
+            return;
+        }
+
         this.UpdateAnimationDirection();
     }
 

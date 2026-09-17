@@ -20,7 +20,15 @@ public enum StatType
     DamageResistance,
     Damage,
     AttributeReduction,
-    TraitReduction
+    TraitReduction,
+    Rejuvenation
+}
+
+public enum RejuvenationType
+{
+    Health,
+    Stamina,
+    Mana
 }
 
 public enum StatCapType
@@ -66,6 +74,7 @@ public struct EquipmentStat
     public StatType statType;
     public PrimaryAttribute reducedAttribute;
     public SecondaryTrait reducedTrait;
+    public RejuvenationType rejuvenationType;
     public StatModifierType modifierType;
     public float value;
 
@@ -524,6 +533,51 @@ public int MaxChargeSkillCost =>
         return statCapType == StatCapType.PrimaryAttribute
             ? attributes.GetAttributeValue(statCapAttribute) >= statCapValue
             : attributes.GetTraitValue(statCapTrait) >= statCapValue;
+    }
+
+    public bool ApplyRejuvenation(PlayerStats playerStats)
+    {
+        if (equipmentType != EquipmentType.Consumable || playerStats == null)
+            return false;
+
+        bool applied = false;
+        foreach (EquipmentStat modifier in statModifiers)
+        {
+            if (modifier.statType != StatType.Rejuvenation || modifier.value <= 0f)
+                continue;
+
+            float amount = modifier.modifierType == StatModifierType.Percent
+                ? GetMaximumResource(playerStats, modifier.rejuvenationType) * modifier.value / 100f
+                : modifier.value;
+
+            switch (modifier.rejuvenationType)
+            {
+                case RejuvenationType.Health:
+                    playerStats.Heal(amount);
+                    break;
+                case RejuvenationType.Stamina:
+                    playerStats.RestoreStamina(amount);
+                    break;
+                case RejuvenationType.Mana:
+                    playerStats.RestoreMana(amount);
+                    break;
+            }
+
+            applied = true;
+        }
+
+        return applied;
+    }
+
+    private static float GetMaximumResource(PlayerStats playerStats, RejuvenationType type)
+    {
+        return type switch
+        {
+            RejuvenationType.Health => playerStats.MaxHealth,
+            RejuvenationType.Stamina => playerStats.MaxStamina,
+            RejuvenationType.Mana => playerStats.MaxMana,
+            _ => 0f
+        };
     }
     #endregion
 

@@ -46,6 +46,8 @@ public class GameManager : MonoBehaviour
 
     public event Action OnFloorFailed;
 
+    public event Action<bool> OnPauseStateChanged;
+
 
     // -------------------------------------------------
     // STATE
@@ -54,6 +56,8 @@ public class GameManager : MonoBehaviour
     private int currentHealth;
 
     private bool isPlayerDead;
+
+    private bool isPaused;
 
     private FloorState floorState =
         FloorState.Playing;
@@ -117,6 +121,9 @@ public class GameManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        if (isPaused)
+            Time.timeScale = 1f;
+
         if (Instance == this)
             Instance = null;
     }
@@ -134,6 +141,9 @@ public class GameManager : MonoBehaviour
 
     public bool IsPlayerDead =>
         isPlayerDead;
+
+    public bool IsPaused =>
+        isPaused;
 
     public FloorState CurrentFloorState =>
         floorState;
@@ -447,6 +457,44 @@ public class GameManager : MonoBehaviour
 
 
     // -------------------------------------------------
+    // PAUSE
+    // -------------------------------------------------
+
+    public void PauseGame()
+    {
+        SetPauseState(true);
+    }
+
+    public void ResumeGame()
+    {
+        SetPauseState(false);
+    }
+
+    public void TogglePause()
+    {
+        SetPauseState(!isPaused);
+    }
+
+    public void SetPauseState(bool pause)
+    {
+        if (isPaused == pause)
+            return;
+
+        isPaused = pause;
+        Time.timeScale = pause ? 0f : 1f;
+
+        if (!logOnlyFloorCleared)
+        {
+            Debug.Log(
+                $"[GameManager] Pause state: {isPaused}"
+            );
+        }
+
+        OnPauseStateChanged?.Invoke(isPaused);
+    }
+
+
+    // -------------------------------------------------
     // RESET
     // -------------------------------------------------
 
@@ -455,6 +503,7 @@ public class GameManager : MonoBehaviour
     {
         isPlayerDead = false;
 
+        SetPauseState(false);
 
         floorState =
             FloorState.Playing;

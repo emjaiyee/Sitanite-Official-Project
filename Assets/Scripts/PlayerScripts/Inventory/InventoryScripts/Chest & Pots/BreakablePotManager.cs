@@ -61,9 +61,21 @@ public class BreakablePotManager : MonoBehaviour
 
     public void SpawnLoot(Vector3 origin)
     {
-        FloorLootConfiguration configuration = GetCurrentConfiguration();
-        if (configuration == null ||
-            UnityEngine.Random.value > configuration.lootChance)
+        foreach (FloorLootConfiguration configuration in
+            GetCurrentConfigurations())
+        {
+            if (UnityEngine.Random.value > configuration.lootChance)
+                continue;
+
+            SpawnConfigurationLoot(configuration, origin);
+        }
+    }
+
+    private void SpawnConfigurationLoot(
+        FloorLootConfiguration configuration,
+        Vector3 origin)
+    {
+        if (configuration == null)
             return;
 
         LootDrop? drop = GetRandomDrop(configuration.lootPool);
@@ -88,22 +100,27 @@ public class BreakablePotManager : MonoBehaviour
         }
     }
 
-    private FloorLootConfiguration GetCurrentConfiguration()
+    private List<FloorLootConfiguration> GetCurrentConfigurations()
     {
+        List<FloorLootConfiguration> configurations =
+            new List<FloorLootConfiguration>();
+
         if (floorManager == null)
             floorManager = FindFirstObjectByType<FloorManager>();
 
         if (floorManager == null)
-            return null;
+            return configurations;
 
         foreach (FloorLootConfiguration configuration in lootConfigurations)
         {
             if (configuration != null &&
                 configuration.ContainsFloor(floorManager.CurrentFloor))
-                return configuration;
+            {
+                configurations.Add(configuration);
+            }
         }
 
-        return null;
+        return configurations;
     }
 
     private static LootDrop? GetRandomDrop(List<LootDrop> lootPool)
