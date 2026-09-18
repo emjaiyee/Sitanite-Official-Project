@@ -23,6 +23,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
     private Vector3 startPosition;
     private float destroyTime;
     private bool initialized;
+    private bool hasHitPlayer;
 
     public void Launch(
         Vector3 direction,
@@ -251,6 +252,22 @@ public class BaseMissile : MonoBehaviour, IProjectileType
 
             return;
         }
+
+        if (enableDebugLogs)
+        {
+            Debug.Log(
+                $"[BaseArrow] *** PLAYER HIT! *** | " +
+                $"Target: {body.name} | " +
+                $"Damage: {damage} | " +
+                $"Damage Type: {damageType}",
+                this
+            );
+        }
+
+        if (hasHitPlayer)
+            return;
+
+        hasHitPlayer = true;
 
         if (enableDebugLogs)
         {

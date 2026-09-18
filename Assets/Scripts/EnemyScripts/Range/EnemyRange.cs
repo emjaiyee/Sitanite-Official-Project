@@ -256,16 +256,6 @@ public class EnemyRange : MonoBehaviour
         CacheBaseStats();
 
 
-        // -----------------------------------------------------
-        // DISABLE LEGACY CONTACT DAMAGE
-        // -----------------------------------------------------
-
-        EnemyAttackScript legacyContactDamage =
-            GetComponent<EnemyAttackScript>();
-
-        if (legacyContactDamage != null)
-            legacyContactDamage.enabled = false;
-
 
         // -----------------------------------------------------
         // FIND PLAYER
@@ -304,11 +294,6 @@ public class EnemyRange : MonoBehaviour
 
     private void Start()
     {
-        EnemyAttackScript legacyContactDamage =
-            GetComponent<EnemyAttackScript>();
-
-        if (legacyContactDamage != null)
-            legacyContactDamage.enabled = false;
 
         nextAttackTime = Time.time + attackCooldown;
 
@@ -695,8 +680,8 @@ public class EnemyRange : MonoBehaviour
             );
 
 
-        BaseArrow projectile =
-            projectileObject.GetComponent<BaseArrow>();
+        IProjectileType projectile =
+            projectileObject.GetComponent<IProjectileType>();
 
 
         if (projectile == null)
