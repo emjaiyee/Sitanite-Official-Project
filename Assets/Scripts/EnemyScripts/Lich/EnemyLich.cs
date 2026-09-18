@@ -85,6 +85,7 @@ public class EnemyLich : MonoBehaviour
     [Min(0f)]
     [SerializeField] private float attackRange = 4f;
 
+    [Header("Projectile")]
     [SerializeField]
     private DamageType projectileDamageType =
         DamageType.Physical;
@@ -101,17 +102,41 @@ public class EnemyLich : MonoBehaviour
     [Min(0.01f)]
     [SerializeField] private float projectileLifetime = 4f;
 
+
+    [Header("Missile")]
+    [SerializeField]
+    private DamageType missileDamageType =
+        DamageType.Physical;
+
+    [Min(0)]
+    [SerializeField] private int missileDamage = 10;
+
+    [Min(0.01f)]
+    [SerializeField] private float missileCooldown = 6.5f;
+
+    [Min(0.01f)]
+    [SerializeField] private float missileSpeed = 3f;
+
+    [Min(0.01f)]
+    [SerializeField] private float missileLifetime = 5f;
+
+
     [Tooltip(
         "The point where the enemy shoots from. " +
         "If left empty, the enemy's transform position is used."
     )]
     [SerializeField] private Transform attackPoint;
 
-    [Header("Projectile")]
+    [Header("Projectiles")]
 
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private GameObject missileProjectilePrefab;
+
 
     private float nextAttackTime;
+    private float nextMissileTime;
+
+    private bool useMissileProjectile = false;
 
     public float AttackRange =>
         attackRange;
@@ -124,7 +149,18 @@ public class EnemyLich : MonoBehaviour
     private bool baseStatsCached;
     private float baseMoveSpeed;
     private int baseProjectileDamage;
+    private int baseMissileDamage;
 
+    // =========================================================
+    // SUMMON STATS
+    // =========================================================
+    [Header("Summon")]
+    [Min(0)]
+    [SerializeField]private int summonLevel = 0;
+    [SerializeField]private GameObject summonEnemy;
+    [SerializeField]private List<GameObject> summonList;
+    [SerializeField]private bool canSummon = true;
+    [SerializeField] private float spawnRadius = 0.7f;
 
     // =========================================================
     // ANIMATION
@@ -186,6 +222,17 @@ public class EnemyLich : MonoBehaviour
             0,
             Mathf.RoundToInt(projectileDamage + modifier)
         );
+
+        baseMissileDamage = Mathf.Max(
+           0,
+           Mathf.RoundToInt(baseMissileDamage + modifier)
+           );
+        missileDamage = Mathf.Max(
+            0,
+            Mathf.RoundToInt(missileDamage + modifier)
+            );
+         
+
     }
 
 
@@ -254,16 +301,6 @@ public class EnemyLich : MonoBehaviour
         CacheBaseStats();
 
 
-        // -----------------------------------------------------
-        // DISABLE LEGACY CONTACT DAMAGE
-        // -----------------------------------------------------
-
-        EnemyAttackScript legacyContactDamage =
-            GetComponent<EnemyAttackScript>();
-
-        if (legacyContactDamage != null)
-            legacyContactDamage.enabled = false;
-
 
         // -----------------------------------------------------
         // FIND PLAYER
@@ -283,7 +320,7 @@ public class EnemyLich : MonoBehaviour
         else
         {
             Debug.LogWarning(
-                $"[EnemyRange] {name} could not find " +
+                $"[Lich_Miniboss] {name} could not find " +
                 "a GameObject tagged 'Player'."
             );
         }
@@ -302,11 +339,10 @@ public class EnemyLich : MonoBehaviour
 
     private void Start()
     {
-        EnemyAttackScript legacyContactDamage =
-            GetComponent<EnemyAttackScript>();
-
-        if (legacyContactDamage != null)
-            legacyContactDamage.enabled = false;
+        Debug.Log(
+                $"[Lich_Miniboss] {name} spawned find " 
+                
+            );
 
         nextAttackTime = Time.time + attackCooldown;
 
@@ -318,7 +354,7 @@ public class EnemyLich : MonoBehaviour
         if (AStarManager.Instance == null)
         {
             Debug.LogWarning(
-                $"[EnemyRange] {name} could not find " +
+                $"[Lich_Miniboss] {name} could not find " +
                 "an AStarManager. Starting FSM without pathfinding."
             );
         }
@@ -327,7 +363,7 @@ public class EnemyLich : MonoBehaviour
                      ElevationLevel))
         {
             Debug.LogWarning(
-                $"[EnemyRange] {name} spawned on a " +
+                $"[EnemyLich] {name} spawned on a " +
                 $"NON-WALKABLE A* tile at {transform.position}. " +
                 "Starting FSM anyway."
             );
@@ -476,7 +512,6 @@ public class EnemyLich : MonoBehaviour
             return;
         }
 
-
         if (currentState != null)
             currentState.Exit();
 
@@ -499,7 +534,7 @@ public class EnemyLich : MonoBehaviour
 
 
         Debug.Log(
-            $"[EnemyRange] {name} -> {newState}"
+            $"[Lich_Miniboss] {name} -> {newState}"
         );
     }
 
@@ -526,7 +561,7 @@ public class EnemyLich : MonoBehaviour
 
             default:
                 Debug.LogError(
-                    $"[EnemyRange] {name}: " +
+                    $"[Lich_Miniboss] {name}: " +
                     $"Unknown state {state}."
                 );
 
@@ -603,6 +638,31 @@ public class EnemyLich : MonoBehaviour
         range * range;
     }
 
+    public void TrySpawnSummon()
+    {
+        if (!canSummon)
+            return;
+
+        if (CurrentState != EnemyState.Chase ||
+           player == null ||
+           !IsPlayerDetected() ||
+           !IsPlayerWithinAttackRange())
+            return;
+
+        Vector2 randomOffset = Random.insideUnitCircle * spawnRadius;
+        Vector2 spawnPos = (Vector2)transform.position + randomOffset;
+
+        GameObject mob = Instantiate(summonEnemy, spawnPos, Quaternion.identity, transform.parent);
+
+        EnemyElevationLevel mobElev = mob.GetComponent<EnemyElevationLevel>();
+
+        mobElev.SetLevel(this.ElevationLevel);
+
+        canSummon = false;
+
+        Debug.Log("[Lich_Miniboss] Summoned a Skelleton");
+    }
+     
 
     // =========================================================
     // PROJECTILE ATTACK
@@ -628,16 +688,22 @@ public class EnemyLich : MonoBehaviour
         if (projectilePrefab == null)
         {
             Debug.LogWarning(
-                $"[EnemyRange] {name}: " +
+                $"[Lich_Miniboss] {name}: " +
                 "Cannot shoot - projectile prefab is missing."
             );
 
             return false;
         }
 
-
         if (Time.time < nextAttackTime)
             return false;
+
+       
+        if(Time.time >= nextMissileTime)
+        {
+            useMissileProjectile = true;      
+        }
+        
 
 
         this.SetAnimatorBool(IsAttackingHash, true);
@@ -666,22 +732,26 @@ public class EnemyLich : MonoBehaviour
         // CREATE PROJECTILE
         // -----------------------------------------------------
 
-        GameObject projectileObject =
-            Instantiate(
+        GameObject projectileObject = useMissileProjectile
+            ? Instantiate(
+              missileProjectilePrefab,
+              spawnPosition,
+              Quaternion.identity
+              )
+            : Instantiate(
                 projectilePrefab,
                 spawnPosition,
                 Quaternion.identity
             );
-
-
-        BaseArrow projectile =
-            projectileObject.GetComponent<BaseArrow>();
+        
+        IProjectileType projectile =
+            projectileObject.GetComponent<IProjectileType>();
 
 
         if (projectile == null)
         {
             Debug.LogError(
-                $"[EnemyRange] {name}: " +
+                $"[Lich_Miniboss] {name}: " +
                 $"Projectile prefab '{projectilePrefab.name}' " +
                 "does not contain a BaseArrow component!"
             );
@@ -696,13 +766,29 @@ public class EnemyLich : MonoBehaviour
         // -----------------------------------------------------
         // LAUNCH
         // -----------------------------------------------------
+     
+        int damageToUse = useMissileProjectile
+            ? missileDamage
+            : projectileDamage;
+
+        DamageType damageTypeToUse = useMissileProjectile
+            ? missileDamageType
+            : projectileDamageType;
+
+        float speedToUse = useMissileProjectile
+            ? missileSpeed
+            : projectileSpeed;
+
+        float lifetimeToUse = useMissileProjectile
+            ? missileLifetime
+            : projectileLifetime;
 
         projectile.Launch(
             direction,
-            projectileDamage,
-            projectileDamageType,
-            projectileSpeed,
-            projectileLifetime
+            damageToUse,
+            damageTypeToUse,
+            speedToUse,
+            lifetimeToUse
         );
 
 
@@ -714,6 +800,18 @@ public class EnemyLich : MonoBehaviour
             Time.time +
             attackCooldown;
 
+       
+        if (useMissileProjectile)
+        {
+            nextMissileTime =
+            Time.time +
+            missileCooldown;
+
+
+            useMissileProjectile = false;
+        }
+
+        
 
         return true;
     }
@@ -881,7 +979,22 @@ public class EnemyLich : MonoBehaviour
                     5f
                 )
             );
+        /*
+         missileDamage =             
+            baseMissileDamage +
+            Mathf.RoundToInt(
+                GetScaledBonus(
+                    level,
+                    5f
+                )
+            );
+         
+         
+         
+         */
+
     }
+
 
 
     private void CacheBaseStats()
@@ -897,6 +1010,9 @@ public class EnemyLich : MonoBehaviour
 
         baseProjectileDamage =
             projectileDamage;
+
+        baseMissileDamage =
+           missileDamage;
     }
 
 

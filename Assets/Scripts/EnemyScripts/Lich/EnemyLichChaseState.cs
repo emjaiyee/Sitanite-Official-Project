@@ -90,6 +90,8 @@ public class EnemyLichChaseState : EnemyLichState
 
             Enemy.SetTakingAim(true);
 
+            Enemy.TrySpawnSummon();
+
             Enemy.TryShootProjectile();
 
             return;

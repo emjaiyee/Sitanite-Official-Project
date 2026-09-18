@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BaseArrow : MonoBehaviour
+public class BaseArrow : MonoBehaviour, IProjectileType
 {
     [Header("Collision")]
     [SerializeField] private LayerMask hittableLayers = Physics2D.AllLayers;
