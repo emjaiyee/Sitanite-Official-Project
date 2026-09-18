@@ -110,18 +110,15 @@ public class WeaponAudioController : MonoBehaviour
 
     private void OnEnable()
     {
-        if (EquipmentManager.Instance != null)
-        {
-            EquipmentManager.Instance.OnEquipmentChanged -=
-                HandleEquipmentChanged;
-
-            EquipmentManager.Instance.OnEquipmentChanged +=
-                HandleEquipmentChanged;
-        }
-
+        SubscribeToEquipmentManager();
         RefreshCurrentWeapon();
     }
 
+    private void Start()
+    {
+        SubscribeToEquipmentManager();
+        RefreshCurrentWeapon();
+    }
 
     private void OnDisable()
     {
@@ -132,6 +129,18 @@ public class WeaponAudioController : MonoBehaviour
         }
 
         StopChargeLoop();
+    }
+
+    private void SubscribeToEquipmentManager()
+    {
+        if (EquipmentManager.Instance == null)
+            return;
+
+        EquipmentManager.Instance.OnEquipmentChanged -=
+            HandleEquipmentChanged;
+
+        EquipmentManager.Instance.OnEquipmentChanged +=
+            HandleEquipmentChanged;
     }
 
 
@@ -269,29 +278,29 @@ public class WeaponAudioController : MonoBehaviour
     // SKILL
     // =========================================================
 
-   public void PlaySkillSound()
-{
-    RefreshCurrentWeapon();
+    public void PlaySkillSound()
+    {
+        RefreshCurrentWeapon();
 
-    if (currentWeaponProfile == null)
-        return;
+        if (currentWeaponProfile == null)
+            return;
 
-    ItemData weaponData =
-        playerEquipment == null
-            ? null
-            : playerEquipment.CurrentWeaponData;
+        ItemData weaponData =
+            playerEquipment == null
+                ? null
+                : playerEquipment.CurrentWeaponData;
 
-    if (weaponData == null)
-        return;
+        if (weaponData == null)
+            return;
 
-    SkillAudioProfile skillProfile =
-        FindSkillProfile(weaponData.WeaponSkillType);
+        SkillAudioProfile skillProfile =
+            FindSkillProfile(weaponData.WeaponSkillType);
 
-    if (skillProfile == null)
-        return;
+        if (skillProfile == null)
+            return;
 
-    PlayOneShot(skillProfile.skillSound);
-}
+        PlayOneShot(skillProfile.skillSound);
+    }
 
 
     private SkillAudioProfile FindSkillProfile(

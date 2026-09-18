@@ -148,10 +148,14 @@ public class EnemyRange : MonoBehaviour
 
     private EnemyHealth enemyHealth;
     private EnemyElevationLevel enemyElevation;
+    private EnemySFX enemySFX;
     private Transform player;
     private PlayerStats playerStats;
 
     private Vector3 spawnPosition;
+    private float nextFootstepTime;
+
+    [SerializeField] private float footstepInterval = 0.42f;
 
     public EnemyHealth Health =>
         enemyHealth;
@@ -239,6 +243,9 @@ public class EnemyRange : MonoBehaviour
 
         enemyElevation =
             GetComponent<EnemyElevationLevel>();
+
+        enemySFX =
+            GetComponent<EnemySFX>();
 
         animator =
             GetComponent<Animator>();
@@ -432,6 +439,9 @@ public class EnemyRange : MonoBehaviour
     private void HandleEnemyDied(
         GameObject deadEnemy)
     {
+        if (enemySFX != null)
+            enemySFX.PlayDeathSFX();
+
         ChangeState(
             EnemyState.Death
         );
@@ -651,6 +661,8 @@ public class EnemyRange : MonoBehaviour
 
         this.SetAnimatorBool(IsAttackingHash, true);
 
+        if (enemySFX != null)
+            enemySFX.PlayAttackSFX();
 
         // -----------------------------------------------------
         // ATTACK POINT
@@ -780,9 +792,13 @@ public class EnemyRange : MonoBehaviour
             return;
         }
 
-
         this.SetAnimatorBool(IsMovingHash, true);
 
+        if (enemySFX != null && Time.time >= nextFootstepTime)
+        {
+            enemySFX.PlayWalkSFX();
+            nextFootstepTime = Time.time + footstepInterval;
+        }
 
         Vector3 target =
             currentPath[currentPathIndex];

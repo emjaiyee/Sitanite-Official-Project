@@ -208,10 +208,14 @@ public class EnemyMelee : MonoBehaviour
 
     private EnemyHealth enemyHealth;
     private EnemyElevationLevel enemyElevation;
+    private EnemySFX enemySFX;
     private Transform player;
     private PlayerStats playerStats;
 
     private Vector3 spawnPosition;
+    private float nextFootstepTime;
+
+    [SerializeField] private float footstepInterval = 0.42f;
 
 
     public EnemyHealth Health =>
@@ -262,6 +266,9 @@ public class EnemyMelee : MonoBehaviour
 
         enemyElevation =
             GetComponent<EnemyElevationLevel>();
+
+        enemySFX =
+            GetComponent<EnemySFX>();
 
         animator =
             GetComponent<Animator>();
@@ -500,9 +507,12 @@ public class EnemyMelee : MonoBehaviour
     private void HandleEnemyDied(
     GameObject deadEnemy)
     {
-        ChangeState(
-            EnemyState.Death
-        );
+    if (enemySFX != null)
+        enemySFX.PlayDeathSFX();
+
+    ChangeState(
+        EnemyState.Death
+    );
     }
 
     private void HandleDamaged(
@@ -719,6 +729,10 @@ public class EnemyMelee : MonoBehaviour
             : attackCooldown;
         nextAttackTime = Time.time + cooldown;
         SetAnimatorBool(IsAttackingHash, true);
+
+        if (enemySFX != null)
+            enemySFX.PlayAttackSFX();
+
         playerStats.TakeDamage(
             damageAmount,
             damageType
@@ -783,8 +797,13 @@ public class EnemyMelee : MonoBehaviour
             return;
         }
 
-
         SetAnimatorBool(IsMovingHash, true);
+
+        if (enemySFX != null && Time.time >= nextFootstepTime)
+        {
+            enemySFX.PlayWalkSFX();
+            nextFootstepTime = Time.time + footstepInterval;
+        }
 
         Vector3 target =
             currentPath[currentPathIndex];
