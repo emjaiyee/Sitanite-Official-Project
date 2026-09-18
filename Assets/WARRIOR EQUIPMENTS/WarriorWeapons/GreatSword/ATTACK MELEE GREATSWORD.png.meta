@@ -1,31 +1,31 @@
 fileFormatVersion: 2
-guid: e2a097088e0897c4598e129409e2e0d8
+guid: 7a7ba0e8914cdd7409f448a9011d50b7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7623990541579601290
-    second: GREAT_SWORD_attack_0
+      213: 1176066375453238032
+    second: ATTACK MELEE GREATSWORD_0
   - first:
-      213: 5819752034651953122
-    second: GREAT_SWORD_attack_1
+      213: -5284547108102097290
+    second: ATTACK MELEE GREATSWORD_1
   - first:
-      213: 3548664076818556579
-    second: GREAT_SWORD_attack_2
+      213: 6927761165503229962
+    second: ATTACK MELEE GREATSWORD_2
   - first:
-      213: -1848820375225382191
-    second: GREAT_SWORD_attack_3
+      213: -7202450170530092891
+    second: ATTACK MELEE GREATSWORD_3
   - first:
-      213: 6851714760218661725
-    second: GREAT_SWORD_attack_4
+      213: -5619052676313776294
+    second: ATTACK MELEE GREATSWORD_4
   - first:
-      213: 2983001969161448079
-    second: GREAT_SWORD_attack_5
+      213: -8611974305362614279
+    second: ATTACK MELEE GREATSWORD_5
   - first:
-      213: -7682198679238349728
-    second: GREAT_SWORD_attack_6
+      213: 8669333039559557275
+    second: ATTACK MELEE GREATSWORD_6
   - first:
-      213: 2230054072701759984
-    second: GREAT_SWORD_attack_7
+      213: -1731581129629955121
+    second: ATTACK MELEE GREATSWORD_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -121,73 +121,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 5
-      rect:
-        serializedVersion: 2
-        x: 406
-        y: 11
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a854ac1010bddc960800000000000000
-      internalID: 7623990541579601290
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 6
-      rect:
-        serializedVersion: 2
-        x: 475
-        y: 28
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2e7594224a9e3c050800000000000000
-      internalID: 5819752034651953122
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 7
-      rect:
-        serializedVersion: 2
-        x: 540
-        y: 28
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 3a6a5fd1d236f3130800000000000000
-      internalID: 3548664076818556579
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: 1
+      name: ATTACK MELEE GREATSWORD_meleeAnimation_000
       rect:
         serializedVersion: 2
         x: 0
@@ -200,19 +134,19 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1dacf290aaba756e0800000000000000
-      internalID: -1848820375225382191
+      spriteID: eb20589fd03c28748b5967c9ddfdfb76
+      internalID: -69069578
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 2
+      name: ATTACK MELEE GREATSWORD_meleeAnimation_001
       rect:
         serializedVersion: 2
-        x: 106
+        x: 64
         y: 0
         width: 64
         height: 64
@@ -222,19 +156,19 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: d535221c54e261f50800000000000000
-      internalID: 6851714760218661725
+      spriteID: db05e0405ffb3a94b9fb7c96d4d3024a
+      internalID: -696053002
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 3
+      name: ATTACK MELEE GREATSWORD_meleeAnimation_002
       rect:
         serializedVersion: 2
-        x: 218
+        x: 128
         y: 0
         width: 64
         height: 64
@@ -244,19 +178,19 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f8aa8208c70c56920800000000000000
-      internalID: 2983001969161448079
+      spriteID: c3a5b43888860a249b580c727c114f9f
+      internalID: -1122279442
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 4
+      name: ATTACK MELEE GREATSWORD_meleeAnimation_003
       rect:
         serializedVersion: 2
-        x: 319
+        x: 192
         y: 0
         width: 64
         height: 64
@@ -266,20 +200,20 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 06ce506d009536590800000000000000
-      internalID: -7682198679238349728
+      spriteID: 1365f619330df5d46b196c1a22724bba
+      internalID: 133676514
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: 8
+      name: ATTACK MELEE GREATSWORD_meleeAnimation_004
       rect:
         serializedVersion: 2
-        x: 629
-        y: 14
+        x: 256
+        y: 0
         width: 64
         height: 64
       alignment: 0
@@ -288,10 +222,76 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 0f13d412d5eb2fe10800000000000000
-      internalID: 2230054072701759984
+      spriteID: 650043e2582062841bab56c753671815
+      internalID: -1416282781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATTACK MELEE GREATSWORD_meleeAnimation_005
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a4a9596cd8309145a1ad8efe0a6527a
+      internalID: 559924552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATTACK MELEE GREATSWORD_meleeAnimation_006
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 166cd05bdbb39284bbcfa4152b0917bb
+      internalID: -158841059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ATTACK MELEE GREATSWORD_meleeAnimation_007
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 64
+        height: 64
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa2a8dbf33f9c4543af287626b4558c1
+      internalID: 440855760
       vertices: []
       indices: 
       edges: []
@@ -300,7 +300,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4986add551209f1419adab07ecbcf584
+    spriteID: 494de96d233443f4bae2a9945c1ba733
     internalID: 0
     vertices: []
     indices: 
@@ -310,14 +310,22 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      1: -1848820375225382191
-      2: 6851714760218661725
-      3: 2983001969161448079
-      4: -7682198679238349728
-      5: 7623990541579601290
-      6: 5819752034651953122
-      7: 3548664076818556579
-      8: 2230054072701759984
+      ATTACK MELEE GREATSWORD_0: 1176066375453238032
+      ATTACK MELEE GREATSWORD_1: -5284547108102097290
+      ATTACK MELEE GREATSWORD_2: 6927761165503229962
+      ATTACK MELEE GREATSWORD_3: -7202450170530092891
+      ATTACK MELEE GREATSWORD_4: -5619052676313776294
+      ATTACK MELEE GREATSWORD_5: -8611974305362614279
+      ATTACK MELEE GREATSWORD_6: 8669333039559557275
+      ATTACK MELEE GREATSWORD_7: -1731581129629955121
+      ATTACK MELEE GREATSWORD_meleeAnimation_000: -69069578
+      ATTACK MELEE GREATSWORD_meleeAnimation_001: -696053002
+      ATTACK MELEE GREATSWORD_meleeAnimation_002: -1122279442
+      ATTACK MELEE GREATSWORD_meleeAnimation_003: 133676514
+      ATTACK MELEE GREATSWORD_meleeAnimation_004: -1416282781
+      ATTACK MELEE GREATSWORD_meleeAnimation_005: 559924552
+      ATTACK MELEE GREATSWORD_meleeAnimation_006: -158841059
+      ATTACK MELEE GREATSWORD_meleeAnimation_007: 440855760
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
