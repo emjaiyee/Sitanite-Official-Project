@@ -98,9 +98,6 @@ public class CharacterSpriteController : MonoBehaviour
         if (playerSoundHelper == null)
             playerSoundHelper = GetComponent<PlayerSoundHelper>();
 
-        if (playerSoundHelper == null)
-            playerSoundHelper = GetComponentInChildren<PlayerSoundHelper>(true);
-
         stateStartTime = Time.time;
     }
 

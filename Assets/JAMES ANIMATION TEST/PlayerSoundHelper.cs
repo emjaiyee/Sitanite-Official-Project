@@ -42,11 +42,6 @@ public class PlayerSoundHelper : MonoBehaviour
         {
             audioSource = GetComponent<AudioSource>();
         }
-
-        if(audioSource == null)
-        {
-            audioSource = GetComponentInChildren<AudioSource>(true);
-        }
     }
 
 
@@ -98,9 +93,13 @@ public class PlayerSoundHelper : MonoBehaviour
             return;
 
 
-        AudioClip clip = clips[Random.Range(0, clips.Count)];
-        if(clip == null)
-            return;
+        AudioClip clip =
+            clips[
+                Random.Range(
+                    0,
+                    clips.Count
+                )
+            ];
 
 
         audioSource.PlayOneShot(clip);

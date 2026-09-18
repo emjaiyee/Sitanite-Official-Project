@@ -255,17 +255,12 @@ public class PlayerDash : MonoBehaviour
             animationController.PlayDash();
         }
         PlayerSoundHelper sound =
-            GetComponent<PlayerSoundHelper>();
+    GetComponent<PlayerSoundHelper>();
 
-        if(sound == null)
-        {
-            sound = GetComponentInChildren<PlayerSoundHelper>(true);
-        }
-
-        if(sound != null)
-        {
-            sound.PlayDash();
-        }
+if(sound != null)
+{
+    sound.PlayDash();
+}
 
 
         Debug.Log(

@@ -645,10 +645,6 @@ public class PlayerStats : MonoBehaviour
             currentHealth - amount
         );
 
-        PlayerSoundHelper sound = GetComponentInChildren<PlayerSoundHelper>(true);
-        if (sound != null)
-            sound.PlayHurt();
-
         // Show the damage number above the player, colored by type.
         DamagePopupSpawner.Spawn(transform, amount, damageType, 1f);
 
@@ -1021,10 +1017,6 @@ public class PlayerStats : MonoBehaviour
             GetComponent<PlayerAnimationController>();
         if (animationController != null)
             animationController.PlayDeath();
-
-        PlayerSoundHelper sound = GetComponentInChildren<PlayerSoundHelper>(true);
-        if (sound != null)
-            sound.PlayDeath();
 
         SpriteRenderer[] renderers =
             GetComponentsInChildren<SpriteRenderer>(true);
