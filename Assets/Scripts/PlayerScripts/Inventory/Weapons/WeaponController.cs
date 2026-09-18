@@ -114,6 +114,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         {
             hasReachedFullCharge = true;
             fullChargeReachedTime = Time.time;
+            weaponAudio?.PlayFullyChargedSound();
             SpawnFullChargeIndicator();
         }
 
