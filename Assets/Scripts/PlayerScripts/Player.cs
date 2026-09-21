@@ -4,6 +4,11 @@ public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
 
+    [Header("Collider References")]
+    [SerializeField] private Collider2D rampMovementCollider;
+
+    public Collider2D RampMovementCollider => rampMovementCollider;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
