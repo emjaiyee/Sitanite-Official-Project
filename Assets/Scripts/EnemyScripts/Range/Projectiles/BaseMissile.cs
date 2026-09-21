@@ -51,7 +51,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
         if (enableDebugLogs)
         {
             Debug.Log(
-                $"[BaseArrow] FIRED | " +
+                $"[BaseMissile] FIRED | " +
                 $"Object: {name} | " +
                 $"Position: {transform.position} | " +
                 $"Direction: {this.direction} | " +
@@ -83,15 +83,16 @@ public class BaseMissile : MonoBehaviour, IProjectileType
 
         if (target != null)
         {
-            Vector3 direction = target.position - transform.position;
+            Vector3 direction = (target.position - transform.position).normalized;
 
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-            transform.rotation = Quaternion.RotateTowards(
-                transform.rotation,
-                rotation,
-                rotationSpeed * Time.deltaTime);
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    rotation,
+                    rotationSpeed * Time.deltaTime);
+      
 
             transform.position +=
             transform.right * speed * Time.deltaTime;
@@ -109,7 +110,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
         if (logMovement)
         {
             Debug.Log(
-                $"[BaseArrow] MOVING | " +
+                $"[BaseMissile] MOVING | " +
                 $"{previousPosition} -> {transform.position}",
                 this
             );
@@ -120,7 +121,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
             if (enableDebugLogs)
             {
                 Debug.Log(
-                    $"[BaseArrow] DESTROYED | " +
+                    $"[BaseMissile] DESTROYED | " +
                     $"Lifetime expired after {lifetime:F2}s | " +
                     $"Final Position: {transform.position}",
                     this
@@ -138,7 +139,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
             if (enableDebugLogs)
             {
                 Debug.Log(
-                    $"[BaseArrow] DESTROYED | " +
+                    $"[BaseMissile] DESTROYED | " +
                     $"Maximum travel distance reached | " +
                     $"Final Position: {transform.position}",
                     this
@@ -164,7 +165,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
         if (enableDebugLogs)
         {
             Debug.Log(
-                $"[BaseArrow] COLLISION/TRIGGER | " +
+                $"[BaseMissile] COLLISION/TRIGGER | " +
                 $"Arrow: {name} | " +
                 $"Hit: {body.name} | " +
                 $"Tag: {body.tag} | " +
@@ -179,7 +180,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
             if (enableDebugLogs)
             {
                 Debug.Log(
-                    $"[BaseArrow] IGNORED COLLISION | " +
+                    $"[BaseMissile] IGNORED COLLISION | " +
                     $"{body.name} is NOT on a hittable layer.",
                     this
                 );
@@ -193,7 +194,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
             if (enableDebugLogs)
             {
                 Debug.Log(
-                    $"[BaseArrow] IGNORED COLLISION | " +
+                    $"[BaseMissile] IGNORED COLLISION | " +
                     $"{body.name} is hittable but is NOT tagged Player.",
                     this
                 );
@@ -216,7 +217,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
             if (enableDebugLogs)
             {
                 Debug.LogWarning(
-                    $"[BaseArrow] PLAYER HIT BUT NO PlayerStats FOUND | " +
+                    $"[BaseMissile] PLAYER HIT BUT NO PlayerStats FOUND | " +
                     $"Object: {body.name}",
                     this
                 );
@@ -230,7 +231,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
             if (enableDebugLogs)
             {
                 Debug.Log(
-                    $"[BaseArrow] PLAYER HIT BUT PLAYER IS DEAD | " +
+                    $"[BaseMissile] PLAYER HIT BUT PLAYER IS DEAD | " +
                     $"Object: {body.name}",
                     this
                 );
@@ -244,7 +245,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
             if (enableDebugLogs)
             {
                 Debug.Log(
-                    $"[BaseArrow] PLAYER HIT BUT DAMAGE IS 0 | " +
+                    $"[BaseMissile] PLAYER HIT BUT DAMAGE IS 0 | " +
                     $"Object: {body.name}",
                     this
                 );
@@ -256,7 +257,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
         if (enableDebugLogs)
         {
             Debug.Log(
-                $"[BaseArrow] *** PLAYER HIT! *** | " +
+                $"[BaseMissile] *** PLAYER HIT! *** | " +
                 $"Target: {body.name} | " +
                 $"Damage: {damage} | " +
                 $"Damage Type: {damageType}",
@@ -272,7 +273,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
         if (enableDebugLogs)
         {
             Debug.Log(
-                $"[BaseArrow] *** PLAYER HIT! *** | " +
+                $"[BaseMissile] *** PLAYER HIT! *** | " +
                 $"Target: {body.name} | " +
                 $"Damage: {damage} | " +
                 $"Damage Type: {damageType}",
@@ -287,7 +288,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
         if (enableDebugLogs)
         {
             Debug.Log(
-                $"[BaseArrow] DESTROYED | " +
+                $"[BaseMissile] DESTROYED | " +
                 $"Successfully damaged player.",
                 this
             );
@@ -304,7 +305,7 @@ public class BaseMissile : MonoBehaviour, IProjectileType
         if (enableDebugLogs)
         {
             Debug.Log(
-                $"[BaseArrow] COLLISION ENTER | " +
+                $"[BaseMissile] COLLISION ENTER | " +
                 $"Arrow: {name} | " +
                 $"Hit: {collision.gameObject.name}",
                 this

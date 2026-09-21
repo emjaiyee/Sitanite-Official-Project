@@ -86,6 +86,7 @@ public class EnemyLichChaseState : EnemyLichState
 
         if (Enemy.IsPlayerWithinAttackRange())
         {
+            
             Enemy.StopMoving();
 
             Enemy.SetTakingAim(true);

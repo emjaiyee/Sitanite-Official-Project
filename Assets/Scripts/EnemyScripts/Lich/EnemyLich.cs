@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class EnemyLich : MonoBehaviour
 {
-
+    #region Stats/ States/ Variables
     // =========================================================
     // STATE
     // =========================================================
@@ -159,8 +159,12 @@ public class EnemyLich : MonoBehaviour
     [SerializeField]private int summonLevel = 0;
     [SerializeField]private GameObject summonEnemy;
     [SerializeField]private List<GameObject> summonList;
-    [SerializeField]private bool canSummon = true;
-    [SerializeField] private float spawnRadius = 0.7f;
+    [SerializeField]private float summonCooldown = 30f;
+    [SerializeField]private bool summonFirst = false;
+    [SerializeField]private float spawnRadius = 0.7f;
+    [SerializeField]private float nextSummonTime;
+    [SerializeField] LayerMask hittableLayers = Physics2D.AllLayers;
+    [SerializeField] float checkRadius = 0.5f;
 
     // =========================================================
     // ANIMATION
@@ -235,7 +239,7 @@ public class EnemyLich : MonoBehaviour
 
     }
 
-
+    #region Path Variables
     // =========================================================
     // PATH
     // =========================================================
@@ -253,8 +257,9 @@ public class EnemyLich : MonoBehaviour
     public bool HasPath =>
         currentPath != null &&
         currentPathIndex < currentPath.Count;
+    #endregion
 
-
+    #region Death Variables
     // =========================================================
     // DEATH
     // =========================================================
@@ -278,6 +283,10 @@ public class EnemyLich : MonoBehaviour
 
     public float DeathFadeDuration =>
         deathFadeDuration;
+    #endregion
+
+    #endregion
+
 
 
     // =========================================================
@@ -340,12 +349,13 @@ public class EnemyLich : MonoBehaviour
     private void Start()
     {
         Debug.Log(
-                $"[Lich_Miniboss] {name} spawned find " 
+                $"[Lich_Miniboss] {name} spawned In map " 
                 
             );
 
         nextAttackTime = Time.time + attackCooldown;
-
+        nextMissileTime = Time.time + missileCooldown;
+        nextSummonTime = Time.time + summonCooldown;
 
         // -----------------------------------------------------
         // CHECK A* SPAWN TILE
@@ -411,6 +421,7 @@ public class EnemyLich : MonoBehaviour
 
 
         this.SetAnimatorBool(IsAttackingHash, false);
+
 
 
         // -----------------------------------------------------
@@ -640,7 +651,13 @@ public class EnemyLich : MonoBehaviour
 
     public void TrySpawnSummon()
     {
-        if (!canSummon)
+        summonList.RemoveAll(mobList => mobList == null);
+
+
+        if (Time.time < nextSummonTime) // cooldowm timer
+            return;
+
+        if (summonList.Count == 3)  // summon limit cap
             return;
 
         if (CurrentState != EnemyState.Chase ||
@@ -649,18 +666,73 @@ public class EnemyLich : MonoBehaviour
            !IsPlayerWithinAttackRange())
             return;
 
-        Vector2 randomOffset = Random.insideUnitCircle * spawnRadius;
-        Vector2 spawnPos = (Vector2)transform.position + randomOffset;
+        summonFirst = true; // prevent attacking when summoning
 
-        GameObject mob = Instantiate(summonEnemy, spawnPos, Quaternion.identity, transform.parent);
+        this.SetAnimatorBool(IsAttackingHash, true); // same animation used
 
-        EnemyElevationLevel mobElev = mob.GetComponent<EnemyElevationLevel>();
+        //--------------------------------
+        // Spawn Around the lich
+        //--------------------------------
 
-        mobElev.SetLevel(this.ElevationLevel);
+        Vector2 randomOffset = 
+            Random.insideUnitCircle * spawnRadius; // spawn radius
+        Vector2 spawnPos = 
+            (Vector2)transform.position + randomOffset; // random location
 
-        canSummon = false;
+        if (Physics2D.OverlapCircle(spawnPos, checkRadius, hittableLayers) == null)
+        {
 
-        Debug.Log("[Lich_Miniboss] Summoned a Skelleton");
+            //--------------------------------
+            // Instantiation
+            //--------------------------------
+
+            GameObject mob =
+                Instantiate(
+                summonEnemy,            //prefab
+                spawnPos,               //location
+                Quaternion.identity,    //rotation
+                transform.parent);      //place to same location of the parent in the hiearchy
+
+            //--------------------------------
+            // Elevation
+            //--------------------------------
+
+            EnemyElevationLevel mobElev =
+                mob.GetComponent<EnemyElevationLevel>();
+
+            mobElev.SetLevel(this.ElevationLevel); // place at same Elevation of Lich 
+
+
+            //--------------------------------
+            // Summon Mobs Cap
+            //--------------------------------
+
+            summonList.Add(mob);
+
+            nextSummonTime =
+                Time.time +
+                summonCooldown;
+
+            Debug.Log("[Lich_Miniboss] Summoned a Skelleton");
+
+        }
+        else {
+                Debug.Log("[Lich_Miniboss] Summoned Skelleton failed to summon");
+        }
+
+            //--------------------------------
+            // Cooldown reset
+            //--------------------------------
+
+            nextAttackTime =   // prevent to imediately fire attack at next frame
+               Time.time +
+               attackCooldown;
+
+            nextMissileTime =  // also reset missile cooldown
+                Time.time +
+                missileCooldown;
+
+       
     }
      
 
@@ -684,6 +756,11 @@ public class EnemyLich : MonoBehaviour
             !IsPlayerWithinAttackRange())
             return false;
 
+        if (summonFirst) // prevent attack after summoning 
+        {
+            summonFirst = false;
+            return false;
+        }
 
         if (projectilePrefab == null)
         {

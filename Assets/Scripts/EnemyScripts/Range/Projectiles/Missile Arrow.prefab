@@ -82,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 52
   m_MaskInteraction: 0
   m_Sprite: {fileID: 8462627801279198804, guid: ccb7dd1f71e80ed40a8281c24f5cfae2, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
@@ -110,9 +110,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   enableDebugLogs: 1
-  logMovement: 0
+  logMovement: 1
   target: {fileID: 0}
-  rotationSpeed: 20
+  rotationSpeed: 100
 --- !u!61 &2812585645137032166
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -167,7 +167,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 111242029175504835}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0

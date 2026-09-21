@@ -124,7 +124,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -5717007380149535562, guid: eb24af4481fb18949ae65c25257373be, type: 3}
+  m_Sprite: {fileID: -8170555316554546650, guid: eb24af4481fb18949ae65c25257373be, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -224,6 +224,7 @@ MonoBehaviour:
   attackPoint: {fileID: 2598113663948595218}
   projectilePrefab: {fileID: 7280552908879159887, guid: 219083c3bbab5c340bdbfeeba73e1861, type: 3}
   takingAim: 0
+  footstepInterval: 0.42
   deathAnimationDelay: 0.5
   deathFadeDuration: 0.75
 --- !u!114 &1524602256715623858
@@ -301,7 +302,7 @@ MonoBehaviour:
   m_CategoryHash: 0.00003641491
   m_labelHash: 1.450069e-28
   m_SpriteKey: 0
-  m_SpriteHash: 867537718
+  m_SpriteHash: 211543085
 --- !u!95 &3463651732144763740
 Animator:
   serializedVersion: 7
