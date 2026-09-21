@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4259996642940716189}
   - component: {fileID: 4288241880751607728}
   - component: {fileID: 831037746259570379}
+  - component: {fileID: 5781865514866685411}
   m_Layer: 6
   m_Name: EnemyMelee (GOBLIN STABER)
   m_TagString: Enemy
@@ -198,6 +199,7 @@ MonoBehaviour:
   locateWaitDuration: 2.5
   deathAnimationDelay: 1
   deathFadeDuration: 0.75
+  footstepInterval: 0.42
 --- !u!114 &3107691529250701503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,3 +415,16 @@ MonoBehaviour:
   attackSFX:
   - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
   deathSFX: {fileID: 8300000, guid: 2bd90bbb7aba732429fbe03134d1896f, type: 3}
+--- !u!114 &5781865514866685411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5945256498423393129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28fe4e929d44d2c9b9277c4050b516d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  lootSpawnPoint: {fileID: 4074788260977273869, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
