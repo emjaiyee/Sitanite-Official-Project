@@ -133,6 +133,22 @@ public class PlayerSkill : MonoBehaviour
             UpdateSkillTarget();
 
             if (Mouse.current != null &&
+                Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                equipment.CurrentWeapon.CancelSkill();
+
+                if (skillRecovery == null)
+                {
+                    skillRecovery =
+                        StartCoroutine(
+                            EndSkillMovementLockAfterDelay()
+                        );
+                }
+
+                return;
+            }
+
+            if (Mouse.current != null &&
                 Mouse.current.leftButton.wasPressedThisFrame)
             {
                 equipment.CurrentWeapon.ConfirmSkill();

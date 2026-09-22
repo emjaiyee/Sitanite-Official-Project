@@ -33,6 +33,7 @@ public class Loot : MonoBehaviour
     private PlayerInventory dropOwner;
     private bool waitingForOwnerExit;
     private float pickupAllowedTime;
+    private bool dropEffectsPlayed;
     #endregion
 
     #region Properties
@@ -91,6 +92,16 @@ public class Loot : MonoBehaviour
         itemData = data;
         quantity = Mathf.Max(1, initialQuantity);
         UpdateVisuals();
+
+        if (!dropEffectsPlayed && itemData != null)
+        {
+            dropEffectsPlayed = true;
+            LootDropEffectsManager.Instance?.PlayDropEffects(
+                itemData,
+                transform,
+                spriteRenderer
+            );
+        }
     }
 
     public void PreventOwnerPickupUntilExit(PlayerInventory owner)
