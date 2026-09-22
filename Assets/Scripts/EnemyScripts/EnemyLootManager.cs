@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-[AddComponentMenu("Dimla/Breakable Pot Manager")]
-public class BreakablePotManager : MonoBehaviour
+[AddComponentMenu("Dimla/Enemy Loot Manager")]
+public class EnemyLootManager : MonoBehaviour
 {
     [Serializable]
     public struct LootDrop
@@ -28,7 +28,7 @@ public class BreakablePotManager : MonoBehaviour
         }
     }
 
-    public static BreakablePotManager Instance { get; private set; }
+    public static EnemyLootManager Instance { get; private set; }
 
     [Header("References")]
     [SerializeField] private FloorManager floorManager;
@@ -74,16 +74,6 @@ public class BreakablePotManager : MonoBehaviour
         if (UnityEngine.Random.value > configuration.lootChance)
             return;
 
-        SpawnConfigurationLoot(configuration, origin);
-    }
-
-    private void SpawnConfigurationLoot(
-        FloorLootConfiguration configuration,
-        Vector3 origin)
-    {
-        if (configuration == null)
-            return;
-
         LootDrop? drop = GetRandomDrop(configuration.lootPool);
         if (!drop.HasValue || lootPrefab == null)
             return;
@@ -93,14 +83,25 @@ public class BreakablePotManager : MonoBehaviour
             return;
 
         LootDrop selectedDrop = drop.Value;
-        GameObject lootObject = Instantiate(lootPrefab, spawnPosition.Value, Quaternion.identity);
+        GameObject lootObject = Instantiate(
+            lootPrefab,
+            spawnPosition.Value,
+            Quaternion.identity
+        );
+
         if (lootObject.TryGetComponent(out Loot loot))
         {
             loot.Setup(
                 selectedDrop.itemData,
                 UnityEngine.Random.Range(
-                    Mathf.Min(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity),
-                    Mathf.Max(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity) + 1
+                    Mathf.Min(
+                        selectedDrop.minimumQuantity,
+                        selectedDrop.maximumQuantity
+                    ),
+                    Mathf.Max(
+                        selectedDrop.minimumQuantity,
+                        selectedDrop.maximumQuantity
+                    ) + 1
                 )
             );
         }
@@ -132,6 +133,7 @@ public class BreakablePotManager : MonoBehaviour
     private static LootDrop? GetRandomDrop(List<LootDrop> lootPool)
     {
         List<LootDrop> validDrops = new List<LootDrop>();
+
         foreach (LootDrop drop in lootPool)
         {
             if (drop.itemData != null)

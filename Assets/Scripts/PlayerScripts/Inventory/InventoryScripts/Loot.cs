@@ -62,7 +62,7 @@ public class Loot : MonoBehaviour
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
 
-        UpdateVisuals();
+        UpdateVisuals(false);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -152,7 +152,7 @@ public class Loot : MonoBehaviour
             : collider.GetComponentInParent<PlayerInventory>();
     }
 
-    private void UpdateVisuals()
+    private void UpdateVisuals(bool updateOutline = true)
     {
         if (spriteRenderer == null) return;
 
@@ -169,7 +169,8 @@ public class Loot : MonoBehaviour
             spriteRenderer.sprite = null;
         }
 
-        UpdateOutline();
+        if (updateOutline)
+            UpdateOutline();
     }
 
     private void CreateOutline()

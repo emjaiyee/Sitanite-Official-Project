@@ -52,6 +52,7 @@ GameObject:
   - component: {fileID: 3463651732144763740}
   - component: {fileID: 796006693669471552}
   - component: {fileID: 4489133721418470123}
+  - component: {fileID: 6514933062211407794}
   m_Layer: 6
   m_Name: 'Goblin (CrossBow) '
   m_TagString: Enemy
@@ -442,3 +443,16 @@ MonoBehaviour:
   attackSFX:
   - {fileID: 8300000, guid: b69bca7f0bc6d1a4b971af539fd59788, type: 3}
   deathSFX: {fileID: 8300000, guid: 2bd90bbb7aba732429fbe03134d1896f, type: 3}
+--- !u!114 &6514933062211407794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8748001588763141578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28fe4e929d44d2c9b9277c4050b516d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  lootSpawnPoint: {fileID: 4074788260977273869, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}

@@ -170,6 +170,7 @@ MonoBehaviour:
   audioSource: {fileID: 2461000000000000001}
   weaponProfiles:
   - weaponId: Dagger
+    attackSounds: []
     attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
     skills:
     - skillType: 5
@@ -324,8 +325,6 @@ MonoBehaviour:
   indicatorPulseMax: 1.1
   rotateIndicator: 1
   pulseIndicator: 1
-  stabTargetingRange: 2
-  selectedStabColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &2822445528674101521
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,6 +373,7 @@ MonoBehaviour:
   audioSource: {fileID: 2461000000000000001}
   weaponProfiles:
   - weaponId: Dagger
+    attackSounds: []
     attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
     skills:
     - skillType: 5
@@ -383,6 +383,7 @@ MonoBehaviour:
       fullyChargedSound: {fileID: 0}
       chargeReleaseSound: {fileID: 0}
   - weaponId: Dagger
+    attackSounds: []
     attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
     skills:
     - skillType: 5
@@ -392,6 +393,7 @@ MonoBehaviour:
       fullyChargedSound: {fileID: 0}
       chargeReleaseSound: {fileID: 0}
   - weaponId: TomeLightning
+    attackSounds: []
     attackSound: {fileID: 8300000, guid: fcd7fa5459535584c836413de73a4eaf, type: 3}
     skills:
     - skillType: 4
@@ -401,6 +403,7 @@ MonoBehaviour:
       fullyChargedSound: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
       chargeReleaseSound: {fileID: 8300000, guid: 1ab5f6a9a6c75c94bb4ae08d6cd00ba8, type: 3}
   - weaponId: ShortBow
+    attackSounds: []
     attackSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
     skills:
     - skillType: 1
@@ -794,6 +797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8783d46ea00cf48940864c7b12b17d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+  rampMovementCollider: {fileID: 7028194302724733707}
 --- !u!114 &705827018461203480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1111,6 +1115,7 @@ MonoBehaviour:
   inventoryAction: {fileID: 3459150446316449696, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
   startOpen: 0
   suppressedUIs: []
+  lootPrefab: {fileID: 0}
 --- !u!114 &1613250513679658638
 MonoBehaviour:
   m_ObjectHideFlags: 0
