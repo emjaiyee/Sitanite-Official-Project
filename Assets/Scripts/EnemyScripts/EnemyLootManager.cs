@@ -34,8 +34,12 @@ public class EnemyLootManager : MonoBehaviour
     [SerializeField] private FloorManager floorManager;
     [SerializeField] private GameObject lootPrefab;
 
-    [Header("Floor Loot Configurations")]
+    [Header("Regular Enemy Floor Loot Configurations")]
     [SerializeField] private List<FloorLootConfiguration> lootConfigurations =
+        new List<FloorLootConfiguration>();
+
+    [Header("Boss Floor Loot Configurations")]
+    [SerializeField] private List<FloorLootConfiguration> bossLootConfigurations =
         new List<FloorLootConfiguration>();
 
     [Header("Spawn Placement")]
@@ -59,10 +63,10 @@ public class EnemyLootManager : MonoBehaviour
             Instance = null;
     }
 
-    public void SpawnLoot(Vector3 origin)
+    public void SpawnLoot(Vector3 origin, EnemyType enemyType)
     {
         List<FloorLootConfiguration> configurations =
-            GetCurrentConfigurations();
+            GetCurrentConfigurations(enemyType);
 
         if (configurations.Count == 0)
             return;
@@ -107,7 +111,8 @@ public class EnemyLootManager : MonoBehaviour
         }
     }
 
-    private List<FloorLootConfiguration> GetCurrentConfigurations()
+    private List<FloorLootConfiguration> GetCurrentConfigurations(
+        EnemyType enemyType)
     {
         List<FloorLootConfiguration> configurations =
             new List<FloorLootConfiguration>();
@@ -118,7 +123,12 @@ public class EnemyLootManager : MonoBehaviour
         if (floorManager == null)
             return configurations;
 
-        foreach (FloorLootConfiguration configuration in lootConfigurations)
+        List<FloorLootConfiguration> lootConfigurationList =
+            enemyType == EnemyType.Boss
+                ? bossLootConfigurations
+                : lootConfigurations;
+
+        foreach (FloorLootConfiguration configuration in lootConfigurationList)
         {
             if (configuration != null &&
                 configuration.ContainsFloor(floorManager.CurrentFloor))

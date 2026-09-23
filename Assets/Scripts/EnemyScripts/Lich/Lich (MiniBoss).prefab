@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 2685940290472866261}
   - component: {fileID: 7168415976655415684}
   - component: {fileID: 4941687366284714724}
+  - component: {fileID: 874966847612507211}
   m_Layer: 6
   m_Name: Lich (MiniBoss)
   m_TagString: Enemy
@@ -202,8 +203,14 @@ MonoBehaviour:
   summonLevel: 1
   summonEnemy: {fileID: 2290695894656021834, guid: 58264b95a41a22749b5cd046a986af7d, type: 3}
   summonList: []
-  canSummon: 1
+  summonCooldown: 30
+  summonFirst: 0
   spawnRadius: 0.7
+  nextSummonTime: 0
+  hittableLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  checkRadius: 0.5
   takingAim: 0
   deathAnimationDelay: 0.5
   deathFadeDuration: 0.75
@@ -333,3 +340,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &874966847612507211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602161633568627328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28fe4e929d44d2c9b9277c4050b516d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  lootSpawnPoint: {fileID: 0}

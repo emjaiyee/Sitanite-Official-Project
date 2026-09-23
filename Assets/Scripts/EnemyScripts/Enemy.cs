@@ -1,9 +1,18 @@
 using UnityEngine;
 
+public enum EnemyType
+{
+    Enemy,
+    Boss
+}
+
 [DisallowMultipleComponent]
 [RequireComponent(typeof(EnemyHealth))]
 public class Enemy : MonoBehaviour
 {
+    [Header("Type")]
+    [SerializeField] private EnemyType enemyType = EnemyType.Enemy;
+
     [Header("Loot")]
     [SerializeField] private Transform lootSpawnPoint;
 
@@ -35,7 +44,8 @@ public class Enemy : MonoBehaviour
         hasDroppedLoot = true;
 
         EnemyLootManager.Instance?.SpawnLoot(
-            lootSpawnPoint != null ? lootSpawnPoint.position : transform.position
+            lootSpawnPoint != null ? lootSpawnPoint.position : transform.position,
+            enemyType
         );
     }
 }

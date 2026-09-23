@@ -169,7 +169,11 @@ MonoBehaviour:
   - minimumFloor: 0
     maximumFloor: 0
     lootChance: 0
-    lootPool: []
+    lootPool:
+    - itemData: {fileID: 0}
+      minimumQuantity: 0
+      maximumQuantity: 0
+  bossLootConfigurations: []
   spawnSearchRadius: 1
   spawnSearchAttempts: 8
 --- !u!1 &242918382
