@@ -493,7 +493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWASD
   moveAction: {fileID: -7623319301975187240, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
   sprintAction: {fileID: 9047545557421842618, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
-  useIsometricMovement: 0
+  useIsometricMovement: 1
   diagonalAxisScale: 0.5
 --- !u!70 &6600023078225743897
 CapsuleCollider2D:
@@ -973,15 +973,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterSpriteController
   playerWASD: {fileID: 5539229426081354734}
   characterRenderer: {fileID: 6783837840638991853}
+  playerSoundHelper: {fileID: 0}
   idleFramesPerSecond: 4
   walkFramesPerSecond: 8
   runningFramesPerSecond: 12
-  attackFramesPerSecond: 10
-  skillFramesPerSecond: 10
+  meleeFramesPerSecond: 10
+  castFramesPerSecond: 10
+  rangedFramesPerSecond: 10
   dashFramesPerSecond: 14
   deathFramesPerSecond: 6
-  attackDuration: 0.4
-  skillDuration: 0.4
+  meleeDuration: 0.4
+  castDuration: 0.4
+  rangedDuration: 0.4
   dashDuration: 0.2
   idleSoundEvents:
     frameCount: 1
@@ -995,11 +998,15 @@ MonoBehaviour:
     frameCount: 4
     loop: 1
     events: []
-  attackSoundEvents:
+  meleeSoundEvents:
     frameCount: 1
     loop: 0
     events: []
-  skillSoundEvents:
+  castSoundEvents:
+    frameCount: 1
+    loop: 0
+    events: []
+  rangedSoundEvents:
     frameCount: 1
     loop: 0
     events: []
@@ -1051,7 +1058,7 @@ Animator:
   m_GameObject: {fileID: 5054948953897289759}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: da619ca6a692c4c44ae6614ec63ad395, type: 2}
+  m_Controller: {fileID: 9100000, guid: df65e8cab4498d541842efc3153d7bbe, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1117,25 +1124,70 @@ AudioSource:
   BypassReverbZones: 0
   rolloffCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   panLevelCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   spreadCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   reverbZoneMixCustomCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
