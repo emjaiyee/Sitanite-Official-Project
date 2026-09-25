@@ -37,7 +37,7 @@ public class EnemySpawnerManager : MonoBehaviour
         [Min(1)] public int minimumFloor = 1;
         [Min(1)] public int maximumFloor = 1;
 
-        [Header("Enemy Sources")]
+        [Header("Prefab Sources")]
         public List<GameObject> enemyPrefabs = new List<GameObject>();
 
         [Header("Active Spawners")]
@@ -58,9 +58,20 @@ public class EnemySpawnerManager : MonoBehaviour
         }
     }
 
+    [Serializable]
+    private class BossSpawnConfiguration : SpawnConfiguration
+    {
+        [Header("Boss Spawn")]
+        [Range(0f, 1f)] public float spawnChance = 0f;
+    }
+
     [Header("Floor Spawn Configurations")]
     [SerializeField] private List<SpawnConfiguration> spawnConfigurations =
         new List<SpawnConfiguration>();
+
+    [Header("Boss Floor Spawn Configurations")]
+    [SerializeField] private List<BossSpawnConfiguration> bossSpawnConfigurations =
+        new List<BossSpawnConfiguration>();
 
     [Header("Spawn Options")]
     [SerializeField] private bool spawnOnStart = true;
@@ -71,6 +82,10 @@ public class EnemySpawnerManager : MonoBehaviour
     [SerializeField] private FloorManager floorManager;
 
     public event Action<RoomInstance> OnRoomWaveCleared;
+    public event Action<EnemyHealth> OnBossSpawned;
+
+    public EnemyHealth ActiveBossHealth { get; private set; }
+    public RoomInstance ActiveBossRoom { get; private set; }
 
     private readonly HashSet<RoomInstance> registeredRooms =
         new HashSet<RoomInstance>();
@@ -81,6 +96,7 @@ public class EnemySpawnerManager : MonoBehaviour
     private readonly Dictionary<RoomInstance, HashSet<EnemySpawnPoint>> clearedSpawnPoints =
         new Dictionary<RoomInstance, HashSet<EnemySpawnPoint>>();
     private readonly Dictionary<EnemySpawnPoint, Action> clearHandlers = new Dictionary<EnemySpawnPoint, Action>();
+    private bool hasSpawnedFloorEnemies;
 
     private void Awake()
     {
@@ -101,6 +117,9 @@ public class EnemySpawnerManager : MonoBehaviour
 
     public void BeginFloor(FloorManager floor)
     {
+        if (ActiveBossHealth != null)
+            ActiveBossHealth.OnEnemyDied -= HandleActiveBossDied;
+
         foreach (KeyValuePair<EnemySpawnPoint, Action> entry in clearHandlers)
         {
             if (entry.Key != null)
@@ -112,27 +131,53 @@ public class EnemySpawnerManager : MonoBehaviour
         activeSpawnPoints.Clear();
         clearedSpawnPoints.Clear();
         clearHandlers.Clear();
+        ActiveBossHealth = null;
+        ActiveBossRoom = null;
+        hasSpawnedFloorEnemies = false;
         floorManager = floor;
     }
 
     public void RegisterRoom(RoomInstance room)
     {
-        if (room == null || !registeredRooms.Add(room))
-            return;
-
-        if (!spawnOnStart)
-            return;
-
-        if (spawnDelay > 0f)
-            StartCoroutine(DelayedSpawn(room, spawnDelay));
-        else
-            SpawnRoomEnemies(room);
+        if (room != null)
+            registeredRooms.Add(room);
     }
 
-    private IEnumerator DelayedSpawn(RoomInstance room, float delay)
+    public void SpawnFloorEnemies()
+    {
+        if (hasSpawnedFloorEnemies || !spawnOnStart)
+            return;
+
+        hasSpawnedFloorEnemies = true;
+
+        if (spawnDelay > 0f)
+            StartCoroutine(DelayedSpawnFloorEnemies(spawnDelay));
+        else
+            SpawnRegisteredRooms();
+    }
+
+    private IEnumerator DelayedSpawnFloorEnemies(float delay)
     {
         yield return new WaitForSeconds(delay);
-        SpawnRoomEnemies(room);
+        SpawnRegisteredRooms();
+    }
+
+    private void SpawnRegisteredRooms()
+    {
+        BossSpawnConfiguration bossConfiguration =
+            GetCurrentBossSpawnConfiguration();
+        RoomInstance bossRoom = SelectBossRoom(bossConfiguration);
+
+        foreach (RoomInstance room in registeredRooms)
+        {
+            if (room == null)
+                continue;
+
+            if (room == bossRoom)
+                SpawnBoss(room, bossConfiguration);
+            else
+                SpawnRoomEnemies(room);
+        }
     }
 
     public void SpawnRoomEnemies(RoomInstance room)
@@ -220,6 +265,112 @@ public class EnemySpawnerManager : MonoBehaviour
         return null;
     }
 
+    private BossSpawnConfiguration GetCurrentBossSpawnConfiguration()
+    {
+        if (floorManager == null)
+            floorManager = FindFirstObjectByType<FloorManager>();
+
+        if (floorManager == null)
+            return null;
+
+        foreach (BossSpawnConfiguration configuration in bossSpawnConfigurations)
+        {
+            if (configuration != null &&
+                configuration.ContainsFloor(floorManager.CurrentFloor))
+                return configuration;
+        }
+
+        return null;
+    }
+
+    private RoomInstance SelectBossRoom(BossSpawnConfiguration configuration)
+    {
+        if (configuration == null ||
+            UnityEngine.Random.value > configuration.spawnChance ||
+            GetRandomEnemyPrefab(configuration) == null)
+            return null;
+
+        List<RoomInstance> eligibleRooms = new List<RoomInstance>();
+
+        foreach (RoomInstance room in registeredRooms)
+        {
+            if (room != null &&
+                room.GetComponentsInChildren<EnemySpawnPoint>(true).Length > 0)
+                eligibleRooms.Add(room);
+        }
+
+        if (eligibleRooms.Count == 0)
+            return null;
+
+        return eligibleRooms[UnityEngine.Random.Range(0, eligibleRooms.Count)];
+    }
+
+    private void SpawnBoss(
+        RoomInstance room,
+        BossSpawnConfiguration configuration)
+    {
+        EnemySpawnPoint[] spawnPoints =
+            room.GetComponentsInChildren<EnemySpawnPoint>(true);
+
+        if (spawnPoints.Length == 0)
+        {
+            RaiseRoomWaveCleared(room);
+            return;
+        }
+
+        EnemySpawnPoint spawnPoint =
+            spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
+        GameObject bossPrefab = GetRandomEnemyPrefab(configuration);
+
+        if (bossPrefab == null)
+        {
+            RaiseRoomWaveCleared(room);
+            return;
+        }
+
+        activeSpawnPoints[room] =
+            new List<EnemySpawnPoint> { spawnPoint };
+        clearedSpawnPoints[room] = new HashSet<EnemySpawnPoint>();
+        spawnPointRooms[spawnPoint] = room;
+
+        Action handler = null;
+        handler = () => HandleSpawnPointCleared(spawnPoint, handler);
+        clearHandlers[spawnPoint] = handler;
+        spawnPoint.OnWaveCleared += handler;
+
+        GameObject boss = spawnPoint.SpawnEnemyAt(
+            spawnPoint.transform.position,
+            bossPrefab,
+            RollEnemyLevel(configuration),
+            spawnParent
+        );
+
+        if (boss == null)
+        {
+            HandleSpawnPointCleared(spawnPoint, handler);
+            return;
+        }
+
+        ApplyModifiers(boss, configuration);
+
+        ActiveBossHealth = boss.GetComponent<EnemyHealth>();
+        if (ActiveBossHealth != null)
+        {
+            ActiveBossRoom = room;
+            ActiveBossHealth.OnEnemyDied += HandleActiveBossDied;
+            OnBossSpawned?.Invoke(ActiveBossHealth);
+        }
+    }
+
+    private void HandleActiveBossDied(GameObject deadBoss)
+    {
+        if (ActiveBossHealth != null)
+            ActiveBossHealth.OnEnemyDied -= HandleActiveBossDied;
+
+        ActiveBossHealth = null;
+        ActiveBossRoom = null;
+    }
+
     private int GetActiveSpawnPointCount(SpawnConfiguration configuration, int availableSpawnPoints)
     {
         if (availableSpawnPoints <= 0)
@@ -292,6 +443,10 @@ public class EnemySpawnerManager : MonoBehaviour
         EnemyRange enemyRange = enemy.GetComponent<EnemyRange>();
         if (enemyRange != null)
             enemyRange.ApplyDamageModifier(damageModifier);
+
+        EnemyLich enemyLich = enemy.GetComponent<EnemyLich>();
+        if (enemyLich != null)
+            enemyLich.ApplyDamageModifier(damageModifier);
 
         EnemyLevelXP enemyLevelXp = enemy.GetComponent<EnemyLevelXP>();
         if (enemyLevelXp != null)

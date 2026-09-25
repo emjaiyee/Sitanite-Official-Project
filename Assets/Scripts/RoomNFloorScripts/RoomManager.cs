@@ -362,6 +362,8 @@ public class RoomManager : MonoBehaviour
             );
         }
 
+        enemySpawnerManager.SpawnFloorEnemies();
+
         // ---------------------------------------------
         // PLAYER
         // ---------------------------------------------
