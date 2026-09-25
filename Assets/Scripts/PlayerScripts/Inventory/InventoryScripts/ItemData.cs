@@ -259,7 +259,11 @@ public enum WeaponSkillType
     Stab,
     CrossbowExplosion,
     Slash,
-    SpinAxe
+    SpinAxe,
+    Typhoon,
+    VeilOfFire,
+    FireBalls,
+    RapidFireBalls
 }
 
 /// <summary>

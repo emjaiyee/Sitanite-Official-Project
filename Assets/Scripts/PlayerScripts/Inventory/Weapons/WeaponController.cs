@@ -304,6 +304,35 @@ public void UseSkill(Vector2 direction)
 
             break;
 
+        case WeaponSkillType.Typhoon:
+
+            BeginArrowRainTargeting(direction);
+
+            break;
+
+        case WeaponSkillType.VeilOfFire:
+
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            weaponAudio?.PlaySkillSound();
+            UseVeilOfFireSkill();
+
+            break;
+
+        case WeaponSkillType.FireBalls:
+
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            weaponAudio?.PlaySkillSound();
+            UseFireBallsSkill(direction);
+
+            break;
+
+        case WeaponSkillType.RapidFireBalls:
+
+            nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
+            UseRapidFireballsSkill(direction);
+
+            break;
+
         case WeaponSkillType.ChargedArrow:
 
             nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
@@ -385,7 +414,19 @@ public void UseSkill(Vector2 direction)
             ClearArrowRainPreview();
             nextSkillTime = Time.time + GetCooldown(data.SkillCooldown);
             weaponAudio?.PlaySkillSound();
-            UseArrowRainSkill(arrowRainPosition);
+
+            if (data.WeaponSkillType == WeaponSkillType.Typhoon)
+                UseTyphoonSkill(arrowRainPosition);
+            else
+                UseArrowRainSkill(arrowRainPosition);
+        }
+
+        public void CancelSkill()
+        {
+            if (!IsTargetingSkill)
+                return;
+
+            ClearArrowRainPreview();
         }
 
 
@@ -759,6 +800,186 @@ private void UseStabSkill(Vector2 direction)
         );
     }
 
+    private void UseTyphoonSkill(Vector3 targetPosition)
+    {
+        if (data.SkillProjectilePrefab == null)
+        {
+            Debug.LogWarning(
+                $"{WeaponId}: Typhoon requires a skill projectile prefab."
+            );
+
+            return;
+        }
+
+        GameObject typhoonObject =
+            Instantiate(
+                data.SkillProjectilePrefab,
+                targetPosition,
+                Quaternion.identity
+            );
+
+        Typhoon typhoon =
+            typhoonObject.GetComponentInChildren<Typhoon>();
+
+        if (typhoon == null)
+        {
+            Debug.LogError(
+                $"{WeaponId}: Typhoon projectile prefab does not contain a Typhoon component."
+            );
+
+            Destroy(typhoonObject);
+            return;
+        }
+
+        typhoon.Initialize(
+            data.GetSkillDamage(
+                DamageSlot.Primary,
+                CalculateSkillDamage(data.SkillDamage)
+            ),
+            DamageType.Air,
+            data.GetSkillDamage(
+                DamageSlot.Secondary,
+                CalculateSkillDamage(data.SkillDamage)
+            ),
+            data.GetDamageType(DamageSlot.Secondary),
+            data.GetSkillDamage(
+                DamageSlot.Tertiary,
+                CalculateSkillDamage(data.SkillDamage)
+            ),
+            data.GetDamageType(DamageSlot.Tertiary),
+            data.SkillRadius * data.SkillRadiusMultiplier,
+            data.SkillDuration,
+            data.SkillDamageTicksPerSecond,
+            Physics2D.AllLayers
+        );
+    }
+
+    private void UseVeilOfFireSkill()
+    {
+        if (data.SkillProjectilePrefab == null)
+        {
+            Debug.LogWarning(
+                $"{WeaponId}: Veil of Fire requires a skill projectile prefab."
+            );
+
+            return;
+        }
+
+        Transform player = transform.root;
+        GameObject veilObject =
+            Instantiate(
+                data.SkillProjectilePrefab,
+                player.position,
+                Quaternion.identity,
+                player
+            );
+
+        VeilOfFire veil = veilObject.GetComponent<VeilOfFire>();
+        if (veil == null)
+            veil = veilObject.AddComponent<VeilOfFire>();
+
+        veil.Initialize(
+            data.GetSkillDamage(
+                DamageSlot.Primary,
+                CalculateSkillDamage(data.SkillDamage)
+            ),
+            data.GetSkillDamage(
+                DamageSlot.Secondary,
+                CalculateSkillDamage(data.SkillDamage)
+            ),
+            data.GetDamageType(DamageSlot.Secondary),
+            data.GetSkillDamage(
+                DamageSlot.Tertiary,
+                CalculateSkillDamage(data.SkillDamage)
+            ),
+            data.GetDamageType(DamageSlot.Tertiary),
+            data.SkillRadius * data.SkillRadiusMultiplier,
+            data.SkillDuration,
+            data.SkillDamageTicksPerSecond,
+            Physics2D.AllLayers,
+            player
+        );
+    }
+
+    private void UseFireBallsSkill(Vector2 direction)
+    {
+        if (data.ProjectilePrefab == null)
+        {
+            Debug.LogWarning(
+                $"{WeaponId}: Fire Balls requires the normal attack projectile prefab."
+            );
+
+            return;
+        }
+
+        Vector2 baseDirection = direction.sqrMagnitude <= 0.0001f
+            ? Vector2.right
+            : direction.normalized;
+
+        int damage = CalculateSkillDamage(data.SkillDamage);
+
+        for (int index = 0; index < 8; index++)
+        {
+            Vector2 fireDirection =
+                Quaternion.Euler(0f, 0f, index * 45f) * baseDirection;
+
+            FireProjectile(
+                data.ProjectilePrefab,
+                data.AttackRange,
+                damage,
+                data.SpellProjectileSpeed,
+                fireDirection,
+                true
+            );
+        }
+    }
+
+    private void UseRapidFireballsSkill(Vector2 direction)
+    {
+        if (data.ProjectilePrefab == null)
+        {
+            Debug.LogWarning(
+                $"{WeaponId}: Rapid Fireballs requires the normal attack projectile prefab."
+            );
+
+            return;
+        }
+
+        Vector2 fireDirection = direction.sqrMagnitude <= 0.0001f
+            ? Vector2.right
+            : direction.normalized;
+
+        StartCoroutine(
+            RapidFireballs(
+                fireDirection,
+                CalculateSkillDamage(data.SkillDamage)
+            )
+        );
+    }
+
+    private IEnumerator RapidFireballs(
+        Vector2 direction,
+        int damage)
+    {
+        for (int index = 0; index < 6; index++)
+        {
+            weaponAudio?.PlayAttackSound();
+
+            FireProjectile(
+                data.ProjectilePrefab,
+                data.AttackRange,
+                damage,
+                data.SpellProjectileSpeed,
+                direction,
+                true,
+                DamageType.Fire
+            );
+
+            if (index < 5)
+                yield return new WaitForSeconds(0.08f);
+        }
+    }
+
     private void ClearArrowRainPreview()
     {
         if (activeArrowRainPreview != null)
@@ -1070,7 +1291,8 @@ public void ReleaseSkill(bool fullyCharged)
         int damage,
         float speed,
         Vector2 direction,
-        bool isSkill = false)
+        bool isSkill = false,
+        DamageType primaryDamageTypeOverride = DamageType.None)
     {
         if (projectilePrefab == null ||
             firePoint == null)
@@ -1119,9 +1341,14 @@ public void ReleaseSkill(bool fullyCharged)
 
         if (isSkill)
         {
+            DamageType primaryDamageType =
+                primaryDamageTypeOverride == DamageType.None
+                    ? data.PrimaryDamageType
+                    : primaryDamageTypeOverride;
+
             projectileComponent.InitializeSkill(
                 damage,
-                data.PrimaryDamageType,
+                primaryDamageType,
 
                 data.GetSkillDamage(
                     DamageSlot.Secondary,
