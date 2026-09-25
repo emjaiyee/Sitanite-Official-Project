@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,8 +10,8 @@ public class BossHealthBarUI : MonoBehaviour
 
     private EnemySpawnerManager spawnerManager;
     private EnemyHealth bossHealth;
-    private RoomManager roomManager;
-    private Coroutine fadeRoutine;
+    private PlayerRoomTracker roomTracker;
+    private float targetAlpha;
 
     private void Awake()
     {
@@ -22,7 +21,8 @@ public class BossHealthBarUI : MonoBehaviour
         if (healthSlider == null)
             healthSlider = GetComponentInChildren<Slider>(true);
 
-        SetAlphaImmediately(0f);
+        targetAlpha = 0f;
+        SetAlphaImmediately(targetAlpha);
     }
 
     private void OnEnable()
@@ -40,6 +40,7 @@ public class BossHealthBarUI : MonoBehaviour
             BindBoss(spawnerManager.ActiveBossHealth);
 
         UpdateVisibility();
+        UpdateFade();
     }
 
     private void OnDisable()
@@ -49,12 +50,6 @@ public class BossHealthBarUI : MonoBehaviour
 
         UnbindBoss();
         spawnerManager = null;
-
-        if (fadeRoutine != null)
-        {
-            StopCoroutine(fadeRoutine);
-            fadeRoutine = null;
-        }
     }
 
     private void BindToSpawner()
@@ -123,57 +118,41 @@ public class BossHealthBarUI : MonoBehaviour
 
     private void UpdateVisibility()
     {
-        if (roomManager == null)
-            roomManager = FindFirstObjectByType<RoomManager>();
+        if (roomTracker == null && Player.Instance != null)
+            roomTracker = Player.Instance.GetComponent<PlayerRoomTracker>();
 
         bool isInBossRoom =
             bossHealth != null &&
             spawnerManager != null &&
             spawnerManager.ActiveBossRoom != null &&
-            roomManager != null &&
-            roomManager.CurrentPlayerRoom == spawnerManager.ActiveBossRoom;
+            roomTracker != null &&
+            roomTracker.CurrentRoom == spawnerManager.ActiveBossRoom;
 
         FadeTo(isInBossRoom ? 1f : 0f);
     }
 
     private void FadeTo(float targetAlpha)
     {
-        if (canvasGroup == null ||
-            Mathf.Approximately(canvasGroup.alpha, targetAlpha))
-            return;
-
-        if (fadeRoutine != null)
-            StopCoroutine(fadeRoutine);
-
-        fadeRoutine = StartCoroutine(FadeRoutine(targetAlpha));
+        this.targetAlpha = targetAlpha;
     }
 
-    private IEnumerator FadeRoutine(float targetAlpha)
+    private void UpdateFade()
     {
-        float startAlpha = canvasGroup.alpha;
-        float duration = Mathf.Max(0f, fadeDuration);
+        if (canvasGroup == null)
+            return;
 
+        float duration = Mathf.Max(0f, fadeDuration);
         if (duration <= 0f)
         {
             SetAlphaImmediately(targetAlpha);
-            fadeRoutine = null;
-            yield break;
+            return;
         }
 
-        float elapsed = 0f;
-        while (elapsed < duration)
-        {
-            elapsed += Time.unscaledDeltaTime;
-            canvasGroup.alpha = Mathf.Lerp(
-                startAlpha,
-                targetAlpha,
-                Mathf.Clamp01(elapsed / duration)
-            );
-            yield return null;
-        }
-
-        SetAlphaImmediately(targetAlpha);
-        fadeRoutine = null;
+        canvasGroup.alpha = Mathf.MoveTowards(
+            canvasGroup.alpha,
+            targetAlpha,
+            Time.unscaledDeltaTime / duration
+        );
     }
 
     private void SetAlphaImmediately(float alpha)

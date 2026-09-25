@@ -188,12 +188,12 @@ MonoBehaviour:
   locateWaitDuration: 2.5
   attackRange: 4
   projectileDamageType: 64
-  projectileDamage: 5
+  projectileDamage: 10
   attackCooldown: 1.5
-  projectileSpeed: 7
+  projectileSpeed: 5
   projectileLifetime: 4
   missileDamageType: 1024
-  missileDamage: 10
+  missileDamage: 15
   missileCooldown: 6.5
   missileSpeed: 3
   missileLifetime: 5
@@ -226,12 +226,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8ab9ceee96b684593ff9daf9b2dc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 120
-  basePierceResistance: 5
-  baseStabResistance: 5
-  baseSlashResistance: 5
-  baseBluntResistance: 5
-  baseFrostResistance: 5
+  maxHealth: 150
+  basePierceResistance: 6
+  baseStabResistance: 6
+  baseSlashResistance: 6
+  baseBluntResistance: 6
+  baseFrostResistance: 20
   basePoisonResistance: 20
   baseLightningResistance: 20
   basePsychicResistance: 20

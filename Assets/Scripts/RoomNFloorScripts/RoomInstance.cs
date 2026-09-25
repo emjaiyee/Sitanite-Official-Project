@@ -10,6 +10,27 @@ public class RoomInstance : MonoBehaviour
 
     public int RoomNumber => roomNumber;
 
+    public bool ContainsWorldPosition(Vector3 worldPosition)
+    {
+        Collider2D[] colliders = GetComponentsInChildren<Collider2D>(true);
+
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider != null && collider.OverlapPoint(worldPosition))
+                return true;
+        }
+
+        Renderer[] renderers = GetComponentsInChildren<Renderer>(true);
+        foreach (Renderer roomRenderer in renderers)
+        {
+            if (roomRenderer != null &&
+                roomRenderer.bounds.Contains(worldPosition))
+                return true;
+        }
+
+        return false;
+    }
+
     public void Initialize(int number)
     {
         roomNumber = number;

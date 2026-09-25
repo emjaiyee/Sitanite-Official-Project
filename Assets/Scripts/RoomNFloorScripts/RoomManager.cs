@@ -63,6 +63,28 @@ public class RoomManager : MonoBehaviour
     private Gateway validSecretGateway;
     private RoomInstance secretUnlockRoom;
 
+    public RoomInstance FindRoomAtPosition(Vector3 worldPosition)
+    {
+        foreach (RoomInstance room in generatedRooms)
+        {
+            if (room != null && room.ContainsWorldPosition(worldPosition))
+                return room;
+        }
+
+        foreach (RoomInstance room in generatedSecretRooms)
+        {
+            if (room != null && room.ContainsWorldPosition(worldPosition))
+                return room;
+        }
+
+        return null;
+    }
+
+    public void SetTrackedPlayerRoom(RoomInstance room)
+    {
+        currentPlayerRoom = room;
+    }
+
 
     // -------------------------------------------------
     // ROOM CLEAR TRACKING
