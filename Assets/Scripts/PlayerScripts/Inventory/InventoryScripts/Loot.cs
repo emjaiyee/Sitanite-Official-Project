@@ -33,6 +33,7 @@ public class Loot : MonoBehaviour
     private PlayerInventory dropOwner;
     private bool waitingForOwnerExit;
     private float pickupAllowedTime;
+    private bool dropEffectsPlayed;
     #endregion
 
     #region Properties
@@ -62,7 +63,7 @@ public class Loot : MonoBehaviour
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
 
-        UpdateVisuals();
+        UpdateVisuals(false);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -91,6 +92,16 @@ public class Loot : MonoBehaviour
         itemData = data;
         quantity = Mathf.Max(1, initialQuantity);
         UpdateVisuals();
+
+        if (!dropEffectsPlayed && itemData != null)
+        {
+            dropEffectsPlayed = true;
+            LootDropEffectsManager.Instance?.PlayDropEffects(
+                itemData,
+                transform,
+                spriteRenderer
+            );
+        }
     }
 
     public void PreventOwnerPickupUntilExit(PlayerInventory owner)
@@ -152,7 +163,7 @@ public class Loot : MonoBehaviour
             : collider.GetComponentInParent<PlayerInventory>();
     }
 
-    private void UpdateVisuals()
+    private void UpdateVisuals(bool updateOutline = true)
     {
         if (spriteRenderer == null) return;
 
@@ -169,7 +180,8 @@ public class Loot : MonoBehaviour
             spriteRenderer.sprite = null;
         }
 
-        UpdateOutline();
+        if (updateOutline)
+            UpdateOutline();
     }
 
     private void CreateOutline()

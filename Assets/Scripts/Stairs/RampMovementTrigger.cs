@@ -41,7 +41,16 @@ public class RampMovementTrigger : MonoBehaviour
         if (!enableRampMovement)
             return;
 
-        PlayerWASD movement = other.GetComponent<PlayerWASD>();
+        Player player = Player.Instance;
+
+        if (player == null ||
+            other != player.RampMovementCollider)
+        {
+            return;
+        }
+
+        PlayerWASD movement =
+            player.GetComponent<PlayerWASD>();
 
         if (movement != null)
             movement.EnterRamp(rampForward);
@@ -49,7 +58,16 @@ public class RampMovementTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        PlayerWASD movement = other.GetComponent<PlayerWASD>();
+        Player player = Player.Instance;
+
+        if (player == null ||
+            other != player.RampMovementCollider)
+        {
+            return;
+        }
+
+        PlayerWASD movement =
+            player.GetComponent<PlayerWASD>();
 
         if (movement != null)
             movement.ExitRamp();

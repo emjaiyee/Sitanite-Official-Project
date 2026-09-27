@@ -61,14 +61,20 @@ public class BreakablePotManager : MonoBehaviour
 
     public void SpawnLoot(Vector3 origin)
     {
-        foreach (FloorLootConfiguration configuration in
-            GetCurrentConfigurations())
-        {
-            if (UnityEngine.Random.value > configuration.lootChance)
-                continue;
+        List<FloorLootConfiguration> configurations =
+            GetCurrentConfigurations();
 
-            SpawnConfigurationLoot(configuration, origin);
-        }
+        if (configurations.Count == 0)
+            return;
+
+        FloorLootConfiguration configuration = configurations[
+            UnityEngine.Random.Range(0, configurations.Count)
+        ];
+
+        if (UnityEngine.Random.value > configuration.lootChance)
+            return;
+
+        SpawnConfigurationLoot(configuration, origin);
     }
 
     private void SpawnConfigurationLoot(

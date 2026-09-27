@@ -63,5 +63,6 @@ public class EnemySFX : MonoBehaviour
 
         audioSource.PlayOneShot(deathSFX);
     }
+
 }
 

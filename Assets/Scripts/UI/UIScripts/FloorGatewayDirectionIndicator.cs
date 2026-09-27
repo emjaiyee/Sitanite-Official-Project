@@ -15,6 +15,7 @@ public class FloorGatewayDirectionIndicator : MonoBehaviour
 
     private Camera gameplayCamera;
     private RoomManager roomManager;
+    private PlayerRoomTracker roomTracker;
 
     private void Reset()
     {
@@ -86,7 +87,12 @@ public class FloorGatewayDirectionIndicator : MonoBehaviour
         RoomInstance floorRoom =
             floorGateway.GetComponentInParent<RoomInstance>();
 
-        RoomInstance playerRoom = roomManager.CurrentPlayerRoom;
+        if (roomTracker == null && Player.Instance != null)
+            roomTracker = Player.Instance.GetComponent<PlayerRoomTracker>();
+
+        RoomInstance playerRoom = roomTracker != null
+            ? roomTracker.CurrentRoom
+            : roomManager.CurrentPlayerRoom;
 
         if (playerRoom == null || playerRoom == floorRoom)
             return floorGateway;

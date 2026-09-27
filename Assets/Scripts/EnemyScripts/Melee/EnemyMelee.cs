@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Enemy))]
 [RequireComponent(typeof(EnemyLevelXP))]
 [RequireComponent(typeof(EnemyHealth))]
 public class EnemyMelee : MonoBehaviour
