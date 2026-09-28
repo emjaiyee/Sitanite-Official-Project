@@ -145,7 +145,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -183,7 +183,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -221,15 +221,15 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: dropeffectsRareandUncommon_0
+      name: rare6
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1536
-        height: 1024
+        x: 22
+        y: 530
+        width: 213
+        height: 261
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -247,11 +247,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 65
-        width: 17
-        height: 37
+        y: 66
+        width: 16
+        height: 35
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -268,12 +268,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_2
       rect:
         serializedVersion: 2
-        x: 12
-        y: 65
-        width: 29
-        height: 55
+        x: 13
+        y: 66
+        width: 27
+        height: 53
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -290,12 +290,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_3
       rect:
         serializedVersion: 2
-        x: 38
-        y: 79
-        width: 12
-        height: 21
+        x: 39
+        y: 80
+        width: 10
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -312,12 +312,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_4
       rect:
         serializedVersion: 2
-        x: 42
+        x: 43
         y: 0
-        width: 436
-        height: 146
+        width: 434
+        height: 145
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -334,12 +334,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_5
       rect:
         serializedVersion: 2
-        x: 460
+        x: 461
         y: 0
-        width: 425
-        height: 106
+        width: 423
+        height: 105
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -356,12 +356,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_6
       rect:
         serializedVersion: 2
-        x: 838
+        x: 839
         y: 0
-        width: 156
-        height: 22
+        width: 154
+        height: 21
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -378,12 +378,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_7
       rect:
         serializedVersion: 2
-        x: 888
-        y: 15
-        width: 11
-        height: 15
+        x: 889
+        y: 16
+        width: 9
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -400,12 +400,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_8
       rect:
         serializedVersion: 2
-        x: 894
-        y: 63
-        width: 9
-        height: 15
+        x: 895
+        y: 64
+        width: 7
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -422,12 +422,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_9
       rect:
         serializedVersion: 2
-        x: 904
-        y: 11
-        width: 27
-        height: 17
+        x: 905
+        y: 12
+        width: 25
+        height: 15
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -444,12 +444,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_10
       rect:
         serializedVersion: 2
-        x: 916
-        y: 15
-        width: 61
-        height: 37
+        x: 917
+        y: 16
+        width: 59
+        height: 35
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -466,12 +466,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_11
       rect:
         serializedVersion: 2
-        x: 948
-        y: 45
-        width: 13
-        height: 12
+        x: 949
+        y: 46
+        width: 11
+        height: 10
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -488,12 +488,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_12
       rect:
         serializedVersion: 2
-        x: 981
-        y: 71
-        width: 10
-        height: 15
+        x: 982
+        y: 72
+        width: 8
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -510,12 +510,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_13
       rect:
         serializedVersion: 2
-        x: 998
+        x: 999
         y: 0
-        width: 538
-        height: 60
+        width: 537
+        height: 59
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -532,12 +532,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_14
       rect:
         serializedVersion: 2
-        x: 998
-        y: 51
-        width: 7
-        height: 7
+        x: 999
+        y: 52
+        width: 5
+        height: 5
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -554,12 +554,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_15
       rect:
         serializedVersion: 2
-        x: 1000
-        y: 79
-        width: 7
-        height: 9
+        x: 1001
+        y: 80
+        width: 5
+        height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -576,12 +576,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_16
       rect:
         serializedVersion: 2
-        x: 1008
-        y: 61
-        width: 11
-        height: 16
+        x: 1009
+        y: 62
+        width: 9
+        height: 14
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -598,12 +598,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_17
       rect:
         serializedVersion: 2
-        x: 1012
-        y: 17
-        width: 23
-        height: 53
+        x: 1013
+        y: 18
+        width: 21
+        height: 51
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -620,12 +620,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_18
       rect:
         serializedVersion: 2
-        x: 1016
-        y: 15
-        width: 9
-        height: 11
+        x: 1017
+        y: 16
+        width: 7
+        height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -642,12 +642,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_19
       rect:
         serializedVersion: 2
-        x: 1028
-        y: 14
-        width: 61
-        height: 62
+        x: 1029
+        y: 15
+        width: 59
+        height: 60
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -664,12 +664,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_20
       rect:
         serializedVersion: 2
-        x: 1030
-        y: 75
-        width: 15
-        height: 15
+        x: 1031
+        y: 76
+        width: 13
+        height: 13
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -686,12 +686,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_21
       rect:
         serializedVersion: 2
-        x: 1046
-        y: 67
-        width: 20
-        height: 25
+        x: 1047
+        y: 68
+        width: 18
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -708,12 +708,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_22
       rect:
         serializedVersion: 2
-        x: 1096
-        y: 5
-        width: 55
-        height: 37
+        x: 1097
+        y: 6
+        width: 53
+        height: 35
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -730,12 +730,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_23
       rect:
         serializedVersion: 2
-        x: 1100
-        y: 43
-        width: 15
-        height: 23
+        x: 1101
+        y: 44
+        width: 13
+        height: 21
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -752,12 +752,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_24
       rect:
         serializedVersion: 2
-        x: 1112
-        y: 59
-        width: 41
-        height: 25
+        x: 1113
+        y: 60
+        width: 39
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -774,12 +774,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_25
       rect:
         serializedVersion: 2
-        x: 1254
-        y: 41
-        width: 9
-        height: 13
+        x: 1255
+        y: 42
+        width: 7
+        height: 11
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -796,12 +796,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_26
       rect:
         serializedVersion: 2
-        x: 1256
-        y: 83
-        width: 7
-        height: 7
+        x: 1257
+        y: 84
+        width: 5
+        height: 5
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -818,12 +818,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_27
       rect:
         serializedVersion: 2
-        x: 1262
-        y: 81
-        width: 7
-        height: 9
+        x: 1263
+        y: 82
+        width: 5
+        height: 7
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -840,12 +840,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_28
       rect:
         serializedVersion: 2
-        x: 1270
-        y: 49
-        width: 15
-        height: 25
+        x: 1271
+        y: 50
+        width: 13
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -862,12 +862,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_29
       rect:
         serializedVersion: 2
-        x: 1288
-        y: 49
-        width: 23
-        height: 37
+        x: 1289
+        y: 50
+        width: 21
+        height: 35
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -884,12 +884,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_30
       rect:
         serializedVersion: 2
-        x: 1322
-        y: 84
-        width: 13
-        height: 14
+        x: 1323
+        y: 85
+        width: 11
+        height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -906,12 +906,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_31
       rect:
         serializedVersion: 2
-        x: 1382
-        y: 51
-        width: 15
-        height: 25
+        x: 1383
+        y: 52
+        width: 13
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -928,12 +928,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_32
       rect:
         serializedVersion: 2
-        x: 1396
-        y: 69
-        width: 17
-        height: 23
+        x: 1397
+        y: 70
+        width: 15
+        height: 21
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -950,12 +950,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_33
       rect:
         serializedVersion: 2
-        x: 1400
-        y: 49
-        width: 7
-        height: 7
+        x: 1401
+        y: 50
+        width: 5
+        height: 5
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -972,12 +972,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_34
       rect:
         serializedVersion: 2
-        x: 1416
-        y: 71
-        width: 13
-        height: 11
+        x: 1417
+        y: 72
+        width: 11
+        height: 9
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -994,12 +994,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_35
       rect:
         serializedVersion: 2
-        x: 1440
-        y: 45
-        width: 15
-        height: 19
+        x: 1441
+        y: 46
+        width: 13
+        height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1016,12 +1016,12 @@ TextureImporter:
       name: dropeffectsRareandUncommon_36
       rect:
         serializedVersion: 2
-        x: 1445
-        y: 82
-        width: 12
-        height: 18
+        x: 1446
+        y: 83
+        width: 10
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -1034,11 +1034,253 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: rare5
+      rect:
+        serializedVersion: 2
+        x: 248
+        y: 536
+        width: 232
+        height: 256
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6e88ee1f85b0eca4e83bbf084a2e4c82
+      internalID: 1364771220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rare4
+      rect:
+        serializedVersion: 2
+        x: 497
+        y: 524
+        width: 247
+        height: 296
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 018bd0734502a4b4bb2d40ec0bf6026d
+      internalID: 295805683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rare3
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 503
+        width: 268
+        height: 333
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecdfe64fa67dda940a50d53f91bd6e48
+      internalID: -1217810363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rare2
+      rect:
+        serializedVersion: 2
+        x: 1021
+        y: 510
+        width: 270
+        height: 334
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 499e02042f894914aaccaae68dca8dde
+      internalID: -229367140
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: rare1
+      rect:
+        serializedVersion: 2
+        x: 1296
+        y: 509
+        width: 231
+        height: 337
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a9786ff7839ba7429d4f6a417760c04
+      internalID: -367031753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: common7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 152
+        width: 234
+        height: 254
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a2bda4c1787f7d4c87c1ea502ab8eb1
+      internalID: 925859753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: common6
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 139
+        width: 235
+        height: 270
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dafd7e3f0cf04d94eb50d557cbbf4601
+      internalID: 1013210227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: common5
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 124
+        width: 261
+        height: 293
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58816d72aee6f3a4b90f779bed294474
+      internalID: 1427920634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: common4
+      rect:
+        serializedVersion: 2
+        x: 754
+        y: 112
+        width: 261
+        height: 315
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd1b9ffedddd7cb40affc67bc9f11e53
+      internalID: -2047156606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: common2
+      rect:
+        serializedVersion: 2
+        x: 1020
+        y: 101
+        width: 269
+        height: 327
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecbee202cf34f7841a211704acf6d11f
+      internalID: -29619699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: common1
+      rect:
+        serializedVersion: 2
+        x: 1295
+        y: 97
+        width: 235
+        height: 338
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac5ebc03272888d41821acdb7ac6a7cc
+      internalID: -632559334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 82044f6ec30429548b3e771d23803b54
     internalID: 0
     vertices: []
     indices: 
@@ -1046,9 +1288,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      dropeffectsRareandUncommon_0: 4757191565486471506
+      common1: -632559334
+      common2: -29619699
+      common4: -2047156606
+      common5: 1427920634
+      common6: 1013210227
+      common7: 925859753
       dropeffectsRareandUncommon_1: 1812930895763032049
       dropeffectsRareandUncommon_10: -2591087004175905073
       dropeffectsRareandUncommon_11: 2674705687660528659
@@ -1085,6 +1334,12 @@ TextureImporter:
       dropeffectsRareandUncommon_7: -1403213037874389877
       dropeffectsRareandUncommon_8: -1205396636972482473
       dropeffectsRareandUncommon_9: 2303047563797530403
+      rare1: -367031753
+      rare2: -229367140
+      rare3: -1217810363
+      rare4: 295805683
+      rare5: 1364771220
+      rare6: 4757191565486471506
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

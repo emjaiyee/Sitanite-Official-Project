@@ -240,7 +240,7 @@ private void Detonate(Vector3 position)
 
     fireComponent.Initialize(
         fireDamage,
-        PrimaryDamageType,
+        DamageType.Fire,
         fireRadius,
         fireDuration,
         fireTickInterval,
@@ -285,4 +285,3 @@ private void Detonate(Vector3 position)
         );
     }
 }
-

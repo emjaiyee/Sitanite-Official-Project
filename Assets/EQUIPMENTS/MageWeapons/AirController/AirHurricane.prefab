@@ -80,8 +80,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -754395869
+  m_SortingLayer: 2
   m_SortingOrder: 20
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4752526497160562815, guid: 465b10dc939cffe47bf076b8b5f3e4f2, type: 3}
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_Size: {x: 0.71, y: 0.7}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1619486430445495404
 MonoBehaviour:
@@ -120,17 +120,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteArrayVisual
   sprites:
-  - {fileID: 44859307617009754, guid: 465b10dc939cffe47bf076b8b5f3e4f2, type: 3}
-  - {fileID: -760924597752746958, guid: 465b10dc939cffe47bf076b8b5f3e4f2, type: 3}
-  - {fileID: -1204373414002541994, guid: 465b10dc939cffe47bf076b8b5f3e4f2, type: 3}
-  - {fileID: -4752526497160562815, guid: 465b10dc939cffe47bf076b8b5f3e4f2, type: 3}
-  - {fileID: 44859307617009754, guid: 465b10dc939cffe47bf076b8b5f3e4f2, type: 3}
-  - {fileID: -760924597752746958, guid: 465b10dc939cffe47bf076b8b5f3e4f2, type: 3}
-  - {fileID: -1204373414002541994, guid: 465b10dc939cffe47bf076b8b5f3e4f2, type: 3}
-  - {fileID: -4752526497160562815, guid: 465b10dc939cffe47bf076b8b5f3e4f2, type: 3}
+  - {fileID: 44859307617009754, guid: 5851b75a081a36e44a571f87f39080eb, type: 3}
+  - {fileID: -760924597752746958, guid: 5851b75a081a36e44a571f87f39080eb, type: 3}
+  - {fileID: -1204373414002541994, guid: 5851b75a081a36e44a571f87f39080eb, type: 3}
+  - {fileID: -4752526497160562815, guid: 5851b75a081a36e44a571f87f39080eb, type: 3}
+  - {fileID: -4752526497160562815, guid: 5851b75a081a36e44a571f87f39080eb, type: 3}
+  - {fileID: 44859307617009754, guid: 5851b75a081a36e44a571f87f39080eb, type: 3}
+  - {fileID: -760924597752746958, guid: 5851b75a081a36e44a571f87f39080eb, type: 3}
+  - {fileID: -760924597752746958, guid: 5851b75a081a36e44a571f87f39080eb, type: 3}
   framesPerSecond: 4
   destroyWhenFinished: 1
-  fadeWhenFinished: 0
+  fadeWhenFinished: 1
   fadeDuration: 0.25
   randomizeRotation: 0
 --- !u!1001 &2529628470049604011

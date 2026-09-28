@@ -12979,7 +12979,31 @@ MonoBehaviour:
   fontAsset: {fileID: 11400000, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
   fontSize: 32
   useUnscaledTime: 1
-  headsUpTextView: {fileID: 0}
+  headsUpTextView: {fileID: 5932741938571926404}
+--- !u!1001 &5932741938571926403
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
+--- !u!114 &5932741938571926404 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5725121369384389183, guid: 65d5a873f9c476747a3273564da08d99, type: 3}
+  m_PrefabInstance: {fileID: 5932741938571926403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb8ed4ceafd2ae4c9868d043e292d96, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::HeadsUpTextView
 --- !u!1 &2060724004
 GameObject:
   m_ObjectHideFlags: 0

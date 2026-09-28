@@ -35,6 +35,10 @@ public class Fire : MonoBehaviour
         // Match the visual size to the damage area.
         transform.localScale = Vector3.one * (radius * 2f);
 
+        SpriteArrayVisual visual = GetComponent<SpriteArrayVisual>();
+        if (visual != null)
+            visual.DestroyWhenFinished = false;
+
         StartCoroutine(FireRoutine());
     }
 

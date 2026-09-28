@@ -80,16 +80,16 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -754395869
+  m_SortingLayer: 2
   m_SortingOrder: 20
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 6765919672396406339, guid: d8b403dd30ad9fb47ba9f095ade7bbfa, type: 3}
+  m_Sprite: {fileID: 985835399619980021, guid: 9395e470f2a88c749a6a06099da602a2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.22, y: 0.09}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -110,14 +110,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   flightSprites:
-  - {fileID: 6765919672396406339, guid: d8b403dd30ad9fb47ba9f095ade7bbfa, type: 3}
-  - {fileID: 1797641077, guid: d8b403dd30ad9fb47ba9f095ade7bbfa, type: 3}
-  - {fileID: -806471982, guid: d8b403dd30ad9fb47ba9f095ade7bbfa, type: 3}
-  - {fileID: 1155582692, guid: d8b403dd30ad9fb47ba9f095ade7bbfa, type: 3}
-  - {fileID: -1801584725, guid: d8b403dd30ad9fb47ba9f095ade7bbfa, type: 3}
-  - {fileID: -963884691, guid: d8b403dd30ad9fb47ba9f095ade7bbfa, type: 3}
-  - {fileID: 1737749592, guid: d8b403dd30ad9fb47ba9f095ade7bbfa, type: 3}
-  - {fileID: -502000555, guid: d8b403dd30ad9fb47ba9f095ade7bbfa, type: 3}
+  - {fileID: 985835399619980021, guid: 9395e470f2a88c749a6a06099da602a2, type: 3}
+  - {fileID: -3411431459113068315, guid: 9395e470f2a88c749a6a06099da602a2, type: 3}
+  - {fileID: -4577085801339170045, guid: 9395e470f2a88c749a6a06099da602a2, type: 3}
+  - {fileID: 3654931900422576146, guid: 9395e470f2a88c749a6a06099da602a2, type: 3}
+  - {fileID: 1236817763507840286, guid: 9395e470f2a88c749a6a06099da602a2, type: 3}
+  - {fileID: -2629076716763136356, guid: 9395e470f2a88c749a6a06099da602a2, type: 3}
+  - {fileID: -1963322571412456278, guid: 9395e470f2a88c749a6a06099da602a2, type: 3}
+  - {fileID: 353427164095699612, guid: 9395e470f2a88c749a6a06099da602a2, type: 3}
   framesPerSecond: 12
   loopAnimation: 1
   spellLight: {fileID: 0}
@@ -186,8 +186,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.75, y: 1.16}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 3.63, y: 3.23}
+    newSize: {x: 0.22, y: 0.09}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

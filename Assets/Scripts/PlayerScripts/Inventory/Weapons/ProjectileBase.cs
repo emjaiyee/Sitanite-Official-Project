@@ -74,6 +74,14 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private void Awake()
     {
+        Rigidbody2D projectileBody = GetComponent<Rigidbody2D>();
+        if (projectileBody == null)
+            projectileBody = gameObject.AddComponent<Rigidbody2D>();
+
+        projectileBody.bodyType = RigidbodyType2D.Kinematic;
+        projectileBody.gravityScale = 0f;
+        projectileBody.simulated = true;
+        projectileBody.useFullKinematicContacts = true;
     }
 
     public void Initialize(
@@ -170,14 +178,8 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Check layer
-        if ((hittableLayers.value &
-             (1 << other.gameObject.layer)) == 0)
-        {
-            return;
-        }
-
-        // Find damageable target
+        // Damageable components are valid targets even when their layer
+        // is not included in the weapon's enemy-targeting mask (for example, pots).
         IDamageable target =
             other.GetComponentInParent<IDamageable>();
 

@@ -1,31 +1,34 @@
 fileFormatVersion: 2
-guid: e2a097088e0897c4598e129409e2e0d8
+guid: fffe0cf21d6893146a6b716d7085ffd2
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7623990541579601290
-    second: GREAT_SWORD_attack_0
+      213: -5333898034549755588
+    second: cross bow attack_0
   - first:
-      213: 5819752034651953122
-    second: GREAT_SWORD_attack_1
+      213: -7662189993618377776
+    second: cross bow attack_1
   - first:
-      213: 3548664076818556579
-    second: GREAT_SWORD_attack_2
+      213: -4781268299437635312
+    second: cross bow attack_2
   - first:
-      213: -1848820375225382191
-    second: GREAT_SWORD_attack_3
+      213: 4811446125667819531
+    second: cross bow attack_3
   - first:
-      213: 6851714760218661725
-    second: GREAT_SWORD_attack_4
+      213: -2942004197306471133
+    second: cross bow attack_4
   - first:
-      213: 2983001969161448079
-    second: GREAT_SWORD_attack_5
+      213: -1993714357423760658
+    second: cross bow attack_5
   - first:
-      213: -7682198679238349728
-    second: GREAT_SWORD_attack_6
+      213: -6236128108741896456
+    second: cross bow attack_6
   - first:
-      213: 2230054072701759984
-    second: GREAT_SWORD_attack_7
+      213: -6172080145134261336
+    second: cross bow attack_7
+  - first:
+      213: -8947019118958928850
+    second: cross bow attack_8
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -58,7 +61,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -96,7 +99,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -117,194 +120,203 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: GREAT_SWORD_attack_meleeAnimation_000
+      name: cross bow attack_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 64
-        height: 64
+        y: 23
+        width: 21
+        height: 7
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: efe8f874611d39742857d17cedbdf0ed
-      internalID: 1023663316
+      spriteID: c31f18e6fff2af5b0800000000000000
+      internalID: -5333898034549755588
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GREAT_SWORD_attack_meleeAnimation_001
+      name: cross bow attack_1
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
-        width: 64
-        height: 64
+        x: 75
+        y: 23
+        width: 21
+        height: 7
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 78baef74d1186404eb074d1f110c923a
-      internalID: -1919811743
+      spriteID: 0d3f2dcfbce6aa590800000000000000
+      internalID: -7662189993618377776
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GREAT_SWORD_attack_meleeAnimation_002
+      name: cross bow attack_2
       rect:
         serializedVersion: 2
-        x: 128
-        y: 0
-        width: 64
-        height: 64
+        x: 108
+        y: 23
+        width: 21
+        height: 7
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 1ebfaff4fc6c5ff4a9dea41f60990a59
-      internalID: 1115498662
+      spriteID: 0190f2c50d585adb0800000000000000
+      internalID: -4781268299437635312
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GREAT_SWORD_attack_meleeAnimation_003
+      name: cross bow attack_3
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 23
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b002c5852c0b5c240800000000000000
+      internalID: 4811446125667819531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cross bow attack_4
+      rect:
+        serializedVersion: 2
+        x: 168
+        y: 27
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32de6db15c6eb27d0800000000000000
+      internalID: -2942004197306471133
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cross bow attack_5
+      rect:
+        serializedVersion: 2
+        x: 178
+        y: 27
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eea1926ea57e454e0800000000000000
+      internalID: -1993714357423760658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cross bow attack_6
       rect:
         serializedVersion: 2
         x: 192
-        y: 0
-        width: 64
-        height: 64
+        y: 23
+        width: 13
+        height: 13
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: e4243d99f58877b4a85d9fce88de603f
-      internalID: 1067823643
+      spriteID: 8f65c988682d479a0800000000000000
+      internalID: -6236128108741896456
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GREAT_SWORD_attack_meleeAnimation_004
+      name: cross bow attack_7
       rect:
         serializedVersion: 2
-        x: 256
-        y: 0
-        width: 64
-        height: 64
+        x: 223
+        y: 23
+        width: 21
+        height: 7
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 4c3bd023d4a68884597e1c499acd7e4e
-      internalID: 2146277913
+      spriteID: 8abe7002fcd585aa0800000000000000
+      internalID: -6172080145134261336
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GREAT_SWORD_attack_meleeAnimation_005
+      name: cross bow attack_8
       rect:
         serializedVersion: 2
-        x: 320
-        y: 0
-        width: 64
-        height: 64
+        x: 40
+        y: 6
+        width: 16
+        height: 19
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 2665487e418096b4781352a235a6a12d
-      internalID: -922192498
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GREAT_SWORD_attack_meleeAnimation_006
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 57e8cc414902f8547a657653f3e4b46c
-      internalID: 1865461233
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GREAT_SWORD_attack_meleeAnimation_007
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9bd0819e49faaab4aa8e690f14171a7e
-      internalID: 814287978
+      spriteID: e2c13dfb38dc5d380800000000000000
+      internalID: -8947019118958928850
       vertices: []
       indices: 
       edges: []
@@ -313,7 +325,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 52d87a78105e04d43ba00a59325232a2
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -323,22 +335,15 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      GREAT_SWORD_attack_0: 7623990541579601290
-      GREAT_SWORD_attack_1: 5819752034651953122
-      GREAT_SWORD_attack_2: 3548664076818556579
-      GREAT_SWORD_attack_3: -1848820375225382191
-      GREAT_SWORD_attack_4: 6851714760218661725
-      GREAT_SWORD_attack_5: 2983001969161448079
-      GREAT_SWORD_attack_6: -7682198679238349728
-      GREAT_SWORD_attack_7: 2230054072701759984
-      GREAT_SWORD_attack_meleeAnimation_000: 1023663316
-      GREAT_SWORD_attack_meleeAnimation_001: -1919811743
-      GREAT_SWORD_attack_meleeAnimation_002: 1115498662
-      GREAT_SWORD_attack_meleeAnimation_003: 1067823643
-      GREAT_SWORD_attack_meleeAnimation_004: 2146277913
-      GREAT_SWORD_attack_meleeAnimation_005: -922192498
-      GREAT_SWORD_attack_meleeAnimation_006: 1865461233
-      GREAT_SWORD_attack_meleeAnimation_007: 814287978
+      cross bow attack_0: -5333898034549755588
+      cross bow attack_1: -7662189993618377776
+      cross bow attack_2: -4781268299437635312
+      cross bow attack_3: 4811446125667819531
+      cross bow attack_4: -2942004197306471133
+      cross bow attack_5: -1993714357423760658
+      cross bow attack_6: -6236128108741896456
+      cross bow attack_7: -6172080145134261336
+      cross bow attack_8: -8947019118958928850
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

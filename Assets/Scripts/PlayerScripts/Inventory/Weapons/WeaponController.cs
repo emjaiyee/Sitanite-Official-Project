@@ -1015,16 +1015,27 @@ private void UseStabSkill(Vector2 direction)
                     0f
                 );
 
-            if (data.SkillProjectilePrefab != null)
+            if (data.ProjectilePrefab != null)
             {
-                GameObject visual =
+                GameObject arrow =
                     Instantiate(
-                        data.SkillProjectilePrefab,
+                        data.ProjectilePrefab,
                         landingPosition + Vector3.up * 2f,
                         Quaternion.Euler(0f, 0f, -90f)
                     );
 
-                Destroy(visual, 0.4f);
+                foreach (Collider2D arrowCollider in
+                         arrow.GetComponentsInChildren<Collider2D>())
+                {
+                    arrowCollider.enabled = false;
+                }
+
+                StartCoroutine(
+                    AnimateArrowRainProjectile(
+                        arrow,
+                        landingPosition
+                    )
+                );
             }
 
             Collider2D[] hits =
@@ -1039,6 +1050,33 @@ private void UseStabSkill(Vector2 direction)
             if (index < projectileCount - 1)
                 yield return new WaitForSeconds(delay);
         }
+    }
+
+    private IEnumerator AnimateArrowRainProjectile(
+        GameObject arrow,
+        Vector3 landingPosition)
+    {
+        Vector3 startPosition = arrow.transform.position;
+        const float fallDuration = 0.4f;
+        float elapsed = 0f;
+
+        while (elapsed < fallDuration)
+        {
+            if (arrow == null)
+                yield break;
+
+            elapsed += Time.deltaTime;
+            arrow.transform.position =
+                Vector3.Lerp(
+                    startPosition,
+                    landingPosition,
+                    elapsed / fallDuration
+                );
+
+            yield return null;
+        }
+
+        Destroy(arrow);
     }
 
     // =========================================================

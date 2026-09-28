@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3126069277610436670}
   - component: {fileID: 8285727368309659290}
   m_Layer: 0
-  m_Name: SlashGreatSword
+  m_Name: GreatSwordRegularSlash
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingOrder: 20
   m_MaskInteraction: 0
   m_Sprite: {fileID: 0}
-  m_Color: {r: 0.122641504, g: 0.11165005, b: 0.11165005, a: 1}
+  m_Color: {r: 0.46226418, g: 0.39466894, b: 0.39466894, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -105,12 +105,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteArrayVisual
   sprites:
-  - {fileID: -2122197324375461716, guid: 9117d0033ea52414eb7b253a28593ae9, type: 3}
-  - {fileID: -7908461729106057882, guid: 9117d0033ea52414eb7b253a28593ae9, type: 3}
-  - {fileID: -373354956976964975, guid: 9117d0033ea52414eb7b253a28593ae9, type: 3}
-  - {fileID: -8458164068383960312, guid: 9117d0033ea52414eb7b253a28593ae9, type: 3}
-  framesPerSecond: 12
+  - {fileID: 1409034906734843663, guid: 513b9a004ac129147ad21cf5c721e891, type: 3}
+  - {fileID: -3291314276349247672, guid: 513b9a004ac129147ad21cf5c721e891, type: 3}
+  - {fileID: -5174729456256209749, guid: 513b9a004ac129147ad21cf5c721e891, type: 3}
+  framesPerSecond: 16
   destroyWhenFinished: 1
-  fadeWhenFinished: 0
+  fadeWhenFinished: 1
   fadeDuration: 0.25
-  randomizeRotation: 0
+  randomizeRotation: 1

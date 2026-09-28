@@ -170,11 +170,131 @@ MonoBehaviour:
   audioSource: {fileID: 2461000000000000001}
   weaponProfiles:
   - weaponId: Dagger
-    attackSounds: []
+    attackSounds:
+    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
     attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
     skills:
     - skillType: 5
       skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: IronSword
+    attackSounds:
+    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 7
+      skillSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: GreatSword
+    attackSounds:
+    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 1
+      skillSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: BattleAxe
+    attackSounds:
+    - {fileID: 8300000, guid: 01d267fcac7ae6f4c9683ba9bac13dd5, type: 3}
+    - {fileID: 8300000, guid: 5da2630e84fd85d40b2fc2451e0e6e8b, type: 3}
+    - {fileID: 8300000, guid: 83917e694569d99479e544d119509e0e, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 8
+      skillSound: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: TomeOfFire
+    attackSounds:
+    - {fileID: 8300000, guid: 2b7d6babedce02b468371ba4b0a511b5, type: 3}
+    - {fileID: 8300000, guid: 5b49261ee03191a42a9d73b804fdc936, type: 3}
+    - {fileID: 8300000, guid: 3a99012728362a348a2ff9e5a8a34bb6, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 11
+      skillSound: {fileID: 8300000, guid: 2b7d6babedce02b468371ba4b0a511b5, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: TomeOfLight
+    attackSounds:
+    - {fileID: 8300000, guid: 5b49261ee03191a42a9d73b804fdc936, type: 3}
+    - {fileID: 8300000, guid: 3a99012728362a348a2ff9e5a8a34bb6, type: 3}
+    - {fileID: 8300000, guid: 2b7d6babedce02b468371ba4b0a511b5, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 4
+      skillSound: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+      chargeStartSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+      chargeLoopSound: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
+      fullyChargedSound: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
+      chargeReleaseSound: {fileID: 8300000, guid: f36cfba8ce79fba4695a962054b7ed95, type: 3}
+  - weaponId: TomeOfAir
+    attackSounds:
+    - {fileID: 8300000, guid: fb482db8c9571d34e87e07f03c404861, type: 3}
+    - {fileID: 8300000, guid: ad66b3402ae26fe49b3f3ae58073a1ca, type: 3}
+    - {fileID: 8300000, guid: c1bbe826cfb0daa45bef7ba259eb43d2, type: 3}
+    attackSound: {fileID: 8300000, guid: c1bbe826cfb0daa45bef7ba259eb43d2, type: 3}
+    skills:
+    - skillType: 9
+      skillSound: {fileID: 8300000, guid: 336729870ef4b3044a26393f2e6b8558, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: ShortBow
+    attackSounds:
+    - {fileID: 8300000, guid: 01d267fcac7ae6f4c9683ba9bac13dd5, type: 3}
+    - {fileID: 8300000, guid: 5da2630e84fd85d40b2fc2451e0e6e8b, type: 3}
+    - {fileID: 8300000, guid: 83917e694569d99479e544d119509e0e, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 8
+      skillSound: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: LongBow
+    attackSounds:
+    - {fileID: 8300000, guid: 01d267fcac7ae6f4c9683ba9bac13dd5, type: 3}
+    - {fileID: 8300000, guid: 5da2630e84fd85d40b2fc2451e0e6e8b, type: 3}
+    - {fileID: 8300000, guid: 83917e694569d99479e544d119509e0e, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 8
+      skillSound: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: CrossBow
+    attackSounds:
+    - {fileID: 8300000, guid: 01d267fcac7ae6f4c9683ba9bac13dd5, type: 3}
+    - {fileID: 8300000, guid: 5da2630e84fd85d40b2fc2451e0e6e8b, type: 3}
+    - {fileID: 8300000, guid: 83917e694569d99479e544d119509e0e, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 8
+      skillSound: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
       chargeStartSound: {fileID: 0}
       chargeLoopSound: {fileID: 0}
       fullyChargedSound: {fileID: 0}
@@ -317,66 +437,77 @@ MonoBehaviour:
   rarityEffects:
   - rarity: 0
     sprites:
-    - {fileID: 4757191565486471506, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -7295942490848221094, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -7141738158157192350, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 1060633491710534308, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -8188038176841925535, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 215028321, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -8188038176841925535, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 215028321, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -8188038176841925535, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 215028321, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -8188038176841925535, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 215028321, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 925859753, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 1013210227, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 1427920634, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -2047156606, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -29619699, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -632559334, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -2047156606, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -29619699, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 1427920634, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -632559334, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -29619699, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -2047156606, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
     framesPerSecond: 4
     dropSound: {fileID: 8300000, guid: e44c9a4b5694f9848ac7c68fd5823e1d, type: 3}
-    soundVolume: 0.083
+    soundVolume: 0.075
     spriteScale: 0.2
     ignoreTimeScale: 0
   - rarity: 1
     sprites:
-    - {fileID: 68933478, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -746637745, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 104434235, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 403408689, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -1419882851, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 47269730, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -1419882851, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 47269730, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -1419882851, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 47269730, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: -1419882851, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
-    - {fileID: 47269730, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 4757191565486471506, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 1364771220, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 295805683, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -1217810363, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -229367140, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -367031753, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -229367140, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -1217810363, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 295805683, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -367031753, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 4757191565486471506, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 295805683, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
     framesPerSecond: 4
-    dropSound: {fileID: 8300000, guid: c6abac04292d8ad49a1be5e349ee1c46, type: 3}
-    soundVolume: 0.083
+    dropSound: {fileID: 8300000, guid: 33ae27c8aa54b4f40a907638036f1023, type: 3}
+    soundVolume: 0.117
     spriteScale: 0.2
     ignoreTimeScale: 0
   - rarity: 2
-    sprites: []
+    sprites:
+    - {fileID: 4757191565486471506, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 1364771220, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 295805683, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -1217810363, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -229367140, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -367031753, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 1364771220, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: 295805683, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -229367140, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -1217810363, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
+    - {fileID: -367031753, guid: cb3ded2832f3436499fbbcd32e7262ba, type: 3}
     framesPerSecond: 4
-    dropSound: {fileID: 8300000, guid: c6abac04292d8ad49a1be5e349ee1c46, type: 3}
-    soundVolume: 0.138
+    dropSound: {fileID: 8300000, guid: 33ae27c8aa54b4f40a907638036f1023, type: 3}
+    soundVolume: 0.146
     spriteScale: 0.2
     ignoreTimeScale: 0
   - rarity: 3
     sprites:
-    - {fileID: 1434970685428923303, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 519608873219351950, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 7824852846140802096, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: -3754451619583131217, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 6002602489654752993, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 4582809140159705173, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 6002602489654752993, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 4582809140159705173, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 6002602489654752993, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 4582809140159705173, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 6002602489654752993, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
-    - {fileID: 4582809140159705173, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: -6095209635430012570, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: 13410687342922809, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: -274250262, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: 6944275687455508421, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: 5306568646489857832, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: 533811892439504872, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: 13410687342922809, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: -274250262, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: -6095209635430012570, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: 13410687342922809, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: -274250262, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
+    - {fileID: 6944275687455508421, guid: c2e5662806bd928408f1931b4926ee55, type: 3}
     framesPerSecond: 4
     dropSound: {fileID: 8300000, guid: 7ef312989e0cb584da713e24a696476a, type: 3}
-    soundVolume: 0.208
+    soundVolume: 0.225
     spriteScale: 0.2
     ignoreTimeScale: 0
   sortingOrderOffset: -1
@@ -437,164 +568,6 @@ MonoBehaviour:
   indicatorPulseMax: 1.1
   rotateIndicator: 1
   pulseIndicator: 1
---- !u!1 &2822445528674101521
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2011306400676518913}
-  - component: {fileID: 2821444996922668626}
-  m_Layer: 7
-  m_Name: WeaponAudioController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2011306400676518913
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2822445528674101521}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2826949009369197633}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2821444996922668626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2822445528674101521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6a3fe7befbe6244c93f5ddbac4ce69c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponAudioController
-  playerEquipment: {fileID: 705827018461203480}
-  audioSource: {fileID: 2461000000000000001}
-  weaponProfiles:
-  - weaponId: Dagger
-    attackSounds:
-    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
-    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
-    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
-    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
-    skills:
-    - skillType: 5
-      skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
-  - weaponId: GreatSword
-    attackSounds:
-    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
-    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
-    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
-    attackSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
-    skills:
-    - skillType: 1
-      skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
-  - weaponId: BattleAxe
-    attackSounds:
-    - {fileID: 8300000, guid: 01d267fcac7ae6f4c9683ba9bac13dd5, type: 3}
-    - {fileID: 8300000, guid: 5da2630e84fd85d40b2fc2451e0e6e8b, type: 3}
-    - {fileID: 8300000, guid: 83917e694569d99479e544d119509e0e, type: 3}
-    attackSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
-    skills:
-    - skillType: 8
-      skillSound: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
-  - weaponId: IronSword
-    attackSounds:
-    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
-    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
-    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
-    attackSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
-    skills:
-    - skillType: 7
-      skillSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
-  - weaponId: TomeLightning
-    attackSounds: []
-    attackSound: {fileID: 8300000, guid: fcd7fa5459535584c836413de73a4eaf, type: 3}
-    skills:
-    - skillType: 4
-      skillSound: {fileID: 0}
-      chargeStartSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
-      chargeLoopSound: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
-      fullyChargedSound: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
-      chargeReleaseSound: {fileID: 8300000, guid: 1ab5f6a9a6c75c94bb4ae08d6cd00ba8, type: 3}
-  - weaponId: ShortBow
-    attackSounds: []
-    attackSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
-    skills:
-    - skillType: 1
-      skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
-      chargeStartSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
-      chargeLoopSound: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
-      fullyChargedSound: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
-      chargeReleaseSound: {fileID: 8300000, guid: 1ab5f6a9a6c75c94bb4ae08d6cd00ba8, type: 3}
-  - weaponId: CrossBow
-    attackSounds:
-    - {fileID: 8300000, guid: 12f11e7170d00e94491a4815c9bd4cb2, type: 3}
-    - {fileID: 8300000, guid: 55db909a546333b45b34dddd2ca54ac4, type: 3}
-    - {fileID: 8300000, guid: a0b4092e6552e7d4493cc658f3a90209, type: 3}
-    attackSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
-    skills:
-    - skillType: 6
-      skillSound: {fileID: 8300000, guid: 095176b446af5f44484eb0da11ff68f2, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
-  - weaponId: AirController
-    attackSounds:
-    - {fileID: 8300000, guid: fb482db8c9571d34e87e07f03c404861, type: 3}
-    - {fileID: 8300000, guid: c1bbe826cfb0daa45bef7ba259eb43d2, type: 3}
-    - {fileID: 8300000, guid: fb482db8c9571d34e87e07f03c404861, type: 3}
-    attackSound: {fileID: 8300000, guid: fb482db8c9571d34e87e07f03c404861, type: 3}
-    skills:
-    - skillType: 9
-      skillSound: {fileID: 8300000, guid: 336729870ef4b3044a26393f2e6b8558, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
-  - weaponId: BookOfFire
-    attackSounds:
-    - {fileID: 8300000, guid: 82e2f0fc540009740a234cfcb327ff28, type: 3}
-    - {fileID: 8300000, guid: 3a99012728362a348a2ff9e5a8a34bb6, type: 3}
-    - {fileID: 8300000, guid: 22155075673497d45ae4c7ccd2b741a0, type: 3}
-    attackSound: {fileID: 8300000, guid: 82e2f0fc540009740a234cfcb327ff28, type: 3}
-    skills:
-    - skillType: 11
-      skillSound: {fileID: 8300000, guid: f3259c59baa3af64d97a4bad92a8f830, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
 --- !u!1 &3652299398545989156
 GameObject:
   m_ObjectHideFlags: 0
@@ -782,8 +755,8 @@ Transform:
   - {fileID: 7690639867013062086}
   - {fileID: 5536741838045283725}
   - {fileID: 5700263183971444938}
-  - {fileID: 2011306400676518913}
   - {fileID: 2122828002183849022}
+  - {fileID: 3759872893080482509}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2092788580339462318
@@ -1034,9 +1007,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a663d7e5969d88640b09f53c27274db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  maxHealth: 1000
-  maxMana: 1000
-  maxStamina: 1000
+  maxHealth: 50
+  maxMana: 50
+  maxStamina: 50
   effectiveMaxHealth: 0
   effectiveMaxMana: 0
   effectiveMaxStamina: 0
@@ -1254,7 +1227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterCustomizationController
   characterRenderer: {fileID: 6783837840638991853}
-  startingGender: 1
+  startingGender: 0
   maleBody: {fileID: 11400000, guid: 41a486a3ac42b3043b83e492f0670f56, type: 2}
   maleEyes: {fileID: 11400000, guid: 6588966b70fbd3249bc28382f2072d18, type: 2}
   maleHair: {fileID: 11400000, guid: 32708923be7780f4d8218206de2c7c1d, type: 2}
@@ -1265,25 +1238,26 @@ MonoBehaviour:
   attributes: {fileID: 3176237796533987833}
   playerStats: {fileID: 8549833145988909020}
   warriorStartingGear:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 7420c82adfcd121419c29d473304b588, type: 2}
+  - {fileID: 11400000, guid: c1b1708b113e1e944b9cc4f8fdb1114b, type: 2}
+  - {fileID: 11400000, guid: 03c6e9d0387ccac40bd2d370f99c3857, type: 2}
+  - {fileID: 11400000, guid: 80d107fb911d022438723e0719533275, type: 2}
   rangerStartingGear:
   - {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
   mageStartingGear:
-  - {fileID: 11400000, guid: 36b8907e7025ee742b833467a0a11093, type: 2}
-  - {fileID: 11400000, guid: 63a619380b08d55479ad76b7672ee149, type: 2}
-  - {fileID: 11400000, guid: ab59b5d8b1b1fdc49aab773d0628d828, type: 2}
-  - {fileID: 11400000, guid: 6edc49bc30a7c0947a2fa7c6eb015509, type: 2}
+  - {fileID: 11400000, guid: d3ec1a675e1627b49a2bb7cd282e4739, type: 2}
+  - {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
+  - {fileID: 11400000, guid: 12b486c90eeea3841a4f7554aefebdd0, type: 2}
+  - {fileID: 11400000, guid: f7bfb2e326990f242866c910c07ea0fc, type: 2}
   warriorStartingItems:
-  - {fileID: 11400000, guid: 7f9d2c1a4e6b48d0a13f5c8e9b027641, type: 2}
-  - {fileID: 11400000, guid: bc9289adc1905c4449a8ce613ad4f215, type: 2}
-  - {fileID: 11400000, guid: d469020feb09ff04a8f46220fd81761c, type: 2}
-  - {fileID: 11400000, guid: 1f399959a8f4f9f41ad25435ea30a6d2, type: 2}
+  - {fileID: 11400000, guid: 47332dcf82319f14bb1079669c1f2ff4, type: 2}
+  - {fileID: 11400000, guid: afcf9a321fddc074280691cca2052f45, type: 2}
   rangerStartingItems:
-  - {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
-  - {fileID: 11400000, guid: 42ba12dcb2e121c45a7d530dde9cf369, type: 2}
-  - {fileID: 11400000, guid: 4a029611aa1038e41aab833074469383, type: 2}
-  - {fileID: 11400000, guid: 10e1a5d6c5c06474da44bbaaf0c4befb, type: 2}
-  mageStartingItems: []
+  - {fileID: 11400000, guid: afcf9a321fddc074280691cca2052f45, type: 2}
+  - {fileID: 11400000, guid: 47332dcf82319f14bb1079669c1f2ff4, type: 2}
+  mageStartingItems:
+  - {fileID: 11400000, guid: b572685af3aa44943b2962ebf3be448b, type: 2}
+  - {fileID: 11400000, guid: 47332dcf82319f14bb1079669c1f2ff4, type: 2}
 --- !u!114 &1614004183530562516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1301,7 +1275,7 @@ MonoBehaviour:
   inventoryAction: {fileID: 3459150446316449696, guid: 4d4185b52db9af24390e945915b1e67a, type: 3}
   startOpen: 0
   suppressedUIs: []
-  lootPrefab: {fileID: 0}
+  lootPrefab: {fileID: 8648172501756555010, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
 --- !u!114 &1613250513679658638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1566,9 +1540,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 06e783238f2339e4585e8cf231decf34, type: 3}
   attackClips: []
   skillClips: []
-  dashClips: []
-  hurtClips: []
-  deathClips: []
+  dashClips:
+  - {fileID: 8300000, guid: 5cc62dadc63ec3649808bdcc5a6174f6, type: 3}
+  hurtClips:
+  - {fileID: 8300000, guid: 28b1c96f46ab0844b88af9be0ed47946, type: 3}
+  - {fileID: 8300000, guid: 1b5ef5bfdc71e66428bb0d966cf72800, type: 3}
+  - {fileID: 8300000, guid: 9c716577d716f99479ec1c1fece540e5, type: 3}
+  deathClips:
+  - {fileID: 8300000, guid: 9fcaaae7066c8434fba527de8ba00ee2, type: 3}
 --- !u!114 &5004489628805899625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1641,7 +1620,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
