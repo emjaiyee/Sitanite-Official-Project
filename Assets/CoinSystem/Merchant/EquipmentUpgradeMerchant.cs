@@ -28,6 +28,14 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
     [Tooltip("Optional transform above the merchant where the progress bar should appear.")]
     [SerializeField] private Transform progressBarAnchor;
     [SerializeField] private Vector3 progressBarOffset = new Vector3(0f, 1.8f, 0f);
+    [Header("Hammer Visual")]
+    [Tooltip("Optional animation frames. Assign the sliced Sprite assets in playback order; leave empty to use the built-in hammer.")]
+    [SerializeField] private Sprite[] hammerAnimationFrames;
+    [Min(1f)] [SerializeField] private float hammerFramesPerSecond = 8f;
+    [SerializeField] private Vector2 hammerVisualPosition = new Vector2(138f, 16f);
+    [SerializeField] private Vector2 hammerVisualSize = new Vector2(44f, 44f);
+    [Min(0f)] [SerializeField] private float hammerSwingAngle = 35f;
+    [Min(0f)] [SerializeField] private float hammerSwingSpeed = 12f;
 
     [Header("Custom UI (Optional)")]
     [Tooltip("Assign your own Canvas and panel references to control the complete merchant layout. Leave empty to use the generated layout.")]
@@ -75,6 +83,8 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
     private readonly List<GameObject> equipmentButtons = new List<GameObject>();
     private readonly List<InventoryItem> equipmentButtonItems = new List<InventoryItem>();
     private readonly List<MerchantEquipmentOptionUI> customEquipmentButtons = new List<MerchantEquipmentOptionUI>();
+    private readonly List<GameObject> emptyEquipmentSlots = new List<GameObject>();
+    private Transform equipmentOptionsGrid;
     private readonly List<SpriteRenderer> playerPreviewRenderers = new List<SpriteRenderer>();
     private readonly List<Image> playerPreviewImages = new List<Image>();
     private CharacterRenderer previewCharacter;
@@ -83,6 +93,7 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
     private Image upgradeProgressFill;
     private TextMeshProUGUI upgradeProgressLabel;
     private RectTransform upgradeHammer;
+    private Image upgradeHammerSprite;
     private InventoryItem itemBeingUpgraded;
     private float upgradeWorkElapsed;
     private float upgradeWorkDuration;
@@ -401,8 +412,24 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
             new Color(1f, 0.82f, 0.45f));
         CreateImage("Section Divider", equipmentFrame.transform,
             new Vector2(820f, 2f), new Vector2(0f, 190f), new Color(0.35f, 0.39f, 0.46f, 0.65f));
+        GameObject equipmentList = CreateImage(
+            "Equipment Options",
+            equipmentFrame.transform,
+            new Vector2(860f, 220f),
+            new Vector2(0f, 75f),
+            new Color(0f, 0f, 0f, 0f)
+        );
+        GridLayoutGroup equipmentLayout = equipmentList.AddComponent<GridLayoutGroup>();
+        equipmentLayout.cellSize = new Vector2(200f, 48f);
+        equipmentLayout.spacing = new Vector2(12f, 8f);
+        equipmentLayout.childAlignment = TextAnchor.MiddleCenter;
+        equipmentLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        equipmentLayout.constraintCount = 4;
+        equipmentLayout.startAxis = GridLayoutGroup.Axis.Horizontal;
+        equipmentLayout.startCorner = GridLayoutGroup.Corner.UpperLeft;
+        equipmentListParent = equipmentList.transform;
         equipmentDetails = AddText(equipmentFrame.transform, "Upgrade Details", "Select equipped gear to see its upgrade.",
-            new Vector2(0f, -82f), new Vector2(850f, 205f), 16, TextAlignmentOptions.TopLeft, Color.white);
+            new Vector2(0f, -130f), new Vector2(850f, 125f), 16, TextAlignmentOptions.TopLeft, Color.white);
         feedbackText = AddText(equipmentFrame.transform, "Feedback", string.Empty,
             new Vector2(0f, -205f), new Vector2(850f, 26f), 15, TextAlignmentOptions.Center,
             new Color(1f, 0.78f, 0.42f));
@@ -432,6 +459,8 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
 
     private void ConfigureCustomUI()
     {
+        ApplyMerchantFont(customPanelRoot != null ? customPanelRoot.transform : uiCanvas.transform);
+
         openUpgradePanelButton.onClick.RemoveListener(OpenUpgradePanel);
         openUpgradePanelButton.onClick.AddListener(OpenUpgradePanel);
 
@@ -463,6 +492,10 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
 
     private void RefreshEquipmentOptions()
     {
+        EnsureEquipmentOptionsGrid();
+        if (equipmentOptionsGrid == null)
+            return;
+
         foreach (GameObject button in equipmentButtons)
         {
             if (button != null)
@@ -476,6 +509,12 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
                 Destroy(button.gameObject);
         }
         customEquipmentButtons.Clear();
+        foreach (GameObject slot in emptyEquipmentSlots)
+        {
+            if (slot != null)
+                Destroy(slot);
+        }
+        emptyEquipmentSlots.Clear();
 
         EquipmentManager equipment = EquipmentManager.Instance;
         List<InventoryItem> upgradeableItems = new List<InventoryItem>();
@@ -508,6 +547,7 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
         {
             equipmentDetails.text = "You have no weapons or armor available to upgrade.";
             upgradeButton.interactable = false;
+            CreateEmptyEquipmentSlots(16);
             return;
         }
 
@@ -515,49 +555,139 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
         {
             foreach (InventoryItem item in upgradeableItems)
             {
-                MerchantEquipmentOptionUI option = Instantiate(equipmentOptionPrefab, equipmentListParent);
+                MerchantEquipmentOptionUI option = Instantiate(equipmentOptionPrefab, equipmentOptionsGrid);
+                ApplyMerchantFont(option.transform);
                 option.Bind(item, SelectItem, equipment != null && equipment.IsEquipped(item));
                 customEquipmentButtons.Add(option);
             }
 
+            CreateEmptyEquipmentSlots(Mathf.Max(0, 16 - upgradeableItems.Count));
             return;
         }
 
-        float buttonWidth = 150f;
-        float startX = -((upgradeableItems.Count - 1) * (buttonWidth + 12f)) * 0.5f;
         for (int index = 0; index < upgradeableItems.Count; index++)
         {
             InventoryItem item = upgradeableItems[index];
             bool isEquipped = equipment != null && equipment.IsEquipped(item);
             Button equipmentButton = CreateButton(
-                equipmentListParent,
+                equipmentOptionsGrid,
                 item.Data.itemName,
                 string.Empty,
-                new Vector2(startX + index * (buttonWidth + 12f), 125f),
-                new Vector2(buttonWidth, 116f),
+                Vector2.zero,
+                new Vector2(200f, 48f),
                 () => SelectItem(item)
             );
             GameObject buttonObject = equipmentButton.gameObject;
 
             Image icon = CreateImage("Icon", buttonObject.transform,
-                new Vector2(48f, 48f), new Vector2(0f, 20f), Color.white).GetComponent<Image>();
+                new Vector2(30f, 30f), new Vector2(-77f, 0f), Color.white).GetComponent<Image>();
             icon.sprite = item.Data.inventoryIcon != null
                 ? item.Data.inventoryIcon
                 : item.Data.equipmentIcon;
             icon.preserveAspect = true;
             AddText(buttonObject.transform, "Item Name", item.Data.itemName,
-                new Vector2(0f, -28f), new Vector2(buttonWidth - 8f, 25f), 12,
-                TextAlignmentOptions.Center, Color.white);
-            AddText(buttonObject.transform, "Item Level", $"LVL {item.UpgradeLevel}",
-                new Vector2(0f, -48f), new Vector2(buttonWidth - 8f, 20f), 13,
+                new Vector2(26f, 9f), new Vector2(142f, 20f), 12,
+                TextAlignmentOptions.Left, Color.white);
+            AddText(buttonObject.transform, "Item Level",
+                $"LVL {item.UpgradeLevel}  |  {(isEquipped ? "EQUIPPED" : "IN BAG")}",
+                new Vector2(26f, -10f), new Vector2(142f, 16f), 10,
                 TextAlignmentOptions.Center, new Color(1f, 0.82f, 0.45f));
-            AddText(buttonObject.transform, "Item Location", isEquipped ? "EQUIPPED" : "IN BAG",
-                new Vector2(0f, -64f), new Vector2(buttonWidth - 8f, 18f), 10,
-                TextAlignmentOptions.Center, new Color(0.78f, 0.81f, 0.86f));
             equipmentButtons.Add(buttonObject);
             equipmentButtonItems.Add(item);
         }
 
+        CreateEmptyEquipmentSlots(Mathf.Max(0, 16 - upgradeableItems.Count));
+    }
+
+    private void EnsureEquipmentOptionsGrid()
+    {
+        equipmentOptionsGrid = null;
+        if (equipmentListParent == null)
+            return;
+
+        GridLayoutGroup grid = equipmentListParent.GetComponent<GridLayoutGroup>();
+        RectTransform optionsRectTransform = equipmentListParent.GetComponent<RectTransform>();
+        if (optionsRectTransform == null)
+        {
+            Debug.LogError("EquipmentUpgradeMerchant equipment options parent requires a RectTransform.", this);
+            return;
+        }
+        optionsRectTransform.anchoredPosition = new Vector2(0f, -160f);
+        if (grid == null)
+        {
+            foreach (LayoutGroup layout in equipmentListParent.GetComponents<LayoutGroup>())
+                layout.enabled = false;
+
+            Transform gridTransform = equipmentListParent.Find("Equipment Options Grid");
+            if (gridTransform == null)
+            {
+                GameObject gridObject = new GameObject("Equipment Options Grid", typeof(RectTransform));
+                gridTransform = gridObject.transform;
+                gridTransform.SetParent(equipmentListParent, false);
+
+                RectTransform gridRect = (RectTransform)gridTransform;
+                gridRect.anchorMin = new Vector2(0.5f, 0.5f);
+                gridRect.anchorMax = new Vector2(0.5f, 0.5f);
+                gridRect.pivot = new Vector2(0.5f, 0.5f);
+                gridRect.sizeDelta = new Vector2(860f, 360f);
+                gridRect.anchoredPosition = Vector2.zero;
+            }
+
+            grid = gridTransform.GetComponent<GridLayoutGroup>();
+            if (grid == null)
+                grid = gridTransform.gameObject.AddComponent<GridLayoutGroup>();
+
+            if (grid == null)
+            {
+                Debug.LogError(
+                    "EquipmentUpgradeMerchant could not create a GridLayoutGroup for equipment options.",
+                    gridTransform
+                );
+                return;
+            }
+
+            equipmentOptionsGrid = gridTransform;
+        }
+        else
+        {
+            equipmentOptionsGrid = equipmentListParent;
+        }
+
+        RectTransform gridRectTransform = grid.GetComponent<RectTransform>();
+        gridRectTransform.localScale = new Vector3(1.5f, 2f, 1f);
+        if (gridRectTransform != optionsRectTransform)
+            gridRectTransform.anchoredPosition = Vector2.zero;
+        grid.cellSize = new Vector2(200f, 84f);
+        grid.spacing = new Vector2(12f, 8f);
+        grid.childAlignment = TextAnchor.MiddleCenter;
+        grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        grid.constraintCount = 4;
+        grid.startAxis = GridLayoutGroup.Axis.Horizontal;
+        grid.startCorner = GridLayoutGroup.Corner.UpperLeft;
+    }
+
+    private void CreateEmptyEquipmentSlots(int count)
+    {
+        if (equipmentOptionsGrid == null)
+            return;
+
+        for (int index = 0; index < count; index++)
+        {
+            GameObject slot = CreateImage(
+                $"Empty Equipment Slot {index + 1}",
+                equipmentOptionsGrid,
+                new Vector2(200f, 48f),
+                Vector2.zero,
+                new Color(0.08f, 0.1f, 0.14f, 0.9f)
+            );
+            Outline outline = slot.AddComponent<Outline>();
+            outline.effectColor = new Color(0.36f, 0.4f, 0.47f, 0.75f);
+            outline.effectDistance = new Vector2(1f, -1f);
+            AddText(slot.transform, "Empty Slot Label", "EMPTY SLOT",
+                Vector2.zero, new Vector2(190f, 34f), 11,
+                TextAlignmentOptions.Center, new Color(0.56f, 0.6f, 0.67f));
+            emptyEquipmentSlots.Add(slot);
+        }
     }
 
     private static bool IsUpgradeableItem(InventoryItem item)
@@ -831,13 +961,13 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
         float nextMultiplier = currentMultiplier + InventoryItem.UpgradeBonusPerLevel;
         StringBuilder preview = new StringBuilder();
         preview.AppendLine($"{item.Data.itemName}  |  Level {item.UpgradeLevel} -> {item.UpgradeLevel + 1}");
-        preview.AppendLine("Current stats  ->  After upgrade");
+        preview.AppendLine("Current stats  ->  <color=#75E08A>After upgrade</color>");
 
         foreach (EquipmentStat stat in item.Data.StatModifiers)
         {
             preview.AppendLine(
                 $"{stat.statType}: {FormatValue(stat.value * currentMultiplier, stat.modifierType)}" +
-                $"  ->  {FormatValue(stat.value * nextMultiplier, stat.modifierType)}"
+                $"  ->  <color=#75E08A>{FormatValue(stat.value * nextMultiplier, stat.modifierType)}</color>"
             );
         }
 
@@ -846,7 +976,7 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
             preview.AppendLine(
                 $"{damage.damageType} {damage.damageSlot} damage: " +
                 $"{FormatValue(damage.value * currentMultiplier, damage.modifierType)}  ->  " +
-                $"{FormatValue(damage.value * nextMultiplier, damage.modifierType)}"
+                $"<color=#75E08A>{FormatValue(damage.value * nextMultiplier, damage.modifierType)}</color>"
             );
         }
 
@@ -854,7 +984,7 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
         {
             preview.AppendLine(
                 $"Skill damage: {FormatValue(item.Data.SkillDamage * currentMultiplier, StatModifierType.Flat)}" +
-                $"  ->  {FormatValue(item.Data.SkillDamage * nextMultiplier, StatModifierType.Flat)}"
+                $"  ->  <color=#75E08A>{FormatValue(item.Data.SkillDamage * nextMultiplier, StatModifierType.Flat)}</color>"
             );
         }
 
@@ -1036,23 +1166,40 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
             "Hammer",
             background.transform,
             Vector2.one,
-            new Vector2(138f, 16f)
+            hammerVisualPosition
         );
         upgradeHammer = hammerPivot.GetComponent<RectTransform>();
-        CreateImage(
-            "Handle",
-            hammerPivot.transform,
-            new Vector2(6f, 28f),
-            new Vector2(0f, -8f),
-            new Color(0.56f, 0.32f, 0.16f, 1f)
-        );
-        CreateImage(
-            "Head",
-            hammerPivot.transform,
-            new Vector2(22f, 8f),
-            new Vector2(0f, 5f),
-            new Color(0.76f, 0.79f, 0.83f, 1f)
-        );
+        if (hammerAnimationFrames != null && hammerAnimationFrames.Length > 0)
+        {
+            GameObject hammerSpriteObject = CreateImage(
+                "Hammer Sprite",
+                hammerPivot.transform,
+                hammerVisualSize,
+                Vector2.zero,
+                Color.white
+            );
+            upgradeHammerSprite = hammerSpriteObject.GetComponent<Image>();
+            upgradeHammerSprite.preserveAspect = true;
+            upgradeHammerSprite.sprite = hammerAnimationFrames[0];
+            upgradeHammerSprite.enabled = upgradeHammerSprite.sprite != null;
+        }
+        else
+        {
+            CreateImage(
+                "Handle",
+                hammerPivot.transform,
+                new Vector2(6f, 28f),
+                new Vector2(0f, -8f),
+                new Color(0.56f, 0.32f, 0.16f, 1f)
+            );
+            CreateImage(
+                "Head",
+                hammerPivot.transform,
+                new Vector2(22f, 8f),
+                new Vector2(0f, 5f),
+                new Color(0.76f, 0.79f, 0.83f, 1f)
+            );
+        }
 
         GameObject track = CreateImage(
             "Progress Track",
@@ -1096,7 +1243,21 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
         int dotCount = Mathf.FloorToInt(Time.time * 3f) % 4;
         upgradeProgressLabel.text = $"HAMMERING{new string('.', dotCount)}";
         if (upgradeHammer != null)
-            upgradeHammer.localRotation = Quaternion.Euler(0f, 0f, Mathf.Sin(Time.time * 12f) * 35f);
+            upgradeHammer.localRotation = Quaternion.Euler(
+                0f,
+                0f,
+                Mathf.Sin(Time.time * hammerSwingSpeed) * hammerSwingAngle
+            );
+
+        if (upgradeHammerSprite != null &&
+            hammerAnimationFrames != null &&
+            hammerAnimationFrames.Length > 0)
+        {
+            int frameIndex = Mathf.FloorToInt(Time.time * hammerFramesPerSecond) % hammerAnimationFrames.Length;
+            Sprite frame = hammerAnimationFrames[frameIndex];
+            upgradeHammerSprite.sprite = frame;
+            upgradeHammerSprite.enabled = frame != null;
+        }
     }
 
     private void CancelUpgradeWork()
@@ -1280,14 +1441,22 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
 
     private static TMP_FontAsset GetUIFontAsset()
     {
-        TMP_FontAsset font = TMP_Settings.defaultFontAsset;
-        if (font != null)
-            return font;
-
-        font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
+        TMP_FontAsset font = Resources.Load<TMP_FontAsset>("Fonts & Materials/HARRINGT SDF");
         if (font == null)
-            Debug.LogError("EquipmentUpgradeMerchant: TextMesh Pro default font asset could not be loaded.");
+            Debug.LogError(
+                "EquipmentUpgradeMerchant: Could not load the HARRINGT SDF font from Resources/Fonts & Materials."
+            );
 
         return font;
+    }
+
+    private void ApplyMerchantFont(Transform root)
+    {
+        TMP_FontAsset merchantFont = GetUIFontAsset();
+        if (root == null || merchantFont == null)
+            return;
+
+        foreach (TextMeshProUGUI text in root.GetComponentsInChildren<TextMeshProUGUI>(true))
+            text.font = merchantFont;
     }
 }

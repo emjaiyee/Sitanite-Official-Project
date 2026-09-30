@@ -41,6 +41,8 @@ public class MerchantEquipmentOptionUI : MonoBehaviour
             return;
         }
 
+        ConfigureCompactLayout();
+
         Sprite icon = item.Data.inventoryIcon != null
             ? item.Data.inventoryIcon
             : item.Data.equipmentIcon;
@@ -61,6 +63,32 @@ public class MerchantEquipmentOptionUI : MonoBehaviour
 
         button.onClick.AddListener(() => onSelected?.Invoke(item));
         SetSelected(false);
+    }
+
+    private void ConfigureCompactLayout()
+    {
+        if (itemIcon != null)
+        {
+            RectTransform iconRect = itemIcon.rectTransform;
+            iconRect.sizeDelta = new Vector2(30f, 30f);
+            iconRect.anchoredPosition = new Vector2(-77f, 0f);
+        }
+
+        if (itemNameText != null)
+        {
+            RectTransform nameRect = itemNameText.rectTransform;
+            nameRect.sizeDelta = new Vector2(142f, 20f);
+            nameRect.anchoredPosition = new Vector2(26f, 9f);
+            itemNameText.alignment = TextAlignmentOptions.Left;
+        }
+
+        if (upgradeLevelText != null)
+        {
+            RectTransform levelRect = upgradeLevelText.rectTransform;
+            levelRect.sizeDelta = new Vector2(142f, 16f);
+            levelRect.anchoredPosition = new Vector2(26f, -10f);
+            upgradeLevelText.fontSize = 10f;
+        }
     }
 
     public void SetSelected(bool selected)

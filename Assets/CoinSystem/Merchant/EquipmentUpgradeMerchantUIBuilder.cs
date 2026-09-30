@@ -11,6 +11,7 @@ public static class EquipmentUpgradeMerchantUIBuilder
     private const string MerchantName = "UpgradeMerchant";
     private const string PanelName = "MerchantPanel";
     private const string GeneratedMarkerName = "Merchant UI - Generated";
+    private static TMP_FontAsset merchantFont;
 
     [MenuItem("Tools/Sitanite/Build Merchant UI for UpgradeMerchant")]
     private static void BuildMerchantUI()
@@ -301,26 +302,30 @@ public static class EquipmentUpgradeMerchantUIBuilder
         GameObject equipmentList = CreateRect(
             "Equipment Options",
             detailsCard.transform,
-            new Vector2(860f, 150f),
-            new Vector2(0f, 122f),
+            new Vector2(860f, 220f),
+            new Vector2(0f, 82f),
             new Vector2(0.5f, 0.5f),
             new Vector2(0.5f, 0.5f),
             new Vector2(0.5f, 0.5f)
         );
-        HorizontalLayoutGroup equipmentLayout = equipmentList.AddComponent<HorizontalLayoutGroup>();
-        equipmentLayout.spacing = 12f;
+        GridLayoutGroup equipmentLayout = equipmentList.AddComponent<GridLayoutGroup>();
+        equipmentLayout.cellSize = new Vector2(200f, 48f);
+        equipmentLayout.spacing = new Vector2(12f, 8f);
         equipmentLayout.childAlignment = TextAnchor.MiddleCenter;
-        equipmentLayout.childControlWidth = false;
-        equipmentLayout.childControlHeight = false;
-        equipmentLayout.childForceExpandWidth = false;
-        equipmentLayout.childForceExpandHeight = false;
+        equipmentLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        equipmentLayout.constraintCount = 4;
+        equipmentLayout.startAxis = GridLayoutGroup.Axis.Horizontal;
+        equipmentLayout.startCorner = GridLayoutGroup.Corner.UpperLeft;
+        RectTransform equipmentListRect = equipmentList.GetComponent<RectTransform>();
+        equipmentListRect.localScale = new Vector3(1.5f, 2f, 1f);
+        equipmentListRect.anchoredPosition = new Vector2(0f, -160f);
 
         TextMeshProUGUI equipmentDetails = CreateText(
             detailsCard.transform,
             "Upgrade Preview",
             "Select equipped gear to see its upgrade.",
-            new Vector2(0f, -72f),
-            new Vector2(850f, 190f),
+            new Vector2(0f, -110f),
+            new Vector2(850f, 120f),
             15,
             Color.white,
             TextAlignmentOptions.TopLeft
@@ -357,7 +362,7 @@ public static class EquipmentUpgradeMerchantUIBuilder
         GameObject optionTemplate = CreatePanel(
             "Equipment Option Template",
             templatesRoot.transform,
-            new Vector2(150f, 116f),
+            new Vector2(200f, 48f),
             Vector2.zero,
             new Color(0.12f, 0.15f, 0.2f, 1f)
         );
@@ -366,16 +371,16 @@ public static class EquipmentUpgradeMerchantUIBuilder
         Image optionIcon = CreateImage(
             "Item Icon",
             optionTemplate.transform,
-            new Vector2(48f, 48f),
-            new Vector2(0f, 20f),
+            new Vector2(30f, 30f),
+            new Vector2(-77f, 0f),
             Color.white
         );
         TextMeshProUGUI optionName = CreateText(
             optionTemplate.transform,
             "Item Name",
             "Item",
-            new Vector2(0f, -28f),
-            new Vector2(140f, 25f),
+            new Vector2(26f, 9f),
+            new Vector2(142f, 20f),
             12,
             Color.white,
             TextAlignmentOptions.Center
@@ -384,9 +389,9 @@ public static class EquipmentUpgradeMerchantUIBuilder
             optionTemplate.transform,
             "Upgrade Level",
             "LVL 0",
-            new Vector2(0f, -48f),
-            new Vector2(140f, 20f),
-            13,
+            new Vector2(26f, -10f),
+            new Vector2(142f, 16f),
+            10,
             new Color(1f, 0.82f, 0.45f),
             TextAlignmentOptions.Center
         );
@@ -483,9 +488,17 @@ public static class EquipmentUpgradeMerchantUIBuilder
             new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f)
         );
         TextMeshProUGUI text = textObject.AddComponent<TextMeshProUGUI>();
-        text.font = TMP_Settings.defaultFontAsset;
-        if (text.font == null)
-            text.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
+        if (merchantFont == null)
+        {
+            merchantFont = Resources.Load<TMP_FontAsset>("Fonts & Materials/HARRINGT SDF");
+            if (merchantFont == null)
+            {
+                Debug.LogError(
+                    "EquipmentUpgradeMerchantUIBuilder: Could not load HARRINGT SDF from Resources/Fonts & Materials."
+                );
+            }
+        }
+        text.font = merchantFont;
         text.fontSize = fontSize;
         text.color = color;
         text.text = value;
