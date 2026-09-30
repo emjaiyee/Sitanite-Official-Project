@@ -90,6 +90,7 @@ public class CombatInputGate : MonoBehaviour
 
         bool uiOpen =
             isPaused ||
+            EquipmentUpgradeMerchant.IsUIOpen ||
             (statsUI != null && statsUI.IsOpen) ||
             (inventory != null && inventory.IsOpen);
 

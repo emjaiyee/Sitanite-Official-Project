@@ -6,6 +6,9 @@ using UnityEngine;
 /// </summary>
 public class InventoryItem
 {
+    public const int MaximumUpgradeLevel = 10;
+    public const float UpgradeBonusPerLevel = 0.1f;
+
     #region Properties
     /// <summary>Gets the immutable base item configuration asset.</summary>
     public ItemData Data { get; }
@@ -20,6 +23,11 @@ public class InventoryItem
     /// Gets the current rotation state step (0 = 0°, 1 = 90°, 2 = 180°, 3 = 270°).
     /// </summary>
     public int RotationIndex { get; private set; }
+
+    public int UpgradeLevel { get; private set; }
+
+    public float UpgradeMultiplier =>
+        1f + UpgradeLevel * UpgradeBonusPerLevel;
     #endregion
 
     #region Constructor
@@ -57,6 +65,25 @@ public class InventoryItem
         // Cycles through 4 cardinal rotation states (0 through 3).
         // Odd indices swap width and height dimensions for placement collision checks.
         RotationIndex = (RotationIndex + 1) % 4;
+    }
+
+    public bool TryUpgrade()
+    {
+        if (Data == null ||
+            Data.EquipmentType == EquipmentType.None ||
+            Data.EquipmentType == EquipmentType.Consumable ||
+            UpgradeLevel >= MaximumUpgradeLevel)
+        {
+            return false;
+        }
+
+        UpgradeLevel++;
+        return true;
+    }
+
+    public void RestoreUpgradeLevel(int level)
+    {
+        UpgradeLevel = Mathf.Clamp(level, 0, MaximumUpgradeLevel);
     }
     #endregion
 }

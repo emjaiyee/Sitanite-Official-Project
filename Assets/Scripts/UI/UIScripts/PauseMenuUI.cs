@@ -164,6 +164,9 @@ public class PauseMenuUI : MonoBehaviour
 
     private void HandlePauseInput()
     {
+        if (EquipmentUpgradeMerchant.IsUIOpen)
+            return;
+
         if (cachedStatsUI == null)
             cachedStatsUI = FindFirstObjectByType<PlayerStatsUI>(FindObjectsInactive.Include);
 

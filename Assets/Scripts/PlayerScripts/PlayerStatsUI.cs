@@ -178,16 +178,25 @@ public class PlayerStatsUI : MonoBehaviour
 
     private void OnStatsPerformed(InputAction.CallbackContext context)
     {
+        if (EquipmentUpgradeMerchant.IsUIOpen)
+            return;
+
         ToggleStatsWindow();
     }
 
     public void ToggleStatsWindow()
     {
+        if (EquipmentUpgradeMerchant.IsUIOpen)
+            return;
+
         SetStatsWindowState(!IsOpen);
     }
 
     public void SetStatsWindowState(bool isOpen)
     {
+        if (isOpen && EquipmentUpgradeMerchant.IsUIOpen)
+            return;
+
         if (statsWindow == null)
             return;
 

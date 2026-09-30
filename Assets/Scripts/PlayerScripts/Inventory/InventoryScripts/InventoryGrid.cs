@@ -208,6 +208,17 @@ public class InventoryGrid : MonoBehaviour
     }
 
     /// <summary>
+    /// Notifies inventory views and persistence listeners that an existing item changed.
+    /// </summary>
+    public void NotifyItemUpdated(InventoryItem item)
+    {
+        if (item == null || !GetItems().Contains(item))
+            return;
+
+        OnItemUpdated?.Invoke(item);
+    }
+
+    /// <summary>
     /// Rotates an item instance and triggers the corresponding rotation event.
     /// </summary>
     /// <param name="item">Target inventory item data to rotate</param>
@@ -215,6 +226,62 @@ public class InventoryGrid : MonoBehaviour
     {
         item.Rotate();
         OnItemRotated?.Invoke(item);
+    }
+
+    public bool TrySpendCoins(int amount)
+    {
+        if (amount < 0)
+            return false;
+
+        if (amount == 0)
+            return true;
+
+        List<InventoryItem> coinStacks = GetItems()
+            .FindAll(IsCurrency);
+
+        int available = 0;
+        foreach (InventoryItem stack in coinStacks)
+            available += stack.Quantity;
+
+        if (available < amount)
+            return false;
+
+        int remaining = amount;
+        foreach (InventoryItem stack in coinStacks)
+        {
+            int spent = Mathf.Min(stack.Quantity, remaining);
+            stack.Quantity -= spent;
+            remaining -= spent;
+
+            if (stack.Quantity <= 0)
+                RemoveItem(stack);
+            else
+                OnItemUpdated?.Invoke(stack);
+
+            if (remaining == 0)
+                break;
+        }
+
+        return true;
+    }
+
+    public int GetCoinCount()
+    {
+        int count = 0;
+        foreach (InventoryItem item in GetItems())
+        {
+            if (IsCurrency(item))
+                count += item.Quantity;
+        }
+
+        return count;
+    }
+
+    private static bool IsCurrency(InventoryItem item)
+    {
+        return item != null &&
+            item.Data != null &&
+            item.Data.IsCurrency;
     }
     #endregion
 

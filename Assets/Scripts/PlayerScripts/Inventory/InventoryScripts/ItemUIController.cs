@@ -31,6 +31,7 @@ public class ItemUIController : MonoBehaviour
     [SerializeField] private RectTransform rectTransform;
 
     private UIHoverTooltip hoverTooltip;
+    private TextMeshProUGUI upgradeLevelText;
     #endregion
 
     #region Lifecycle
@@ -44,6 +45,10 @@ public class ItemUIController : MonoBehaviour
 
         if (hoverTooltip == null)
             hoverTooltip = GetComponent<UIHoverTooltip>();
+
+        Transform existingBadge = transform.Find("Upgrade Level");
+        if (existingBadge != null)
+            upgradeLevelText = existingBadge.GetComponent<TextMeshProUGUI>();
     }
     #endregion
 
@@ -61,6 +66,7 @@ public class ItemUIController : MonoBehaviour
         UpdateTooltip(item);
         UpdateGridBackground(item, cellSize);
         UpdateStackText(item);
+        UpdateUpgradeLevel(item);
         UpdateLayout(item, cellSize);
     }
 
@@ -92,6 +98,7 @@ public class ItemUIController : MonoBehaviour
         }
 
         UpdateStackText(item);
+        UpdateUpgradeLevel(item);
     }
 
     /// <summary>
@@ -151,11 +158,13 @@ public class ItemUIController : MonoBehaviour
         if (hoverTooltip == null || item == null || item.Data == null)
             return;
 
-        hoverTooltip.SetDescription(BuildTooltipText(item.Data));
+        hoverTooltip.SetDescription(BuildTooltipText(item));
     }
 
-    private string BuildTooltipText(ItemData data)
+    private string BuildTooltipText(InventoryItem item)
     {
+        ItemData data = item.Data;
+        float upgradeMultiplier = item.UpgradeMultiplier;
         StringBuilder text = new StringBuilder();
         text.AppendLine($"<color={GetRarityColor(data.Rarity)}>{data.itemName}</color>");
         text.AppendLine($"Rarity: {FormatEnum(data.Rarity)}");
@@ -166,6 +175,9 @@ public class ItemUIController : MonoBehaviour
         if (data.EquipmentType != EquipmentType.None)
         {
             text.AppendLine($"Equipment Type: {FormatEnum(data.EquipmentType)}");
+            text.AppendLine(
+                $"Upgrade Level: {item.UpgradeLevel}/{InventoryItem.MaximumUpgradeLevel}"
+            );
 
             if (data.StatCapType != StatCapType.None)
             {
@@ -181,7 +193,7 @@ public class ItemUIController : MonoBehaviour
         {
             text.AppendLine();
             text.AppendLine($"Modifier {modifierNumber}:");
-            text.AppendLine(FormatModifier(modifier));
+            text.AppendLine(FormatModifier(modifier, upgradeMultiplier));
             modifierNumber++;
         }
 
@@ -192,7 +204,7 @@ public class ItemUIController : MonoBehaviour
             {
                 text.AppendLine();
                 text.AppendLine($"Attack Damage {damageNumber}:");
-                text.AppendLine(FormatWeaponDamage(damage));
+                text.AppendLine(FormatWeaponDamage(damage, upgradeMultiplier));
                 damageNumber++;
             }
 
@@ -200,7 +212,7 @@ public class ItemUIController : MonoBehaviour
             {
                 text.AppendLine();
                 text.AppendLine("Skill Damage:");
-                text.AppendLine(FormatWeaponDamage(data.SkillDamageEntry));
+                text.AppendLine(FormatWeaponDamage(data.SkillDamageEntry, upgradeMultiplier));
             }
 
             if (data.WeaponSkillType == WeaponSkillType.ChargedArrow ||
@@ -208,7 +220,10 @@ public class ItemUIController : MonoBehaviour
             {
                 text.AppendLine();
                 text.AppendLine("Charged Skill Damage Type:");
-                text.AppendLine(FormatWeaponDamage(data.ChargedSkillDamageEntry));
+                text.AppendLine(FormatWeaponDamage(
+                    data.ChargedSkillDamageEntry,
+                    upgradeMultiplier
+                ));
             }
         }
 
@@ -226,22 +241,25 @@ public class ItemUIController : MonoBehaviour
         };
     }
 
-    private string FormatWeaponDamage(WeaponDamage damage)
+    private string FormatWeaponDamage(WeaponDamage damage, float upgradeMultiplier)
     {
         StringBuilder text = new StringBuilder(FormatDamageType(damage.damageType));
         text.Append($" ({FormatEnum(damage.damageSlot)})");
 
         if (damage.lingeringDamage)
-            text.Append($" [Lingering: {damage.lingeringBaseValue:0.##} base]");
+            text.Append(
+                $" [Lingering: {damage.lingeringBaseValue * upgradeMultiplier:0.##} base]"
+            );
 
-        string sign = damage.value > 0f ? "+" : string.Empty;
+        float value = damage.value * upgradeMultiplier;
+        string sign = value > 0f ? "+" : string.Empty;
         string suffix = damage.modifierType == StatModifierType.Percent ? "%" : string.Empty;
-        text.Append($": {sign}{damage.value:0.##}{suffix}");
+        text.Append($": {sign}{value:0.##}{suffix}");
 
         return $"<color=#00FF00>{text}</color>";
     }
 
-    private string FormatModifier(EquipmentStat modifier)
+    private string FormatModifier(EquipmentStat modifier, float upgradeMultiplier)
     {
         StringBuilder text = new StringBuilder(FormatEnum(modifier.statType));
 
@@ -261,7 +279,9 @@ public class ItemUIController : MonoBehaviour
                 if (hasDamageDetails)
                     text.Append(")");
                 if (modifier.lingeringDamage)
-                    text.Append($" [Lingering: {modifier.lingeringBaseValue:0.##} base]");
+                    text.Append(
+                        $" [Lingering: {modifier.lingeringBaseValue * upgradeMultiplier:0.##} base]"
+                    );
                 break;
             case StatType.BaseDamageResistance:
             case StatType.DamageResistance:
@@ -281,7 +301,8 @@ public class ItemUIController : MonoBehaviour
 
         bool isReduction = modifier.statType == StatType.AttributeReduction ||
                            modifier.statType == StatType.TraitReduction;
-        float displayValue = isReduction ? -Mathf.Abs(modifier.value) : modifier.value;
+        float upgradedValue = modifier.value * upgradeMultiplier;
+        float displayValue = isReduction ? -Mathf.Abs(upgradedValue) : upgradedValue;
         string sign = displayValue > 0f ? "+" : string.Empty;
         string suffix = modifier.modifierType == StatModifierType.Percent ? "%" : string.Empty;
         text.Append($": {sign}{displayValue:0.##}{suffix}");
@@ -344,6 +365,62 @@ public class ItemUIController : MonoBehaviour
         {
             stackText.gameObject.SetActive(false);
         }
+    }
+
+    private void UpdateUpgradeLevel(InventoryItem item)
+    {
+        if (item == null || item.Data == null ||
+            item.Data.EquipmentType == EquipmentType.None ||
+            item.Data.EquipmentType == EquipmentType.Consumable)
+        {
+            if (upgradeLevelText != null)
+                upgradeLevelText.gameObject.SetActive(false);
+            return;
+        }
+
+        if (upgradeLevelText == null)
+        {
+            upgradeLevelText = new GameObject(
+                "Upgrade Level",
+                typeof(RectTransform),
+                typeof(TextMeshProUGUI)
+            ).GetComponent<TextMeshProUGUI>();
+            upgradeLevelText.font = TMP_Settings.defaultFontAsset;
+            if (upgradeLevelText.font == null)
+                upgradeLevelText.font = Resources.Load<TMP_FontAsset>(
+                    "Fonts & Materials/LiberationSans SDF"
+                );
+            upgradeLevelText.fontSize = 13;
+            upgradeLevelText.fontStyle = FontStyles.Bold;
+            upgradeLevelText.alignment = TextAlignmentOptions.Bottom;
+            upgradeLevelText.margin = Vector4.zero;
+            upgradeLevelText.enableWordWrapping = false;
+            upgradeLevelText.raycastTarget = false;
+        }
+
+        upgradeLevelText.transform.SetParent(rectTransform, false);
+        RectTransform badgeRect = upgradeLevelText.rectTransform;
+        badgeRect.anchorMin = new Vector2(0.5f, 0f);
+        badgeRect.anchorMax = new Vector2(0.5f, 0f);
+        badgeRect.pivot = new Vector2(0.5f, 0f);
+        badgeRect.anchoredPosition = new Vector2(0f, 1f);
+        badgeRect.sizeDelta = new Vector2(60f, 19f);
+        upgradeLevelText.gameObject.SetActive(true);
+        upgradeLevelText.text = $"LVL {item.UpgradeLevel}";
+        upgradeLevelText.color = GetUpgradeLevelColor(item.UpgradeLevel);
+        upgradeLevelText.transform.SetAsLastSibling();
+    }
+
+    private static Color GetUpgradeLevelColor(int level)
+    {
+        return level switch
+        {
+            0 => Color.white,
+            <= 3 => new Color(0.45f, 1f, 0.48f),
+            <= 6 => new Color(0.35f, 0.78f, 1f),
+            < InventoryItem.MaximumUpgradeLevel => new Color(0.82f, 0.55f, 1f),
+            _ => new Color(1f, 0.78f, 0.25f)
+        };
     }
     #endregion
 }

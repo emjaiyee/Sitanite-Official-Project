@@ -299,6 +299,9 @@ public class ItemData : ScriptableObject
     [Tooltip("Rarity classification used by item data and inventory presentation.")]
     [SerializeField] private ItemRarity rarity = ItemRarity.Common;
 
+    [Tooltip("Marks this stackable item as spendable currency.")]
+    [SerializeField] private bool isCurrency;
+
     [Tooltip("Character definition applied while this item is equipped.")]
     [SerializeField] private CharacterPartDefinition characterDefinition;
 
@@ -379,6 +382,9 @@ public class ItemData : ScriptableObject
 
     /// <summary>Get the item's rarity classification.</summary>
     public ItemRarity Rarity => rarity;
+
+    /// <summary>Gets whether this item is spendable currency.</summary>
+    public bool IsCurrency => isCurrency;
 
     /// <summary>Get the character definition applied by this item.</summary>
     public CharacterPartDefinition CharacterDefinition => characterDefinition;

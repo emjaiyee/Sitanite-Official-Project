@@ -140,6 +140,30 @@ public class EquipmentManager : MonoBehaviour
         return currentEquipment.ContainsValue(item);
     }
 
+    public float GetWeaponUpgradeMultiplier(ItemData weaponData)
+    {
+        InventoryItem weapon = GetEquippedItem(EquipmentType.Weapon);
+        return weapon != null && weapon.Data == weaponData
+            ? weapon.UpgradeMultiplier
+            : 1f;
+    }
+
+    public void NotifyItemUpgraded(InventoryItem item)
+    {
+        if (item == null)
+            return;
+
+        foreach (KeyValuePair<EquipmentType, InventoryItem> equipped in currentEquipment)
+        {
+            if (equipped.Value != item)
+                continue;
+
+            OnEquipmentChanged?.Invoke(equipped.Key, item);
+            NotifyPlayerStatsChanged();
+            return;
+        }
+    }
+
     public float GetModifiedStat(float baseValue, StatType statType, DamageType damageType = DamageType.None)
     {
         float flat = 0f;
@@ -155,15 +179,30 @@ public class EquipmentManager : MonoBehaviour
                 if (modifier.statType != statType)
                     continue;
 
-                if (statType != StatType.MoveSpeed &&
-                    modifier.damageType != DamageType.None &&
-                    (modifier.damageType & damageType) == 0)
-                    continue;
+                AccumulateModifier(
+                    modifier.statType,
+                    modifier.damageType,
+                    modifier.modifierType,
+                    modifier.value * item.UpgradeMultiplier,
+                    statType,
+                    damageType,
+                    ref flat,
+                    ref percent
+                );
+            }
 
-                if (modifier.modifierType == StatModifierType.Percent)
-                    percent += modifier.value;
-                else
-                    flat += modifier.value;
+            foreach (WeaponDamage weaponDamage in item.Data.WeaponDamages)
+            {
+                AccumulateModifier(
+                    StatType.Damage,
+                    weaponDamage.damageType,
+                    weaponDamage.modifierType,
+                    weaponDamage.value * item.UpgradeMultiplier,
+                    statType,
+                    damageType,
+                    ref flat,
+                    ref percent
+                );
             }
         }
 
@@ -191,15 +230,30 @@ public class EquipmentManager : MonoBehaviour
                 if (modifier.statType != statType)
                     continue;
 
-                if (statType != StatType.MoveSpeed &&
-                    modifier.damageType != DamageType.None &&
-                    (modifier.damageType & damageType) == 0)
-                    continue;
+                AccumulateModifier(
+                    modifier.statType,
+                    modifier.damageType,
+                    modifier.modifierType,
+                    modifier.value * item.UpgradeMultiplier,
+                    statType,
+                    damageType,
+                    ref flat,
+                    ref percent
+                );
+            }
 
-                if (modifier.modifierType == StatModifierType.Percent)
-                    percent += modifier.value;
-                else
-                    flat += modifier.value;
+            foreach (WeaponDamage weaponDamage in item.Data.WeaponDamages)
+            {
+                AccumulateModifier(
+                    StatType.Damage,
+                    weaponDamage.damageType,
+                    weaponDamage.modifierType,
+                    weaponDamage.value * item.UpgradeMultiplier,
+                    statType,
+                    damageType,
+                    ref flat,
+                    ref percent
+                );
             }
         }
 
@@ -232,13 +286,39 @@ public class EquipmentManager : MonoBehaviour
                     continue;
 
                 if (modifier.modifierType == StatModifierType.Percent)
-                    percent += modifier.value;
+                    percent += modifier.value * item.UpgradeMultiplier;
                 else
-                    flat += modifier.value;
+                    flat += modifier.value * item.UpgradeMultiplier;
             }
         }
 
         return Mathf.Max(0f, (baseValue - flat) * (1f - percent / 100f));
+    }
+
+    private static void AccumulateModifier(
+        StatType modifierStat,
+        DamageType modifierDamageType,
+        StatModifierType modifierType,
+        float value,
+        StatType requestedStat,
+        DamageType requestedDamageType,
+        ref float flat,
+        ref float percent)
+    {
+        if (modifierStat != requestedStat)
+            return;
+
+        if (requestedStat != StatType.MoveSpeed &&
+            modifierDamageType != DamageType.None &&
+            (modifierDamageType & requestedDamageType) == 0)
+        {
+            return;
+        }
+
+        if (modifierType == StatModifierType.Percent)
+            percent += value;
+        else
+            flat += value;
     }
 
     #endregion

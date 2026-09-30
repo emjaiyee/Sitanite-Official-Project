@@ -261,12 +261,12 @@ public void Attack(Vector2 direction)
         if (primaryDamage > 0 && data.PrimaryDamageType != DamageType.None)
             target.TakeDamage(primaryDamage, data.PrimaryDamageType, source);
 
-        int secondaryDamage = data.GetDamage(DamageSlot.Secondary);
+        int secondaryDamage = GetWeaponDamage(DamageSlot.Secondary);
         DamageType secondaryDamageType = data.GetDamageType(DamageSlot.Secondary);
         if (secondaryDamage > 0 && secondaryDamageType != DamageType.None)
             target.TakeDamage(secondaryDamage, secondaryDamageType, source);
 
-        int tertiaryDamage = data.GetDamage(DamageSlot.Tertiary);
+        int tertiaryDamage = GetWeaponDamage(DamageSlot.Tertiary);
         DamageType tertiaryDamageType = data.GetDamageType(DamageSlot.Tertiary);
         if (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)
             target.TakeDamage(tertiaryDamage, tertiaryDamageType, source);
@@ -1498,7 +1498,11 @@ public void ReleaseSkill(bool fullyCharged)
     private int CalculateSkillDamage(int rawDamage)
     {
         if (playerStats == null)
-            return rawDamage;
+        {
+            return Mathf.RoundToInt(
+                rawDamage * GetWeaponUpgradeMultiplier()
+            );
+        }
 
         float baseDamage = playerStats.GetPreEquipmentDamage(data.PrimaryDamageType);
         if (EquipmentManager.Instance != null)
@@ -1510,7 +1514,8 @@ public void ReleaseSkill(bool fullyCharged)
             );
         }
 
-        return Mathf.RoundToInt(baseDamage) + rawDamage;
+        return Mathf.RoundToInt(baseDamage) +
+            Mathf.RoundToInt(rawDamage * GetWeaponUpgradeMultiplier());
     }
 
     /// <summary>
@@ -1524,7 +1529,9 @@ public void ReleaseSkill(bool fullyCharged)
     /// </summary>
     private int CalculateChargedSkillDamage(int rawDamage)
     {
-        int damage = rawDamage + data.GetDamage(DamageSlot.Primary);
+        int damage =
+            Mathf.RoundToInt(rawDamage * GetWeaponUpgradeMultiplier()) +
+            GetWeaponDamage(DamageSlot.Primary);
 
         if (playerStats == null)
             return damage;
@@ -1548,7 +1555,9 @@ public void ReleaseSkill(bool fullyCharged)
     private int GetPrimaryDamage()
     {
         if (playerStats == null)
-            return data.PrimaryDamage;
+            return Mathf.RoundToInt(
+                data.PrimaryDamage * GetWeaponUpgradeMultiplier()
+            );
 
         float damage =
             playerStats.GetEffectiveDamage(
@@ -1560,9 +1569,23 @@ public void ReleaseSkill(bool fullyCharged)
         // A default weapon assigned directly bypasses the manager, so its
         // ItemData damage has to be added here.
         if (!IsWeaponRegisteredInEquipment())
-            damage += data.PrimaryDamage;
+            damage += data.PrimaryDamage * GetWeaponUpgradeMultiplier();
 
         return Mathf.RoundToInt(damage);
+    }
+
+    private float GetWeaponUpgradeMultiplier()
+    {
+        return EquipmentManager.Instance == null
+            ? 1f
+            : EquipmentManager.Instance.GetWeaponUpgradeMultiplier(data);
+    }
+
+    private int GetWeaponDamage(DamageSlot slot)
+    {
+        return Mathf.RoundToInt(
+            data.GetDamage(slot) * GetWeaponUpgradeMultiplier()
+        );
     }
 
     private bool IsWeaponRegisteredInEquipment()
