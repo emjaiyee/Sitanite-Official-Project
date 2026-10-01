@@ -21,6 +21,11 @@ public class ItemUIController : MonoBehaviour
     [Tooltip("Sprite used by the 9-slice item background.")]
     [SerializeField] private Sprite gridBackgroundSprite;
 
+    [Header("Rarity Background Colors")]
+    [SerializeField] private Color uncommonBackgroundColor = new Color(0.35f, 0.9f, 0.4f);
+    [SerializeField] private Color rareBackgroundColor = new Color(0.35f, 0.65f, 1f);
+    [SerializeField] private Color legendaryBackgroundColor = new Color(1f, 0.6f, 0.28f);
+
     [Tooltip("TextMeshPro displaying stack amount.")]
     [SerializeField] private TextMeshProUGUI stackText;
 
@@ -32,6 +37,7 @@ public class ItemUIController : MonoBehaviour
 
     private UIHoverTooltip hoverTooltip;
     private TextMeshProUGUI upgradeLevelText;
+    private Color gridBackgroundBaseColor = Color.white;
     #endregion
 
     #region Lifecycle
@@ -39,6 +45,9 @@ public class ItemUIController : MonoBehaviour
     {
         if (rectTransform == null)
             rectTransform = GetComponent<RectTransform>();
+
+        if (gridBackgroundImage != null)
+            gridBackgroundBaseColor = gridBackgroundImage.color;
 
         if (iconImage != null)
             hoverTooltip = iconImage.GetComponent<UIHoverTooltip>();
@@ -151,6 +160,17 @@ public class ItemUIController : MonoBehaviour
         if (iconImage == null || item?.Data == null) return;
 
         iconImage.sprite = item.Data.inventoryIcon;
+    }
+
+    public Color GetRarityBackgroundColor(ItemRarity rarity)
+    {
+        return rarity switch
+        {
+            ItemRarity.Uncommon => uncommonBackgroundColor,
+            ItemRarity.Rare => rareBackgroundColor,
+            ItemRarity.Legendary => legendaryBackgroundColor,
+            _ => Color.white
+        };
     }
 
     private void UpdateTooltip(InventoryItem item)
@@ -345,6 +365,8 @@ public class ItemUIController : MonoBehaviour
         gridBackgroundImage.type = Image.Type.Sliced;
         gridBackgroundImage.raycastTarget = false;
         gridBackgroundImage.enabled = gridBackgroundSprite != null;
+        gridBackgroundImage.color = gridBackgroundBaseColor *
+                                    GetRarityBackgroundColor(item.Data.Rarity);
         gridBackgroundImage.rectTransform.SetAsFirstSibling();
         gridBackgroundImage.rectTransform.sizeDelta = new Vector2(
             item.GetWidth() * cellSize,

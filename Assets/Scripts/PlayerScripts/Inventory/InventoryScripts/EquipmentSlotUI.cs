@@ -29,6 +29,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
     #region Private Fields
     private RectTransform equippedVisual;
     private bool dropHandled;
+    private Color slotBaseColor = Color.white;
     #endregion
 
     #region Properties
@@ -45,6 +46,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
     private void Awake()
     {
         if (slotRectTransform == null) slotRectTransform = GetComponent<RectTransform>();
+        if (slotImage != null) slotBaseColor = slotImage.color;
 
         Graphic dropTarget = GetComponent<Graphic>();
         if (dropTarget == null)
@@ -179,6 +181,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
             slotImage.sprite = equippedItem == null
                 ? emptySlotSprite
                 : occupiedSlotSprite;
+            slotImage.color = slotBaseColor;
         }
     }
     #endregion
@@ -294,6 +297,11 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
         if (visual.TryGetComponent<ItemUIController>(out var controller))
         {
             controller.SetupForEquipment(item, slotSize);
+            if (slotImage != null && item?.Data != null)
+            {
+                slotImage.color = slotBaseColor *
+                                  controller.GetRarityBackgroundColor(item.Data.Rarity);
+            }
         }
 
         if (visual.TryGetComponent<CanvasGroup>(out var canvasGroup))
