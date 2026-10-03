@@ -122,7 +122,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -1739791099016606575, guid: e62622a2affed2f40bf4190ff00562a1, type: 3}
+  m_Sprite: {fileID: -1158581314517614047, guid: cb2642c08745f1944b42cc18fbc5cb11, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -202,8 +202,14 @@ MonoBehaviour:
   summonLevel: 1
   summonEnemy: {fileID: 2290695894656021834, guid: 58264b95a41a22749b5cd046a986af7d, type: 3}
   summonList: []
-  canSummon: 1
+  summonCooldown: 30
+  summonFirst: 0
   spawnRadius: 0.7
+  nextSummonTime: 0
+  hittableLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  checkRadius: 0.5
   takingAim: 0
   deathAnimationDelay: 0.5
   deathFadeDuration: 0.75
@@ -310,7 +316,7 @@ MonoBehaviour:
   m_CategoryHash: 1.8990936e-26
   m_labelHash: 2.480907e-28
   m_SpriteKey: 0
-  m_SpriteHash: 211543085
+  m_SpriteHash: 643579979
 --- !u!95 &4941687366284714724
 Animator:
   serializedVersion: 7

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(Enemy))]
@@ -6,6 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyHealth))]
 public class EnemyRange : MonoBehaviour
 {
+    #region Variables/ Stats/ Reference/ States
     // =========================================================
     // STATE
     // =========================================================
@@ -23,8 +25,11 @@ public class EnemyRange : MonoBehaviour
     [SerializeField] private EnemyState startingState =
         EnemyState.Idle;
 
-    public EnemyState? CurrentState { get; private set; }
+   public EnemyState? CurrentState { get; private set; }
 
+    [Header("Inspector")]
+    [SerializeField] private EnemyState CurrentStateInspector; // Inspector of currently active state
+    
     private EnemyRangeState currentState;
 
 
@@ -39,6 +44,8 @@ public class EnemyRange : MonoBehaviour
         "The enemy must detect the player before entering Chase."
     )]
     [SerializeField] private int detectionRadius = 12;
+
+    [SerializeField] private LayerMask playerCollider = Physics2D.AllLayers;
 
     public int DetectionRadius =>
         detectionRadius;
@@ -80,7 +87,10 @@ public class EnemyRange : MonoBehaviour
         "fire a projectile once it is in Chase state."
     )]
     [Min(0f)]
-    [SerializeField] private float attackRange = 4f;
+  
+    [SerializeField] private float radiusX = 0.5f;
+    [SerializeField] private float radiusY = 0.2f;
+
 
     [SerializeField] private DamageType projectileDamageType =
         DamageType.Physical;
@@ -108,9 +118,6 @@ public class EnemyRange : MonoBehaviour
     [SerializeField] private GameObject projectilePrefab;
 
     private float nextAttackTime;
-
-    public float AttackRange =>
-        attackRange;
 
 
     // =========================================================
@@ -232,7 +239,8 @@ public class EnemyRange : MonoBehaviour
     public float DeathFadeDuration =>
         deathFadeDuration;
 
-
+#endregion
+   
     // =========================================================
     // UNITY
     // =========================================================
@@ -346,7 +354,7 @@ public class EnemyRange : MonoBehaviour
         }
 
         // -----------------------------------------------------
-        // FIND PLAYER IF MISSING
+        // FIND PLAYER IF MISSING                                    // expect to remove for performance
         // -----------------------------------------------------
 
         if (player == null)
@@ -407,8 +415,8 @@ public class EnemyRange : MonoBehaviour
         PlayerStats stats =
             playerObject.GetComponentInParent<PlayerStats>();
 
-        if (stats == null)
-        {
+        if (stats == null)                                              // this if statement chould be remove for performance if player stats is always at 
+        {                                                               // the root object    
             stats =
                 playerObject.GetComponentInChildren<PlayerStats>();
         }
@@ -425,7 +433,7 @@ public class EnemyRange : MonoBehaviour
     private void HandleEnemyDied(
         GameObject deadEnemy)
     {
-        if (enemySFX != null)
+        if (enemySFX != null)        // this is good since there is no death animation 
             enemySFX.PlayDeathSFX();
 
         ChangeState(
@@ -492,6 +500,9 @@ public class EnemyRange : MonoBehaviour
         nextAttackTime = 0f;
 
         CurrentState =
+            newState;
+
+        CurrentStateInspector = 
             newState;
 
 
@@ -596,16 +607,45 @@ public class EnemyRange : MonoBehaviour
         if (player == null)
             return false;
 
+        Vector2 rayDirection = 
+            (player.position - transform.position).normalized;
 
-        float range =
-            attackRange;
+        RaycastHit2D ray =
+            Physics2D.Raycast(
+                transform.position,
+                rayDirection,
+                5f,
+                playerCollider
+                );
 
+        if (ray.collider == null)
+            return false;
 
-        return (
-            (Vector2)player.position -
-            (Vector2)transform.position
-        ).sqrMagnitude <=
-        range * range;
+        if (ray.collider.CompareTag("Player"))
+        {
+            Debug.Log(
+                $"[EnemyRange] {name} could see Player " +
+                $"See if can attack {ray.transform.name}."
+                );
+
+            Vector2 difference =
+          (Vector2)player.position -
+          (Vector2)transform.position;
+
+            float normalizedX = Mathf.Pow(difference.x, 2) / Mathf.Pow(radiusX, 2);
+            float normalizedY = Mathf.Pow(difference.y, 2) / Mathf.Pow(radiusY, 2);
+
+            return (normalizedX + normalizedY) <= 1.0f;
+        }
+
+        else 
+        {
+            Debug.LogWarning(
+                 $"[EnemyRange] {name} could not see Player " +
+                 $"Could only see {ray.transform.name}."
+                 );
+            return false;
+        }
     }
 
 
@@ -1105,18 +1145,33 @@ public class EnemyRange : MonoBehaviour
         // ATTACK RANGE
         // -----------------------------------------------------
 
-        Gizmos.color =
-            new Color(
-                1f,
-                0f,
-                0f,
-                0.35f
-            );
+        if (IsPlayerWithinAttackRange())
+        {
+            Gizmos.color = Color.green;
 
+            const int segments = 64;
 
-        Gizmos.DrawWireSphere(
-            transform.position,
-            attackRange
-        );
+            Vector3 previousPoint = transform.position + new Vector3(radiusX, 0f, 0f);
+
+            for (int i = 1; i <= segments; i++)
+            {
+                float angle = (i / (float)segments) * Mathf.PI * 2f;
+
+                Vector3 point = transform.position + new Vector3(
+                    Mathf.Cos(angle) * radiusX,
+                    Mathf.Sin(angle) * radiusY,
+                    0f
+                );
+
+                Gizmos.DrawLine(previousPoint, point);
+                previousPoint = point;
+            }
+
+            Vector2 direction  = (player.position - transform.position).normalized;
+
+            Gizmos.DrawRay(transform.position, direction * 5f);
+
+        }
+
     }
 }

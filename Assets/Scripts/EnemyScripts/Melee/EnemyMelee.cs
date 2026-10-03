@@ -28,7 +28,8 @@ public class EnemyMelee : MonoBehaviour
 
     public EnemyState? CurrentState { get; private set; }
 
-
+    [Header("Inspector")]
+    [SerializeField] private EnemyState CurrentStateInspector; // Inspector of currently active state
 
 
     // =========================================================
@@ -59,6 +60,8 @@ public class EnemyMelee : MonoBehaviour
             ? Mathf.CeilToInt(detectionRadius * 1.5f)
             : detectionRadius;
 
+    [SerializeField] private LayerMask playerCollider = Physics2D.AllLayers;
+
 
     // =========================================================
     // MOVEMENT
@@ -77,14 +80,16 @@ public class EnemyMelee : MonoBehaviour
     // =========================================================
 
     [Header("Attack")]
-    [SerializeField] private float attackRange = 0.8f;
+    [SerializeField] private float attackRadiusX = 0.8f;
+    [SerializeField] private float attackRadiusY = 0.6f;
     [SerializeField] private DamageType attackDamageType = DamageType.Slash;
     [Min(0f)] [SerializeField] private float damage = 5f;
     [Min(0.01f)] [SerializeField] private float attackCooldown = 1.5f;
     [SerializeField] private bool useChargedAttack;
 
     [Header("Charged Attack")]
-    [Min(0f)] [SerializeField] private float chargedAttackRange = 1.2f;
+    [SerializeField] private float chargeRadiusX = 1.5f;
+    [SerializeField] private float chargeRadiusY = 1.2f;
     [SerializeField] private DamageType chargedAttackDamageType = DamageType.Blunt;
     [Min(0f)] [SerializeField] private float chargedDamage = 10f;
     [Min(0.01f)] [SerializeField] private float chargedAttackCooldown = 2.5f;
@@ -98,6 +103,10 @@ public class EnemyMelee : MonoBehaviour
     private float baseMoveSpeed;
     private float baseDamage;
     private float baseChargedDamage;
+
+
+    public float radiusX => useChargedAttack ? chargeRadiusX : attackRadiusX;
+    public float radiusY => useChargedAttack ? chargeRadiusY : attackRadiusY;
 
 
     // =========================================================
@@ -120,9 +129,7 @@ public class EnemyMelee : MonoBehaviour
 
     public bool takingAim;
 
-    public float AttackRange => useChargedAttack ? chargedAttackRange : attackRange;
-    public float AttackCooldown => attackCooldown;
-    public bool UseChargedAttack => useChargedAttack;
+    [SerializeField] public bool stillMovement;
 
 
     [SerializeField] private int idleWanderRadius = 4;
@@ -565,6 +572,8 @@ public class EnemyMelee : MonoBehaviour
         CurrentState =
             newState;
 
+        CurrentStateInspector =
+          newState;
 
         // -----------------------------------------------------
         // CREATE STATE INSTANCE
@@ -652,9 +661,45 @@ public class EnemyMelee : MonoBehaviour
         if (player == null)
             return false;
 
-        float range = useChargedAttack ? chargedAttackRange : attackRange;
-        return ((Vector2)player.position - (Vector2)transform.position)
-            .sqrMagnitude <= range * range;
+        Vector2 rayDirection =
+            (player.position - transform.position).normalized;
+
+        RaycastHit2D ray =
+            Physics2D.Raycast(
+                transform.position,
+                rayDirection,
+                2f,
+                playerCollider
+                );
+
+        if (ray.collider == null)
+            return false;
+
+        if (ray.collider.CompareTag("Player"))
+        {
+            Debug.Log(
+                $"[EnemyMelee] {name} could see Player " +
+                $"See if can attack {ray.transform.name}."
+                );
+
+            Vector2 difference =
+          (Vector2)player.position -
+          (Vector2)transform.position;
+
+            float normalizedX = Mathf.Pow(difference.x, 2) / Mathf.Pow(radiusX, 2);
+            float normalizedY = Mathf.Pow(difference.y, 2) / Mathf.Pow(radiusY, 2);
+
+            return (normalizedX + normalizedY) <= 1.0f;
+        }
+
+        else
+        {
+            Debug.LogWarning(
+                 $"[EnemyMelee] {name} could not see Player " +
+                 $"Could only see {ray.transform.name}."
+                 );
+            return false;
+        }
     }
 
     public void TryAttack()
@@ -698,6 +743,8 @@ public class EnemyMelee : MonoBehaviour
         chargingAttack = false;
         chargedAttackTimer = 0f;
 
+        stillMovement = true;
+
         if (player == null || !IsPlayerWithinAttackRange())
             return;
 
@@ -729,6 +776,7 @@ public class EnemyMelee : MonoBehaviour
             ? chargedAttackCooldown
             : attackCooldown;
         nextAttackTime = Time.time + cooldown;
+
         SetAnimatorBool(IsAttackingHash, true);
 
         if (enemySFX != null)
@@ -972,6 +1020,42 @@ public class EnemyMelee : MonoBehaviour
                     tilemap.cellSize
                 );
             }
+        }
+
+        // -----------------------------------------------------
+        // ATTACK RANGE
+        // -----------------------------------------------------
+
+        if (IsPlayerWithinAttackRange())
+        {
+
+
+
+
+            Gizmos.color = Color.green;
+
+            const int segments = 64;
+
+            Vector3 previousPoint = transform.position + new Vector3(radiusX, 0f, 0f);
+
+            for (int i = 1; i <= segments; i++)
+            {
+                float angle = (i / (float)segments) * Mathf.PI * 2f;
+
+                Vector3 point = transform.position + new Vector3(
+                    Mathf.Cos(angle) * radiusX,
+                    Mathf.Sin(angle) * radiusY,
+                    0f
+                );
+
+                Gizmos.DrawLine(previousPoint, point);
+                previousPoint = point;
+            }
+
+            Vector2 direction = (player.position - transform.position).normalized;
+
+            Gizmos.DrawRay(transform.position, direction * 5f);
+
         }
     }
 

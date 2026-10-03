@@ -52,7 +52,7 @@ public class EnemyMeleeSearchState : EnemyMeleeState
 
     public override void Tick()
     {
-        if (Enemy.HasPath)
+        if (Enemy.HasPath && !Enemy.IsPlayerDetected())
         {
             Enemy.FollowCurrentPath();
             return;
