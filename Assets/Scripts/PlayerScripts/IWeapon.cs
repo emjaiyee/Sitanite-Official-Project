@@ -12,4 +12,5 @@ public interface IWeapon
     void UseSkill(Vector2 direction);
     void UpdateSkillTarget(Vector3 targetPosition);
     void ConfirmSkill();
+    void CancelSkill();
 }

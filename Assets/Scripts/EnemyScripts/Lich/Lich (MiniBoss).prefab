@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 2685940290472866261}
   - component: {fileID: 7168415976655415684}
   - component: {fileID: 4941687366284714724}
+  - component: {fileID: 874966847612507211}
   m_Layer: 6
   m_Name: Lich (MiniBoss)
   m_TagString: Enemy
@@ -186,18 +187,18 @@ MonoBehaviour:
   idleWanderRadius: 2
   locateWaitDuration: 2.5
   attackRange: 4
-  projectileDamageType: 256
-  projectileDamage: 5
+  projectileDamageType: 64
+  projectileDamage: 10
   attackCooldown: 1.5
-  projectileSpeed: 7
+  projectileSpeed: 5
   projectileLifetime: 4
-  missileDamageType: 256
-  missileDamage: 10
+  missileDamageType: 1024
+  missileDamage: 15
   missileCooldown: 6.5
   missileSpeed: 3
   missileLifetime: 5
   attackPoint: {fileID: 0}
-  projectilePrefab: {fileID: 7280552908879159887, guid: 219083c3bbab5c340bdbfeeba73e1861, type: 3}
+  projectilePrefab: {fileID: 7280552908879159887, guid: 1bc2a513f254b0e4eae356aa96cd64a0, type: 3}
   missileProjectilePrefab: {fileID: 111242029175504835, guid: 8796c79d190bf2749b2d4cc6fc8fe92c, type: 3}
   summonLevel: 1
   summonEnemy: {fileID: 2290695894656021834, guid: 58264b95a41a22749b5cd046a986af7d, type: 3}
@@ -225,21 +226,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8ab9ceee96b684593ff9daf9b2dc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 30
-  basePierceResistance: 5
-  baseStabResistance: 5
-  baseSlashResistance: 5
-  baseBluntResistance: 0
-  baseFrostResistance: 0
-  basePoisonResistance: 0
-  baseLightningResistance: 0
-  basePsychicResistance: 0
-  baseNecrosisResistance: 0
-  baseWaterResistance: 0
-  baseEarthResistance: 0
-  baseFireResistance: 0
-  baseAirResistance: 0
-  basePhysicalResistance: 0
+  maxHealth: 150
+  basePierceResistance: 6
+  baseStabResistance: 6
+  baseSlashResistance: 6
+  baseBluntResistance: 6
+  baseFrostResistance: 20
+  basePoisonResistance: 20
+  baseLightningResistance: 20
+  basePsychicResistance: 20
+  baseNecrosisResistance: 20
+  baseWaterResistance: 20
+  baseEarthResistance: 20
+  baseFireResistance: 20
+  baseAirResistance: 20
+  basePhysicalResistance: 20
   runtimeCurrentHealth: 0
 --- !u!114 &5788917785862662444
 MonoBehaviour:
@@ -285,7 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyLevelXP
   level: 1
-  experienceReward: 12
+  experienceReward: 30
   grantExperienceOnDeath: 1
 --- !u!114 &2685940290472866261
 MonoBehaviour:
@@ -339,3 +340,17 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &874966847612507211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1602161633568627328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28fe4e929d44d2c9b9277c4050b516d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  enemyType: 0
+  lootSpawnPoint: {fileID: 0}

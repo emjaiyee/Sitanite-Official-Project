@@ -29,6 +29,9 @@ public class Player : MonoBehaviour
             gameObject.AddComponent<EquipmentCharacterVisualSync>();
         }
 
+        if (GetComponent<PlayerRoomTracker>() == null)
+            gameObject.AddComponent<PlayerRoomTracker>();
+
         DontDestroyOnLoad(gameObject);
 
         Debug.Log(

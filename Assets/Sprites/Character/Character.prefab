@@ -270,6 +270,118 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2649066790600765314
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2122828002183849022}
+  - component: {fileID: 2492370133990187073}
+  m_Layer: 7
+  m_Name: LootDropsSFXandVFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2122828002183849022
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2649066790600765314}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2826949009369197633}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2492370133990187073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2649066790600765314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d5fbb43a9a744fdb1e72a3f503bc5f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LootDropEffectsManager
+  rarityEffects:
+  - rarity: 0
+    sprites:
+    - {fileID: 4757191565486471506, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -7295942490848221094, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -7141738158157192350, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 1060633491710534308, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -8188038176841925535, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 215028321, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -8188038176841925535, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 215028321, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -8188038176841925535, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 215028321, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -8188038176841925535, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 215028321, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    framesPerSecond: 4
+    dropSound: {fileID: 8300000, guid: e44c9a4b5694f9848ac7c68fd5823e1d, type: 3}
+    soundVolume: 0.083
+    spriteScale: 0.2
+    ignoreTimeScale: 0
+  - rarity: 1
+    sprites:
+    - {fileID: 68933478, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -746637745, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 104434235, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 403408689, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -1419882851, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 47269730, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -1419882851, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 47269730, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -1419882851, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 47269730, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: -1419882851, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    - {fileID: 47269730, guid: 857b43346ba4e8e4bad67376c657bab3, type: 3}
+    framesPerSecond: 4
+    dropSound: {fileID: 8300000, guid: c6abac04292d8ad49a1be5e349ee1c46, type: 3}
+    soundVolume: 0.083
+    spriteScale: 0.2
+    ignoreTimeScale: 0
+  - rarity: 2
+    sprites: []
+    framesPerSecond: 4
+    dropSound: {fileID: 8300000, guid: c6abac04292d8ad49a1be5e349ee1c46, type: 3}
+    soundVolume: 0.138
+    spriteScale: 0.2
+    ignoreTimeScale: 0
+  - rarity: 3
+    sprites:
+    - {fileID: 1434970685428923303, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 519608873219351950, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 7824852846140802096, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: -3754451619583131217, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 6002602489654752993, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 4582809140159705173, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 6002602489654752993, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 4582809140159705173, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 6002602489654752993, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 4582809140159705173, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 6002602489654752993, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    - {fileID: 4582809140159705173, guid: 0a90a387a9586ca498220a2194ee76d2, type: 3}
+    framesPerSecond: 4
+    dropSound: {fileID: 8300000, guid: 7ef312989e0cb584da713e24a696476a, type: 3}
+    soundVolume: 0.208
+    spriteScale: 0.2
+    ignoreTimeScale: 0
+  sortingOrderOffset: -1
+  audioMixerGroup: {fileID: 0}
+  persistBetweenScenes: 1
 --- !u!1 &2718112565132081930
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,7 +485,10 @@ MonoBehaviour:
   audioSource: {fileID: 2461000000000000001}
   weaponProfiles:
   - weaponId: Dagger
-    attackSounds: []
+    attackSounds:
+    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
     attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
     skills:
     - skillType: 5
@@ -382,12 +497,41 @@ MonoBehaviour:
       chargeLoopSound: {fileID: 0}
       fullyChargedSound: {fileID: 0}
       chargeReleaseSound: {fileID: 0}
-  - weaponId: Dagger
-    attackSounds: []
-    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+  - weaponId: GreatSword
+    attackSounds:
+    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    attackSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
     skills:
-    - skillType: 5
+    - skillType: 1
       skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: BattleAxe
+    attackSounds:
+    - {fileID: 8300000, guid: 01d267fcac7ae6f4c9683ba9bac13dd5, type: 3}
+    - {fileID: 8300000, guid: 5da2630e84fd85d40b2fc2451e0e6e8b, type: 3}
+    - {fileID: 8300000, guid: 83917e694569d99479e544d119509e0e, type: 3}
+    attackSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+    skills:
+    - skillType: 8
+      skillSound: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: IronSword
+    attackSounds:
+    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    attackSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+    skills:
+    - skillType: 7
+      skillSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
       chargeStartSound: {fileID: 0}
       chargeLoopSound: {fileID: 0}
       fullyChargedSound: {fileID: 0}
@@ -412,6 +556,45 @@ MonoBehaviour:
       chargeLoopSound: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
       fullyChargedSound: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
       chargeReleaseSound: {fileID: 8300000, guid: 1ab5f6a9a6c75c94bb4ae08d6cd00ba8, type: 3}
+  - weaponId: CrossBow
+    attackSounds:
+    - {fileID: 8300000, guid: 12f11e7170d00e94491a4815c9bd4cb2, type: 3}
+    - {fileID: 8300000, guid: 55db909a546333b45b34dddd2ca54ac4, type: 3}
+    - {fileID: 8300000, guid: a0b4092e6552e7d4493cc658f3a90209, type: 3}
+    attackSound: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+    skills:
+    - skillType: 6
+      skillSound: {fileID: 8300000, guid: 095176b446af5f44484eb0da11ff68f2, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: AirController
+    attackSounds:
+    - {fileID: 8300000, guid: fb482db8c9571d34e87e07f03c404861, type: 3}
+    - {fileID: 8300000, guid: c1bbe826cfb0daa45bef7ba259eb43d2, type: 3}
+    - {fileID: 8300000, guid: fb482db8c9571d34e87e07f03c404861, type: 3}
+    attackSound: {fileID: 8300000, guid: fb482db8c9571d34e87e07f03c404861, type: 3}
+    skills:
+    - skillType: 9
+      skillSound: {fileID: 8300000, guid: 336729870ef4b3044a26393f2e6b8558, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: BookOfFire
+    attackSounds:
+    - {fileID: 8300000, guid: 82e2f0fc540009740a234cfcb327ff28, type: 3}
+    - {fileID: 8300000, guid: 3a99012728362a348a2ff9e5a8a34bb6, type: 3}
+    - {fileID: 8300000, guid: 22155075673497d45ae4c7ccd2b741a0, type: 3}
+    attackSound: {fileID: 8300000, guid: 82e2f0fc540009740a234cfcb327ff28, type: 3}
+    skills:
+    - skillType: 11
+      skillSound: {fileID: 8300000, guid: f3259c59baa3af64d97a4bad92a8f830, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
 --- !u!1 &3652299398545989156
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,7 +783,7 @@ Transform:
   - {fileID: 5536741838045283725}
   - {fileID: 5700263183971444938}
   - {fileID: 2011306400676518913}
-  - {fileID: 3759872893080482509}
+  - {fileID: 2122828002183849022}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2092788580339462318
@@ -851,9 +1034,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a663d7e5969d88640b09f53c27274db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStats
-  maxHealth: 50
-  maxMana: 50
-  maxStamina: 50
+  maxHealth: 1000
+  maxMana: 1000
+  maxStamina: 1000
   effectiveMaxHealth: 0
   effectiveMaxMana: 0
   effectiveMaxStamina: 0
@@ -1082,21 +1265,24 @@ MonoBehaviour:
   attributes: {fileID: 3176237796533987833}
   playerStats: {fileID: 8549833145988909020}
   warriorStartingGear:
-  - {fileID: 11400000, guid: c1b1708b113e1e944b9cc4f8fdb1114b, type: 2}
-  - {fileID: 11400000, guid: 03c6e9d0387ccac40bd2d370f99c3857, type: 2}
-  - {fileID: 11400000, guid: 7420c82adfcd121419c29d473304b588, type: 2}
-  - {fileID: 11400000, guid: 80d107fb911d022438723e0719533275, type: 2}
+  - {fileID: 0}
   rangerStartingGear:
   - {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
   mageStartingGear:
-  - {fileID: 11400000, guid: 05209c6759f80f44980eb67a74c3320b, type: 2}
-  - {fileID: 11400000, guid: 12b486c90eeea3841a4f7554aefebdd0, type: 2}
-  - {fileID: 11400000, guid: d3ec1a675e1627b49a2bb7cd282e4739, type: 2}
-  - {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
+  - {fileID: 11400000, guid: 36b8907e7025ee742b833467a0a11093, type: 2}
+  - {fileID: 11400000, guid: 63a619380b08d55479ad76b7672ee149, type: 2}
+  - {fileID: 11400000, guid: ab59b5d8b1b1fdc49aab773d0628d828, type: 2}
+  - {fileID: 11400000, guid: 6edc49bc30a7c0947a2fa7c6eb015509, type: 2}
   warriorStartingItems:
-  - {fileID: 11400000, guid: 88aacabff38dfc74ab06ec183864d69e, type: 2}
+  - {fileID: 11400000, guid: 7f9d2c1a4e6b48d0a13f5c8e9b027641, type: 2}
+  - {fileID: 11400000, guid: bc9289adc1905c4449a8ce613ad4f215, type: 2}
+  - {fileID: 11400000, guid: d469020feb09ff04a8f46220fd81761c, type: 2}
+  - {fileID: 11400000, guid: 1f399959a8f4f9f41ad25435ea30a6d2, type: 2}
   rangerStartingItems:
   - {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
+  - {fileID: 11400000, guid: 42ba12dcb2e121c45a7d530dde9cf369, type: 2}
+  - {fileID: 11400000, guid: 4a029611aa1038e41aab833074469383, type: 2}
+  - {fileID: 11400000, guid: 10e1a5d6c5c06474da44bbaaf0c4befb, type: 2}
   mageStartingItems: []
 --- !u!114 &1614004183530562516
 MonoBehaviour:
