@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerShieldDefense))]
 public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }

@@ -11,6 +11,7 @@ public class MerchantEquipmentOptionUI : MonoBehaviour
     [SerializeField] private Image itemIcon;
     [SerializeField] private TextMeshProUGUI itemNameText;
     [SerializeField] private TextMeshProUGUI upgradeLevelText;
+    [SerializeField] private Image rarityBorderImage;
 
     [Header("Selection Appearance")]
     [SerializeField] private Graphic selectionGraphic;
@@ -18,6 +19,8 @@ public class MerchantEquipmentOptionUI : MonoBehaviour
     [SerializeField] private Color selectedColor = new Color(0.31f, 0.28f, 0.19f, 1f);
 
     public InventoryItem Item { get; private set; }
+
+    private Color rarityBackgroundColor = Color.white;
 
     private void Awake()
     {
@@ -42,6 +45,7 @@ public class MerchantEquipmentOptionUI : MonoBehaviour
         }
 
         ConfigureCompactLayout();
+        ApplyRarityAppearance(item);
 
         Sprite icon = item.Data.inventoryIcon != null
             ? item.Data.inventoryIcon
@@ -94,6 +98,55 @@ public class MerchantEquipmentOptionUI : MonoBehaviour
     public void SetSelected(bool selected)
     {
         if (selectionGraphic != null)
-            selectionGraphic.color = selected ? selectedColor : normalColor;
+            selectionGraphic.color = (selected ? selectedColor : normalColor) * rarityBackgroundColor;
+    }
+
+    private void ApplyRarityAppearance(InventoryItem item)
+    {
+        ItemUIController rarityStyleSource = EquipmentManager.Instance?.ItemPrefab != null
+            ? EquipmentManager.Instance.ItemPrefab.GetComponent<ItemUIController>()
+            : FindFirstObjectByType<ItemUIController>();
+
+        if (rarityStyleSource == null)
+        {
+            Debug.LogWarning("Unable to apply merchant item rarity styling because no ItemUIController is available.", this);
+            return;
+        }
+
+        rarityBackgroundColor = rarityStyleSource.GetRarityBackgroundColor(item.Data.Rarity);
+        if (selectionGraphic != null)
+            selectionGraphic.color = normalColor * rarityBackgroundColor;
+
+        Sprite borderSprite = rarityStyleSource.GetRarityBorderSprite(item.Data.Rarity);
+        if (borderSprite == null)
+        {
+            if (rarityBorderImage != null)
+                rarityBorderImage.enabled = false;
+            return;
+        }
+
+        if (rarityBorderImage == null)
+        {
+            GameObject borderObject = new GameObject(
+                "Rarity Border",
+                typeof(RectTransform),
+                typeof(CanvasRenderer),
+                typeof(Image)
+            );
+            RectTransform borderRect = borderObject.GetComponent<RectTransform>();
+            borderRect.SetParent(transform, false);
+            borderRect.anchorMin = Vector2.zero;
+            borderRect.anchorMax = Vector2.one;
+            borderRect.offsetMin = Vector2.zero;
+            borderRect.offsetMax = Vector2.zero;
+            rarityBorderImage = borderObject.GetComponent<Image>();
+        }
+
+        rarityBorderImage.sprite = borderSprite;
+        rarityBorderImage.color = Color.white;
+        rarityBorderImage.preserveAspect = false;
+        rarityBorderImage.raycastTarget = false;
+        rarityBorderImage.enabled = true;
+        rarityBorderImage.transform.SetAsLastSibling();
     }
 }

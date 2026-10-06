@@ -8,6 +8,7 @@ public interface IWeapon
     bool IsTargetingSkill { get; }
 
     void Attack(Vector2 direction);
+    void Attack(Vector2 direction, float damageMultiplier);
 
     void UseSkill(Vector2 direction);
     void UpdateSkillTarget(Vector3 targetPosition);

@@ -15,6 +15,9 @@ public class ItemUIController : MonoBehaviour
     [Tooltip("Rendered icon for sprite")]
     [SerializeField] private Image iconImage;
 
+    [Tooltip("Rarity frame drawn over the item box, separate from the item icon.")]
+    [SerializeField] private Image rarityBorderImage;
+
     [Tooltip("9-slice background highlighting the item's occupied grid cells.")]
     [SerializeField] private Image gridBackgroundImage;
 
@@ -25,6 +28,12 @@ public class ItemUIController : MonoBehaviour
     [SerializeField] private Color uncommonBackgroundColor = new Color(0.35f, 0.9f, 0.4f);
     [SerializeField] private Color rareBackgroundColor = new Color(0.35f, 0.65f, 1f);
     [SerializeField] private Color legendaryBackgroundColor = new Color(1f, 0.6f, 0.28f);
+
+    [Header("Rarity Border Sprites")]
+    [SerializeField] private Sprite commonBorderSprite;
+    [SerializeField] private Sprite uncommonBorderSprite;
+    [SerializeField] private Sprite rareBorderSprite;
+    [SerializeField] private Sprite legendaryBorderSprite;
 
     [Tooltip("TextMeshPro displaying stack amount.")]
     [SerializeField] private TextMeshProUGUI stackText;
@@ -72,6 +81,7 @@ public class ItemUIController : MonoBehaviour
         if (item == null || item.Data == null) return;
 
         UpdateIconSprite(item);
+        UpdateRarityBorder(item);
         UpdateTooltip(item);
         UpdateGridBackground(item, cellSize);
         UpdateStackText(item);
@@ -92,6 +102,8 @@ public class ItemUIController : MonoBehaviour
         UpdateTooltip(item);
         if (gridBackgroundImage != null)
             gridBackgroundImage.enabled = false;
+        if (rarityBorderImage != null)
+            rarityBorderImage.enabled = false;
 
         if (iconImage != null)
         {
@@ -171,6 +183,38 @@ public class ItemUIController : MonoBehaviour
             ItemRarity.Legendary => legendaryBackgroundColor,
             _ => Color.white
         };
+    }
+
+    public Sprite GetRarityBorderSprite(ItemRarity rarity)
+    {
+        return rarity switch
+        {
+            ItemRarity.Common => commonBorderSprite,
+            ItemRarity.Uncommon => uncommonBorderSprite,
+            ItemRarity.Rare => rareBorderSprite,
+            ItemRarity.Legendary => legendaryBorderSprite,
+            _ => null
+        };
+    }
+
+    private void UpdateRarityBorder(InventoryItem item)
+    {
+        if (rarityBorderImage == null)
+            return;
+
+        rarityBorderImage.raycastTarget = false;
+        rarityBorderImage.color = Color.white;
+        rarityBorderImage.preserveAspect = false;
+
+        if (item?.Data == null)
+        {
+            rarityBorderImage.sprite = null;
+            rarityBorderImage.enabled = false;
+            return;
+        }
+
+        rarityBorderImage.sprite = GetRarityBorderSprite(item.Data.Rarity);
+        rarityBorderImage.enabled = rarityBorderImage.sprite != null;
     }
 
     private void UpdateTooltip(InventoryItem item)

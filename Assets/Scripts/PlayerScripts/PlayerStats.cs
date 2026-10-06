@@ -633,10 +633,27 @@ public class PlayerStats : MonoBehaviour
     // HEALTH
     // -------------------------------------------------
 
-    public void TakeDamage(float amount, DamageType damageType = DamageType.Slash)
+    public void TakeDamage(
+        float amount,
+        DamageType damageType = DamageType.Slash,
+        Vector3? damageSource = null,
+        EnemyHealth attacker = null)
     {
         if (amount <= 0 || IsDead || currentHealth <= 0)
             return;
+
+        PlayerShieldDefense shieldDefense = GetComponent<PlayerShieldDefense>();
+        if (shieldDefense != null)
+        {
+            amount = shieldDefense.ModifyIncomingDamage(
+                amount,
+                damageSource,
+                attacker
+            );
+
+            if (amount <= 0f)
+                return;
+        }
 
         amount = Mathf.Max(1f, amount - GetDamageResistance(damageType));
 

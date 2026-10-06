@@ -41,6 +41,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private float indicatorPulseTimer;
     private float nextAttackTime;
     private float nextSkillTime;
+    private float attackDamageMultiplier = 1f;
     private Coroutine spinAxeRoutine;
 
     // Direction captured when the skill begins charging.
@@ -132,9 +133,28 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
  
 public void Attack(Vector2 direction)
 {
-    if (!IsConfigured() || !CanAttack)
+    Attack(direction, 1f);
+}
+
+public void Attack(Vector2 direction, float damageMultiplier)
+{
+    if (!IsConfigured() || !CanAttack ||
+        direction.sqrMagnitude <= 0.0001f)
         return;
 
+    attackDamageMultiplier = Mathf.Max(1f, damageMultiplier);
+    try
+    {
+        PerformAttack(direction);
+    }
+    finally
+    {
+        attackDamageMultiplier = 1f;
+    }
+}
+
+private void PerformAttack(Vector2 direction)
+{
     if (direction.sqrMagnitude <= 0.0001f)
         return;
 
@@ -1556,7 +1576,9 @@ public void ReleaseSkill(bool fullyCharged)
     {
         if (playerStats == null)
             return Mathf.RoundToInt(
-                data.PrimaryDamage * GetWeaponUpgradeMultiplier()
+                data.PrimaryDamage *
+                GetWeaponUpgradeMultiplier() *
+                attackDamageMultiplier
             );
 
         float damage =
@@ -1571,7 +1593,7 @@ public void ReleaseSkill(bool fullyCharged)
         if (!IsWeaponRegisteredInEquipment())
             damage += data.PrimaryDamage * GetWeaponUpgradeMultiplier();
 
-        return Mathf.RoundToInt(damage);
+        return Mathf.RoundToInt(damage * attackDamageMultiplier);
     }
 
     private float GetWeaponUpgradeMultiplier()
@@ -1584,7 +1606,9 @@ public void ReleaseSkill(bool fullyCharged)
     private int GetWeaponDamage(DamageSlot slot)
     {
         return Mathf.RoundToInt(
-            data.GetDamage(slot) * GetWeaponUpgradeMultiplier()
+            data.GetDamage(slot) *
+            GetWeaponUpgradeMultiplier() *
+            attackDamageMultiplier
         );
     }
 

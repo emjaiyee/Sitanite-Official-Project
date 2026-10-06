@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class BaseArrow : MonoBehaviour, IProjectileType
 {
+    private EnemyHealth attacker;
+
+    public void SetAttacker(EnemyHealth source)
+    {
+        attacker = source;
+    }
+
     [Header("Collision")]
     [SerializeField] private LayerMask hittableLayers = Physics2D.AllLayers;
 
@@ -231,7 +238,9 @@ public class BaseArrow : MonoBehaviour, IProjectileType
 
         playerStats.TakeDamage(
             damage,
-            damageType);
+            damageType,
+            transform.position,
+            attacker);
 
         if (enableDebugLogs)
         {

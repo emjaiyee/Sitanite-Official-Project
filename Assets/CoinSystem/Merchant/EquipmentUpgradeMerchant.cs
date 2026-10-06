@@ -85,6 +85,8 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
     private readonly List<MerchantEquipmentOptionUI> customEquipmentButtons = new List<MerchantEquipmentOptionUI>();
     private readonly List<GameObject> emptyEquipmentSlots = new List<GameObject>();
     private Transform equipmentOptionsGrid;
+    private Color[] equippedSlotBaseColors;
+    private Image[] equippedSlotRarityBorders;
     private readonly List<SpriteRenderer> playerPreviewRenderers = new List<SpriteRenderer>();
     private readonly List<Image> playerPreviewImages = new List<Image>();
     private CharacterRenderer previewCharacter;
@@ -865,6 +867,23 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
         if (equippedSlotIcons == null)
             return;
 
+        if (equippedSlotBaseColors == null || equippedSlotBaseColors.Length != equippedSlotIcons.Length)
+        {
+            equippedSlotBaseColors = new Color[equippedSlotIcons.Length];
+            equippedSlotRarityBorders = new Image[equippedSlotIcons.Length];
+            for (int index = 0; index < equippedSlotIcons.Length; index++)
+            {
+                Image slotBackground = equippedSlotIcons[index] != null
+                    ? equippedSlotIcons[index].transform.parent.GetComponent<Image>()
+                    : null;
+                equippedSlotBaseColors[index] = slotBackground != null ? slotBackground.color : Color.white;
+            }
+        }
+
+        ItemUIController rarityStyleSource = equipment?.ItemPrefab != null
+            ? equipment.ItemPrefab.GetComponent<ItemUIController>()
+            : FindFirstObjectByType<ItemUIController>();
+
         for (int index = 0; index < Mathf.Min(UpgradeableSlots.Length, equippedSlotIcons.Length); index++)
         {
             if (equippedSlotIcons[index] == null)
@@ -880,6 +899,52 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
             equippedSlotIcons[index].sprite = sprite;
             equippedSlotIcons[index].enabled = sprite != null;
             equippedSlotIcons[index].color = sprite != null ? Color.white : new Color(0.56f, 0.59f, 0.65f, 0.45f);
+
+            Image slotBackground = equippedSlotIcons[index].transform.parent.GetComponent<Image>();
+            if (slotBackground != null)
+                slotBackground.color = equippedSlotBaseColors[index] *
+                    (item != null && item.Data != null && rarityStyleSource != null
+                        ? rarityStyleSource.GetRarityBackgroundColor(item.Data.Rarity)
+                        : Color.white);
+
+            if (item == null || item.Data == null || rarityStyleSource == null)
+            {
+                if (equippedSlotRarityBorders[index] != null)
+                    equippedSlotRarityBorders[index].enabled = false;
+                continue;
+            }
+
+            Sprite borderSprite = rarityStyleSource.GetRarityBorderSprite(item.Data.Rarity);
+            if (borderSprite == null)
+            {
+                if (equippedSlotRarityBorders[index] != null)
+                    equippedSlotRarityBorders[index].enabled = false;
+                continue;
+            }
+
+            if (equippedSlotRarityBorders[index] == null)
+            {
+                GameObject borderObject = new GameObject(
+                    "Rarity Border",
+                    typeof(RectTransform),
+                    typeof(CanvasRenderer),
+                    typeof(Image)
+                );
+                RectTransform borderRect = borderObject.GetComponent<RectTransform>();
+                borderRect.SetParent(equippedSlotIcons[index].transform.parent, false);
+                borderRect.anchorMin = Vector2.zero;
+                borderRect.anchorMax = Vector2.one;
+                borderRect.offsetMin = Vector2.zero;
+                borderRect.offsetMax = Vector2.zero;
+                equippedSlotRarityBorders[index] = borderObject.GetComponent<Image>();
+                equippedSlotRarityBorders[index].raycastTarget = false;
+                equippedSlotRarityBorders[index].color = Color.white;
+                equippedSlotRarityBorders[index].preserveAspect = false;
+            }
+
+            equippedSlotRarityBorders[index].sprite = borderSprite;
+            equippedSlotRarityBorders[index].enabled = true;
+            equippedSlotRarityBorders[index].transform.SetAsLastSibling();
         }
     }
 

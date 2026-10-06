@@ -17,6 +17,19 @@ public class ItemDataEditor : Editor
 
         if (equipmentType == EquipmentType.Weapon)
             DrawSection("Weapon Stats", "weaponStats");
+        else if (equipmentType == EquipmentType.Shield)
+        {
+            DrawSection(
+                "Shield Blocking",
+                "blockArmor",
+                "blockStaminaCost",
+                "blockStaminaCostPerDamage",
+                "parryWindow",
+                "blockArcDegrees",
+                "parryStaggerDuration"
+            );
+            DrawSection("Stat Modifiers", "statModifiers");
+        }
         else if (equipmentType != EquipmentType.None)
             DrawSection("Stat Modifiers", "statModifiers");
 

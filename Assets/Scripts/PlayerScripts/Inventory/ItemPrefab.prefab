@@ -199,6 +199,7 @@ RectTransform:
   m_Children:
   - {fileID: 5723366425380031997}
   - {fileID: 3295805022774948036}
+  - {fileID: 9135792401123456102}
   - {fileID: 3817664969821292025}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -232,11 +233,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemUIController
   iconImage: {fileID: 1118555475574115747}
+  rarityBorderImage: {fileID: 9135792401123456103}
   gridBackgroundImage: {fileID: 3333253972933032835}
   gridBackgroundSprite: {fileID: 21300000, guid: 2d12b5eea169c4e47a11bbe4fa1bd75d, type: 3}
-  uncommonBackgroundColor: {r: 0.35, g: 0.9, b: 0.4, a: 0.7294118}
-  rareBackgroundColor: {r: 0.35, g: 0.65, b: 1, a: 0.7294118}
-  legendaryBackgroundColor: {r: 1, g: 0.6, b: 0.28, a: 0.74509805}
+  uncommonBackgroundColor: {r: 0.26015162, g: 1, b: 0.1273585, a: 0.6862745}
+  rareBackgroundColor: {r: 0.23529412, g: 0.79607844, b: 1, a: 0.7294118}
+  legendaryBackgroundColor: {r: 0.9716981, g: 0.633766, b: 0.21176471, a: 0.8235294}
+  commonBorderSprite: {fileID: 0}
+  uncommonBorderSprite: {fileID: 5214351356208627058, guid: 88124b56354452b46afcf52d16658842, type: 3}
+  rareBorderSprite: {fileID: -9048140085725755378, guid: 88124b56354452b46afcf52d16658842, type: 3}
+  legendaryBorderSprite: {fileID: 3146639042043289784, guid: 88124b56354452b46afcf52d16658842, type: 3}
   stackText: {fileID: 6825724008393676977}
   actionMenuPrefab: {fileID: 246105839330326591, guid: 8659c28e8465f92498a722ec1bc00425, type: 3}
   rectTransform: {fileID: 2011060415236228498}
@@ -377,3 +383,78 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &9135792401123456101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9135792401123456102}
+  - component: {fileID: 9135792401123456104}
+  - component: {fileID: 9135792401123456103}
+  m_Layer: 5
+  m_Name: Rarity Border
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &9135792401123456102
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9135792401123456101}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2011060415236228498}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &9135792401123456104
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9135792401123456101}
+  m_CullTransparentMesh: 1
+--- !u!114 &9135792401123456103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9135792401123456101}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
