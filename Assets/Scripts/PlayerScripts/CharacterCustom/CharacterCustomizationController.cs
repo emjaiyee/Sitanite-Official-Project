@@ -370,6 +370,20 @@ public class CharacterCustomizationController : MonoBehaviour
         return spawnedCount;
     }
 
+    public ItemData GetStartingWeapon(PlayerClass playerClass)
+    {
+        ItemData[] gear = GetStartingGear(playerClass);
+        if (gear == null)
+            return null;
+
+        foreach (ItemData item in gear)
+        {
+            if (item != null && item.EquipmentType == EquipmentType.Weapon)
+                return item;
+        }
+        return null;
+    }
+
     private ItemData[] GetStartingGear(PlayerClass playerClass)
     {
         return playerClass switch

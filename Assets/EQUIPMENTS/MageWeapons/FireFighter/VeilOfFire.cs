@@ -17,6 +17,13 @@ public class VeilOfFire : MonoBehaviour
     private float endTime;
     private LayerMask hittableLayers;
     private bool initialized;
+    private BossBalance.HostileDamage enemyDamage;
+
+    public void SetEnemyDamage(BossBalance.HostileDamage damage)
+    {
+        enemyDamage = damage;
+        hittableLayers = damage.Layers;
+    }
 
     public void Initialize(
         int primaryDamage,
@@ -73,6 +80,12 @@ public class VeilOfFire : MonoBehaviour
                 radius,
                 hittableLayers
             );
+
+        if (enemyDamage != null)
+        {
+            enemyDamage.HitTargets(hits, tickInterval, damageScale);
+            return;
+        }
 
         HashSet<IDamageable> targets = new HashSet<IDamageable>();
 

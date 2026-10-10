@@ -20,6 +20,13 @@ public class Typhoon : MonoBehaviour
     private LayerMask hittableLayers;
     private float endTime;
     private bool initialized;
+    private BossBalance.HostileDamage enemyDamage;
+
+    public void SetEnemyDamage(BossBalance.HostileDamage damage)
+    {
+        enemyDamage = damage;
+        hittableLayers = damage.Layers;
+    }
 
     [Header("Typhoon Behavior")]
     [Min(0f)]
@@ -72,6 +79,21 @@ public class Typhoon : MonoBehaviour
                 radius,
                 hittableLayers
             );
+
+        if (enemyDamage != null)
+        {
+            HashSet<PlayerStats> pulled = new HashSet<PlayerStats>();
+            foreach (Collider2D hit in hits)
+            {
+                PlayerStats playerTarget = enemyDamage.Resolve(hit);
+                if (playerTarget == null || !pulled.Add(playerTarget))
+                    continue;
+                playerTarget.transform.position = Vector2.MoveTowards(playerTarget.transform.position,
+                    transform.position, pullSpeed * Time.deltaTime);
+            }
+            enemyDamage.HitTargets(hits, tickInterval, damageScale);
+            return;
+        }
 
         foreach (Collider2D hit in hits)
         {

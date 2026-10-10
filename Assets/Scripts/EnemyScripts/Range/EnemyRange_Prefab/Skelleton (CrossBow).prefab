@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 927030284202529383}
   - component: {fileID: 5186203932507762558}
   - component: {fileID: 6784845555405096029}
+  - component: {fileID: 7588241987485067284}
   m_Layer: 6
   m_Name: Skelleton (CrossBow)
   m_TagString: Enemy
@@ -150,6 +151,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 35
+  isMiniBoss: 0
+  enemyName: Crossbowman Skeleton
   basePierceResistance: 0
   baseStabResistance: 0
   baseSlashResistance: 0
@@ -191,6 +194,7 @@ MonoBehaviour:
   attackPoint: {fileID: 3630610358147121951}
   projectilePrefab: {fileID: 7280552908879159887, guid: 219083c3bbab5c340bdbfeeba73e1861, type: 3}
   takingAim: 0
+  footstepInterval: 0.42
   deathAnimationDelay: 0.5
   deathFadeDuration: 0.75
 --- !u!114 &5987392201616334597
@@ -291,6 +295,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7588241987485067284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2290695894656021834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28fe4e929d44d2c9b9277c4050b516d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  enemyType: 0
+  lootSpawnPoint: {fileID: 0}
 --- !u!1 &5656172016243864789
 GameObject:
   m_ObjectHideFlags: 0

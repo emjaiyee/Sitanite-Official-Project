@@ -34,6 +34,13 @@ public class Beam : MonoBehaviour
     private SpriteRenderer visualRenderer;
     private Vector3 visualScale;
     private float startTime;
+    private BossBalance.HostileDamage enemyDamage;
+
+    public void SetEnemyDamage(BossBalance.HostileDamage damage)
+    {
+        enemyDamage = damage;
+        hittableLayers = damage.Layers;
+    }
 
     private void Awake()
     {
@@ -115,6 +122,12 @@ public class Beam : MonoBehaviour
             transform.eulerAngles.z,
             hittableLayers
         );
+
+        if (enemyDamage != null)
+        {
+            enemyDamage.HitTargets(hits, tickInterval, damageScale);
+            return;
+        }
 
         foreach (Collider2D hit in hits)
         {

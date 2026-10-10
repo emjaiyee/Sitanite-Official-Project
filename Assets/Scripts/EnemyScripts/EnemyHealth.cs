@@ -1,10 +1,15 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour, IDamageable
 {
     [Header("Health")]
     [SerializeField] private int maxHealth = 10;
+
+    [Header("Run Statistics")]
+    [SerializeField] private bool isMiniBoss;
+    [SerializeField] private string enemyName;
 
     [Header("Damage Resistance")]
     [Min(0)] [SerializeField] private float basePierceResistance;
@@ -24,6 +29,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public int CurrentHealth { get; private set; }
     public int MaxHealth => maxHealth;
+    public bool IsMiniBoss => isMiniBoss;
+    public string EnemyName => enemyName;
 
     [Header("Runtime (Debug)")]
     [Tooltip("Runtime current HP. Read-only display for the Inspector.")]
@@ -35,6 +42,39 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public event Action<EnemyHealth, Vector3?> OnDamaged;
 
     private bool hasDied;
+    private Dictionary<DamageType, float> configuredResistances;
+
+    public bool HasConfiguredStats => configuredResistances != null;
+
+    public void SetEnemyName(string name)
+    {
+        enemyName = name;
+    }
+
+    public void ConfigureBossStats(float health, IEnumerable<DungeonMemory.DamageStat> stats)
+    {
+        configuredResistances = new Dictionary<DamageType, float>();
+        foreach (DungeonMemory.DamageStat stat in stats)
+            configuredResistances[stat.type] = Mathf.Max(0f, stat.resistance);
+
+        isMiniBoss = true;
+        Init(Mathf.CeilToInt(health));
+    }
+
+    public void BalanceBoss(int enemyLevel, PlayerStats player)
+    {
+        List<DungeonMemory.DamageStat> stats = new List<DungeonMemory.DamageStat>();
+        foreach (DamageType type in BossBalance.DamageTypes())
+        {
+            stats.Add(new DungeonMemory.DamageStat
+            {
+                type = type,
+                resistance = BossBalance.AdjustBase(GetDamageResistance(type), enemyLevel, player.Level)
+            });
+        }
+        ConfigureBossStats(BossBalance.Health(MaxHealth, player.MaxHealth), stats);
+    }
+
     private bool baseStatsCached;
     private int baseMaxHealth;
     private float basePierceResistanceValue;
@@ -67,6 +107,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public void ApplyLevelScaling(int level)
     {
+        if (HasConfiguredStats)
+            return;
+
         CacheBaseStats();
 
         level = Mathf.Max(1, level);
@@ -127,6 +170,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         maxHealth = Mathf.Max(1, maxHealth + healthModifier);
         CurrentHealth = Mathf.Clamp(CurrentHealth + healthModifier, 1, maxHealth);
         runtimeCurrentHealth = CurrentHealth;
+
+        if (configuredResistances != null)
+        {
+            foreach (DamageType type in new List<DamageType>(configuredResistances.Keys))
+                configuredResistances[type] = Mathf.Max(0f, configuredResistances[type] + resistanceModifier);
+        }
 
         basePierceResistanceValue = AddToActiveResistance(basePierceResistanceValue, resistanceModifier);
         baseStabResistanceValue = AddToActiveResistance(baseStabResistanceValue, resistanceModifier);
@@ -208,6 +257,16 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     public float GetDamageResistance(DamageType damageType)
     {
+        if (configuredResistances != null)
+        {
+            foreach (DamageType type in BossBalance.DamageTypes())
+            {
+                if ((damageType & type) != 0 && configuredResistances.TryGetValue(type, out float value))
+                    return value;
+            }
+            return 0f;
+        }
+
         if ((damageType & DamageType.Pierce) != 0)
             return basePierceResistance;
         if ((damageType & DamageType.Stab) != 0)
@@ -352,6 +411,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         hasDied = true;
 
+        if (Player.Instance != null)
+        {
+            Player.Instance.RecordEnemyDefeated(
+                isMiniBoss || GetComponentInParent<EnemyLich>() != null
+            );
+        }
 
         Debug.Log(
             $"[EnemyHealth] {gameObject.name} died"

@@ -16,6 +16,8 @@ public class FloorManager : MonoBehaviour
     [SerializeField]
     private RoomManager roomManager;
 
+    [SerializeField] private DungeonMemory dungeonMemory;
+
     public int CurrentFloor => currentFloor;
 
     public FloorConfiguration CurrentConfiguration
@@ -63,6 +65,16 @@ public class FloorManager : MonoBehaviour
         roomManager.GenerateFloor(
             configuration
         );
+
+        if (roomManager.GeneratedRooms.Count > 0 && Player.Instance != null)
+        {
+            Player.Instance.RecordFloorEntered(currentFloor);
+            if (dungeonMemory == null)
+                dungeonMemory = FindFirstObjectByType<DungeonMemory>();
+
+            if (dungeonMemory != null)
+                dungeonMemory.SpawnForFloor(currentFloor, roomManager.GeneratedRooms);
+        }
 
         FloorTextManager.ShowFloor(currentFloor);
     }

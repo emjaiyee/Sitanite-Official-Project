@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseArrow : MonoBehaviour, IProjectileType
@@ -18,6 +19,19 @@ public class BaseArrow : MonoBehaviour, IProjectileType
     private float destroyTime;
     private bool initialized;
     private bool hasHitPlayer;
+    private List<DungeonMemory.DamageStat> enemyHits;
+    private int enemyElevation;
+    private bool enemyHoming;
+
+    public void LaunchForEnemy(Vector3 direction, IReadOnlyList<DungeonMemory.DamageStat> hits, float speed, float range, bool homing, int elevation)
+    {
+        enemyHits = new List<DungeonMemory.DamageStat>(hits);
+        enemyElevation = elevation;
+        enemyHoming = homing;
+        hittableLayers = LayerMask.GetMask("Player");
+        hasHitPlayer = false;
+        Launch(direction, 0, DamageType.None, speed, range / Mathf.Max(0.01f, speed));
+    }
 
     public void Launch(
         Vector3 direction,
@@ -62,6 +76,12 @@ public class BaseArrow : MonoBehaviour, IProjectileType
             return;
 
         Vector3 previousPosition = transform.position;
+
+        if (enemyHoming && Player.Instance != null)
+        {
+            direction = (Player.Instance.transform.position - transform.position).normalized;
+            transform.right = direction;
+        }
 
         transform.position +=
             direction * speed * Time.deltaTime;
@@ -113,6 +133,19 @@ public class BaseArrow : MonoBehaviour, IProjectileType
     {
         if (body == null)
             return;
+
+        if (enemyHits != null)
+        {
+            PlayerStats player = body.GetComponentInParent<PlayerStats>();
+            if (hasHitPlayer || (hittableLayers.value & (1 << body.gameObject.layer)) == 0 ||
+                !BossBalance.CanHitPlayer(player, enemyElevation))
+                return;
+
+            hasHitPlayer = true;
+            BossBalance.HitPlayer(player, enemyHits, enemyElevation);
+            Destroy(gameObject);
+            return;
+        }
 
         string objectLayer =
             LayerMask.LayerToName(body.gameObject.layer);

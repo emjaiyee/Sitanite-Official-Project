@@ -353,13 +353,25 @@ public class EnemySpawnPoint : MonoBehaviour
 
         enemyElevation.SetLevel(elevationLevel);
 
-        EnemyLevelXP enemyLevelXp =
-            instance.GetComponent<EnemyLevelXP>();
+        FallenDescender fallen = instance.GetComponent<FallenDescender>();
+        if (fallen != null)
+        {
+            EnemyLevelXP legacyExperience = instance.GetComponent<EnemyLevelXP>();
+            if (legacyExperience != null)
+                legacyExperience.enabled = false;
 
-        if (enemyLevelXp == null)
-            enemyLevelXp = instance.AddComponent<EnemyLevelXP>();
-
-        enemyLevelXp.SetLevel(enemyLevel);
+            FallenDescenderLevelXP experience = instance.GetComponent<FallenDescenderLevelXP>();
+            if (experience == null)
+                experience = instance.AddComponent<FallenDescenderLevelXP>();
+            experience.SetLevel(enemyLevel);
+        }
+        else
+        {
+            EnemyLevelXP enemyLevelXp = instance.GetComponent<EnemyLevelXP>();
+            if (enemyLevelXp == null)
+                enemyLevelXp = instance.AddComponent<EnemyLevelXP>();
+            enemyLevelXp.SetLevel(enemyLevel);
+        }
 
         EnemyHealth enemyHealth = instance.GetComponent<EnemyHealth>();
 
@@ -368,7 +380,10 @@ public class EnemySpawnPoint : MonoBehaviour
 
         EnsureEnemyPhysics(instance);
 
-        enemyHealth.OnEnemyDied += HandleTrackedEnemyDied;
+        if (fallen != null)
+            fallen.CorpseCreated += HandleTrackedEnemyDied;
+        else
+            enemyHealth.OnEnemyDied += HandleTrackedEnemyDied;
         trackedEnemies.Add(instance);
 
         OnEnemySpawned?.Invoke(instance);
@@ -380,6 +395,17 @@ public class EnemySpawnPoint : MonoBehaviour
     /// <summary>
     /// Called when one of the enemies spawned by this spawn point dies.
     /// </summary>
+    public void DiscardSpawnedEnemy(GameObject enemy)
+    {
+        EnemyHealth health = enemy != null ? enemy.GetComponent<EnemyHealth>() : null;
+        if (health != null)
+            health.OnEnemyDied -= HandleTrackedEnemyDied;
+        FallenDescender fallen = enemy != null ? enemy.GetComponent<FallenDescender>() : null;
+        if (fallen != null)
+            fallen.CorpseCreated -= HandleTrackedEnemyDied;
+        trackedEnemies.RemoveAll(tracked => tracked == null || tracked == enemy);
+    }
+
     private void HandleTrackedEnemyDied(GameObject enemy)
     {
         // Unsubscribe if possible.
@@ -390,6 +416,10 @@ public class EnemySpawnPoint : MonoBehaviour
 
         if (eh != null)
             eh.OnEnemyDied -= HandleTrackedEnemyDied;
+
+        FallenDescender fallen = enemy != null ? enemy.GetComponent<FallenDescender>() : null;
+        if (fallen != null)
+            fallen.CorpseCreated -= HandleTrackedEnemyDied;
 
 
         // Remove the dead enemy and any destroyed references.
@@ -520,16 +550,19 @@ public class EnemySpawnPoint : MonoBehaviour
         var srs =
             root.GetComponentsInChildren<SpriteRenderer>(true);
 
+        bool paperdoll = root.GetComponent<FallenDescender>() != null;
+
         foreach (var sr in srs)
         {
             if (!string.IsNullOrEmpty(sortingLayer))
                 sr.sortingLayerName = sortingLayer;
 
-            sr.sortingOrder = sortingOrder;
+            if (!paperdoll)
+                sr.sortingOrder = sortingOrder;
         }
 
 
-        if (addSortingGroupIfMultipleRenderers &&
+        if ((paperdoll || addSortingGroupIfMultipleRenderers) &&
             srs.Length > 1)
         {
             var sg =
@@ -572,7 +605,9 @@ public class EnemySpawnPoint : MonoBehaviour
         body.bodyType = RigidbodyType2D.Dynamic;
         body.simulated = true;
         body.gravityScale = 0f;
-        body.constraints = RigidbodyConstraints2D.FreezeAll;
+        body.constraints = instance.GetComponent<FallenDescender>() != null
+            ? RigidbodyConstraints2D.FreezeRotation
+            : RigidbodyConstraints2D.FreezeAll;
         body.collisionDetectionMode =
             CollisionDetectionMode2D.Continuous;
 

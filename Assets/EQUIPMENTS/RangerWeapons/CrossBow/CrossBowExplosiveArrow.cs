@@ -114,6 +114,12 @@ private void Detonate(Vector3 position)
 
     private void DamageExplosion(Vector3 position)
     {
+        if (EnemyDamage != null)
+        {
+            EnemyDamage.HitTargets(Physics2D.OverlapCircleAll(position, explosionRadius, EnemyDamage.Layers));
+            return;
+        }
+
         Collider2D[] hits =
             Physics2D.OverlapCircleAll(
                 position,
@@ -238,14 +244,24 @@ private void Detonate(Vector3 position)
         return;
     }
 
-    fireComponent.Initialize(
-        fireDamage,
-        PrimaryDamageType,
-        fireRadius,
-        fireDuration,
-        fireTickInterval,
-        Physics2D.AllLayers
-    );
+    if (EnemyDamage != null)
+    {
+        DamageType type = EnemyDamage.Hits.Count > 0 ? EnemyDamage.Hits[0].type : DamageType.Fire;
+        BossBalance.HostileDamage fireHits = new BossBalance.HostileDamage(
+            new[] { new DungeonMemory.DamageStat { type = type, damage = fireDamage } }, EnemyDamage.Elevation);
+        fireComponent.InitializeForEnemy(fireHits, fireRadius, fireDuration, fireTickInterval);
+    }
+    else
+    {
+        fireComponent.Initialize(
+            fireDamage,
+            PrimaryDamageType,
+            fireRadius,
+            fireDuration,
+            fireTickInterval,
+            Physics2D.AllLayers
+        );
+    }
 
     Debug.Log(
         $"[CrossbowExplosiveArrow] FIRE SPAWNED SUCCESSFULLY | " +

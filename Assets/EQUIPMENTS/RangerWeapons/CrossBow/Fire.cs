@@ -14,6 +14,13 @@ public class Fire : MonoBehaviour
     private LayerMask hittableLayers;
 
     private bool initialized;
+    private BossBalance.HostileDamage enemyDamage;
+
+    public void InitializeForEnemy(BossBalance.HostileDamage hits, float radius, float duration, float interval)
+    {
+        enemyDamage = hits;
+        Initialize(0, DamageType.None, radius, duration, interval, hits.Layers);
+    }
 
     public void Initialize(
         int damage,
@@ -65,6 +72,12 @@ public class Fire : MonoBehaviour
                 radius,
                 hittableLayers
             );
+
+        if (enemyDamage != null)
+        {
+            enemyDamage.HitTargets(hits);
+            return;
+        }
 
         // Prevent an enemy with multiple colliders from
         // receiving damage more than once per tick.

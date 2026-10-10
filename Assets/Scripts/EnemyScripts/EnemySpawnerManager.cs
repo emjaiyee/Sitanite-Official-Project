@@ -65,6 +65,27 @@ public class EnemySpawnerManager : MonoBehaviour
         [Range(0f, 1f)] public float spawnChance = 0f;
     }
 
+    [Serializable]
+    private class FallenDescenderConfiguration
+    {
+        public List<GameObject> enemyPrefabs = new List<GameObject>();
+        public AdditiveModifier health = new AdditiveModifier();
+        public AdditiveModifier resistance = new AdditiveModifier();
+        public AdditiveModifier damage = new AdditiveModifier();
+        public AdditiveModifier level = new AdditiveModifier();
+        public AdditiveModifier experienceReward = new AdditiveModifier();
+
+        public BossBalance.SpawnModifiers Roll()
+        {
+            return new BossBalance.SpawnModifiers
+            {
+                health = health.Roll(), resistance = resistance.Roll(), damage = damage.Roll(),
+                level = Mathf.RoundToInt(level.Roll()),
+                experience = experienceReward.Roll()
+            };
+        }
+    }
+
     [Header("Floor Spawn Configurations")]
     [SerializeField] private List<SpawnConfiguration> spawnConfigurations =
         new List<SpawnConfiguration>();
@@ -72,6 +93,10 @@ public class EnemySpawnerManager : MonoBehaviour
     [Header("Boss Floor Spawn Configurations")]
     [SerializeField] private List<BossSpawnConfiguration> bossSpawnConfigurations =
         new List<BossSpawnConfiguration>();
+
+    [Header("Fallen Descender Configuration")]
+    [SerializeField] private FallenDescenderConfiguration fallenDescenderConfiguration = new FallenDescenderConfiguration();
+    [SerializeField] private DungeonMemory dungeonMemory;
 
     [Header("Spawn Options")]
     [SerializeField] private bool spawnOnStart = true;
@@ -164,9 +189,21 @@ public class EnemySpawnerManager : MonoBehaviour
 
     private void SpawnRegisteredRooms()
     {
+        if (floorManager == null)
+            floorManager = FindFirstObjectByType<FloorManager>();
+        if (dungeonMemory == null)
+            dungeonMemory = FindFirstObjectByType<DungeonMemory>();
+
+        List<RoomInstance> eligibleRooms = GetEligibleBossRooms();
+        GameObject fallenPrefab = GetFallenPrefab();
+        DungeonMemory.SavedDeath fallen = eligibleRooms.Count > 0 && fallenPrefab != null && dungeonMemory != null && floorManager != null
+            ? dungeonMemory.SelectReanimatedForFloor(floorManager.CurrentFloor, Player.Instance)
+            : null;
         BossSpawnConfiguration bossConfiguration =
             GetCurrentBossSpawnConfiguration();
-        RoomInstance bossRoom = SelectBossRoom(bossConfiguration);
+        RoomInstance bossRoom = fallen != null
+            ? eligibleRooms[UnityEngine.Random.Range(0, eligibleRooms.Count)]
+            : SelectBossRoom(bossConfiguration);
 
         foreach (RoomInstance room in registeredRooms)
         {
@@ -174,7 +211,7 @@ public class EnemySpawnerManager : MonoBehaviour
                 continue;
 
             if (room == bossRoom)
-                SpawnBoss(room, bossConfiguration);
+                SpawnBoss(room, bossConfiguration, fallen, fallenPrefab);
             else
                 SpawnRoomEnemies(room);
         }
@@ -290,6 +327,16 @@ public class EnemySpawnerManager : MonoBehaviour
             GetRandomEnemyPrefab(configuration) == null)
             return null;
 
+        List<RoomInstance> eligibleRooms = GetEligibleBossRooms();
+
+        if (eligibleRooms.Count == 0)
+            return null;
+
+        return eligibleRooms[UnityEngine.Random.Range(0, eligibleRooms.Count)];
+    }
+
+    private List<RoomInstance> GetEligibleBossRooms()
+    {
         List<RoomInstance> eligibleRooms = new List<RoomInstance>();
 
         foreach (RoomInstance room in registeredRooms)
@@ -299,15 +346,20 @@ public class EnemySpawnerManager : MonoBehaviour
                 eligibleRooms.Add(room);
         }
 
-        if (eligibleRooms.Count == 0)
-            return null;
+        return eligibleRooms;
+    }
 
-        return eligibleRooms[UnityEngine.Random.Range(0, eligibleRooms.Count)];
+    private GameObject GetFallenPrefab()
+    {
+        List<GameObject> prefabs = fallenDescenderConfiguration.enemyPrefabs.FindAll(prefab => prefab != null && prefab.GetComponent<FallenDescender>() != null);
+        return prefabs.Count > 0 ? prefabs[UnityEngine.Random.Range(0, prefabs.Count)] : null;
     }
 
     private void SpawnBoss(
         RoomInstance room,
-        BossSpawnConfiguration configuration)
+        BossSpawnConfiguration configuration,
+        DungeonMemory.SavedDeath fallen = null,
+        GameObject fallenPrefab = null)
     {
         EnemySpawnPoint[] spawnPoints =
             room.GetComponentsInChildren<EnemySpawnPoint>(true);
@@ -320,7 +372,7 @@ public class EnemySpawnerManager : MonoBehaviour
 
         EnemySpawnPoint spawnPoint =
             spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
-        GameObject bossPrefab = GetRandomEnemyPrefab(configuration);
+        GameObject bossPrefab = fallen != null ? fallenPrefab : GetRandomEnemyPrefab(configuration);
 
         if (bossPrefab == null)
         {
@@ -341,8 +393,8 @@ public class EnemySpawnerManager : MonoBehaviour
         GameObject boss = spawnPoint.SpawnEnemyAt(
             spawnPoint.transform.position,
             bossPrefab,
-            RollEnemyLevel(configuration),
-            spawnParent
+            fallen != null ? fallen.combat.level : RollEnemyLevel(configuration),
+            room.transform
         );
 
         if (boss == null)
@@ -351,7 +403,37 @@ public class EnemySpawnerManager : MonoBehaviour
             return;
         }
 
-        ApplyModifiers(boss, configuration);
+        PlayerStats player = Player.Instance != null ? Player.Instance.GetComponent<PlayerStats>() : null;
+        if (fallen != null)
+        {
+            FallenDescender descender = boss.GetComponent<FallenDescender>();
+            if (descender == null || !descender.Configure(fallen, dungeonMemory, room, player, fallenDescenderConfiguration.Roll()))
+            {
+                string reason = descender != null ? descender.ConfigurationError : "The prefab has no FallenDescender on its root.";
+                Debug.LogWarning($"EnemySpawnerManager: Fallen '{bossPrefab.name}' could not spawn: {reason} Memory retained.", this);
+                spawnPoint.DiscardSpawnedEnemy(boss);
+                boss.SetActive(false);
+                Destroy(boss);
+                spawnPoint.OnWaveCleared -= handler;
+                activeSpawnPoints.Remove(room);
+                clearedSpawnPoints.Remove(room);
+                SpawnRoomEnemies(room);
+                return;
+            }
+            Player.Instance.MarkDungeonMemoryEncountered(fallen.id);
+        }
+        else
+        {
+            EnemyHealth health = boss.GetComponent<EnemyHealth>();
+            EnemyLevelXP experience = boss.GetComponent<EnemyLevelXP>();
+            if (health != null && player != null)
+            {
+                int bossLevel = experience != null ? experience.Level : 1;
+                health.BalanceBoss(bossLevel, player);
+                ApplyDamageModifier(boss, player.Level - bossLevel);
+            }
+            ApplyModifiers(boss, configuration);
+        }
 
         ActiveBossHealth = boss.GetComponent<EnemyHealth>();
         if (ActiveBossHealth != null)
@@ -436,6 +518,15 @@ public class EnemySpawnerManager : MonoBehaviour
         if (enemyHealth != null)
             enemyHealth.ApplyAdditiveModifiers(healthModifier, resistanceModifier);
 
+        ApplyDamageModifier(enemy, damageModifier);
+
+        EnemyLevelXP enemyLevelXp = enemy.GetComponent<EnemyLevelXP>();
+        if (enemyLevelXp != null)
+            enemyLevelXp.AddExperienceReward(experienceModifier);
+    }
+
+    private void ApplyDamageModifier(GameObject enemy, float damageModifier)
+    {
         EnemyMelee enemyMelee = enemy.GetComponent<EnemyMelee>();
         if (enemyMelee != null)
             enemyMelee.ApplyDamageModifier(damageModifier);
@@ -448,9 +539,6 @@ public class EnemySpawnerManager : MonoBehaviour
         if (enemyLich != null)
             enemyLich.ApplyDamageModifier(damageModifier);
 
-        EnemyLevelXP enemyLevelXp = enemy.GetComponent<EnemyLevelXP>();
-        if (enemyLevelXp != null)
-            enemyLevelXp.AddExperienceReward(experienceModifier);
     }
 
     private List<EnemySpawnPoint> SelectSpawnPoints(

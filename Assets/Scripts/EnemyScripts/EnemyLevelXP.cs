@@ -96,6 +96,9 @@ public class EnemyLevelXP : MonoBehaviour
 
     private void ApplyLevelScaling()
     {
+        if (GetComponent<FallenDescender>() != null)
+            return;
+
         ResolveReferences();
 
         if (enemyHealth != null)
@@ -110,7 +113,7 @@ public class EnemyLevelXP : MonoBehaviour
 
     private void HandleEnemyDied(GameObject deadEnemy)
     {
-        if (!grantExperienceOnDeath)
+        if (!grantExperienceOnDeath || GetComponent<FallenDescender>() != null)
             return;
 
         if (Player.Instance == null)

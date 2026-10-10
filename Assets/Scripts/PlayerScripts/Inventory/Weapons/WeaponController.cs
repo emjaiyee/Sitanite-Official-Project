@@ -42,6 +42,16 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private float nextAttackTime;
     private float nextSkillTime;
     private Coroutine spinAxeRoutine;
+    private BossBalance.HostileDamage enemyDamage;
+    private Transform enemyOwner;
+    private float enemyBusyUntil;
+    private Transform WeaponOwner => enemyOwner != null ? enemyOwner : transform.root;
+
+    public float AttackCooldownSeconds => data == null ? 0f : enemyDamage != null
+        ? Mathf.Max(0.05f, data.AttackCooldown * 1.5f) : GetCooldown(data.AttackCooldown);
+    public float SkillCooldownSeconds => data == null ? 0f : GetCooldown(data.SkillCooldown);
+    public bool IsPerformingEnemySkill => enemyDamage != null &&
+        (isCharging || spinAxeRoutine != null || Time.time < enemyBusyUntil);
 
     // Direction captured when the skill begins charging.
     private Vector2 skillDirection = Vector2.right;
@@ -84,9 +94,50 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
         StopCharging();
         ClearArrowRainPreview();
+        enemyDamage = null;
+        enemyOwner = null;
         data = weaponData;
         nextAttackTime = 0f;
         nextSkillTime = 0f;
+    }
+
+    public void ConfigureForEnemy(ItemData weaponData, IReadOnlyList<DungeonMemory.DamageStat> balancedDamage,
+        int elevation, Transform owner, Transform muzzle)
+    {
+        Configure(weaponData);
+        enemyDamage = new BossBalance.HostileDamage(balancedDamage, elevation);
+        enemyOwner = owner;
+        attackPoint = owner;
+        firePoint = muzzle != null ? muzzle : owner;
+        playerStats = null;
+        weaponAudio = null;
+    }
+
+    public void UseSkillForEnemy(Vector2 direction, Vector3 targetPosition, int elevation)
+    {
+        if (enemyDamage == null || data == null || !CanUseSkill || IsPerformingEnemySkill ||
+            data.WeaponSkillType == WeaponSkillType.None)
+            return;
+
+        enemyDamage = new BossBalance.HostileDamage(enemyDamage.Hits, elevation);
+        UseSkill(direction);
+        if (IsTargetingSkill)
+        {
+            UpdateSkillTarget(targetPosition);
+            ConfirmSkill();
+        }
+        nextSkillTime = Time.time + SkillCooldownSeconds;
+        if (data.WeaponSkillType == WeaponSkillType.RapidFireBalls)
+            enemyBusyUntil = Time.time + 0.4f;
+    }
+
+    public void CancelEnemyActions()
+    {
+        StopAllCoroutines();
+        spinAxeRoutine = null;
+        StopCharging();
+        ClearArrowRainPreview();
+        enemyBusyUntil = 0f;
     }
 
     private void Update()
@@ -123,6 +174,8 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             AnimateMaxChargeVisual();
             AnimateFullChargeIndicator();
         }
+        if (enemyDamage != null && chargePercent >= 1f)
+            ReleaseSkill(true);
     }
 
     // =========================================================
@@ -140,13 +193,13 @@ public void Attack(Vector2 direction)
 
     direction.Normalize();
 
-    nextAttackTime = Time.time + GetCooldown(data.AttackCooldown);
+    nextAttackTime = Time.time + AttackCooldownSeconds;
 
     // Play weapon-specific attack SFX
     weaponAudio?.PlayAttackSound();
 
     Vector3 attackOrigin = attackPoint == null
-        ? transform.root.position
+        ? WeaponOwner.position
         : attackPoint.position;
     Vector3 visualPosition = attackOrigin + (Vector3)(direction * data.AttackRange);
 
@@ -219,7 +272,7 @@ public void Attack(Vector2 direction)
 
         // Place the melee hit area in front of the player.
         Vector2 attackPosition =
-            (Vector2)transform.root.position +
+            (Vector2)WeaponOwner.position +
             direction * data.AttackRange;
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(
@@ -256,7 +309,7 @@ public void Attack(Vector2 direction)
 
     private void ApplyMeleeDamage(IDamageable target, int primaryDamage)
     {
-        Vector3 source = transform.root.position;
+        Vector3 source = WeaponOwner.position;
 
         if (primaryDamage > 0 && data.PrimaryDamageType != DamageType.None)
             target.TakeDamage(primaryDamage, data.PrimaryDamageType, source);
@@ -391,7 +444,7 @@ public void UseSkill(Vector2 direction)
             if (!IsTargetingSkill || data == null)
                 return;
 
-            Vector3 origin = transform.root.position;
+            Vector3 origin = WeaponOwner.position;
             Vector2 offset = (Vector2)(targetPosition - origin);
             float range = Mathf.Max(0f, data.SkillRange);
 
@@ -444,7 +497,7 @@ private void UseCrossbowExplosionSkill(Vector2 direction)
     Vector3 spawnPosition =
         firePoint != null
             ? firePoint.position
-            : transform.root.position;
+            : WeaponOwner.position;
 
     Vector2 shootDirection = direction.normalized;
 
@@ -532,6 +585,12 @@ private void UseCrossbowExplosionSkill(Vector2 direction)
         data.FireDamage,
         data.FireRadius
     );
+    if (enemyDamage != null)
+    {
+        BossBalance.HostileDamage hits = BuildEnemySkillDamage(primaryDamage);
+        explosiveArrow.InitializeForEnemy(hits.Hits, data.ProjectileSpeed, data.SkillRange,
+            data.Homing, hits.Elevation, true);
+    }
 }
 
 private void UseStabSkill(Vector2 direction)
@@ -542,7 +601,7 @@ private void UseStabSkill(Vector2 direction)
     direction.Normalize();
 
     Vector2 origin =
-        (Vector2)transform.root.position;
+        (Vector2)WeaponOwner.position;
 
     // Short forward reach for the dagger stab.
     Vector2 stabPosition =
@@ -561,8 +620,26 @@ private void UseStabSkill(Vector2 direction)
     IDamageable closestTarget = null;
     float closestDistance = float.MaxValue;
 
+    if (enemyDamage != null)
+    {
+        BossBalance.HostileDamage skillHits = BuildEnemySkillDamage(CalculateSkillDamage(data.SkillDamage));
+        foreach (Collider2D hit in hits)
+        {
+            PlayerStats playerTarget = skillHits.Resolve(hit);
+            if (playerTarget == null || Vector2.Distance(origin, playerTarget.transform.position) > data.SkillRange)
+                continue;
+            Vector2 toTarget = (Vector2)playerTarget.transform.position - origin;
+            if (toTarget.sqrMagnitude > 0.0001f && Vector2.Dot(direction, toTarget.normalized) <= 0f)
+                continue;
+            skillHits.Hit(playerTarget);
+            break;
+        }
+    }
+
     foreach (Collider2D hit in hits)
     {
+        if (enemyDamage != null)
+            break;
         if (hit == null)
             continue;
 
@@ -637,18 +714,28 @@ private void UseStabSkill(Vector2 direction)
     private void UseSlashSkill(Vector2 direction)
     {
         Vector3 origin = attackPoint == null
-            ? transform.root.position
+            ? WeaponOwner.position
             : attackPoint.position;
         float radius = data.SkillRadius * data.SkillRadiusMultiplier;
         float halfAngle = data.SlashAngle * 0.5f;
         float minimumDot = Mathf.Cos(halfAngle * Mathf.Deg2Rad);
         HashSet<IDamageable> targets = new HashSet<IDamageable>();
+        List<Collider2D> playerHits = enemyDamage != null ? new List<Collider2D>() : null;
 
         foreach (Collider2D hit in Physics2D.OverlapCircleAll(
                      origin,
                      radius,
                      Physics2D.AllLayers))
         {
+            if (enemyDamage != null)
+            {
+                if (enemyDamage.Resolve(hit) == null)
+                    continue;
+                Vector2 toPlayer = (Vector2)hit.ClosestPoint(origin) - (Vector2)origin;
+                if (toPlayer.sqrMagnitude <= 0.0001f || Vector2.Dot(direction, toPlayer.normalized) >= minimumDot)
+                    playerHits.Add(hit);
+                continue;
+            }
             IDamageable target = hit == null
                 ? null
                 : hit.GetComponentInParent<IDamageable>();
@@ -663,6 +750,9 @@ private void UseStabSkill(Vector2 direction)
 
             targets.Add(target);
         }
+
+        if (playerHits != null)
+            BuildEnemySkillDamage(CalculateSkillDamage(data.SkillDamage)).HitTargets(playerHits.ToArray());
 
         foreach (IDamageable target in targets)
         {
@@ -701,9 +791,9 @@ private void UseStabSkill(Vector2 direction)
         {
             visual = Instantiate(
                 data.SkillVisualPrefab,
-                transform.root.position,
+                WeaponOwner.position,
                 Quaternion.identity,
-                transform.root
+                WeaponOwner
             );
             visual.transform.localPosition = Vector3.zero;
             visual.transform.localScale = Vector3.one * radius * 2f;
@@ -713,7 +803,7 @@ private void UseStabSkill(Vector2 direction)
         {
             DamageTargets(
                 Physics2D.OverlapCircleAll(
-                    transform.root.position,
+                    WeaponOwner.position,
                     radius,
                     Physics2D.AllLayers
                 )
@@ -735,7 +825,7 @@ private void UseStabSkill(Vector2 direction)
 
     private void UseAreaDamageSkill()
     {
-        Vector3 origin = transform.root.position;
+        Vector3 origin = WeaponOwner.position;
 
         float radius =
             data.SkillRadius *
@@ -768,7 +858,7 @@ private void UseStabSkill(Vector2 direction)
             return;
 
         arrowRainTargeting = true;
-        Vector3 origin = transform.root.position;
+        Vector3 origin = WeaponOwner.position;
         Vector3 targetPosition =
             origin + (Vector3)(direction.normalized * data.SkillRange);
 
@@ -852,6 +942,8 @@ private void UseStabSkill(Vector2 direction)
             data.SkillDamageTicksPerSecond,
             Physics2D.AllLayers
         );
+        if (enemyDamage != null)
+            typhoon.SetEnemyDamage(BuildEnemySkillDamage(CalculateSkillDamage(data.SkillDamage), DamageType.Air));
     }
 
     private void UseVeilOfFireSkill()
@@ -865,7 +957,7 @@ private void UseStabSkill(Vector2 direction)
             return;
         }
 
-        Transform player = transform.root;
+        Transform player = WeaponOwner;
         GameObject veilObject =
             Instantiate(
                 data.SkillProjectilePrefab,
@@ -899,6 +991,8 @@ private void UseStabSkill(Vector2 direction)
             Physics2D.AllLayers,
             player
         );
+        if (enemyDamage != null)
+            veil.SetEnemyDamage(BuildEnemySkillDamage(CalculateSkillDamage(data.SkillDamage), DamageType.Fire));
     }
 
     private void UseFireBallsSkill(Vector2 direction)
@@ -1071,7 +1165,7 @@ private void StartCharging(Vector2 direction)
             Instantiate(
                 data.ChargeVisualPrefab,
                 firePoint == null
-                    ? transform.root.position
+                    ? WeaponOwner.position
                     : firePoint.position,
                 Quaternion.Euler(
                     0f,
@@ -1127,7 +1221,7 @@ private void StartCharging(Vector2 direction)
         // Update full charge indicator position if it's parented to root instead of firePoint
         if (activeFullChargeIndicator != null && firePoint == null)
         {
-            activeFullChargeIndicator.transform.position = transform.root.position;
+            activeFullChargeIndicator.transform.position = WeaponOwner.position;
         }
     }
 
@@ -1279,6 +1373,8 @@ public void ReleaseSkill(bool fullyCharged)
             Physics2D.AllLayers,
             data.DamageTicksPerSecond
         );
+        if (enemyDamage != null)
+            beam.SetEnemyDamage(BuildEnemySkillDamage(damage));
     }
 
     // =========================================================
@@ -1325,6 +1421,23 @@ public void ReleaseSkill(bool fullyCharged)
                     angle
                 )
             );
+
+        if (enemyDamage != null)
+        {
+            BossBalance.HostileDamage hits = isSkill ? BuildEnemySkillDamage(damage, primaryDamageTypeOverride) : enemyDamage;
+            ProjectileBase hostileProjectile = projectile.GetComponentInChildren<ProjectileBase>();
+            BaseArrow hostileArrow = projectile.GetComponentInChildren<BaseArrow>();
+            if (hostileProjectile != null)
+                hostileProjectile.InitializeForEnemy(hits.Hits, speed, range, data.Homing, hits.Elevation);
+            else if (hostileArrow != null)
+                hostileArrow.LaunchForEnemy(direction, hits.Hits, speed, range, data.Homing, hits.Elevation);
+            else
+            {
+                Debug.LogWarning($"{WeaponId}: Fallen skill projectile requires ProjectileBase or BaseArrow.", this);
+                Destroy(projectile);
+            }
+            return;
+        }
 
         IProjectile projectileComponent =
             projectile.GetComponentInChildren<IProjectile>();
@@ -1393,6 +1506,11 @@ public void ReleaseSkill(bool fullyCharged)
 
     private void DamageTargets(Collider2D[] hits)
     {
+        if (enemyDamage != null)
+        {
+            BuildEnemySkillDamage(CalculateSkillDamage(data.SkillDamage)).HitTargets(hits);
+            return;
+        }
         foreach (Collider2D hit in hits)
         {
             IDamageable target =
@@ -1443,7 +1561,7 @@ public void ReleaseSkill(bool fullyCharged)
             target.TakeDamage(
                 damage,
                 damageType,
-                transform.root.position
+                WeaponOwner.position
             );
         }
     }
@@ -1457,8 +1575,26 @@ public void ReleaseSkill(bool fullyCharged)
     ///              + damage modifiers from equipped armor
     ///              + the weapon skill's configured damage value.
     /// </summary>
+    private BossBalance.HostileDamage BuildEnemySkillDamage(int primaryDamage, DamageType primaryType = DamageType.None)
+    {
+        List<DungeonMemory.DamageStat> hits = new List<DungeonMemory.DamageStat>();
+        foreach (DamageSlot slot in new[] { DamageSlot.Primary, DamageSlot.Secondary, DamageSlot.Tertiary })
+        {
+            DamageType type = slot == DamageSlot.Primary && primaryType != DamageType.None
+                ? primaryType : data.GetDamageType(slot);
+            if (type != DamageType.None)
+                hits.Add(new DungeonMemory.DamageStat { type = type, damage = data.GetSkillDamage(slot, primaryDamage) });
+        }
+        return new BossBalance.HostileDamage(hits, enemyDamage.Elevation);
+    }
+
     private int CalculateSkillDamage(int rawDamage)
     {
+        if (enemyDamage != null)
+        {
+            DungeonMemory.DamageStat stat = enemyDamage.Hits.Find(hit => hit.type == data.PrimaryDamageType);
+            return Mathf.Max(0, rawDamage + Mathf.RoundToInt(stat != null ? stat.damage : 0f));
+        }
         if (playerStats == null)
             return rawDamage;
 
@@ -1486,6 +1622,11 @@ public void ReleaseSkill(bool fullyCharged)
     /// </summary>
     private int CalculateChargedSkillDamage(int rawDamage)
     {
+        if (enemyDamage != null)
+        {
+            DungeonMemory.DamageStat stat = enemyDamage.Hits.Find(hit => hit.type == data.PrimaryDamageType);
+            return Mathf.Max(0, rawDamage + Mathf.RoundToInt((stat != null ? stat.damage : 0f) * 0.5f));
+        }
         int damage = rawDamage + data.GetDamage(DamageSlot.Primary);
 
         if (playerStats == null)
@@ -1542,6 +1683,8 @@ public void ReleaseSkill(bool fullyCharged)
 
     private float GetCooldown(float baseCooldown)
     {
+        if (enemyDamage != null)
+            return Mathf.Max(0.05f, baseCooldown * 2.5f);
         float reduction = playerStats == null
             ? 0f
             : playerStats.CooldownReduction;
@@ -1618,14 +1761,14 @@ public void ReleaseSkill(bool fullyCharged)
             return;
 
         Vector3 spawnPosition = firePoint == null
-            ? transform.root.position
+            ? WeaponOwner.position
             : firePoint.position;
 
         activeFullChargeIndicator = Instantiate(
             fullyChargedIndicatorPrefab,
             spawnPosition,
             Quaternion.identity,
-            firePoint == null ? transform.root : firePoint
+            firePoint == null ? WeaponOwner : firePoint
         );
 
         // Gather all sprite renderers for animation

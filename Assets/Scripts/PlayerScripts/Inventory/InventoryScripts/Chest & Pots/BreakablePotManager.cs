@@ -88,22 +88,35 @@ public class BreakablePotManager : MonoBehaviour
         if (!drop.HasValue || lootPrefab == null)
             return;
 
+        LootDrop selectedDrop = drop.Value;
+        SpawnLoot(
+            selectedDrop.itemData,
+            UnityEngine.Random.Range(
+                Mathf.Min(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity),
+                Mathf.Max(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity) + 1
+            ),
+            origin
+        );
+    }
+
+    public bool SpawnLoot(ItemData itemData, int quantity, Vector3 origin, Transform parent = null)
+    {
+        if (itemData == null || quantity <= 0 || lootPrefab == null)
+            return false;
+
         Vector3? spawnPosition = FindWalkableSpawnPosition(origin);
         if (!spawnPosition.HasValue)
-            return;
+            return false;
 
-        LootDrop selectedDrop = drop.Value;
-        GameObject lootObject = Instantiate(lootPrefab, spawnPosition.Value, Quaternion.identity);
+        GameObject lootObject = Instantiate(lootPrefab, spawnPosition.Value, Quaternion.identity, parent);
         if (lootObject.TryGetComponent(out Loot loot))
         {
-            loot.Setup(
-                selectedDrop.itemData,
-                UnityEngine.Random.Range(
-                    Mathf.Min(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity),
-                    Mathf.Max(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity) + 1
-                )
-            );
+            loot.Setup(itemData, quantity);
+            return true;
         }
+
+        Destroy(lootObject);
+        return false;
     }
 
     private List<FloorLootConfiguration> GetCurrentConfigurations()

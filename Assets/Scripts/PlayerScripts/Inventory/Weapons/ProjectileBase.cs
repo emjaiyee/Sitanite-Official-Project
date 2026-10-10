@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ProjectileBase : MonoBehaviour, IProjectile
@@ -22,6 +23,21 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private Vector3 startPosition;
     private bool initialized;
+    private List<DungeonMemory.DamageStat> enemyHits;
+    private int enemyElevation;
+    private bool enemyHit;
+    private bool enemyImpactEffects;
+    protected BossBalance.HostileDamage EnemyDamage { get; private set; }
+
+    public void InitializeForEnemy(IReadOnlyList<DungeonMemory.DamageStat> hits, float speed, float range, bool homing, int elevation, bool impactEffects = false)
+    {
+        enemyHits = new List<DungeonMemory.DamageStat>(hits);
+        EnemyDamage = new BossBalance.HostileDamage(hits, elevation);
+        enemyElevation = elevation;
+        enemyHit = false;
+        enemyImpactEffects = impactEffects;
+        Initialize(0, DamageType.None, speed, range, homing, EnemyDamage.Layers);
+    }
 
     /// <summary>
     /// Time.time when this projectile was initialized.
@@ -157,7 +173,8 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
                 startPosition,
                 transform.position) >= maxDistance)
         {
-            OnMaxRangeReached();
+            if (enemyHits == null || enemyImpactEffects)
+                OnMaxRangeReached();
 
             Destroy(gameObject);
 
@@ -170,6 +187,22 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (enemyHits != null)
+        {
+            PlayerStats player = EnemyDamage.Resolve(other);
+            if (enemyHit || player == null)
+                return;
+
+            enemyHit = true;
+            if (!enemyImpactEffects || ShouldDealDirectDamage)
+                BossBalance.HitPlayer(player, enemyHits, enemyElevation);
+            if (enemyImpactEffects)
+                OnImpact(transform.position);
+            initialized = false;
+            Destroy(gameObject);
+            return;
+        }
+
         // Check layer
         if ((hittableLayers.value &
              (1 << other.gameObject.layer)) == 0)
@@ -288,6 +321,9 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
     /// </summary>
     private Transform FindNearestTarget()
     {
+        if (enemyHits != null)
+            return Player.Instance != null ? Player.Instance.transform : null;
+
         Collider2D[] candidates =
             Physics2D.OverlapCircleAll(
                 startPosition,

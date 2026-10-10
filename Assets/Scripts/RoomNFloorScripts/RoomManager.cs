@@ -609,6 +609,9 @@ public class RoomManager : MonoBehaviour
         if (room == null)
             return;
 
+        if (Player.Instance != null)
+            Player.Instance.RecordRoomCleared(room);
+
         Debug.Log(
             $"Room {room.RoomNumber} has been cleared."
         );

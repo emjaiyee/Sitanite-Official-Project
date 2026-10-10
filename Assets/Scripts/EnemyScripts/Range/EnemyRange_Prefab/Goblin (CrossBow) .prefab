@@ -184,6 +184,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 30
+  isMiniBoss: 0
+  enemyName: Archer Goblin
   basePierceResistance: 5
   baseStabResistance: 5
   baseSlashResistance: 5
@@ -455,4 +457,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28fe4e929d44d2c9b9277c4050b516d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
+  enemyType: 0
   lootSpawnPoint: {fileID: 4074788260977273869, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
