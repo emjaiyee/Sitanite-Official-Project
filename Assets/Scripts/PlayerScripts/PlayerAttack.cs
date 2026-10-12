@@ -115,7 +115,9 @@ public class PlayerAttack : MonoBehaviour
             shieldDefense != null &&
             shieldDefense.HasCounterOpportunity;
 
-        if (Attack(isCounterAttack ? shieldDefense.CounterDamageMultiplier : 1f) &&
+        if (Attack(
+                isCounterAttack ? shieldDefense.CounterDamageMultiplier : 1f,
+                isCounterAttack) &&
             isCounterAttack)
         {
             shieldDefense.ConsumeCounterOpportunity();
@@ -123,7 +125,7 @@ public class PlayerAttack : MonoBehaviour
     }
 
 
-    private bool Attack(float damageMultiplier)
+    private bool Attack(float damageMultiplier, bool isCounterAttack)
     {
         if (!CombatInputGate.IsCombatInputAllowed)
             return false;
@@ -197,7 +199,11 @@ public class PlayerAttack : MonoBehaviour
 
 
         // Send attack direction to weapon
-        equipment.CurrentWeapon.Attack(attackDirection, damageMultiplier);
+        equipment.CurrentWeapon.Attack(
+            attackDirection,
+            damageMultiplier,
+            isCounterAttack
+        );
 
 
         attackRecovery = StartCoroutine(

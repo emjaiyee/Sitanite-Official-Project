@@ -138,6 +138,11 @@ public void Attack(Vector2 direction)
 
 public void Attack(Vector2 direction, float damageMultiplier)
 {
+    Attack(direction, damageMultiplier, false);
+}
+
+public void Attack(Vector2 direction, float damageMultiplier, bool isCounterAttack)
+{
     if (!IsConfigured() || !CanAttack ||
         direction.sqrMagnitude <= 0.0001f)
         return;
@@ -145,7 +150,7 @@ public void Attack(Vector2 direction, float damageMultiplier)
     attackDamageMultiplier = Mathf.Max(1f, damageMultiplier);
     try
     {
-        PerformAttack(direction);
+        PerformAttack(direction, isCounterAttack);
     }
     finally
     {
@@ -153,7 +158,7 @@ public void Attack(Vector2 direction, float damageMultiplier)
     }
 }
 
-private void PerformAttack(Vector2 direction)
+private void PerformAttack(Vector2 direction, bool isCounterAttack)
 {
     if (direction.sqrMagnitude <= 0.0001f)
         return;
@@ -185,7 +190,7 @@ private void PerformAttack(Vector2 direction)
     {
         case WeaponAttackType.Melee:
 
-            AttackMelee(direction);
+            AttackMelee(direction, isCounterAttack);
 
             break;
 
@@ -202,7 +207,10 @@ private void PerformAttack(Vector2 direction)
                 data.AttackRange,
                 GetPrimaryDamage(),
                 projectileSpeed,
-                direction
+                direction,
+                counterHitVisualPrefab: isCounterAttack && GetPrimaryDamage() > 0
+                    ? data.AttackVisualPrefab
+                    : null
             );
 
             break;
@@ -218,7 +226,7 @@ private void PerformAttack(Vector2 direction)
 }
 
 
-    private void AttackMelee(Vector2 direction)
+    private void AttackMelee(Vector2 direction, bool isCounterAttack)
     {
         if (attackPoint == null)
         {
@@ -270,13 +278,26 @@ private void PerformAttack(Vector2 direction)
                     (target as MonoBehaviour)?.transform))
                 continue;
 
-            ApplyMeleeDamage(target, primaryDamage);
+            ApplyMeleeDamage(target, primaryDamage, isCounterAttack);
         }
     }
 
-    private void ApplyMeleeDamage(IDamageable target, int primaryDamage)
+    private void ApplyMeleeDamage(
+        IDamageable target,
+        int primaryDamage,
+        bool isCounterAttack)
     {
         Vector3 source = transform.root.position;
+        if (isCounterAttack &&
+            target is EnemyHealth enemyHealth &&
+            ((primaryDamage > 0 && data.PrimaryDamageType != DamageType.None) ||
+             (GetWeaponDamage(DamageSlot.Secondary) > 0 &&
+              data.GetDamageType(DamageSlot.Secondary) != DamageType.None) ||
+             (GetWeaponDamage(DamageSlot.Tertiary) > 0 &&
+              data.GetDamageType(DamageSlot.Tertiary) != DamageType.None)))
+        {
+            enemyHealth.PlayCounterHitVisual(data.AttackVisualPrefab, source);
+        }
 
         if (primaryDamage > 0 && data.PrimaryDamageType != DamageType.None)
             target.TakeDamage(primaryDamage, data.PrimaryDamageType, source);
@@ -1350,7 +1371,8 @@ public void ReleaseSkill(bool fullyCharged)
         float speed,
         Vector2 direction,
         bool isSkill = false,
-        DamageType primaryDamageTypeOverride = DamageType.None)
+        DamageType primaryDamageTypeOverride = DamageType.None,
+        GameObject counterHitVisualPrefab = null)
     {
         if (projectilePrefab == null ||
             firePoint == null)
@@ -1442,6 +1464,12 @@ public void ReleaseSkill(bool fullyCharged)
                 data.Homing,
                 Physics2D.AllLayers
             );
+
+            if (counterHitVisualPrefab != null &&
+                projectileComponent is ProjectileBase projectileBase)
+            {
+                projectileBase.SetCounterHitVisual(counterHitVisualPrefab);
+            }
         }
     }
 

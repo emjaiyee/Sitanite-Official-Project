@@ -22,6 +22,7 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private Vector3 startPosition;
     private bool initialized;
+    private GameObject counterHitVisualPrefab;
 
     /// <summary>
     /// Time.time when this projectile was initialized.
@@ -111,6 +112,11 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         OnInitialized();
     }
 
+    public void SetCounterHitVisual(GameObject visualPrefab)
+    {
+        counterHitVisualPrefab = visualPrefab;
+    }
+
     public void InitializeSkill(
         int primaryDamage,
         DamageType primaryDamageType,
@@ -196,6 +202,15 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         // Normal projectile damage
         if (ShouldDealDirectDamage)
         {
+            if (counterHitVisualPrefab != null &&
+                target is EnemyHealth enemyHealth)
+            {
+                enemyHealth.PlayCounterHitVisual(
+                    counterHitVisualPrefab,
+                    startPosition
+                );
+            }
+
             target.TakeDamage(
                 damage,
                 damageType,

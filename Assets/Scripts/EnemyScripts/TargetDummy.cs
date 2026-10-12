@@ -14,6 +14,11 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
     [SerializeField] private bool respawnOnDeath = true;
     [SerializeField] private bool showDamageNumbers = true;
 
+    [Header("Damage Feedback")]
+    [SerializeField] private Color damageFlashColor = new Color(1f, 0.25f, 0.25f, 1f);
+    [Min(0.01f)]
+    [SerializeField] private float damageFlashDuration = 0.12f;
+
     [Header("Attack")]
     [SerializeField] private bool canAttack = true;
     [Min(0f)]
@@ -37,6 +42,9 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
 
     private Coroutine respawnRoutine;
     private Coroutine attackRoutine;
+    private Coroutine damageFlashRoutine;
+    private SpriteRenderer[] damageFeedbackRenderers;
+    private Color[] originalRendererColors;
     private PlayerStats player;
     private float nextAttackTime;
 
@@ -45,6 +53,7 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
         maxHealth = Mathf.Max(1, maxHealth);
         CurrentHealth = maxHealth;
         player = FindFirstObjectByType<PlayerStats>();
+        CacheDamageFeedbackRenderers();
 
         int enemyLayer = LayerMask.NameToLayer("Enemy");
         if (enemyLayer < 0)
@@ -98,6 +107,8 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
             StopCoroutine(attackRoutine);
             attackRoutine = null;
         }
+
+        StopDamageFlash(restoreColors: true);
     }
 
     private void OnValidate()
@@ -105,6 +116,7 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
         maxHealth = Mathf.Max(1, maxHealth);
         respawnDelay = Mathf.Max(0f, respawnDelay);
         attackDamage = Mathf.Max(0f, attackDamage);
+        damageFlashDuration = Mathf.Max(0.01f, damageFlashDuration);
         attackRange = Mathf.Max(0.01f, attackRange);
         attackCooldown = Mathf.Max(0.01f, attackCooldown);
         attackWindup = Mathf.Max(0f, attackWindup);
@@ -245,6 +257,8 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
         if (amount <= 0 || IsDead)
             return;
 
+        StartDamageFlash();
+
         int appliedDamage = Mathf.Min(amount, CurrentHealth);
         CurrentHealth -= appliedDamage;
 
@@ -265,6 +279,8 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
 
     public void ResetDummy()
     {
+        StopDamageFlash(restoreColors: true);
+
         if (respawnRoutine != null)
         {
             StopCoroutine(respawnRoutine);
@@ -274,6 +290,81 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
         IsDead = false;
         CurrentHealth = maxHealth;
         OnHealthChanged?.Invoke(this);
+    }
+
+    private void CacheDamageFeedbackRenderers()
+    {
+        damageFeedbackRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+        originalRendererColors = new Color[damageFeedbackRenderers.Length];
+
+        for (int i = 0; i < damageFeedbackRenderers.Length; i++)
+            originalRendererColors[i] = damageFeedbackRenderers[i].color;
+    }
+
+    private void StartDamageFlash()
+    {
+        if (damageFeedbackRenderers == null || damageFeedbackRenderers.Length == 0)
+            return;
+
+        StopDamageFlash(restoreColors: false);
+        damageFlashRoutine = StartCoroutine(PlayDamageFlash());
+    }
+
+    private IEnumerator PlayDamageFlash()
+    {
+        float halfDuration = damageFlashDuration * 0.5f;
+        float elapsed = 0f;
+
+        while (elapsed < damageFlashDuration)
+        {
+            elapsed += Time.deltaTime;
+            float progress = elapsed < halfDuration
+                ? elapsed / halfDuration
+                : 1f - ((elapsed - halfDuration) / halfDuration);
+            ApplyDamageFlash(Mathf.Clamp01(progress));
+            yield return null;
+        }
+
+        RestoreDamageFeedbackColors();
+        damageFlashRoutine = null;
+    }
+
+    private void ApplyDamageFlash(float amount)
+    {
+        for (int i = 0; i < damageFeedbackRenderers.Length; i++)
+        {
+            SpriteRenderer spriteRenderer = damageFeedbackRenderers[i];
+            if (spriteRenderer == null)
+                continue;
+
+            Color flashColor = damageFlashColor;
+            flashColor.a = originalRendererColors[i].a;
+            spriteRenderer.color = Color.Lerp(originalRendererColors[i], flashColor, amount);
+        }
+    }
+
+    private void StopDamageFlash(bool restoreColors)
+    {
+        if (damageFlashRoutine != null)
+        {
+            StopCoroutine(damageFlashRoutine);
+            damageFlashRoutine = null;
+        }
+
+        if (restoreColors)
+            RestoreDamageFeedbackColors();
+    }
+
+    private void RestoreDamageFeedbackColors()
+    {
+        if (damageFeedbackRenderers == null || originalRendererColors == null)
+            return;
+
+        for (int i = 0; i < damageFeedbackRenderers.Length; i++)
+        {
+            if (damageFeedbackRenderers[i] != null)
+                damageFeedbackRenderers[i].color = originalRendererColors[i];
+        }
     }
 
     private void ScheduleRespawn()

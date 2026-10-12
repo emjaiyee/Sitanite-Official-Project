@@ -9,6 +9,7 @@ public interface IWeapon
 
     void Attack(Vector2 direction);
     void Attack(Vector2 direction, float damageMultiplier);
+    void Attack(Vector2 direction, float damageMultiplier, bool isCounterAttack);
 
     void UseSkill(Vector2 direction);
     void UpdateSkillTarget(Vector3 targetPosition);

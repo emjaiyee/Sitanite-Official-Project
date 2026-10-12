@@ -113,8 +113,11 @@ public class PlayerShieldDefense : MonoBehaviour
     public float ModifyIncomingDamage(
         float damage,
         Vector3? damageSource,
-        EnemyHealth attacker)
+        EnemyHealth attacker,
+        out bool wasBlocked)
     {
+        wasBlocked = false;
+
         if (damage <= 0f ||
             !IsGuarding ||
             damageSource == null ||
@@ -146,6 +149,8 @@ public class PlayerShieldDefense : MonoBehaviour
 
         if (staminaCost > 0f && !stats.UseStamina(staminaCost))
             return damage;
+
+        wasBlocked = true;
 
         float skillFactor = Mathf.Lerp(
             minimumSkillArmorMultiplier,
