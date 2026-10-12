@@ -226,6 +226,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
             return;
         }
 
+        ClearVisualOnly();
         UpdateSlotAppearance(newItem);
 
         if (incomingVisual != null)
@@ -351,6 +352,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
     {
         if (equippedVisual != null)
         {
+            equippedVisual.gameObject.SetActive(false);
             Destroy(equippedVisual.gameObject);
             equippedVisual = null;
         }
@@ -360,6 +362,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
             Transform child = slotRectTransform.GetChild(i);
             if (child.GetComponent<ItemUIController>() != null)
             {
+                child.gameObject.SetActive(false);
                 Destroy(child.gameObject);
             }
         }

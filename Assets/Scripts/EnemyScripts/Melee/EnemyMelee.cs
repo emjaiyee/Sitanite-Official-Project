@@ -645,6 +645,14 @@ public class EnemyMelee : MonoBehaviour
         if (player == null)
             return false;
 
+        AdaptiveEnemy adaptation = GetComponent<AdaptiveEnemy>();
+        if (adaptation != null && adaptation.Swarming)
+        {
+            if (!adaptation.DetectsPlayerInRoom())
+                return false;
+            LastKnownPlayerPosition = player.position;
+            return true;
+        }
 
         if (AStarManager.Instance == null)
             return false;

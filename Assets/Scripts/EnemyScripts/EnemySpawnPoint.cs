@@ -120,7 +120,9 @@ public class EnemySpawnPoint : MonoBehaviour
     public List<GameObject> SpawnEnemies(
         GameObject managedEnemyPrefab,
         int enemyLevel,
-        Transform parentOverride)
+        Transform parentOverride,
+        float countMultiplier = 1f,
+        float clearanceMultiplier = 1f)
     {
         if (managedEnemyPrefab == null)
         {
@@ -141,6 +143,8 @@ public class EnemySpawnPoint : MonoBehaviour
             count = UnityEngine.Random.Range(min, max + 1);
         }
 
+        count = Mathf.CeilToInt(count * Mathf.Max(1f, countMultiplier));
+        float placementRadius = spawnRadius * Mathf.Sqrt(Mathf.Max(1f, countMultiplier)) * Mathf.Max(1f, clearanceMultiplier);
         List<GameObject> spawned = new List<GameObject>();
 
         if (count <= 0)
@@ -152,7 +156,7 @@ public class EnemySpawnPoint : MonoBehaviour
 
         if (evenDistribution && count > 1)
         {
-            float baseRadius = Mathf.Max(0.01f, spawnRadius);
+            float baseRadius = Mathf.Max(0.01f, placementRadius);
 
             for (int i = 0; i < count; i++)
             {
@@ -176,7 +180,7 @@ public class EnemySpawnPoint : MonoBehaviour
                         (Vector2)transform.position +
                         new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * r;
 
-                    if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab))
+                    if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab, clearanceMultiplier))
                     {
                         chosenPos = pos;
                         found = true;
@@ -190,9 +194,9 @@ public class EnemySpawnPoint : MonoBehaviour
                     {
                         Vector2 pos =
                             (Vector2)transform.position +
-                            UnityEngine.Random.insideUnitCircle * spawnRadius;
+                            UnityEngine.Random.insideUnitCircle * placementRadius;
 
-                        if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab))
+                        if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab, clearanceMultiplier))
                         {
                             chosenPos = pos;
                             found = true;
@@ -235,9 +239,9 @@ public class EnemySpawnPoint : MonoBehaviour
                 {
                     pos2D =
                         (Vector2)transform.position +
-                        UnityEngine.Random.insideUnitCircle * spawnRadius;
+                        UnityEngine.Random.insideUnitCircle * placementRadius;
 
-                    if (IsPositionAcceptable(pos2D, spawned, managedEnemyPrefab))
+                    if (IsPositionAcceptable(pos2D, spawned, managedEnemyPrefab, clearanceMultiplier))
                     {
                         found = true;
                         break;
@@ -251,7 +255,7 @@ public class EnemySpawnPoint : MonoBehaviour
                 {
                     Vector2 centerPos = transform.position;
 
-                    if (IsPositionAcceptable(centerPos, spawned, managedEnemyPrefab))
+                    if (IsPositionAcceptable(centerPos, spawned, managedEnemyPrefab, clearanceMultiplier))
                     {
                         pos2D = centerPos;
                         found = true;
@@ -461,12 +465,13 @@ public class EnemySpawnPoint : MonoBehaviour
     private bool IsPositionAcceptable(
         Vector2 pos,
         List<GameObject> alreadySpawned,
-        GameObject prefab)
+        GameObject prefab,
+        float clearanceMultiplier = 1f)
     {
         // Compute approximate collision radius from prefab/sprite
         // and combine with minSeparation.
-        float approxRadius = GetApproximateRadius(prefab);
-        float required = Mathf.Max(minSeparation, approxRadius);
+        float approxRadius = GetApproximateRadius(prefab) * Mathf.Max(1f, clearanceMultiplier);
+        float required = Mathf.Max(minSeparation * Mathf.Max(1f, clearanceMultiplier), approxRadius);
 
 
         // Reject if any world collider overlaps here.
@@ -488,7 +493,7 @@ public class EnemySpawnPoint : MonoBehaviour
                 continue;
 
             float otherRadius =
-                GetApproximateRadiusForGameObject(go);
+                GetApproximateRadiusForGameObject(go) * Mathf.Max(1f, clearanceMultiplier);
 
             float dist =
                 Vector2.Distance(

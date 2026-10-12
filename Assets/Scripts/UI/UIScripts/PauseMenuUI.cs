@@ -170,10 +170,11 @@ public class PauseMenuUI : MonoBehaviour
         if (cachedStatsUI == null)
             cachedStatsUI = FindFirstObjectByType<PlayerStatsUI>(FindObjectsInactive.Include);
 
+        bool closedPanel = false;
         if (cachedStatsUI != null && cachedStatsUI.IsOpen)
         {
             cachedStatsUI.SetStatsWindowState(false);
-            return;
+            closedPanel = true;
         }
 
         if (cachedInventory == null)
@@ -182,8 +183,11 @@ public class PauseMenuUI : MonoBehaviour
         if (cachedInventory != null && cachedInventory.IsOpen)
         {
             cachedInventory.SetInventoryState(false);
-            return;
+            closedPanel = true;
         }
+
+        if (closedPanel)
+            return;
 
         TogglePause();
     }

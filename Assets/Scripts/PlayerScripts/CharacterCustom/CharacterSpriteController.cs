@@ -265,9 +265,6 @@ public class CharacterSpriteController : MonoBehaviour
             case SpriteSoundEventType.Dash:
                 playerSoundHelper.PlayDash();
                 break;
-            case SpriteSoundEventType.Hurt:
-                playerSoundHelper.PlayHurt();
-                break;
             case SpriteSoundEventType.Death:
                 playerSoundHelper.PlayDeath();
                 break;

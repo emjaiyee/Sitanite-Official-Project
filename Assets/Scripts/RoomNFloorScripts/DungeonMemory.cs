@@ -66,6 +66,62 @@ public class DungeonMemory : MonoBehaviour
     {
         public int version = 1;
         public List<SavedDeath> deaths = new List<SavedDeath>();
+        public List<DamageUse> damageUses = new List<DamageUse>();
+
+        public void RecordKill(DamageType damageType, bool ranged)
+        {
+            DamageType selected = DamageType.None;
+            foreach (DamageType type in BossBalance.DamageTypes())
+            {
+                if ((damageType & type) != 0)
+                {
+                    selected = type;
+                    break;
+                }
+            }
+            if (selected == DamageType.None)
+                return;
+
+            if (damageUses == null)
+                damageUses = new List<DamageUse>();
+            DamageUse current = damageUses.Find(use => use.type == selected);
+            if (current == null)
+            {
+                current = new DamageUse { type = selected };
+                damageUses.Add(current);
+            }
+            foreach (DamageUse use in damageUses)
+            {
+                use.kills = use == current ? Mathf.Min(use.kills, int.MaxValue - 1) + 1 : Mathf.Max(0, use.kills - 1);
+                if (!ranged)
+                    use.rangedKills = Mathf.Max(0, use.rangedKills - 1);
+            }
+            if (ranged)
+                current.rangedKills = Mathf.Min(current.rangedKills, int.MaxValue - 1) + 1;
+        }
+
+        public Adaptation GetAdaptation(int threshold = 50)
+        {
+            DamageUse resistant = null;
+            DamageUse ranged = null;
+            long rangedTotal = 0;
+            foreach (DamageUse use in damageUses ?? new List<DamageUse>())
+            {
+                if (use == null)
+                    continue;
+                if (resistant == null || use.kills > resistant.kills)
+                    resistant = use;
+                if (ranged == null || use.rangedKills > ranged.rangedKills)
+                    ranged = use;
+                rangedTotal += use.rangedKills;
+            }
+            bool swarm = ranged != null && rangedTotal >= Mathf.Max(1, threshold);
+            return new Adaptation
+            {
+                damageType = swarm ? ranged.type : resistant != null && resistant.kills >= Mathf.Max(1, threshold) ? resistant.type : DamageType.None,
+                swarm = swarm
+            };
+        }
 
         public void Remember(SavedDeath death)
         {
@@ -73,6 +129,21 @@ public class DungeonMemory : MonoBehaviour
             while (deaths.Count > 5)
                 deaths.RemoveAt(0);
         }
+    }
+
+    [Serializable]
+    public class DamageUse
+    {
+        public DamageType type;
+        public int kills;
+        public int rangedKills;
+    }
+
+    public struct Adaptation
+    {
+        public DamageType damageType;
+        public bool swarm;
+        public bool Active => damageType != DamageType.None;
     }
 
     [Serializable]
@@ -109,6 +180,15 @@ public class DungeonMemory : MonoBehaviour
     private bool persistenceAvailable = true;
 
     public IReadOnlyList<SavedDeath> RememberedDeaths => archive.deaths.AsReadOnly();
+    public Adaptation GetAdaptation(int threshold = 50) => archive != null ? archive.GetAdaptation(threshold) : default;
+
+    public void RecordAdaptiveKill(DamageType damageType, bool ranged)
+    {
+        if (!persistenceAvailable || archive == null)
+            return;
+        archive.RecordKill(damageType, ranged);
+        Save();
+    }
 
     private void Awake()
     {
@@ -121,6 +201,14 @@ public class DungeonMemory : MonoBehaviour
             if (archive == null || archive.version != 1 || archive.deaths == null)
                 throw new ArgumentException("Unsupported or invalid dungeon memory archive.");
 
+            if (archive.damageUses == null)
+                archive.damageUses = new List<DamageUse>();
+            archive.damageUses.RemoveAll(use => use == null || use.type == DamageType.None);
+            foreach (DamageUse use in archive.damageUses)
+            {
+                use.kills = Mathf.Max(0, use.kills);
+                use.rangedKills = Mathf.Max(0, use.rangedKills);
+            }
             archive.deaths.RemoveAll(death => death == null || string.IsNullOrEmpty(death.id));
             foreach (SavedDeath death in archive.deaths)
             {

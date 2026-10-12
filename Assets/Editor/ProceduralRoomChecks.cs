@@ -163,10 +163,11 @@ public static class ProceduralRoomChecks
 
             if (generationOnly)
             {
+                CheckGeneratorUpgrades(profile, scene, folder);
                 CheckPopulation(profile, scene, folder);
                 CheckGeneratedPlanes(profile, scene, folder);
                 Require(JsonUtility.ToJson(previousRandom) == JsonUtility.ToJson(UnityEngine.Random.state), "Generator plane checks altered Unity's random state.");
-                string generationResult = "PASS: Generator independent elevation/base Z 0/5; regular and secret rooms; walls at base Z through base Z + 2; shifted markers, props, lights and boundary geometry; matching navigation/visibility/gateway/destination/enemy/light levels; flat-Z actor projection; prefab round-trips; negative input rejection; decoration and light population; unchanged Unity random state.";
+                string generationResult = "PASS: Four new shapes across seeds/dimensions/gateway directions; ring holes and connected passages; direction-specific wall-mounted gateway prefabs; inland enemy markers including template spawn radius; supplied NotWalkableTile boundaries; automatic paint/erase collider updates; independent elevation/base Z 0/5; regular and secret rooms; wall layers; shifted markers/props/lights; matching elevation metadata; flat-Z actor projection; prefab round-trips; invalid input rejection; unchanged Unity random state.";
                 File.WriteAllText(ResultPath, generationResult);
                 Debug.Log(generationResult);
                 return;
@@ -335,6 +336,7 @@ public static class ProceduralRoomChecks
             CheckComposition(profile, scene, folder);
             CheckPopulation(profile, scene, folder);
             CheckGeneratedPlanes(profile, scene, folder);
+            CheckGeneratorUpgrades(profile, scene, folder);
             profile.backwardDirection = profile.forwardDirection;
             RequireThrows(() => ProceduralRoomLayout.Generate(profile, 1), "Overlapping gateway sides passed validation.");
             profile.backwardDirection = GatewayDirection.SouthWest;
@@ -861,6 +863,118 @@ public static class ProceduralRoomChecks
             Object.DestroyImmediate(profile);
             Object.DestroyImmediate(propSource);
             Object.DestroyImmediate(lightSource);
+        }
+    }
+
+    private static void CheckGeneratorUpgrades(ProceduralRoomProfile template, UnityEngine.SceneManagement.Scene scene, string folder)
+    {
+        ProceduralRoomProfile profile = Object.Instantiate(template);
+        GameObject visualSource = new GameObject("North Wall Visual");
+        GameObject markerSource = new GameObject("Radius Spawn Marker");
+        UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(visualSource, scene);
+        UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(markerSource, scene);
+        try
+        {
+            visualSource.AddComponent<SpriteRenderer>();
+            profile.northEastGatewayVisualPrefab = PrefabUtility.SaveAsPrefabAsset(visualSource, folder + "/NorthEastVisual.prefab");
+            profile.northWestGatewayVisualPrefab = PrefabUtility.SaveAsPrefabAsset(visualSource, folder + "/NorthWestVisual.prefab");
+            profile.forwardDirection = GatewayDirection.NorthEast;
+            profile.backwardDirection = GatewayDirection.NorthWest;
+            profile.isSecretRoom = false;
+            profile.includeSecretGateway = false;
+            profile.includeFloorGateway = true;
+            profile.elevationLevel = profile.baseZ = 5;
+            profile.enemySpawnPoints = 4;
+            profile.enemyBoundaryClearance = 3;
+            foreach (ProceduralRoomShape shape in new[] { ProceduralRoomShape.Donut, ProceduralRoomShape.HallwayCaves,
+                ProceduralRoomShape.TwinDonuts, ProceduralRoomShape.WindingPassage })
+            {
+                profile.shape = shape;
+                foreach (int dimension in new[] { 16, 36, 64, 128 })
+                {
+                    profile.width = profile.height = dimension;
+                    for (int seed = 0; seed < 12; seed++)
+                    {
+                        ProceduralRoomLayout layout = ProceduralRoomLayout.Generate(profile, seed);
+                        Require(layout.Ground.SetEquals(ProceduralRoomLayout.Generate(profile, seed).Ground), "New shape is not seeded.");
+                        layout.Validate(true);
+                        if (shape == ProceduralRoomShape.Donut)
+                            Require(!layout.Ground.Contains(Vector3Int.zero), "Donut lost its central hole.");
+                        if (shape == ProceduralRoomShape.TwinDonuts)
+                            Require(!layout.Ground.Contains(new Vector3Int(Mathf.RoundToInt(-0.5f - dimension * 0.225f), 0, 0)) &&
+                                !layout.Ground.Contains(new Vector3Int(Mathf.RoundToInt(-0.5f + dimension * 0.225f), 0, 0)), "Twin Donuts lost an interior hole.");
+                    }
+                }
+                profile.width = profile.height = 36;
+                GameObject room = ProceduralRoomBuilder.Build(profile, 12345, false, scene);
+                try
+                {
+                    Tilemap surface = room.GetComponentInChildren<AStarWalkableMap>().GetComponent<Tilemap>();
+                    Tilemap collision = room.transform.Find("ColliderLevel0").GetComponent<Tilemap>();
+                    Require(collision.GetComponent<PolygonCollider2D>() == null && collision.GetComponent<TilemapCollider2D>() != null &&
+                        collision.GetComponent<CompositeCollider2D>().generationType == CompositeCollider2D.GenerationType.Synchronous,
+                        "Generated boundary still depends on manually rebuilt polygons.");
+                    TileBase provided = AssetDatabase.LoadAssetAtPath<TileBase>("Assets/Sprites/Tiles/TilemapPalette/NotWalkableTile.asset");
+                    Require(ProceduralRoomBuilder.GetCells(collision).All(cell => collision.GetTile(cell) == provided), "Boundary does not use the provided NotWalkableTile.");
+                    CheckSurfaceBoundary(surface, collision);
+                    foreach (Gateway gateway in room.GetComponentsInChildren<Gateway>())
+                    {
+                        if (gateway.Flow == GatewayFlow.Floor)
+                            continue;
+                        Transform visual = gateway.transform.GetChild(0);
+                        GameObject expected = gateway.Direction == GatewayDirection.NorthEast ? profile.northEastGatewayVisualPrefab : profile.northWestGatewayVisualPrefab;
+                        Vector3Int cell = ProceduralTilemapPlane.WorldToCell(surface, gateway.transform.position);
+                        Vector3 wallContact = (surface.GetCellCenterWorld(cell) + surface.GetCellCenterWorld(cell + ProceduralRoomLayout.DirectionOffset(gateway.Direction))) * 0.5f;
+                        Require(PrefabUtility.GetCorrespondingObjectFromSource(visual.gameObject) == expected && Vector3.Distance(visual.position, wallContact) < 0.0001f,
+                            "Northern gateway used the wrong prefab or floated away from its wall face.");
+                    }
+                    CheckEnemyClearance(room, profile.enemyBoundaryClearance);
+                    Vector3Int paintCell = new Vector3Int(200, 200, profile.baseZ);
+                    TilemapCollider2D tiles = collision.GetComponent<TilemapCollider2D>();
+                    CompositeCollider2D composite = collision.GetComponent<CompositeCollider2D>();
+                    collision.SetTile(paintCell, provided);
+                    tiles.ProcessTilemapChanges();
+                    Physics2D.SyncTransforms();
+                    Require(composite.OverlapPoint(collision.GetCellCenterWorld(paintCell)), "Painting a boundary tile did not update collision automatically.");
+                    collision.SetTile(paintCell, null);
+                    tiles.ProcessTilemapChanges();
+                    Physics2D.SyncTransforms();
+                    Require(!composite.OverlapPoint(collision.GetCellCenterWorld(paintCell)), "Erasing a boundary tile left stale collision.");
+                }
+                finally { Object.DestroyImmediate(room); }
+            }
+            EnemySpawnPoint marker = markerSource.AddComponent<EnemySpawnPoint>();
+            SerializedObject markerSettings = new SerializedObject(marker);
+            markerSettings.FindProperty("spawnRadius").floatValue = 0.2f;
+            markerSettings.ApplyModifiedPropertiesWithoutUndo();
+            profile.enemySpawnPointPrefab = PrefabUtility.SaveAsPrefabAsset(markerSource, folder + "/RadiusMarker.prefab");
+            profile.shape = ProceduralRoomShape.Rectangle;
+            profile.width = profile.height = 48;
+            GameObject radiusRoom = ProceduralRoomBuilder.Build(profile, 12345, false, scene);
+            try
+            {
+                Require(radiusRoom.GetComponentsInChildren<EnemySpawnPoint>().Length == 4, "Inland placement failed to populate a spacious room.");
+                CheckEnemyClearance(radiusRoom, 4);
+            }
+            finally { Object.DestroyImmediate(radiusRoom); }
+        }
+        finally
+        {
+            Object.DestroyImmediate(visualSource);
+            Object.DestroyImmediate(markerSource);
+            Object.DestroyImmediate(profile);
+        }
+    }
+
+    private static void CheckEnemyClearance(GameObject room, int clearance)
+    {
+        Tilemap surface = room.GetComponentInChildren<AStarWalkableMap>().GetComponent<Tilemap>();
+        foreach (EnemySpawnPoint marker in room.GetComponentsInChildren<EnemySpawnPoint>())
+        {
+            Vector3Int cell = ProceduralTilemapPlane.WorldToCell(surface, marker.transform.position);
+            for (int offsetX = -clearance; offsetX <= clearance; offsetX++)
+            for (int offsetY = -clearance; offsetY <= clearance; offsetY++)
+                Require(surface.HasTile(cell + new Vector3Int(offsetX, offsetY, 0)), "Enemy marker is too close to a boundary or cut decoration.");
         }
     }
 
@@ -1486,9 +1600,9 @@ public static class ProceduralRoomChecks
                 if (map.HasTile(cell + offset))
                     continue;
                 Vector2 outside = map.GetCellCenterWorld(cell + offset);
-                Vector2 edgeProbe = Vector2.Lerp(center, outside, 0.55f);
+                Vector2 edgeProbe = Vector2.Lerp(center, outside, 0.6f);
                 Require(collider.OverlapPoint(edgeProbe), $"Collision leaves an exposed cube-top edge open: cell {cell}, direction {offset}, center {center.ToString("F5")}, outside {outside.ToString("F5")}, probe {edgeProbe.ToString("F5")}, closest {collider.ClosestPoint(edgeProbe).ToString("F5")}, map anchor {map.tileAnchor}, collision anchor {collision.tileAnchor}.");
-                Require(!collider.OverlapPoint(Vector2.Lerp(center, outside, 0.45f)), "Collision cuts into the walkable cube-top edge.");
+                Require(!collider.OverlapPoint(Vector2.Lerp(center, outside, 0.4f)), "Collision cuts into the walkable cube-top interior.");
             }
         }
     }

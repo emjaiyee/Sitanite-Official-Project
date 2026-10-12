@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class VeilOfFire : MonoBehaviour
 {
+    public WeaponAttackType SourceAttackType { get; set; } = WeaponAttackType.Spell;
+
     private readonly Dictionary<IDamageable, float> nextDamageTimes =
         new Dictionary<IDamageable, float>();
 
@@ -125,24 +127,30 @@ public class VeilOfFire : MonoBehaviour
             Mathf.RoundToInt(tertiaryDamage * damageScale);
 
         if (scaledPrimaryDamage > 0)
-            target.TakeDamage(
+            PlayerDamage.Deal(
+                target,
                 scaledPrimaryDamage,
                 DamageType.Fire,
-                transform.position
+                transform.position,
+                SourceAttackType
             );
 
         if (scaledSecondaryDamage > 0 && secondaryDamageType != DamageType.None)
-            target.TakeDamage(
+            PlayerDamage.Deal(
+                target,
                 scaledSecondaryDamage,
                 secondaryDamageType,
-                transform.position
+                transform.position,
+                SourceAttackType
             );
 
         if (scaledTertiaryDamage > 0 && tertiaryDamageType != DamageType.None)
-            target.TakeDamage(
+            PlayerDamage.Deal(
+                target,
                 scaledTertiaryDamage,
                 tertiaryDamageType,
-                transform.position
+                transform.position,
+                SourceAttackType
             );
     }
 }

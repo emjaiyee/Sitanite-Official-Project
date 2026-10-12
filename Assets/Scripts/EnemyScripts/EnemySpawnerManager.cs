@@ -106,6 +106,13 @@ public class EnemySpawnerManager : MonoBehaviour
     [Header("Floor References")]
     [SerializeField] private FloorManager floorManager;
 
+    [Header("Adaptive Regular Enemies")]
+    [SerializeField] private bool enableAdaptation = true;
+    [Min(1)] [SerializeField] private int adaptationKillThreshold = 50;
+    [Min(1f)] [SerializeField] private float adaptiveSpawnMultiplier = 1.5f;
+    [SerializeField] private List<GameObject> swarmMeleePrefabs = new List<GameObject>();
+    [SerializeField] private RegularEnemyNameUI regularEnemyNamePrefab;
+
     public event Action<RoomInstance> OnRoomWaveCleared;
     public event Action<EnemyHealth> OnBossSpawned;
 
@@ -122,6 +129,8 @@ public class EnemySpawnerManager : MonoBehaviour
         new Dictionary<RoomInstance, HashSet<EnemySpawnPoint>>();
     private readonly Dictionary<EnemySpawnPoint, Action> clearHandlers = new Dictionary<EnemySpawnPoint, Action>();
     private bool hasSpawnedFloorEnemies;
+    private bool adaptationFrozen;
+    private DungeonMemory.Adaptation floorAdaptation;
 
     private void Awake()
     {
@@ -159,6 +168,8 @@ public class EnemySpawnerManager : MonoBehaviour
         ActiveBossHealth = null;
         ActiveBossRoom = null;
         hasSpawnedFloorEnemies = false;
+        adaptationFrozen = false;
+        floorAdaptation = default;
         floorManager = floor;
     }
 
@@ -194,6 +205,7 @@ public class EnemySpawnerManager : MonoBehaviour
         if (dungeonMemory == null)
             dungeonMemory = FindFirstObjectByType<DungeonMemory>();
 
+        FreezeAdaptation();
         List<RoomInstance> eligibleRooms = GetEligibleBossRooms();
         GameObject fallenPrefab = GetFallenPrefab();
         DungeonMemory.SavedDeath fallen = eligibleRooms.Count > 0 && fallenPrefab != null && dungeonMemory != null && floorManager != null
@@ -222,6 +234,7 @@ public class EnemySpawnerManager : MonoBehaviour
         if (room == null || !registeredRooms.Contains(room))
             return;
 
+        FreezeAdaptation();
         EnemySpawnPoint[] spawnPoints =
             room.GetComponentsInChildren<EnemySpawnPoint>(true);
 
@@ -256,7 +269,7 @@ public class EnemySpawnerManager : MonoBehaviour
 
             spawnPointRooms[spawnPoint] = room;
 
-            GameObject enemyPrefab = GetRandomEnemyPrefab(configuration);
+            GameObject enemyPrefab = GetRegularEnemyPrefab(configuration);
             if (enemyPrefab == null)
             {
                 Debug.LogWarning(
@@ -266,7 +279,7 @@ public class EnemySpawnerManager : MonoBehaviour
                 continue;
             }
 
-            int enemyLevel = RollEnemyLevel(configuration);
+            int enemyLevel = floorAdaptation.Active ? 1 : RollEnemyLevel(configuration);
 
             Action handler = null;
             handler = () => HandleSpawnPointCleared(spawnPoint, handler);
@@ -276,12 +289,83 @@ public class EnemySpawnerManager : MonoBehaviour
             List<GameObject> spawnedEnemies = spawnPoint.SpawnEnemies(
                 enemyPrefab,
                 enemyLevel,
-                spawnParent
+                spawnParent,
+                floorAdaptation.Active ? Mathf.Max(1f, adaptiveSpawnMultiplier) : 1f,
+                floorAdaptation.Active ? 1.25f : 1f
             );
 
             foreach (GameObject enemy in spawnedEnemies)
-                ApplyModifiers(enemy, configuration);
+            {
+                if (floorAdaptation.Active)
+                {
+                    AdaptiveEnemy adaptation = enemy.GetComponent<AdaptiveEnemy>();
+                    if (adaptation == null)
+                        adaptation = enemy.AddComponent<AdaptiveEnemy>();
+                    PlayerStats player = Player.Instance != null ? Player.Instance.GetComponent<PlayerStats>() : null;
+                    adaptation.Configure(floorAdaptation, room, player);
+                }
+                else
+                    ApplyModifiers(enemy, configuration);
+
+                EnemyHealth health = enemy.GetComponent<EnemyHealth>();
+                if (regularEnemyNamePrefab != null && enemy.GetComponentInChildren<RegularEnemyNameUI>(true) == null)
+                    Instantiate(regularEnemyNamePrefab, enemy.transform).Bind(health);
+                foreach (RegularEnemyNameUI label in enemy.GetComponentsInChildren<RegularEnemyNameUI>(true))
+                    label.Bind(health);
+            }
         }
+    }
+
+    private void FreezeAdaptation()
+    {
+        if (adaptationFrozen)
+            return;
+        if (dungeonMemory == null)
+            dungeonMemory = FindFirstObjectByType<DungeonMemory>();
+        floorAdaptation = enableAdaptation && dungeonMemory != null
+            ? dungeonMemory.GetAdaptation(adaptationKillThreshold) : default;
+        adaptationFrozen = true;
+    }
+
+    private static bool IsRegularPrefab(GameObject prefab, bool meleeOnly)
+    {
+        if (prefab == null || prefab.GetComponent<EnemyLich>() != null || prefab.GetComponent<FallenDescender>() != null)
+            return false;
+        EnemyHealth health = prefab.GetComponent<EnemyHealth>();
+        if (health != null && health.IsMiniBoss)
+            return false;
+        return !meleeOnly || (prefab.GetComponent<EnemyMelee>() != null && prefab.GetComponent<EnemyRange>() == null);
+    }
+
+    private GameObject GetRegularEnemyPrefab(SpawnConfiguration configuration)
+    {
+        List<GameObject> pool = new List<GameObject>();
+        if (configuration != null)
+        {
+            foreach (GameObject prefab in configuration.enemyPrefabs)
+                if (IsRegularPrefab(prefab, floorAdaptation.swarm))
+                    pool.Add(prefab);
+        }
+        if (pool.Count == 0 && floorAdaptation.swarm)
+        {
+            foreach (GameObject prefab in swarmMeleePrefabs)
+                if (IsRegularPrefab(prefab, true))
+                    pool.Add(prefab);
+            if (pool.Count == 0)
+            {
+                foreach (SpawnConfiguration entry in spawnConfigurations)
+                {
+                    if (entry == null)
+                        continue;
+                    foreach (GameObject prefab in entry.enemyPrefabs)
+                        if (IsRegularPrefab(prefab, true) && !pool.Contains(prefab))
+                            pool.Add(prefab);
+                }
+            }
+            if (pool.Count == 0)
+                Debug.LogError("EnemySpawnerManager: Swarming needs a regular EnemyMelee prefab in Swarm Melee Prefabs or a floor configuration.", this);
+        }
+        return pool.Count > 0 ? pool[UnityEngine.Random.Range(0, pool.Count)] : null;
     }
 
     private SpawnConfiguration GetCurrentSpawnConfiguration()

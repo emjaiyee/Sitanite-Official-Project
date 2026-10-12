@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Typhoon : MonoBehaviour
 {
+    public WeaponAttackType SourceAttackType { get; set; } = WeaponAttackType.Spell;
+
     private readonly Dictionary<IDamageable, float> nextDamageTimes =
         new Dictionary<IDamageable, float>();
 
@@ -144,24 +146,30 @@ public class Typhoon : MonoBehaviour
             Mathf.RoundToInt(tertiaryDamage * damageScale);
 
         if (scaledPrimaryDamage > 0 && primaryDamageType != DamageType.None)
-            target.TakeDamage(
+            PlayerDamage.Deal(
+                target,
                 scaledPrimaryDamage,
                 primaryDamageType,
-                transform.position
+                transform.position,
+                SourceAttackType
             );
 
         if (scaledSecondaryDamage > 0 && secondaryDamageType != DamageType.None)
-            target.TakeDamage(
+            PlayerDamage.Deal(
+                target,
                 scaledSecondaryDamage,
                 secondaryDamageType,
-                transform.position
+                transform.position,
+                SourceAttackType
             );
 
         if (scaledTertiaryDamage > 0 && tertiaryDamageType != DamageType.None)
-            target.TakeDamage(
+            PlayerDamage.Deal(
+                target,
                 scaledTertiaryDamage,
                 tertiaryDamageType,
-                transform.position
+                transform.position,
+                SourceAttackType
             );
     }
 }

@@ -380,6 +380,7 @@ public class PlayerStats : MonoBehaviour
 
     public event Action<PlayerStats> Changed;
     public event Action Died;
+    public event Action<float, float> Damaged;
 
     // -------------------------------------------------
     // REGENERATION ACCUMULATORS
@@ -652,11 +653,19 @@ public class PlayerStats : MonoBehaviour
         float amount,
         DamageType damageType = DamageType.Slash,
         Vector3? damageSource = null,
-        EnemyHealth attacker = null)
+        EnemyHealth attacker = null,
+        DamageType adaptiveDamageType = DamageType.None)
     {
         if (amount <= 0 || IsDead || currentHealth <= 0)
             return;
 
+        if (adaptiveDamageType == DamageType.None)
+            adaptiveDamageType = AdaptiveEnemy.GetAdaptedDamageType(attacker);
+        if (adaptiveDamageType != DamageType.None)
+        {
+            damageType = adaptiveDamageType;
+            amount = AdaptiveEnemy.FairRawDamage(MaxHealth, GetDamageResistance(damageType));
+        }
         PlayerShieldDefense shieldDefense = GetComponent<PlayerShieldDefense>();
         bool wasBlocked = false;
         if (shieldDefense != null)
@@ -674,10 +683,12 @@ public class PlayerStats : MonoBehaviour
 
         amount = Mathf.Max(1f, amount - GetDamageResistance(damageType));
 
+        float healthBeforeDamage = currentHealth;
         currentHealth = Mathf.Max(
             0,
             currentHealth - amount
         );
+        float damageTaken = healthBeforeDamage - currentHealth;
 
         if (currentHealth > 0f)
         {
@@ -689,7 +700,9 @@ public class PlayerStats : MonoBehaviour
 
         PlayerSoundHelper sound = GetComponentInChildren<PlayerSoundHelper>(true);
         if (sound != null)
-            sound.PlayHurt();
+            sound.PlayHurt(damageTaken, healthBeforeDamage);
+
+        Damaged?.Invoke(damageTaken, healthBeforeDamage);
 
         // Show the damage number above the player, colored by type.
         DamagePopupSpawner.Spawn(transform, amount, damageType, 1f);

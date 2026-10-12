@@ -320,6 +320,7 @@ public static class ProceduralRoomComposer
             CompositeCollider2D composite = map.GetComponent<CompositeCollider2D>();
             composite.enabled = true;
             ProceduralRoomBuilder.RebuildBoundaryCollision(map);
+            map.GetComponent<TilemapCollider2D>().enabled = true;
         }
     }
 

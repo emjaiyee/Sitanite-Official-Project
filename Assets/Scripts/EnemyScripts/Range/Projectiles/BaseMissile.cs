@@ -3,10 +3,12 @@ using UnityEngine;
 public class BaseMissile : MonoBehaviour, IProjectileType
 {
     private EnemyHealth attacker;
+    private DamageType adaptiveDamageType;
 
     public void SetAttacker(EnemyHealth source)
     {
         attacker = source;
+        adaptiveDamageType = AdaptiveEnemy.GetAdaptedDamageType(source);
     }
 
 
@@ -292,7 +294,8 @@ public class BaseMissile : MonoBehaviour, IProjectileType
             damage,
             damageType,
             transform.position,
-            attacker);
+            attacker,
+            adaptiveDamageType);
 
         if (enableDebugLogs)
         {

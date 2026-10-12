@@ -189,6 +189,15 @@ public class PlayerStatsUI : MonoBehaviour
         if (EquipmentUpgradeMerchant.IsUIOpen)
             return;
 
+        if (inventory == null)
+            ResolveInventoryReference();
+
+        if (inventory != null && inventory.IsOpen)
+        {
+            inventory.SetInventoryState(false);
+            return;
+        }
+
         SetStatsWindowState(!IsOpen);
     }
 

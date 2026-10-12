@@ -8,7 +8,11 @@ public enum ProceduralRoomShape
     Rectangle,
     Chambers,
     Organic,
-    Cavern
+    Cavern,
+    Donut,
+    HallwayCaves,
+    TwinDonuts,
+    WindingPassage
 }
 
 [Flags]
@@ -88,8 +92,12 @@ public class ProceduralRoomProfile : ScriptableObject
     [HideInInspector] public int wallSortingOrder = 20;
 
     [Header("Gateways")]
-    [Tooltip("Optional visual prefab. The generator supplies the gateway trigger and progression components.")]
+    [HideInInspector]
     public GameObject gatewayVisualPrefab;
+    [Tooltip("Visual-only prefab for the North East wall face. Its root pivot is placed at the wall contact point.")]
+    public GameObject northEastGatewayVisualPrefab;
+    [Tooltip("Visual-only prefab for the North West wall face. Its root pivot is placed at the wall contact point.")]
+    public GameObject northWestGatewayVisualPrefab;
     public GatewayDirection forwardDirection = GatewayDirection.NorthEast;
     public GatewayDirection backwardDirection = GatewayDirection.SouthWest;
     public GatewayDirection secretRoomBackwardDirection = GatewayDirection.SouthEast;
@@ -122,6 +130,7 @@ public class ProceduralRoomProfile : ScriptableObject
 
     [Header("Population")]
     [Range(0, 24)] public int enemySpawnPoints = 6;
+    [Range(1, 8)] public int enemyBoundaryClearance = 3;
     [Tooltip("Optional configured marker prefab containing EnemySpawnPoint.")]
     public GameObject enemySpawnPointPrefab;
     public List<GameObject> decorationPrefabs = new List<GameObject>();

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Fire : MonoBehaviour
 {
+    public WeaponAttackType SourceAttackType { get; set; } = WeaponAttackType.Ranged;
+
     private int damage;
     private DamageType damageType;
 
@@ -120,10 +122,12 @@ public class Fire : MonoBehaviour
             if (damageType == DamageType.None)
                 continue;
 
-            target.TakeDamage(
+            PlayerDamage.Deal(
+                target,
                 damage,
                 damageType,
-                transform.position
+                transform.position,
+                SourceAttackType
             );
 
             damagedTargets.Add(target);

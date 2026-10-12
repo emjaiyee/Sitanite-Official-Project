@@ -58,6 +58,10 @@ public sealed class ProceduralRoomLayout
         {
             layout.CreateCavern(profile, random, minimumX, minimumY, maximumX, maximumY);
         }
+        else if (profile.shape >= ProceduralRoomShape.Donut && profile.shape <= ProceduralRoomShape.WindingPassage)
+        {
+            layout.CreatePassage(profile, random, minimumX, minimumY, maximumX, maximumY);
+        }
         else
         {
             layout.FillRectangle(minimumX, -halfWidth, maximumX, halfWidth);
@@ -141,7 +145,7 @@ public sealed class ProceduralRoomLayout
 
         foreach (Vector3Int cell in layout.Walkable)
         {
-            if (Math.Abs(cell.y) <= halfWidth || Math.Abs(cell.x) <= halfWidth)
+            if (profile.shape < ProceduralRoomShape.Donut && (Math.Abs(cell.y) <= halfWidth || Math.Abs(cell.x) <= halfWidth))
                 layout.Reserved.Add(cell);
         }
 
@@ -189,6 +193,122 @@ public sealed class ProceduralRoomLayout
     }
 
     private static int LandingDistance(Vector2 size) => Mathf.CeilToInt(size.y * 0.5f) + 2;
+
+    private void CreatePassage(ProceduralRoomProfile profile, System.Random random, int minimumX, int minimumY, int maximumX, int maximumY)
+    {
+        float centerX = (minimumX + maximumX) * 0.5f;
+        float centerY = (minimumY + maximumY) * 0.5f;
+        float radiusX = profile.width * 0.5f;
+        float radiusY = profile.height * 0.5f;
+        bool rings = profile.shape == ProceduralRoomShape.Donut || profile.shape == ProceduralRoomShape.TwinDonuts;
+        HashSet<Vector3Int> holes = new HashSet<Vector3Int>();
+        if (rings)
+        {
+            float thickness = profile.corridorHalfWidth * 2f + 1f + (float)random.NextDouble();
+            bool twin = profile.shape == ProceduralRoomShape.TwinDonuts;
+            float ringRadiusX = twin ? radiusX * 0.55f : radiusX;
+            float holeX = Mathf.Max(1f, ringRadiusX - thickness);
+            float holeY = Mathf.Max(1f, radiusY - thickness);
+            float[] centers = twin ? new[] { centerX - radiusX * 0.45f, centerX + radiusX * 0.45f } : new[] { centerX };
+            for (int cellX = minimumX; cellX <= maximumX; cellX++)
+            {
+                for (int cellY = minimumY; cellY <= maximumY; cellY++)
+                {
+                    Vector3Int cell = new Vector3Int(cellX, cellY, 0);
+                    bool outer = Array.Exists(centers, ringCenter =>
+                        Mathf.Pow((cellX - ringCenter) / ringRadiusX, 2f) + Mathf.Pow((cellY - centerY) / radiusY, 2f) <= 1f);
+                    bool hole = Array.Exists(centers, ringCenter =>
+                        Mathf.Pow((cellX - ringCenter) / holeX, 2f) + Mathf.Pow((cellY - centerY) / holeY, 2f) < 1f);
+                    if (hole)
+                        holes.Add(cell);
+                    if (outer && !hole)
+                        Ground.Add(cell);
+                }
+            }
+        }
+        else
+        {
+            float amplitude = Mathf.Max(0f, radiusY - profile.corridorHalfWidth - 3f) *
+                (profile.shape == ProceduralRoomShape.WindingPassage ? 0.85f : 0.35f);
+            float cycles = profile.shape == ProceduralRoomShape.WindingPassage ? 2f : 1f;
+            float phase = (float)random.NextDouble() * Mathf.PI * 2f;
+            int samples = profile.width * 4;
+            for (int sample = 0; sample <= samples; sample++)
+            {
+                float progress = sample / (float)samples;
+                Vector2 center = new Vector2(Mathf.Lerp(minimumX, maximumX, progress),
+                    centerY + Mathf.Sin(progress * cycles * Mathf.PI + phase) * amplitude);
+                int radius = profile.corridorHalfWidth + 1 + (int)(Mathf.Sin(progress * Mathf.PI * 6f + phase) * 0.5f + 0.5f);
+                FillCavernDisc(center, radius, minimumX, minimumY, maximumX, maximumY, false);
+            }
+        }
+        CarvePassageApproach(profile.EntranceDirection, profile.backwardColliderSize, profile, minimumX, minimumY, maximumX, maximumY);
+        if (!profile.isSecretRoom)
+            CarvePassageApproach(profile.forwardDirection, profile.forwardColliderSize, profile, minimumX, minimumY, maximumX, maximumY);
+        if (profile.UsesSecretEntrance)
+            CarvePassageApproach(profile.secretDirection, profile.secretColliderSize, profile, minimumX, minimumY, maximumX, maximumY);
+        Ground.ExceptWith(holes);
+        Reserved.IntersectWith(Ground);
+        ReserveGatewayRoute(EdgeCell(profile.EntranceDirection, minimumX, minimumY, maximumX, maximumY),
+            EdgeCell(profile.isSecretRoom ? profile.EntranceDirection : profile.forwardDirection, minimumX, minimumY, maximumX, maximumY));
+    }
+
+    private void CarvePassageApproach(GatewayDirection direction, Vector2 size, ProceduralRoomProfile profile,
+        int minimumX, int minimumY, int maximumX, int maximumY)
+    {
+        Vector3Int edge = EdgeCell(direction, minimumX, minimumY, maximumX, maximumY);
+        Vector3Int inward = -DirectionOffset(direction);
+        int depth = LandingDistance(size);
+        Vector3Int landing = edge + inward * depth;
+        Vector3Int nearest = landing;
+        int distance = int.MaxValue;
+        foreach (Vector3Int cell in OrderedCells(Ground))
+        {
+            int candidateDistance = (cell - landing).sqrMagnitude;
+            if (candidateDistance < distance)
+            {
+                nearest = cell;
+                distance = candidateDistance;
+            }
+        }
+        for (int step = 0; step <= depth; step++)
+            FillCavernDisc((Vector2Int)(edge + inward * step), profile.corridorHalfWidth, minimumX, minimumY, maximumX, maximumY, true);
+        Vector3Int current = landing;
+        while (current != nearest)
+        {
+            current += current.x != nearest.x ? new Vector3Int(Math.Sign(nearest.x - current.x), 0, 0) :
+                new Vector3Int(0, Math.Sign(nearest.y - current.y), 0);
+            FillCavernDisc((Vector2Int)current, profile.corridorHalfWidth, minimumX, minimumY, maximumX, maximumY, true);
+        }
+    }
+
+    private void ReserveGatewayRoute(Vector3Int start, Vector3Int end)
+    {
+        Dictionary<Vector3Int, Vector3Int> previous = new Dictionary<Vector3Int, Vector3Int> { [start] = start };
+        Queue<Vector3Int> pending = new Queue<Vector3Int>();
+        pending.Enqueue(start);
+        while (pending.Count > 0 && !previous.ContainsKey(end))
+        {
+            Vector3Int cell = pending.Dequeue();
+            foreach (Vector3Int offset in Neighbors)
+            {
+                Vector3Int next = cell + offset;
+                if (Ground.Contains(next) && !previous.ContainsKey(next))
+                {
+                    previous.Add(next, cell);
+                    pending.Enqueue(next);
+                }
+            }
+        }
+        if (!previous.ContainsKey(end))
+            throw new InvalidOperationException("Passage gateways are disconnected.");
+        for (Vector3Int cell = end; ; cell = previous[cell])
+        {
+            Reserved.Add(cell);
+            if (cell == start)
+                break;
+        }
+    }
 
     private void CreateCavern(ProceduralRoomProfile profile, System.Random random, int minimumX, int minimumY, int maximumX, int maximumY)
     {

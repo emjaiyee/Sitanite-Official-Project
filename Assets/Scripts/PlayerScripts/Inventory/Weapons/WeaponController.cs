@@ -41,6 +41,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private float indicatorPulseTimer;
     private float nextAttackTime;
     private float nextSkillTime;
+    private float attackDamageMultiplier = 1f;
     private Coroutine spinAxeRoutine;
     private BossBalance.HostileDamage enemyDamage;
     private Transform enemyOwner;
@@ -185,9 +186,33 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
  
 public void Attack(Vector2 direction)
 {
-    if (!IsConfigured() || !CanAttack)
+    Attack(direction, 1f);
+}
+
+public void Attack(Vector2 direction, float damageMultiplier)
+{
+    Attack(direction, damageMultiplier, false);
+}
+
+public void Attack(Vector2 direction, float damageMultiplier, bool isCounterAttack)
+{
+    if (!IsConfigured() || !CanAttack ||
+        direction.sqrMagnitude <= 0.0001f)
         return;
 
+    attackDamageMultiplier = Mathf.Max(1f, damageMultiplier);
+    try
+    {
+        PerformAttack(direction, isCounterAttack);
+    }
+    finally
+    {
+        attackDamageMultiplier = 1f;
+    }
+}
+
+private void PerformAttack(Vector2 direction, bool isCounterAttack)
+{
     if (direction.sqrMagnitude <= 0.0001f)
         return;
 
@@ -218,7 +243,7 @@ public void Attack(Vector2 direction)
     {
         case WeaponAttackType.Melee:
 
-            AttackMelee(direction);
+            AttackMelee(direction, isCounterAttack);
 
             break;
 
@@ -235,7 +260,8 @@ public void Attack(Vector2 direction)
                 data.AttackRange,
                 GetPrimaryDamage(),
                 projectileSpeed,
-                direction
+                direction,
+                counterHitVisualPrefab: isCounterAttack ? data.AttackVisualPrefab : null
             );
 
             break;
@@ -251,7 +277,7 @@ public void Attack(Vector2 direction)
 }
 
 
-    private void AttackMelee(Vector2 direction)
+    private void AttackMelee(Vector2 direction, bool isCounterAttack)
     {
         if (attackPoint == null)
         {
@@ -303,26 +329,39 @@ public void Attack(Vector2 direction)
                     (target as MonoBehaviour)?.transform))
                 continue;
 
-            ApplyMeleeDamage(target, primaryDamage);
+            ApplyMeleeDamage(target, primaryDamage, isCounterAttack);
         }
     }
 
-    private void ApplyMeleeDamage(IDamageable target, int primaryDamage)
+    private void ApplyMeleeDamage(
+        IDamageable target,
+        int primaryDamage,
+        bool isCounterAttack)
     {
         Vector3 source = WeaponOwner.position;
+        if (isCounterAttack &&
+            target is EnemyHealth enemyHealth &&
+            ((primaryDamage > 0 && data.PrimaryDamageType != DamageType.None) ||
+             (GetWeaponDamage(DamageSlot.Secondary) > 0 &&
+              data.GetDamageType(DamageSlot.Secondary) != DamageType.None) ||
+             (GetWeaponDamage(DamageSlot.Tertiary) > 0 &&
+              data.GetDamageType(DamageSlot.Tertiary) != DamageType.None)))
+        {
+            enemyHealth.PlayCounterHitVisual(data.AttackVisualPrefab, source);
+        }
 
         if (primaryDamage > 0 && data.PrimaryDamageType != DamageType.None)
-            target.TakeDamage(primaryDamage, data.PrimaryDamageType, source);
+            PlayerDamage.Deal(target, primaryDamage, data.PrimaryDamageType, source, data.WeaponAttackType);
 
-        int secondaryDamage = data.GetDamage(DamageSlot.Secondary);
+        int secondaryDamage = GetWeaponDamage(DamageSlot.Secondary);
         DamageType secondaryDamageType = data.GetDamageType(DamageSlot.Secondary);
         if (secondaryDamage > 0 && secondaryDamageType != DamageType.None)
-            target.TakeDamage(secondaryDamage, secondaryDamageType, source);
+            PlayerDamage.Deal(target, secondaryDamage, secondaryDamageType, source, data.WeaponAttackType);
 
-        int tertiaryDamage = data.GetDamage(DamageSlot.Tertiary);
+        int tertiaryDamage = GetWeaponDamage(DamageSlot.Tertiary);
         DamageType tertiaryDamageType = data.GetDamageType(DamageSlot.Tertiary);
         if (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)
-            target.TakeDamage(tertiaryDamage, tertiaryDamageType, source);
+            PlayerDamage.Deal(target, tertiaryDamage, tertiaryDamageType, source, data.WeaponAttackType);
     }
 
     // =========================================================
@@ -567,6 +606,7 @@ private void UseCrossbowExplosionSkill(Vector2 direction)
         $"Fire Radius: {data.FireRadius}"
     );
 
+    explosiveArrow.SourceAttackType = data.WeaponAttackType;
     explosiveArrow.InitializeExplosive(
         primaryDamage,
         primaryDamageType,
@@ -921,6 +961,7 @@ private void UseStabSkill(Vector2 direction)
             return;
         }
 
+        typhoon.SourceAttackType = data.WeaponAttackType;
         typhoon.Initialize(
             data.GetSkillDamage(
                 DamageSlot.Primary,
@@ -970,6 +1011,7 @@ private void UseStabSkill(Vector2 direction)
         if (veil == null)
             veil = veilObject.AddComponent<VeilOfFire>();
 
+        veil.SourceAttackType = data.WeaponAttackType;
         veil.Initialize(
             data.GetSkillDamage(
                 DamageSlot.Primary,
@@ -1093,6 +1135,10 @@ private void UseStabSkill(Vector2 direction)
                 ? data.SkillDuration / (projectileCount - 1)
                 : 0f;
 
+        GameObject arrowPrefab = enemyDamage == null && data.ProjectilePrefab != null
+            ? data.ProjectilePrefab
+            : data.SkillProjectilePrefab;
+
         for (int index = 0;
              index < projectileCount;
              index++)
@@ -1109,16 +1155,34 @@ private void UseStabSkill(Vector2 direction)
                     0f
                 );
 
-            if (data.SkillProjectilePrefab != null)
+            if (arrowPrefab != null)
             {
-                GameObject visual =
+                GameObject arrow =
                     Instantiate(
-                        data.SkillProjectilePrefab,
+                        arrowPrefab,
                         landingPosition + Vector3.up * 2f,
                         Quaternion.Euler(0f, 0f, -90f)
                     );
 
-                Destroy(visual, 0.4f);
+                if (enemyDamage != null)
+                {
+                    Destroy(arrow, 0.4f);
+                }
+                else
+                {
+                    foreach (Collider2D arrowCollider in
+                             arrow.GetComponentsInChildren<Collider2D>())
+                    {
+                        arrowCollider.enabled = false;
+                    }
+
+                    StartCoroutine(
+                        AnimateArrowRainProjectile(
+                            arrow,
+                            landingPosition
+                        )
+                    );
+                }
             }
 
             Collider2D[] hits =
@@ -1133,6 +1197,33 @@ private void UseStabSkill(Vector2 direction)
             if (index < projectileCount - 1)
                 yield return new WaitForSeconds(delay);
         }
+    }
+
+    private IEnumerator AnimateArrowRainProjectile(
+        GameObject arrow,
+        Vector3 landingPosition)
+    {
+        Vector3 startPosition = arrow.transform.position;
+        const float fallDuration = 0.4f;
+        float elapsed = 0f;
+
+        while (elapsed < fallDuration)
+        {
+            if (arrow == null)
+                yield break;
+
+            elapsed += Time.deltaTime;
+            arrow.transform.position =
+                Vector3.Lerp(
+                    startPosition,
+                    landingPosition,
+                    elapsed / fallDuration
+                );
+
+            yield return null;
+        }
+
+        Destroy(arrow);
     }
 
     // =========================================================
@@ -1345,6 +1436,7 @@ public void ReleaseSkill(bool fullyCharged)
             return;
         }
 
+        beam.SourceAttackType = data.WeaponAttackType;
         beam.Initialize(
             damage,
             data.PrimaryDamageType,
@@ -1388,7 +1480,8 @@ public void ReleaseSkill(bool fullyCharged)
         float speed,
         Vector2 direction,
         bool isSkill = false,
-        DamageType primaryDamageTypeOverride = DamageType.None)
+        DamageType primaryDamageTypeOverride = DamageType.None,
+        GameObject counterHitVisualPrefab = null)
     {
         if (projectilePrefab == null ||
             firePoint == null)
@@ -1452,6 +1545,8 @@ public void ReleaseSkill(bool fullyCharged)
             return;
         }
 
+        if (projectileComponent is ProjectileBase trackedProjectile)
+            trackedProjectile.SourceAttackType = data.WeaponAttackType;
         if (isSkill)
         {
             DamageType primaryDamageType =
@@ -1497,6 +1592,12 @@ public void ReleaseSkill(bool fullyCharged)
                 data.Homing,
                 Physics2D.AllLayers
             );
+
+            if (counterHitVisualPrefab != null &&
+                projectileComponent is ProjectileBase projectileBase)
+            {
+                projectileBase.SetCounterHitVisual(counterHitVisualPrefab);
+            }
         }
     }
 
@@ -1558,10 +1659,12 @@ public void ReleaseSkill(bool fullyCharged)
         if (damage > 0 &&
             damageType != DamageType.None)
         {
-            target.TakeDamage(
+            PlayerDamage.Deal(
+                target,
                 damage,
                 damageType,
-                WeaponOwner.position
+                WeaponOwner.position,
+                data.WeaponAttackType
             );
         }
     }
@@ -1596,7 +1699,11 @@ public void ReleaseSkill(bool fullyCharged)
             return Mathf.Max(0, rawDamage + Mathf.RoundToInt(stat != null ? stat.damage : 0f));
         }
         if (playerStats == null)
-            return rawDamage;
+        {
+            return Mathf.RoundToInt(
+                rawDamage * GetWeaponUpgradeMultiplier()
+            );
+        }
 
         float baseDamage = playerStats.GetPreEquipmentDamage(data.PrimaryDamageType);
         if (EquipmentManager.Instance != null)
@@ -1608,7 +1715,8 @@ public void ReleaseSkill(bool fullyCharged)
             );
         }
 
-        return Mathf.RoundToInt(baseDamage) + rawDamage;
+        return Mathf.RoundToInt(baseDamage) +
+            Mathf.RoundToInt(rawDamage * GetWeaponUpgradeMultiplier());
     }
 
     /// <summary>
@@ -1627,7 +1735,9 @@ public void ReleaseSkill(bool fullyCharged)
             DungeonMemory.DamageStat stat = enemyDamage.Hits.Find(hit => hit.type == data.PrimaryDamageType);
             return Mathf.Max(0, rawDamage + Mathf.RoundToInt((stat != null ? stat.damage : 0f) * 0.5f));
         }
-        int damage = rawDamage + data.GetDamage(DamageSlot.Primary);
+        int damage =
+            Mathf.RoundToInt(rawDamage * GetWeaponUpgradeMultiplier()) +
+            GetWeaponDamage(DamageSlot.Primary);
 
         if (playerStats == null)
             return damage;
@@ -1651,7 +1761,11 @@ public void ReleaseSkill(bool fullyCharged)
     private int GetPrimaryDamage()
     {
         if (playerStats == null)
-            return data.PrimaryDamage;
+            return Mathf.RoundToInt(
+                data.PrimaryDamage *
+                GetWeaponUpgradeMultiplier() *
+                attackDamageMultiplier
+            );
 
         float damage =
             playerStats.GetEffectiveDamage(
@@ -1663,9 +1777,25 @@ public void ReleaseSkill(bool fullyCharged)
         // A default weapon assigned directly bypasses the manager, so its
         // ItemData damage has to be added here.
         if (!IsWeaponRegisteredInEquipment())
-            damage += data.PrimaryDamage;
+            damage += data.PrimaryDamage * GetWeaponUpgradeMultiplier();
 
-        return Mathf.RoundToInt(damage);
+        return Mathf.RoundToInt(damage * attackDamageMultiplier);
+    }
+
+    private float GetWeaponUpgradeMultiplier()
+    {
+        return enemyDamage != null || EquipmentManager.Instance == null
+            ? 1f
+            : EquipmentManager.Instance.GetWeaponUpgradeMultiplier(data);
+    }
+
+    private int GetWeaponDamage(DamageSlot slot)
+    {
+        return Mathf.RoundToInt(
+            data.GetDamage(slot) *
+            GetWeaponUpgradeMultiplier() *
+            attackDamageMultiplier
+        );
     }
 
     private bool IsWeaponRegisteredInEquipment()

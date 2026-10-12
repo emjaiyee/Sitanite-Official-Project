@@ -12,6 +12,7 @@ using Object = UnityEngine.Object;
 public static class ProceduralRoomBuilder
 {
     public static readonly Vector3 CellSize = new Vector3(0.32f, 0.16f, 2f);
+    private const string BoundaryTilePath = "Assets/Sprites/Tiles/TilemapPalette/NotWalkableTile.asset";
 
     public static GameObject Build(ProceduralRoomProfile profile, int seed, bool registerUndo = true, Scene targetScene = default)
     {
@@ -48,7 +49,7 @@ public static class ProceduralRoomBuilder
 
             PaintVisuals(ground, layout.Ground, profile.groundTiles, profile.groundEdges, layout.Ground, true, random);
             PaintVisuals(walls, layout.VisualWalls, profile.wallTiles, profile.wallEdges, layout.Ground, false, random);
-            Paint(collision, layout.Walls, profile.collisionTile);
+            Paint(collision, layout.Walls, BoundaryTile(profile));
 
             Rigidbody2D body = collision.gameObject.AddComponent<Rigidbody2D>();
             body.bodyType = RigidbodyType2D.Static;
@@ -58,7 +59,7 @@ public static class ProceduralRoomBuilder
 
             AddVisibility(ground, null, null);
             AddVisibility(walls, null, null);
-            AddVisibility(collision, null, composite);
+            AddVisibility(collision, collision.GetComponent<TilemapCollider2D>(), composite);
 
             Transform helpers = Child(root.transform, "RoomMarkers").transform;
             GameObject spawn = Child(helpers, "PlayerSpawn");
@@ -141,11 +142,9 @@ public static class ProceduralRoomBuilder
         }
         if (profile.collisionTile == null)
         {
-            Tile tile = ScriptableObject.CreateInstance<Tile>();
-            tile.name = "Invisible Grid Collision";
-            tile.colliderType = Tile.ColliderType.Grid;
-            AssetDatabase.AddObjectToAsset(tile, profile);
-            profile.collisionTile = tile;
+            profile.collisionTile = AssetDatabase.LoadAssetAtPath<TileBase>(BoundaryTilePath);
+            if (profile.collisionTile == null)
+                throw new InvalidOperationException("The supplied NotWalkableTile asset could not be found.");
         }
         EditorUtility.SetDirty(profile);
         AssetDatabase.SaveAssetIfDirty(profile);
@@ -292,8 +291,8 @@ public static class ProceduralRoomBuilder
                 {
                     Vector3Int neighbor = cell + new Vector3Int(offsetX, offsetY, 0);
                     if (!groundCells.Contains(neighbor) &&
-                        (!collision.HasTile(neighbor) || collision.GetColliderType(neighbor) != Tile.ColliderType.Grid))
-                        throw new InvalidOperationException("Ground boundary has a missing Grid collision tile. Update ColliderLevel0 after editing ground.");
+                        (!collision.HasTile(neighbor) || collision.GetColliderType(neighbor) == Tile.ColliderType.None))
+                        throw new InvalidOperationException("Ground boundary has a missing collision tile. Paint NotWalkableTile on ColliderLevel0 after editing ground.");
                 }
             }
         }
@@ -335,29 +334,53 @@ public static class ProceduralRoomBuilder
         if (collision == null || collision.GetComponent<CompositeCollider2D>() == null)
             throw new InvalidOperationException("Select the generated ColliderLevel0 map with its CompositeCollider2D.");
         PolygonCollider2D polygon = collision.GetComponent<PolygonCollider2D>();
-        if (polygon == null)
-            polygon = collision.gameObject.AddComponent<PolygonCollider2D>();
+        if (polygon != null)
+            Object.DestroyImmediate(polygon);
+        TilemapCollider2D tiles = collision.GetComponent<TilemapCollider2D>();
+        if (tiles == null)
+            tiles = collision.gameObject.AddComponent<TilemapCollider2D>();
+        tiles.compositeOperation = Collider2D.CompositeOperation.Merge;
         CompositeCollider2D composite = collision.GetComponent<CompositeCollider2D>();
-        composite.generationType = CompositeCollider2D.GenerationType.Manual;
-        polygon.compositeOperation = Collider2D.CompositeOperation.Merge;
-        List<Vector3Int> cells = ProceduralRoomLayout.OrderedCells(GetCells(collision));
-        polygon.pathCount = cells.Count;
-        foreach (Vector3Int cell in cells)
+        composite.generationType = CompositeCollider2D.GenerationType.Synchronous;
+        Tile spriteTile = GetCells(collision).Select(collision.GetTile).OfType<Tile>().FirstOrDefault(tile =>
+            tile.sprite != null && tile.colliderType == Tile.ColliderType.Sprite);
+        if (spriteTile != null)
         {
-            if (collision.GetColliderType(cell) != Tile.ColliderType.Grid)
-                throw new InvalidOperationException("Boundary collision tiles must use Grid collider metadata.");
+            List<Vector2> points = new List<Vector2>();
+            Bounds bounds = default;
+            bool hasPoint = false;
+            for (int shape = 0; shape < spriteTile.sprite.GetPhysicsShapeCount(); shape++)
+            {
+                spriteTile.sprite.GetPhysicsShape(shape, points);
+                foreach (Vector2 point in points)
+                {
+                    if (!hasPoint)
+                        bounds = new Bounds(point, Vector3.zero);
+                    else
+                        bounds.Encapsulate(point);
+                    hasPoint = true;
+                }
+            }
+            tiles.offset = hasPoint ? -(Vector2)bounds.center : Vector2.zero;
         }
-        for (int index = 0; index < cells.Count; index++)
+        foreach (Vector3Int cell in GetCells(collision))
         {
-            Vector3Int cell = cells[index];
-            Vector3 centerWorld = collision.GetCellCenterWorld(cell);
-            Vector2 center = collision.transform.InverseTransformPoint(centerWorld);
-            Vector2 axisX = (Vector2)collision.transform.InverseTransformVector(collision.GetCellCenterWorld(cell + Vector3Int.right) - centerWorld) * 0.5f;
-            Vector2 axisY = (Vector2)collision.transform.InverseTransformVector(collision.GetCellCenterWorld(cell + Vector3Int.up) - centerWorld) * 0.5f;
-            polygon.SetPath(index, new[] { center + axisX + axisY, center - axisX + axisY,
-                center - axisX - axisY, center + axisX - axisY });
+            if (collision.GetColliderType(cell) == Tile.ColliderType.None)
+                throw new InvalidOperationException("Boundary tiles need Sprite or Grid collision metadata.");
         }
+        tiles.ProcessTilemapChanges();
         composite.GenerateGeometry();
+    }
+
+    private static TileBase BoundaryTile(ProceduralRoomProfile profile)
+    {
+        Tile tile = profile.collisionTile as Tile;
+        if (tile != null && tile.sprite != null && tile.colliderType != Tile.ColliderType.None)
+            return tile;
+        TileBase provided = AssetDatabase.LoadAssetAtPath<TileBase>(BoundaryTilePath);
+        if (provided == null)
+            throw new InvalidOperationException("Assign a sprite collision tile or restore the supplied NotWalkableTile asset.");
+        return provided;
     }
 
     private static void ValidateProfile(ProceduralRoomProfile profile)
@@ -394,10 +417,14 @@ public static class ProceduralRoomBuilder
         if (profile.enemySpawnPointPrefab != null && (!PrefabUtility.IsPartOfPrefabAsset(profile.enemySpawnPointPrefab) ||
             profile.enemySpawnPointPrefab.GetComponentsInChildren<EnemySpawnPoint>(true).Length != 1))
             throw new InvalidOperationException("Enemy Spawn Point Prefab must be a prefab containing exactly one EnemySpawnPoint.");
-        if (profile.gatewayVisualPrefab != null && (!PrefabUtility.IsPartOfPrefabAsset(profile.gatewayVisualPrefab) ||
-            profile.gatewayVisualPrefab.GetComponentsInChildren<Collider2D>(true).Length > 0 ||
-            profile.gatewayVisualPrefab.GetComponentsInChildren<Gateway>(true).Length > 0))
-            throw new InvalidOperationException("Gateway Visual Prefab must be a visual-only prefab without colliders or Gateway components.");
+        foreach (GameObject prefab in new[] { profile.northEastGatewayVisualPrefab, profile.northWestGatewayVisualPrefab, profile.gatewayVisualPrefab })
+        {
+            if (prefab != null && (!PrefabUtility.IsPartOfPrefabAsset(prefab) ||
+                prefab.GetComponentsInChildren<Collider2D>(true).Length > 0 || prefab.GetComponentsInChildren<Gateway>(true).Length > 0))
+                throw new InvalidOperationException("Gateway visual prefabs must be visual-only prefabs without colliders or Gateway components.");
+        }
+        if (profile.enemyBoundaryClearance < 1 || profile.enemyBoundaryClearance > 8)
+            throw new InvalidOperationException("Enemy Boundary Clearance must be 1-8 cells.");
         if (profile.southGatewayLightPrefab != null && (!PrefabUtility.IsPartOfPrefabAsset(profile.southGatewayLightPrefab) ||
             profile.southGatewayLightPrefab.GetComponentsInChildren<Light2D>(true).Length != 1 ||
             profile.southGatewayLightPrefab.GetComponentsInChildren<Collider2D>(true).Length != 0 ||
@@ -695,11 +722,17 @@ public static class ProceduralRoomBuilder
                 light.pointLightInnerRadius = profile.southGatewayLightRadius * 0.25f;
             }
         }
-        else if (profile.gatewayVisualPrefab != null)
+        else
         {
-            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(profile.gatewayVisualPrefab, gateway.transform);
-            instance.transform.localPosition = Vector3.zero;
-            visual = instance.GetComponentInChildren<SpriteRenderer>(true);
+            GameObject prefab = direction == GatewayDirection.NorthEast ? profile.northEastGatewayVisualPrefab : profile.northWestGatewayVisualPrefab;
+            if (prefab == null)
+                prefab = profile.gatewayVisualPrefab;
+            if (prefab != null)
+            {
+                GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab, gateway.transform);
+                instance.transform.position = (map.GetCellCenterWorld(cell) + map.GetCellCenterWorld(cell + outward)) * 0.5f;
+                visual = instance.GetComponentInChildren<SpriteRenderer>(true);
+            }
         }
         GatewayVisibility visibility = secretEntrance ? gateway.AddComponent<GatewaySecretVisibility>() : gateway.AddComponent<GatewayVisibility>();
         Configure(visibility, serialized =>
@@ -915,8 +948,12 @@ public static class ProceduralRoomBuilder
     private static void PlaceEnemies(GameObject root, Tilemap map, ProceduralRoomLayout layout, ProceduralRoomProfile profile, System.Random random)
     {
         Transform parent = Child(root.transform, "EnemySpawnPoints").transform;
+        float spawnRadius = profile.enemySpawnPointPrefab != null
+            ? new SerializedObject(profile.enemySpawnPointPrefab.GetComponentInChildren<EnemySpawnPoint>(true)).FindProperty("spawnRadius").floatValue : 0f;
+        int clearance = Math.Max(profile.enemyBoundaryClearance, Mathf.CeilToInt(Mathf.Max(0f, spawnRadius) / (CellSize.y * 0.5f)) + 1);
         List<Vector3Int> candidates = ProceduralRoomLayout.OrderedCells(layout.Walkable.Where(cell =>
-            (cell - layout.PlayerSpawn).sqrMagnitude >= 36 && !layout.Reserved.Contains(cell)));
+            (cell - layout.PlayerSpawn).sqrMagnitude >= 36 && !layout.Reserved.Contains(cell) &&
+            HasEnemyClearance(layout.Walkable, cell, clearance)));
         Shuffle(candidates, random);
         List<Vector3Int> placed = new List<Vector3Int>();
         foreach (Vector3Int cell in candidates)
@@ -950,6 +987,19 @@ public static class ProceduralRoomBuilder
         }
         if (placed.Count < profile.enemySpawnPoints)
             Debug.LogWarning($"{root.name}: placed {placed.Count}/{profile.enemySpawnPoints} enemy markers with safe spacing.", root);
+    }
+
+    private static bool HasEnemyClearance(HashSet<Vector3Int> walkable, Vector3Int cell, int clearance)
+    {
+        for (int offsetX = -clearance; offsetX <= clearance; offsetX++)
+        {
+            for (int offsetY = -clearance; offsetY <= clearance; offsetY++)
+            {
+                if (!walkable.Contains(cell + new Vector3Int(offsetX, offsetY, 0)))
+                    return false;
+            }
+        }
+        return true;
     }
 
     private static void Shuffle<T>(List<T> values, System.Random random)
@@ -986,7 +1036,9 @@ public class ProceduralRoomProfileEditor : Editor
             enterChildren = false;
             if (property.name == "m_Script")
                 continue;
-            if ((cavern && property.name == "chamberCount") || (!cavern && property.name.StartsWith("cavern", StringComparison.Ordinal)))
+            bool chambers = serializedObject.FindProperty("shape").enumValueIndex == (int)ProceduralRoomShape.Chambers ||
+                serializedObject.FindProperty("shape").enumValueIndex == (int)ProceduralRoomShape.Organic;
+            if ((!chambers && property.name == "chamberCount") || (!cavern && property.name.StartsWith("cavern", StringComparison.Ordinal)))
                 continue;
             if ((secret && (property.name == "forwardDirection" || property.name == "backwardDirection" || property.name == "forwardColliderSize" ||
                 property.name == "includeFloorGateway" || property.name.StartsWith("trapdoor", StringComparison.Ordinal) ||
@@ -1101,26 +1153,6 @@ public class ProceduralRoomWindow : EditorWindow
         {
             using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("Rebuild Boundary"))
-                    Perform(() =>
-                    {
-                        Tilemap[] collisions = editableRoom.GetComponentsInChildren<Tilemap>().Where(map =>
-                            map.name.StartsWith("ColliderLevel", StringComparison.Ordinal) && map.GetComponent<CompositeCollider2D>() != null).ToArray();
-                        if (collisions.Length == 0)
-                            throw new InvalidOperationException("Edited Room has no generated level collision maps.");
-                        int undoGroup = Undo.GetCurrentGroup();
-                        Undo.SetCurrentGroupName("Rebuild Room Boundary");
-                        foreach (Tilemap collision in collisions)
-                        {
-                            PolygonCollider2D polygon = collision.GetComponent<PolygonCollider2D>();
-                            if (polygon == null)
-                                Undo.AddComponent<PolygonCollider2D>(collision.gameObject);
-                            Undo.RecordObjects(new Object[] { collision.GetComponent<PolygonCollider2D>(), collision.GetComponent<CompositeCollider2D>() }, "Rebuild Room Boundary");
-                            ProceduralRoomBuilder.RebuildBoundaryCollision(collision);
-                        }
-                        Undo.CollapseUndoOperations(undoGroup);
-                        status = $"Rebuilt exact surface-aligned boundary polygons on {collisions.Length} elevation maps.";
-                    });
                 if (GUILayout.Button("Validate Edited Room"))
                     Perform(() => ProceduralRoomBuilder.ValidateRoom(editableRoom));
                 if (GUILayout.Button("Bake New Prefab"))

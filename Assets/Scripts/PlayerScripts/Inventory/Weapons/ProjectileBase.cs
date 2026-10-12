@@ -3,6 +3,8 @@ using UnityEngine;
 
 public abstract class ProjectileBase : MonoBehaviour, IProjectile
 {
+    public WeaponAttackType SourceAttackType { get; set; } = WeaponAttackType.Ranged;
+
     [Header("Damage")]
     [SerializeField] private LayerMask hittableLayers;
 
@@ -23,6 +25,7 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private Vector3 startPosition;
     private bool initialized;
+    private GameObject counterHitVisualPrefab;
     private List<DungeonMemory.DamageStat> enemyHits;
     private int enemyElevation;
     private bool enemyHit;
@@ -90,6 +93,14 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private void Awake()
     {
+        Rigidbody2D projectileBody = GetComponent<Rigidbody2D>();
+        if (projectileBody == null)
+            projectileBody = gameObject.AddComponent<Rigidbody2D>();
+
+        projectileBody.bodyType = RigidbodyType2D.Kinematic;
+        projectileBody.gravityScale = 0f;
+        projectileBody.simulated = true;
+        projectileBody.useFullKinematicContacts = true;
     }
 
     public void Initialize(
@@ -117,6 +128,11 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         initialized = true;
 
         OnInitialized();
+    }
+
+    public void SetCounterHitVisual(GameObject visualPrefab)
+    {
+        counterHitVisualPrefab = visualPrefab;
     }
 
     public void InitializeSkill(
@@ -203,13 +219,6 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
             return;
         }
 
-        // Check layer
-        if ((hittableLayers.value &
-             (1 << other.gameObject.layer)) == 0)
-        {
-            return;
-        }
-
         // Find damageable target
         IDamageable target =
             other.GetComponentInParent<IDamageable>();
@@ -227,29 +236,44 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         // Normal projectile damage
         if (ShouldDealDirectDamage)
         {
-            target.TakeDamage(
+            if (counterHitVisualPrefab != null &&
+                target is EnemyHealth enemyHealth)
+            {
+                enemyHealth.PlayCounterHitVisual(
+                    counterHitVisualPrefab,
+                    startPosition
+                );
+            }
+
+            PlayerDamage.Deal(
+                target,
                 damage,
                 damageType,
-                startPosition
+                startPosition,
+                SourceAttackType
             );
 
             if (secondaryDamage > 0 &&
                 secondaryDamageType != DamageType.None)
             {
-                target.TakeDamage(
+                PlayerDamage.Deal(
+                    target,
                     secondaryDamage,
                     secondaryDamageType,
-                    startPosition
+                    startPosition,
+                    SourceAttackType
                 );
             }
 
             if (tertiaryDamage > 0 &&
                 tertiaryDamageType != DamageType.None)
             {
-                target.TakeDamage(
+                PlayerDamage.Deal(
+                    target,
                     tertiaryDamage,
                     tertiaryDamageType,
-                    startPosition
+                    startPosition,
+                    SourceAttackType
                 );
             }
         }

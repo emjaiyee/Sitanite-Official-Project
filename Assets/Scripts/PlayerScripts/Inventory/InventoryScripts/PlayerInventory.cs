@@ -200,6 +200,18 @@ public class PlayerInventory : MonoBehaviour
     /// </summary>
     public void ToggleInventory()
     {
+        if (EquipmentUpgradeMerchant.IsUIOpen)
+            return;
+
+        if (statsUI == null)
+            statsUI = FindFirstObjectByType<PlayerStatsUI>(FindObjectsInactive.Include);
+
+        if (statsUI != null && statsUI.IsOpen)
+        {
+            statsUI.SetStatsWindowState(false);
+            return;
+        }
+
         if (inventoryPanel == null)
         {
             Debug.LogWarning(

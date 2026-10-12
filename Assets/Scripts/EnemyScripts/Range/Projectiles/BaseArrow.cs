@@ -4,10 +4,12 @@ using UnityEngine;
 public class BaseArrow : MonoBehaviour, IProjectileType
 {
     private EnemyHealth attacker;
+    private DamageType adaptiveDamageType;
 
     public void SetAttacker(EnemyHealth source)
     {
         attacker = source;
+        adaptiveDamageType = AdaptiveEnemy.GetAdaptedDamageType(source);
     }
 
     [Header("Collision")]
@@ -273,7 +275,8 @@ public class BaseArrow : MonoBehaviour, IProjectileType
             damage,
             damageType,
             transform.position,
-            attacker);
+            attacker,
+            adaptiveDamageType);
 
         if (enableDebugLogs)
         {

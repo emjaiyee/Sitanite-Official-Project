@@ -16,6 +16,59 @@ The scripts do not change your existing scene hierarchy or create placeholder ar
 
 `BreakablePotManager` must remain active and have its usual loot prefab assigned. Remembered loot uses its exact-item overload and the same A* walkability checks as pot drops. Body and loot objects belong to the selected generated room and are cleaned up with that floor.
 
+## Regular Enemy Names and Adaptation
+
+### Name UI
+
+1. Create a separate **World Space** Canvas prefab for regular-enemy labels, with a TMP text above the enemy. Size and position it for the game's world units. Disable raycasts on the TMP text; this canvas is not the boss health bar or death-results canvas.
+2. Add `RegularEnemyNameUI` to that prefab and assign **Name Text**. Leave **Enemy Health** empty when using it as a reusable prefab: the spawner binds the owner. Assign the prefab to **EnemySpawnerManager > Adaptive Regular Enemies > Regular Enemy Name Prefab**. Alternatively, place the canvas and component directly under each regular enemy prefab; do not do both.
+3. Set **EnemyHealth > Run Statistics > Enemy Name** on regular enemy prefabs. The label displays `Name | Lvl N`, using `EnemyLevelXP.Level`. An empty name falls back to the prefab object name without `(Clone)`. Mini-bosses, Liches, Fallen Descenders and dead enemies leave this separate label blank. Existing boss labels are unchanged.
+
+### Counters and Floor Selection
+
+- **Enable Adaptation** defaults to true, **Adaptation Kill Threshold** to 50, and **Adaptive Spawn Multiplier** to 1.5. The multiplier increases the number of regular enemies requested at each active spawn point, rounded up. Spawn placement still respects available space; the search radius and clearance increase for larger enemies.
+- Player-caused enemy deaths count once, using the lethal damage type and the firing weapon's attack category. Player projectiles, beams and lingering effects retain that category even after a weapon swap. Training dummies, pots, chests and uncredited environmental damage do not count.
+- Damage-type scores are persistent in the existing dungeon-memory archive across floors, deaths, restarts and new characters. A kill adds 1 to its type and subtracts 1 from every other type, never below zero. Scores are not consumed when adaptation triggers. Existing saved death records are preserved, and older archives start with zero scores.
+- The spawner freezes a snapshot before the floor's enemies spawn. A score of at least 50 adapts the **next generated floor**, not enemies already alive on the current floor. Switching damage types can lower the score below 50 and remove adaptation on a later floor. All regular enemies on an adapted floor receive the selected resistance; boss spawning is exempt.
+- Ranged and Spell kills also add to a separate persistent histogram. Switching between ranged types does not reduce that histogram; each melee kill subtracts 1 from every ranged type with a positive count. At 50 pooled ranged kills, swarming takes priority and selects the type with the most ranged kills even if its ordinary resistance score is below 50. Ties retain the first recorded type. For example, 30 lightning and 20 fire ranged kills produce lightning-resistant swarming enemies.
+- Swarming selects only regular `EnemyMelee` prefabs, never `EnemyRange`, mini-bosses, Liches or Fallen Descenders. It first uses melee prefabs on the current floor, then **Swarm Melee Prefabs**, then melee prefabs in the other regular floor configurations. Supply a melee fallback if every configured floor is ranged-only. A missing melee source logs an error rather than quietly spawning ranged enemies.
+- Swarming enemies detect the player anywhere in their assigned room as soon as `PlayerRoomTracker` reports entry. They still use the existing A* movement, elevation, attack range, cooldowns and windups. They do not acquire the player through a neighboring room.
+
+### Special Enemy Rules
+
+The spawner skips its additive health, resistance, damage, level and XP rolls for adapted regular enemies. Their base prefab stats use level 1. Adaptation itself does not apply ordinary level stat scaling or alter ItemData assets.
+
+For each incoming damage application of the adapted type, let $D$ be the final player attack damage, already calculated by the normal weapon pipeline from base stats, equipment, upgrades and skill multipliers. Sample an integer $r$ from 1 through 5:
+
+$$R_{enemy}=\max(0,D-r),\qquad D_{received}=\max(1,D-R_{enemy}).$$
+
+This leaves 1-5 damage for that type even for upgraded weapons and charged skills; other damage types use normal enemy resistance. A multi-type weapon can still hurt through its non-adapted slots. The displayed resistance records the latest calculated value, rather than a fixed value that a weapon swap could invalidate.
+
+Adapted enemy attacks use the same type they resist. Let $H$ be the player's equipped maximum health and $R_{player}$ the current resistance of that type, including equipped gear:
+
+$$D_{raw}=\max(1,0.05H)+R_{player}.$$
+
+The existing player resistance subtraction leaves about 5% of maximum HP per unblocked hit. Shield blocks and parries still reduce or cancel the hit; the existing minimum-damage rule applies for health below 20. Enemy projectiles retain the adapted type even if their shooter dies before impact, and splash damage deduplicates player colliders.
+
+Adapted enemies have X/Y scale 1.25, preserve Z scale and flipping, and receive the following name prefixes:
+
+| Resistance | Prefix |
+| --- | --- |
+| Blunt, Pierce, Slash, Stab, Physical | Thick Skinned |
+| Frost | Icy |
+| Poison | Venomous |
+| Lightning | Conduit |
+| Psychic | Clairvoyant |
+| Necrosis | Rotting |
+| Water | Dripping |
+| Earth | Stone-scaled |
+| Fire | Burnt |
+| Air | Aero |
+
+`AdaptiveEnemy` creates translucent child SpriteRenderers to follow the source sprite, flip, size, sorting and opacity each frame. It never changes the original renderer's color, so the original animation and hit-flash logic remain intact. Highlights reuse damage-number colors, with light gray for all physical types, orange for fire and light blue for lightning. Overlay strength is 40% of the source alpha.
+
+In Edit Mode, run **Tools > Dungeon Memory > Run Adaptation Checks**. The focused checks use temporary objects, restore player/equipment singletons and random state, and do not write PlayerPrefs. Their result is logged and written to `Temp/DungeonAdaptationChecks.result`. In Play Mode, verify the world-space label position, colored animations, crowded-room placement, projectile hits, and room-entry swarming with the actual prefab artwork and UI references.
+
 ## Fallen Descender Prefab
 
 1. Create an enemy prefab with `FallenDescender` on the root. It requires `EnemyHealth`, `Rigidbody2D`, `EnemyElevationLevel`, and `FallenDescenderLevelXP`; Unity adds those automatically. For an existing prefab, remove `EnemyLevelXP` and add `FallenDescenderLevelXP` instead. The spawn point also adds the new tracker if needed and disables a leftover regular XP component. Add a non-trigger `Collider2D` for the body. Use your usual enemy layer, never the Player tag/layer. Gravity is disabled and rotation frozen by the brain. Do not attach `Player`, `PlayerStats`, player input/movement scripts, `EquipmentManager`, or any of the regular enemy FSMs.

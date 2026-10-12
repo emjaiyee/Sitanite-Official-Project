@@ -4,6 +4,8 @@ using UnityEngine.Rendering.Universal;
 
 public class Beam : MonoBehaviour
 {
+    public WeaponAttackType SourceAttackType { get; set; } = WeaponAttackType.Spell;
+
     private const float AppearDuration = 0.12f;
     private const float PulseFrequency = 8f;
     private const float PulseAmount = 0.12f;
@@ -184,12 +186,12 @@ public class Beam : MonoBehaviour
         int tertiary = Mathf.RoundToInt(tertiaryDamage * damageScale);
 
         if (primary > 0 && primaryDamageType != DamageType.None)
-            target.TakeDamage(primary, primaryDamageType, transform.position);
+            PlayerDamage.Deal(target, primary, primaryDamageType, transform.position, SourceAttackType);
 
         if (secondary > 0 && secondaryDamageType != DamageType.None)
-            target.TakeDamage(secondary, secondaryDamageType, transform.position);
+            PlayerDamage.Deal(target, secondary, secondaryDamageType, transform.position, SourceAttackType);
 
         if (tertiary > 0 && tertiaryDamageType != DamageType.None)
-            target.TakeDamage(tertiary, tertiaryDamageType, transform.position);
+            PlayerDamage.Deal(target, tertiary, tertiaryDamageType, transform.position, SourceAttackType);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,11 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 {
     [Header("Health")]
     [SerializeField] private int maxHealth = 10;
+
+    [Header("Damage Feedback")]
+    [SerializeField] private Color damageFlashColor = new Color(1f, 0.25f, 0.25f, 1f);
+    [Min(0.01f)]
+    [SerializeField] private float damageFlashDuration = 0.12f;
 
     [Header("Run Statistics")]
     [SerializeField] private bool isMiniBoss;
@@ -43,6 +49,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
     private bool hasDied;
     private Dictionary<DamageType, float> configuredResistances;
+    private bool playerHit;
+    private WeaponAttackType playerAttackType;
+    private DamageType lastDamageType;
+    private AdaptiveEnemy adaptation;
 
     public bool HasConfiguredStats => configuredResistances != null;
 
@@ -76,6 +86,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     }
 
     private bool baseStatsCached;
+    private Coroutine damageFlashRoutine;
+    private SpriteRenderer[] damageFeedbackRenderers;
+    private Color[] originalRendererColors;
     private int baseMaxHealth;
     private float basePierceResistanceValue;
     private float baseStabResistanceValue;
@@ -100,9 +113,15 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     private void Awake()
     {
         CacheBaseStats();
+        CacheDamageFeedbackRenderers();
         CurrentHealth = maxHealth;
         runtimeCurrentHealth = CurrentHealth;
         hasDied = false;
+    }
+
+    private void OnDisable()
+    {
+        StopDamageFlash(restoreColors: true);
     }
 
     public void ApplyLevelScaling(int level)
@@ -227,13 +246,20 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         if (CurrentHealth <= 0)
             return;
 
-
-        amount = Mathf.RoundToInt(
+        lastDamageType = damageType;
+        if (adaptation == null)
+            adaptation = GetComponent<AdaptiveEnemy>();
+        amount = adaptation != null && !isMiniBoss && adaptation.Matches(damageType)
+            ? adaptation.Mitigate(amount, damageType)
+            : Mathf.RoundToInt(
             Mathf.Max(1f, amount - GetDamageResistance(damageType))
         );
 
         CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
         runtimeCurrentHealth = CurrentHealth;
+
+        if (CurrentHealth > 0)
+            StartDamageFlash();
 
         // Show the damage number above the enemy, colored by type.
         DamagePopupSpawner.Spawn(transform, amount, damageType, 0.8f);
@@ -255,8 +281,45 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         }
     }
 
+    public void TakePlayerDamage(int amount, DamageType type, Vector3? source, WeaponAttackType attackType)
+    {
+        playerHit = true;
+        playerAttackType = attackType;
+        try
+        {
+            TakeDamage(amount, type, source);
+        }
+        finally
+        {
+            playerHit = false;
+        }
+    }
+
+    public void PlayCounterHitVisual(GameObject visualPrefab, Vector3 sourcePosition)
+    {
+        if (visualPrefab == null || hasDied || CurrentHealth <= 0)
+            return;
+
+        Vector2 direction = (Vector2)(transform.position - sourcePosition);
+        float angle = direction.sqrMagnitude > 0.0001f
+            ? Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg
+            : 0f;
+        GameObject visual = Instantiate(
+            visualPrefab,
+            transform.position,
+            Quaternion.Euler(0f, 0f, angle)
+        );
+
+        if (visual.GetComponentInChildren<SpriteArrayVisual>() == null)
+            Destroy(visual, 0.5f);
+    }
+
     public float GetDamageResistance(DamageType damageType)
     {
+        if (adaptation == null)
+            adaptation = GetComponent<AdaptiveEnemy>();
+        if (adaptation != null && !isMiniBoss && adaptation.Matches(damageType))
+            return adaptation.DamageResistance;
         if (configuredResistances != null)
         {
             foreach (DamageType type in BossBalance.DamageTypes())
@@ -322,6 +385,91 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         baseFireResistanceValue = baseFireResistance;
         baseAirResistanceValue = baseAirResistance;
         basePhysicalResistanceValue = basePhysicalResistance;
+    }
+
+    private void CacheDamageFeedbackRenderers()
+    {
+        damageFeedbackRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+        originalRendererColors = new Color[damageFeedbackRenderers.Length];
+
+        for (int index = 0; index < damageFeedbackRenderers.Length; index++)
+            originalRendererColors[index] = damageFeedbackRenderers[index].color;
+    }
+
+    private void StartDamageFlash()
+    {
+        if (damageFeedbackRenderers == null || damageFeedbackRenderers.Length == 0)
+            return;
+
+        StopDamageFlash(restoreColors: false);
+        damageFlashRoutine = StartCoroutine(PlayDamageFlash());
+    }
+
+    private IEnumerator PlayDamageFlash()
+    {
+        float halfDuration = Mathf.Max(0.01f, damageFlashDuration) * 0.5f;
+        float elapsed = 0f;
+
+        while (elapsed < halfDuration * 2f)
+        {
+            elapsed += Time.deltaTime;
+            float progress = elapsed < halfDuration
+                ? elapsed / halfDuration
+                : 1f - ((elapsed - halfDuration) / halfDuration);
+            ApplyDamageFlash(Mathf.Clamp01(progress));
+            yield return null;
+        }
+
+        RestoreDamageFeedbackColors();
+        damageFlashRoutine = null;
+    }
+
+    private void ApplyDamageFlash(float amount)
+    {
+        for (int index = 0; index < damageFeedbackRenderers.Length; index++)
+        {
+            SpriteRenderer spriteRenderer = damageFeedbackRenderers[index];
+            if (spriteRenderer == null)
+                continue;
+
+            Color originalColor = originalRendererColors[index];
+            Color flashColor = damageFlashColor;
+            Color currentColor = spriteRenderer.color;
+            flashColor.a = currentColor.a;
+
+            Color result = Color.Lerp(originalColor, flashColor, amount);
+            result.a = currentColor.a;
+            spriteRenderer.color = result;
+        }
+    }
+
+    private void StopDamageFlash(bool restoreColors)
+    {
+        if (damageFlashRoutine != null)
+        {
+            StopCoroutine(damageFlashRoutine);
+            damageFlashRoutine = null;
+        }
+
+        if (restoreColors)
+            RestoreDamageFeedbackColors();
+    }
+
+    private void RestoreDamageFeedbackColors()
+    {
+        if (damageFeedbackRenderers == null)
+            return;
+
+        for (int index = 0; index < damageFeedbackRenderers.Length; index++)
+        {
+            SpriteRenderer spriteRenderer = damageFeedbackRenderers[index];
+            if (spriteRenderer == null)
+                continue;
+
+            Color restoredColor = originalRendererColors[index];
+            restoredColor.a = spriteRenderer.color.a;
+            spriteRenderer.color = restoredColor;
+        }
     }
 
     private static float GetScaledBonus(int level, float perLevelBonus)
@@ -411,6 +559,12 @@ public class EnemyHealth : MonoBehaviour, IDamageable
 
         hasDied = true;
 
+        if (playerHit && Player.Instance != null)
+        {
+            DungeonMemory memory = FindFirstObjectByType<DungeonMemory>();
+            if (memory != null)
+                memory.RecordAdaptiveKill(lastDamageType, playerAttackType != WeaponAttackType.Melee);
+        }
         if (Player.Instance != null)
         {
             Player.Instance.RecordEnemyDefeated(

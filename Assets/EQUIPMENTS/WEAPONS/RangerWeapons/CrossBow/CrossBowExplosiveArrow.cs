@@ -188,10 +188,12 @@ private void Detonate(Vector3 position)
         if (damageType == DamageType.None)
             return;
 
-        target.TakeDamage(
+        PlayerDamage.Deal(
+            target,
             damage,
             damageType,
-            damageSource
+            damageSource,
+            SourceAttackType
         );
     }
 
@@ -253,9 +255,10 @@ private void Detonate(Vector3 position)
     }
     else
     {
+        fireComponent.SourceAttackType = SourceAttackType;
         fireComponent.Initialize(
             fireDamage,
-            PrimaryDamageType,
+            DamageType.Fire,
             fireRadius,
             fireDuration,
             fireTickInterval,

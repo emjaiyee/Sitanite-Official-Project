@@ -14,11 +14,15 @@ public static class DungeonMemoryChecks
 {
     private static readonly string RequestPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Temp/DungeonMemoryChecks.request"));
     private static readonly string ResultPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Temp/DungeonMemoryChecks.result"));
+    private static readonly string AdaptationRequestPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Temp/DungeonAdaptationChecks.request"));
+    private static readonly string AdaptationResultPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Temp/DungeonAdaptationChecks.result"));
 
     static DungeonMemoryChecks()
     {
         if (File.Exists(RequestPath))
             EditorApplication.delayCall += RunRequestedChecks;
+        if (File.Exists(AdaptationRequestPath))
+            EditorApplication.delayCall += RunAdaptationChecks;
     }
 
     private static void RunRequestedChecks()
@@ -93,6 +97,210 @@ public static class DungeonMemoryChecks
         catch (Exception exception)
         {
             Debug.LogException(exception);
+        }
+    }
+
+    [MenuItem("Tools/Dungeon Memory/Run Adaptation Checks")]
+    public static void RunAdaptationChecks()
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode)
+        {
+            File.WriteAllText(AdaptationResultPath, "BLOCKED: Exit Play Mode and run Tools > Dungeon Memory > Run Adaptation Checks.");
+            return;
+        }
+        if (File.Exists(AdaptationRequestPath))
+            File.Delete(AdaptationRequestPath);
+        Random.State previousRandomState = Random.state;
+        try
+        {
+            CheckAdaptationCounters();
+            CheckAdaptiveEnemy();
+            const string result = "PASS: Persistent 50-kill damage counters and competing decay; pooled 30/20 ranged swarming; floor snapshot freezing; exact resistant-type 1-5 damage; equipped health/resistance 5% formula; all titles; boss exemption; 1.25 scale and non-destructive animated overlays; melee-only filtering, increased spawn counts and regular enemy label separation.";
+            File.WriteAllText(AdaptationResultPath, result);
+            Debug.Log(result);
+        }
+        catch (Exception exception)
+        {
+            File.WriteAllText(AdaptationResultPath, $"FAIL: {exception}");
+            Debug.LogException(exception);
+        }
+        finally
+        {
+            Random.state = previousRandomState;
+        }
+    }
+
+    private static void CheckAdaptationCounters()
+    {
+        DungeonMemory.Archive archive = new DungeonMemory.Archive();
+        for (int index = 0; index < 49; index++)
+            archive.RecordKill(DamageType.Fire, false);
+        Require(!archive.GetAdaptation().Active, "Resistance triggered before 50 kills.");
+        archive.RecordKill(DamageType.Fire, false);
+        DungeonMemory.Adaptation snapshot = archive.GetAdaptation();
+        Require(snapshot.damageType == DamageType.Fire && !snapshot.swarm, "50 melee kills did not trigger fire resistance alone.");
+        archive.RecordKill(DamageType.Lightning, false);
+        Require(!archive.GetAdaptation().Active && archive.damageUses.Find(use => use.type == DamageType.Fire).kills == 49 &&
+            snapshot.damageType == DamageType.Fire, "Changing damage types did not decay counters or mutated the frozen floor snapshot.");
+        DungeonMemory.Archive ranged = new DungeonMemory.Archive();
+        for (int index = 0; index < 30; index++)
+            ranged.RecordKill(DamageType.Lightning, true);
+        for (int index = 0; index < 19; index++)
+            ranged.RecordKill(DamageType.Fire, true);
+        Require(!ranged.GetAdaptation().Active, "Ranged swarming triggered before 50 pooled kills.");
+        ranged.RecordKill(DamageType.Fire, true);
+        DungeonMemory.Adaptation swarm = ranged.GetAdaptation();
+        Require(swarm.swarm && swarm.damageType == DamageType.Lightning, "30 lightning plus 20 fire kills did not swarm with lightning resistance.");
+        DungeonMemory.Archive restored = JsonUtility.FromJson<DungeonMemory.Archive>(JsonUtility.ToJson(ranged));
+        Require(restored.GetAdaptation().swarm && restored.GetAdaptation().damageType == DamageType.Lightning &&
+            restored.damageUses.Find(use => use.type == DamageType.Fire).rangedKills == 20, "Adaptation counters did not survive archive JSON roundtrip.");
+        restored.RecordKill(DamageType.Pierce, false);
+        Require(!restored.GetAdaptation().swarm && restored.damageUses.Find(use => use.type == DamageType.Lightning).rangedKills == 29,
+            "Melee kills did not reduce pooled ranged usage.");
+        DungeonMemory.Archive legacy = JsonUtility.FromJson<DungeonMemory.Archive>("{\"version\":1,\"deaths\":[]}");
+        Require(!legacy.GetAdaptation().Active, "Old archives unexpectedly acquired adaptation.");
+        legacy.RecordKill(DamageType.None, true);
+        Require(!legacy.GetAdaptation().Active, "An untyped kill triggered adaptation.");
+    }
+
+    private static void CheckAdaptiveEnemy()
+    {
+        GameObject root = TemporaryObject("Adaptation Check", false);
+        GameObject playerObject = TemporaryObject("Adaptive Player", false);
+        EquipmentManager previousEquipment = EquipmentManager.Instance;
+        Player previousPlayer = Player.Instance;
+        Texture2D texture = new Texture2D(4, 2);
+        Sprite firstSprite = Sprite.Create(texture, new Rect(0, 0, 2, 2), Vector2.one * 0.5f);
+        Sprite secondSprite = Sprite.Create(texture, new Rect(2, 0, 2, 2), Vector2.one * 0.5f);
+        ItemData armour = ScriptableObject.CreateInstance<ItemData>();
+        try
+        {
+            EquipmentManager equipment = root.AddComponent<EquipmentManager>();
+            typeof(EquipmentManager).GetProperty("Instance").GetSetMethod(true).Invoke(null, new object[] { equipment });
+            SetField(armour, "statModifiers", new List<EquipmentStat>
+            {
+                new EquipmentStat { statType = StatType.Health, value = 100f },
+                new EquipmentStat { statType = StatType.DamageResistance, damageType = DamageType.Fire, value = 12f }
+            });
+            Dictionary<EquipmentType, InventoryItem> slots = (Dictionary<EquipmentType, InventoryItem>)typeof(EquipmentManager)
+                .GetField("currentEquipment", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(equipment);
+            slots[EquipmentType.Chestplate] = new InventoryItem(armour);
+            playerObject.AddComponent<PlayerAttributesNTraits>();
+            PlayerStats player = playerObject.GetComponent<PlayerStats>();
+            if (player == null)
+                player = playerObject.AddComponent<PlayerStats>();
+            player.maxHealth = 100f;
+            player.baseFireResistance = 3f;
+            Require(player.MaxHealth == 200f && player.GetDamageResistance(DamageType.Fire) == 15f, "Equipped test health/resistance were not applied.");
+            float raw = AdaptiveEnemy.FairRawDamage(player.MaxHealth, player.GetDamageResistance(DamageType.Fire));
+            Require(raw == 25f && raw - player.GetDamageResistance(DamageType.Fire) == player.MaxHealth * 0.05f,
+                "Adaptive hit failed to leave 5% of geared maximum health after resistance.");
+
+            EnemyHealth health = root.AddComponent<EnemyHealth>();
+            health.Init(100);
+            health.SetEnemyName("Brute Goblin");
+            SpriteRenderer source = root.AddComponent<SpriteRenderer>();
+            source.sprite = firstSprite;
+            source.color = new Color(0.3f, 0.5f, 0.8f, 0.5f);
+            Color originalColor = source.color;
+            AdaptiveEnemy adaptive = root.AddComponent<AdaptiveEnemy>();
+            adaptive.Configure(new DungeonMemory.Adaptation { damageType = DamageType.Fire, swarm = true }, root.AddComponent<RoomInstance>(), player);
+            Require(health.EnemyName == "Burnt Brute Goblin" && root.transform.localScale.x == 1.25f && root.transform.localScale.y == 1.25f,
+                "Adaptive title or 1.25 scale was missing.");
+            HashSet<int> remainingValues = new HashSet<int>();
+            Random.InitState(2048);
+            for (int index = 0; index < 128; index++)
+            {
+                int remaining = adaptive.Mitigate(200 + index, DamageType.Fire);
+                remainingValues.Add(remaining);
+                Require(remaining >= 1 && remaining <= 5 && Mathf.Approximately(200 + index - adaptive.DamageResistance, remaining),
+                    "Adaptive resistance did not leave randomized 1-5 damage.");
+            }
+            Require(remainingValues.Count == 5 && adaptive.Mitigate(80, DamageType.Lightning) == 80, "Adaptive resistance affected another type or did not vary.");
+            foreach (DamageType type in BossBalance.DamageTypes())
+                Require(!string.IsNullOrWhiteSpace(AdaptiveEnemy.Title(type)), "An adaptive damage type is missing its title.");
+            Require(AdaptiveEnemy.Title(DamageType.Physical) == "Thick Skinned" && AdaptiveEnemy.Title(DamageType.Lightning) == "Conduit" &&
+                AdaptiveEnemy.Title(DamageType.Earth) == "Stone-scaled", "Adaptive titles did not match the requested labels.");
+            source.sprite = secondSprite;
+            source.flipX = true;
+            source.sortingOrder = 14;
+            Invoke(adaptive, "SyncHighlights");
+            SpriteRenderer overlay = root.transform.Find("Adaptation Highlight").GetComponent<SpriteRenderer>();
+            Require(overlay.sprite == secondSprite && overlay.flipX && overlay.sortingOrder == 15 && Mathf.Approximately(overlay.color.a, 0.2f) &&
+                source.color == originalColor, "Adaptation highlight failed to follow animation or changed the original renderer color.");
+
+            GameObject bossObject = TemporaryObject("Exempt Boss", false);
+            bossObject.transform.SetParent(root.transform);
+            EnemyHealth boss = bossObject.AddComponent<EnemyHealth>();
+            SetField(boss, "isMiniBoss", true);
+            AdaptiveEnemy exempt = bossObject.AddComponent<AdaptiveEnemy>();
+            exempt.Configure(new DungeonMemory.Adaptation { damageType = DamageType.Fire }, null, player);
+            Require(!exempt.Active && bossObject.transform.localScale == Vector3.one, "Mini-boss acquired adaptive modifiers.");
+
+            GameObject textObject = new GameObject("Regular Name", typeof(RectTransform));
+            textObject.transform.SetParent(root.transform);
+            TMP_Text text = textObject.AddComponent<TextMeshProUGUI>();
+            RegularEnemyNameUI label = textObject.AddComponent<RegularEnemyNameUI>();
+            SetField(label, "nameText", text);
+            root.AddComponent<EnemyLevelXP>().SetLevel(3);
+            label.Bind(health);
+            Require(text.text == "Burnt Brute Goblin | Lvl 3", "Separate regular label did not display the adaptive title and level.");
+            label.Bind(boss);
+            Require(text.text == string.Empty, "Regular label displayed a boss.");
+
+            Player actor = playerObject.AddComponent<Player>();
+            typeof(Player).GetProperty("Instance").GetSetMethod(true).Invoke(null, new object[] { actor });
+            PlayerRoomTracker tracker = playerObject.AddComponent<PlayerRoomTracker>();
+            typeof(PlayerRoomTracker).GetProperty("CurrentRoom").GetSetMethod(true).Invoke(tracker, new object[] { root.GetComponent<RoomInstance>() });
+            Require(adaptive.DetectsPlayerInRoom(), "Swarming did not detect the player in its room.");
+            typeof(PlayerRoomTracker).GetProperty("CurrentRoom").GetSetMethod(true).Invoke(tracker, new object[] { null });
+            Require(!adaptive.DetectsPlayerInRoom(), "Swarming detected a player outside its room.");
+
+            DungeonMemory memory = root.AddComponent<DungeonMemory>();
+            DungeonMemory.Archive archive = new DungeonMemory.Archive();
+            for (int index = 0; index < 50; index++)
+                archive.RecordKill(DamageType.Fire, false);
+            SetField(memory, "archive", archive);
+            EnemySpawnerManager manager = root.AddComponent<EnemySpawnerManager>();
+            SetField(manager, "dungeonMemory", memory);
+            Invoke(manager, "FreezeAdaptation");
+            archive.RecordKill(DamageType.Air, false);
+            Invoke(manager, "FreezeAdaptation");
+            FieldInfo floorAdaptation = typeof(EnemySpawnerManager).GetField("floorAdaptation", BindingFlags.NonPublic | BindingFlags.Instance);
+            Require(((DungeonMemory.Adaptation)floorAdaptation.GetValue(manager)).damageType == DamageType.Fire, "Current floor changed its adaptation after a kill.");
+            manager.BeginFloor(null);
+            Invoke(manager, "FreezeAdaptation");
+            Require(!((DungeonMemory.Adaptation)floorAdaptation.GetValue(manager)).Active, "Next floor ignored decayed counters.");
+
+            GameObject meleeObject = TemporaryObject("Swarm Melee Prefab", false);
+            meleeObject.transform.SetParent(root.transform);
+            meleeObject.AddComponent<EnemyMelee>();
+            GameObject rangedObject = TemporaryObject("Ranged Prefab", false);
+            rangedObject.transform.SetParent(root.transform);
+            rangedObject.AddComponent<EnemyRange>();
+            MethodInfo filter = typeof(EnemySpawnerManager).GetMethod("IsRegularPrefab", BindingFlags.NonPublic | BindingFlags.Static);
+            Require((bool)filter.Invoke(null, new object[] { meleeObject, true }) && !(bool)filter.Invoke(null, new object[] { rangedObject, true }) &&
+                !(bool)filter.Invoke(null, new object[] { bossObject, false }), "Swarm selection accepted ranged or boss prefabs.");
+            GameObject marker = TemporaryObject("Density Marker", false);
+            marker.transform.SetParent(root.transform);
+            marker.transform.position = new Vector3(20000f, 20000f, 0f);
+            EnemySpawnPoint point = marker.AddComponent<EnemySpawnPoint>();
+            SetField(point, "useRandomCount", false);
+            SetField(point, "fixedSpawnCount", 2);
+            SetField(point, "spawnRadius", 10f);
+            SetField(point, "spawnCheckMask", (LayerMask)0);
+            Require(point.SpawnEnemies(meleeObject, 1, root.transform, 1.5f, 1.25f).Count == 3, "Adaptive density did not increase a two-enemy wave to three.");
+        }
+        finally
+        {
+            typeof(EquipmentManager).GetProperty("Instance").GetSetMethod(true).Invoke(null, new object[] { previousEquipment });
+            typeof(Player).GetProperty("Instance").GetSetMethod(true).Invoke(null, new object[] { previousPlayer });
+            UnityEngine.Object.DestroyImmediate(root);
+            UnityEngine.Object.DestroyImmediate(playerObject);
+            UnityEngine.Object.DestroyImmediate(firstSprite);
+            UnityEngine.Object.DestroyImmediate(secondSprite);
+            UnityEngine.Object.DestroyImmediate(texture);
+            UnityEngine.Object.DestroyImmediate(armour);
         }
     }
 
