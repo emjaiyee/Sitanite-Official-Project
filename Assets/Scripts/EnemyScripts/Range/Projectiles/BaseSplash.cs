@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class BaseSplash : MonoBehaviour, IProjectileType
 {
+    private EnemyHealth attacker;
+
+    public void SetAttacker(EnemyHealth source)
+    {
+        attacker = source;
+    }
+
     [Header("Collision")]
     [SerializeField] private LayerMask hittableLayers = Physics2D.AllLayers;
 
@@ -288,7 +295,9 @@ public class BaseSplash : MonoBehaviour, IProjectileType
 
                 health.TakeDamage(
                     finalDamage,
-                    damageType);
+                    damageType,
+                    transform.position,
+                    attacker);
 
 
             }
@@ -310,6 +319,4 @@ public class BaseSplash : MonoBehaviour, IProjectileType
     }
 
 }
-
-
 

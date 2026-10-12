@@ -95,6 +95,7 @@ public class PlayerDash : MonoBehaviour
     private void Update()
     {
         if (Time.timeScale == 0f ||
+            EquipmentUpgradeMerchant.IsUIOpen ||
             (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
             (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
         {
@@ -140,6 +141,7 @@ public class PlayerDash : MonoBehaviour
         InputAction.CallbackContext context)
     {
         if (Time.timeScale == 0f ||
+            EquipmentUpgradeMerchant.IsUIOpen ||
             (GameManager.Instance != null && GameManager.Instance.IsPaused) ||
             (PauseMenuUI.Instance != null && PauseMenuUI.Instance.IsOpen))
         {

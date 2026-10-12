@@ -21,6 +21,7 @@ public class PlayerInventory : MonoBehaviour
         public ItemData itemData;
         public int quantity;
         public int rotationIndex;
+        public int upgradeLevel;
         public Vector2Int originPosition;
     }
     #region Serialized Fields
@@ -109,6 +110,7 @@ public class PlayerInventory : MonoBehaviour
     private void Update()
     {
         if (inventoryAction != null &&
+            !EquipmentUpgradeMerchant.IsUIOpen &&
             inventoryAction.action.WasPressedThisFrame())
         {
             ToggleInventory();
@@ -258,6 +260,16 @@ public class PlayerInventory : MonoBehaviour
         return item.TryPickup(mainBackpack);
     }
 
+    public int GetCoinCount()
+    {
+        return mainBackpack != null ? mainBackpack.GetCoinCount() : 0;
+    }
+
+    public bool TrySpendCoins(int amount)
+    {
+        return mainBackpack != null && mainBackpack.TrySpendCoins(amount);
+    }
+
     public void DropItem(InventoryItem item)
     {
         if (item == null || item.Data == null || item.Quantity <= 0)
@@ -286,6 +298,7 @@ public class PlayerInventory : MonoBehaviour
                 itemData = item.Data,
                 quantity = item.Quantity,
                 rotationIndex = item.RotationIndex,
+                upgradeLevel = item.UpgradeLevel,
                 originPosition = item.OriginPosition
             });
         }
@@ -347,6 +360,7 @@ public class PlayerInventory : MonoBehaviour
                 continue;
 
             InventoryItem item = new InventoryItem(savedItem.itemData, savedItem.quantity);
+            item.RestoreUpgradeLevel(savedItem.upgradeLevel);
             for (int rotation = 0; rotation < savedItem.rotationIndex; rotation++)
                 item.Rotate();
 

@@ -28,11 +28,18 @@ public class PlayerSoundHelper : MonoBehaviour
 
 
     [Header("Damage")]
+    [Tooltip("Hurt clips used when the character is male.")]
     [SerializeField]
     private List<AudioClip> hurtClips;
 
+    [Tooltip("Hurt clips used when the character is female.")]
+    [SerializeField]
+    private List<AudioClip> femaleHurtClips;
+
     [SerializeField]
     private List<AudioClip> deathClips;
+
+    private PlayerStats playerStats;
 
 
 
@@ -46,6 +53,12 @@ public class PlayerSoundHelper : MonoBehaviour
         if(audioSource == null)
         {
             audioSource = GetComponentInChildren<AudioSource>(true);
+        }
+
+        playerStats = GetComponentInParent<PlayerStats>();
+        if (playerStats == null)
+        {
+            playerStats = GetComponentInChildren<PlayerStats>(true);
         }
     }
 
@@ -77,7 +90,12 @@ public class PlayerSoundHelper : MonoBehaviour
 
     public void PlayHurt()
     {
-        PlayRandomClip(hurtClips);
+        List<AudioClip> clips =
+            playerStats != null && playerStats.Gender == CharacterGender.Female
+                ? femaleHurtClips
+                : hurtClips;
+
+        PlayRandomClip(clips);
     }
 
 

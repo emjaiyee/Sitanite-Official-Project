@@ -17,6 +17,12 @@ public class SpriteArrayVisual : MonoBehaviour
     private float fadeStartTime;
     private bool isFading;
 
+    public bool DestroyWhenFinished
+    {
+        get => destroyWhenFinished;
+        set => destroyWhenFinished = value;
+    }
+
     private void Awake()
     {
         spriteRenderers = GetComponentsInChildren<SpriteRenderer>();

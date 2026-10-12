@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(PlayerShieldDefense))]
 public class Player : MonoBehaviour
 {
     public struct RunStatistics

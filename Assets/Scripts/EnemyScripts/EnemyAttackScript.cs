@@ -42,7 +42,12 @@ public class EnemyAttackScript : MonoBehaviour
         if (Time.time < nextAttackTime) return;
 
         nextAttackTime = Time.time + attackCooldown;
-        player.TakeDamage(damage);
+        player.TakeDamage(
+            damage,
+            DamageType.Slash,
+            transform.position,
+            GetComponentInParent<EnemyHealth>()
+        );
         Debug.Log($"[EnemyContactDamage] {name} hit player for {damage}. Player HP: {player.CurrentHealth}/{player.MaxHealth}");
     }
 }
