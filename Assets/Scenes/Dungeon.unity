@@ -256,86 +256,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 19089291}
   m_CullTransparentMesh: 1
---- !u!1 &35294754
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 35294755}
-  - component: {fileID: 35294756}
-  m_Layer: 0
-  m_Name: EnemyLootManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &35294755
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 35294754}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 457963315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &35294756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 35294754}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c41cf737b8c34c798053e9e7f754e96f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyLootManager
-  floorManager: {fileID: 1969959510}
-  lootPrefab: {fileID: 7909839741886251486, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
-  lootConfigurations:
-  - minimumFloor: 0
-    maximumFloor: 0
-    lootChance: 0.115
-    lootPool:
-    - itemData: {fileID: 0}
-      minimumQuantity: 0
-      maximumQuantity: 0
-    - itemData: {fileID: 0}
-      minimumQuantity: 0
-      maximumQuantity: 0
-  - minimumFloor: 0
-    maximumFloor: 0
-    lootChance: 0.115
-    lootPool:
-    - itemData: {fileID: 0}
-      minimumQuantity: 0
-      maximumQuantity: 0
-    - itemData: {fileID: 0}
-      minimumQuantity: 0
-      maximumQuantity: 0
-  bossLootConfigurations:
-  - minimumFloor: 0
-    maximumFloor: 0
-    lootChance: 1
-    lootPool:
-    - itemData: {fileID: 0}
-      minimumQuantity: 0
-      maximumQuantity: 0
-    - itemData: {fileID: 0}
-      minimumQuantity: 0
-      maximumQuantity: 0
-  spawnSearchRadius: 1
-  spawnSearchAttempts: 8
 --- !u!1 &181043743
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,50 +393,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2000, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &242918382
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 242918383}
-  - component: {fileID: 242918384}
-  m_Layer: 0
-  m_Name: AStarManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &242918383
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 242918382}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 457963315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &242918384
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 242918382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 642488802b0ed6343bf9c0e8efe86454, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AStarManager
 --- !u!1 &243209604
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,220 +594,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e21795581b05e554a8f2ac10988afaf8, type: 3}
---- !u!1 &349555423
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 349555424}
-  - component: {fileID: 349555425}
-  m_Layer: 0
-  m_Name: EnemySpawnerManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &349555424
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349555423}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 457963315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &349555425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 349555423}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a365103837e0ef408003fa01870ab64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawnerManager
-  spawnConfigurations:
-  - minimumFloor: 1
-    maximumFloor: 2
-    enemyPrefabs:
-    - {fileID: 5945256498423393129, guid: 31392a082ec2e074e8d3762b2981a204, type: 3}
-    - {fileID: 8748001588763141578, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-    minimumActiveSpawners: 2
-    maximumActiveSpawners: 4
-    activationChance: 0.6
-    health:
-      minimum: -3
-      maximum: 7
-      chance: 0.401
-    resistance:
-      minimum: 1
-      maximum: 2
-      chance: 0.502
-    damage:
-      minimum: -1
-      maximum: 3
-      chance: 0.547
-    level:
-      minimum: 1
-      maximum: 2
-      chance: 0.615
-    experienceReward:
-      minimum: 1
-      maximum: 15
-      chance: 0.502
-  - minimumFloor: 3
-    maximumFloor: 5
-    enemyPrefabs:
-    - {fileID: 5945256498423393129, guid: 31392a082ec2e074e8d3762b2981a204, type: 3}
-    - {fileID: 8748001588763141578, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-    minimumActiveSpawners: 4
-    maximumActiveSpawners: 6
-    activationChance: 0.6
-    health:
-      minimum: 0
-      maximum: 10
-      chance: 0.401
-    resistance:
-      minimum: 3
-      maximum: 5
-      chance: 0.502
-    damage:
-      minimum: 0
-      maximum: 5
-      chance: 0.547
-    level:
-      minimum: 1
-      maximum: 4
-      chance: 0.615
-    experienceReward:
-      minimum: 5
-      maximum: 25
-      chance: 0.502
-  - minimumFloor: 6
-    maximumFloor: 9
-    enemyPrefabs:
-    - {fileID: 5945256498423393129, guid: 31392a082ec2e074e8d3762b2981a204, type: 3}
-    - {fileID: 8748001588763141578, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
-    minimumActiveSpawners: 6
-    maximumActiveSpawners: 10
-    activationChance: 0.6
-    health:
-      minimum: 5
-      maximum: 15
-      chance: 0.401
-    resistance:
-      minimum: 5
-      maximum: 8
-      chance: 0.502
-    damage:
-      minimum: 3
-      maximum: 8
-      chance: 0.547
-    level:
-      minimum: 2
-      maximum: 5
-      chance: 0.615
-    experienceReward:
-      minimum: 10
-      maximum: 30
-      chance: 0.502
-  bossSpawnConfigurations:
-  - minimumFloor: 1
-    maximumFloor: 3
-    enemyPrefabs:
-    - {fileID: 1602161633568627328, guid: 9a6f066a57cb22647b77e91da0e116eb, type: 3}
-    minimumActiveSpawners: 0
-    maximumActiveSpawners: 0
-    activationChance: 0
-    health:
-      minimum: 20
-      maximum: 40
-      chance: 0.197
-    resistance:
-      minimum: 20
-      maximum: 20
-      chance: 0.184
-    damage:
-      minimum: 20
-      maximum: 40
-      chance: 0.197
-    level:
-      minimum: 1
-      maximum: 5
-      chance: 0.18
-    experienceReward:
-      minimum: 15
-      maximum: 30
-      chance: 0.367
-    spawnChance: 0.4
-  - minimumFloor: 4
-    maximumFloor: 8
-    enemyPrefabs:
-    - {fileID: 1602161633568627328, guid: 9a6f066a57cb22647b77e91da0e116eb, type: 3}
-    minimumActiveSpawners: 0
-    maximumActiveSpawners: 0
-    activationChance: 0
-    health:
-      minimum: 30
-      maximum: 60
-      chance: 0.197
-    resistance:
-      minimum: 20
-      maximum: 30
-      chance: 0.184
-    damage:
-      minimum: 30
-      maximum: 50
-      chance: 0.197
-    level:
-      minimum: 3
-      maximum: 8
-      chance: 0.18
-    experienceReward:
-      minimum: 25
-      maximum: 40
-      chance: 0.367
-    spawnChance: 0.4
-  fallenDescenderConfiguration:
-    enemyPrefabs:
-    - {fileID: 312011220688383164, guid: 09f38ffd7bd101d4c987023aeaa04780, type: 3}
-    health:
-      minimum: -5
-      maximum: 20
-      chance: 0.5
-    resistance:
-      minimum: -2
-      maximum: 5
-      chance: 0.5
-    damage:
-      minimum: 1
-      maximum: 5
-      chance: 0.5
-    level:
-      minimum: 0
-      maximum: 0
-      chance: 1
-    experienceReward:
-      minimum: 2
-      maximum: 12
-      chance: 0.5
-  dungeonMemory: {fileID: 1775428404}
-  spawnOnStart: 1
-  spawnDelay: 0
-  spawnParent: {fileID: 0}
-  floorManager: {fileID: 1969959510}
 --- !u!1 &457525910
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,57 +661,6 @@ MonoBehaviour:
   healthSlider: {fileID: 1200682128}
   bossNameText: {fileID: 1887743751}
   fadeDuration: 0.2
---- !u!1 &457963313
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 457963315}
-  - component: {fileID: 457963314}
-  m_Layer: 0
-  m_Name: IsometricGrid
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!156049354 &457963314
-Grid:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 457963313}
-  m_Enabled: 1
-  m_CellSize: {x: 0.32, y: 0.16, z: 2}
-  m_CellGap: {x: 0, y: 0, z: 0}
-  m_CellLayout: 3
-  m_CellSwizzle: 0
---- !u!4 &457963315
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 457963313}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 349555424}
-  - {fileID: 242918383}
-  - {fileID: 1435930602}
-  - {fileID: 1969959509}
-  - {fileID: 1454998427}
-  - {fileID: 1954027254}
-  - {fileID: 35294755}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &463758710
 GameObject:
   m_ObjectHideFlags: 0
@@ -3157,119 +2768,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMPFontApplier
   fontAsset: {fileID: 11400000, guid: fa9d6bd4a4085a84c9b93393463f2640, type: 2}
---- !u!1 &1435930601
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1435930602}
-  - component: {fileID: 1435930603}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1435930602
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1435930601}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.48331, y: 1.73403, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 457963315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1435930603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1435930601}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d1fa3e650c3d52c4ab289bbf6a78a40a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  maxHealth: 10
-  poisonTickInterval: 1
-  poisonDamagePerTick: 1
-  logOnlyFloorCleared: 1
-  initialClearedFloors: 00000000
-  selectedClass: 0
---- !u!1 &1454998426
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1454998427}
-  - component: {fileID: 1454998428}
-  m_Layer: 0
-  m_Name: RoomManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1454998427
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1454998426}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 457963315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1454998428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1454998426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb51e5b25ef14ed4d883b35a523f58b1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RoomManager
-  smallRoomPrefabs:
-  - {fileID: 813509379841093977, guid: 00bb0326593d36e4b8f803048b1be003, type: 3}
-  - {fileID: 4057089196393080423, guid: 96884bbef967961488826ea9fa5ead74, type: 3}
-  - {fileID: 4446540059129025920, guid: c0a710d2d6370be44b56ac80bddf06e3, type: 3}
-  - {fileID: 7745713463632234708, guid: dd9c316be7a4adf448b7354c4ecd232c, type: 3}
-  - {fileID: 8949253308790495490, guid: 29078164f14b3b44caa6e011dc8bfab1, type: 3}
-  mediumRoomPrefabs:
-  - {fileID: 3669049625457777017, guid: 445defc8a089fa54ca0c67e4e0fa1a3b, type: 3}
-  - {fileID: 3354851161163321188, guid: b99d1595a3ba2aa41b2f0fc2d9ef4109, type: 3}
-  largeRoomPrefabs:
-  - {fileID: 3472139270589249039, guid: cfed6d6ed49e14840bbe67174ecb9931, type: 3}
-  xlRoomPrefabs: []
-  roomSpacingX: 60
-  lockNextRoomUntilCleared: 1
-  secretGatewayChance: 1
-  floorManager: {fileID: 1969959510}
-  secretRoomPrefabs:
-  - {fileID: 259565403157239011, guid: 7abaeae41c2df364fb0775d657a3786b, type: 3}
-  secretRoomSpawnOffset: {x: 0, y: -30, z: 0}
 --- !u!1 &1551216551
 GameObject:
   m_ObjectHideFlags: 0
@@ -3614,8 +3112,8 @@ MonoBehaviour:
   bodyPrefab: {fileID: 3241548027260711759, guid: eafa26433589408469de4df8fa821c76, type: 3}
   maleBodySprite: {fileID: 8025331650737768707, guid: b87b54b9f3a57864dbfd38fbc561ac95, type: 3}
   femaleBodySprite: {fileID: -7512634915180263139, guid: 2edad871669c64546a57146df05392a8, type: 3}
-  bodySpawnChance: 0.5
-  laterFloorSpawnChance: 0.25
+  bodySpawnChance: 1
+  laterFloorSpawnChance: 1
   lootScatterRadius: 1
   lootPlacementAttempts: 8
   itemCatalog:
@@ -5704,224 +5202,17 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &1954027253
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1954027254}
-  - component: {fileID: 1954027255}
-  m_Layer: 0
-  m_Name: BreakablePotManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1954027254
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954027253}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 457963315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1954027255
+--- !u!114 &1969959510 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 274238991486715204, guid: 1c56150265914714582b50b143a5a449, type: 3}
+  m_PrefabInstance: {fileID: 392303936547265577}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954027253}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8994e01dc7a521d45af240dfbc0c3b60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BreakablePotManager
-  floorManager: {fileID: 1969959510}
-  lootPrefab: {fileID: 7909839741886251486, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
-  lootConfigurations:
-  - minimumFloor: 1
-    maximumFloor: 9
-    lootChance: 0.109
-    lootPool:
-    - itemData: {fileID: 11400000, guid: 5220c9ba8ccf9304e9764d4472168edb, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: 7f9d2c1a4e6b48d0a13f5c8e9b027641, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-  - minimumFloor: 1
-    maximumFloor: 9
-    lootChance: 0.783
-    lootPool:
-    - itemData: {fileID: 11400000, guid: 47332dcf82319f14bb1079669c1f2ff4, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: afcf9a321fddc074280691cca2052f45, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: b572685af3aa44943b2962ebf3be448b, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-  - minimumFloor: 1
-    maximumFloor: 9
-    lootChance: 0.041
-    lootPool:
-    - itemData: {fileID: 11400000, guid: 42ba12dcb2e121c45a7d530dde9cf369, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: 4a029611aa1038e41aab833074469383, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: 10e1a5d6c5c06474da44bbaaf0c4befb, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-  - minimumFloor: 1
-    maximumFloor: 9
-    lootChance: 0.063
-    lootPool:
-    - itemData: {fileID: 11400000, guid: fe86ba7c94620e94ba442d5ee32e2b48, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: 98b34c695b8599b43a323e82e9a78c9d, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: 87b967588346274428222f3313067917, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-  - minimumFloor: 1
-    maximumFloor: 9
-    lootChance: 0.094
-    lootPool:
-    - itemData: {fileID: 11400000, guid: 63a619380b08d55479ad76b7672ee149, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: ab59b5d8b1b1fdc49aab773d0628d828, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: 6edc49bc30a7c0947a2fa7c6eb015509, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-  - minimumFloor: 1
-    maximumFloor: 9
-    lootChance: 0.157
-    lootPool:
-    - itemData: {fileID: 11400000, guid: 4a48c207325251e42a6082b78602d574, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: 2f5cdaf684596054db0668c25d6c7f80, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-    - itemData: {fileID: 11400000, guid: a341a71a84c83f740a9aa60bee6840e2, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-  - minimumFloor: 1
-    maximumFloor: 9
-    lootChance: 0.151
-    lootPool:
-    - itemData: {fileID: 11400000, guid: 3921c627c6ec1f84b82bce67b425f452, type: 2}
-      minimumQuantity: 1
-      maximumQuantity: 1
-  spawnSearchRadius: 1
-  spawnSearchAttempts: 8
---- !u!1 &1969959508
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1969959509}
-  - component: {fileID: 1969959510}
-  m_Layer: 0
-  m_Name: FloorManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1969959509
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1969959508}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.12642, y: 1.56009, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 457963315}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1969959510
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1969959508}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21ae98d81372ec649832708f6a90aa4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorManager
-  currentFloor: 1
-  floorConfigurations:
-  - minimumFloor: 1
-    maximumFloor: 2
-    allowSmall: 1
-    allowMedium: 0
-    allowLarge: 0
-    allowXL: 0
-    minimumRooms: 6
-    maximumRooms: 8
-    minimumActiveSpawners: 1
-    maximumActiveSpawners: 2
-    minimumEnemyLevel: 1
-    maximumEnemyLevel: 2
-    maximumEnemyLevelChance: 0.217
-  - minimumFloor: 3
-    maximumFloor: 5
-    allowSmall: 1
-    allowMedium: 1
-    allowLarge: 0
-    allowXL: 0
-    minimumRooms: 4
-    maximumRooms: 6
-    minimumActiveSpawners: 2
-    maximumActiveSpawners: 4
-    minimumEnemyLevel: 2
-    maximumEnemyLevel: 4
-    maximumEnemyLevelChance: 0.217
-  - minimumFloor: 6
-    maximumFloor: 9
-    allowSmall: 0
-    allowMedium: 1
-    allowLarge: 1
-    allowXL: 0
-    minimumRooms: 3
-    maximumRooms: 5
-    minimumActiveSpawners: 4
-    maximumActiveSpawners: 4
-    minimumEnemyLevel: 4
-    maximumEnemyLevel: 6
-    maximumEnemyLevelChance: 0.217
-  roomManager: {fileID: 1454998428}
-  dungeonMemory: {fileID: 1775428404}
 --- !u!1001 &1982812896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6203,6 +5494,95 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2068308045}
   m_CullTransparentMesh: 1
+--- !u!1001 &392303936547265577
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 274238991486715204, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: dungeonMemory
+      value: 
+      objectReference: {fileID: 1775428404}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3440333574984988740, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_Name
+      value: IsometricGrid
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: dungeonMemory
+      value: 
+      objectReference: {fileID: 1775428404}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: smallRoomPrefabs.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: mediumRoomPrefabs.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'smallRoomPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 77466602918055909, guid: 03787ff9535528140bceac0c6a6d3052, type: 3}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'smallRoomPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 7480719018366960771, guid: 627a70c40eddd1f4b86886eeb0ac58dc, type: 3}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'smallRoomPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2495465571713983303, guid: fc0133fbcca9d9149b6219b5044cb675, type: 3}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'smallRoomPrefabs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 2788375754935750398, guid: e34222b3f0b2a8747a51e39560ae23ce, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1c56150265914714582b50b143a5a449, type: 3}
 --- !u!1001 &5390065605662560241
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6404,7 +5784,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 619394802}
-  - {fileID: 457963315}
+  - {fileID: 392303936547265577}
   - {fileID: 8798791297599282146}
   - {fileID: 1686456531}
   - {fileID: 718025987}
