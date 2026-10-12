@@ -180,21 +180,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMelee
   startingState: 0
+  CurrentStateInspector: 0
   detectionRadius: 8
   alertedDuration: 20
+  playerCollider:
+    serializedVersion: 2
+    m_Bits: 129
   moveSpeed: 1
-  attackRange: 0.5
+  attackRadiusX: 0.8
+  attackRadiusY: 0.6
   attackDamageType: 2
   damage: 15
   attackCooldown: 1.5
   useChargedAttack: 0
-  chargedAttackRange: 1.2
+  attackPrefab: {fileID: 9219959829639980943, guid: e1560b468edb77e4aa486a1d9604ab7f, type: 3}
+  markPoint: 0.2
+  chargeRadiusX: 1.5
+  chargeRadiusY: 1.2
   chargedAttackDamageType: 4
   chargedDamage: 10
   chargedAttackCooldown: 2.5
   chargedAttackTime: 0.75
   chargedAttackMultiplier: 2
+  damageType: 0
+  damageAmount: 0
   takingAim: 0
+  stillMovement: 0
   idleWanderRadius: 4
   locateWaitDuration: 2.5
   deathAnimationDelay: 1

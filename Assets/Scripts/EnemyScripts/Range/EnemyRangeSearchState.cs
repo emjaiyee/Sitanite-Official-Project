@@ -4,7 +4,11 @@ using UnityEngine;
 public class EnemyRangeSearchState : EnemyRangeState
 {
     private float searchTimer;
+    private float waitTimer;
     private const float SearchDuration = 3.5f;
+    private const float waitDuration = 1.5f;
+
+    private bool stillWaiting;
 
     public EnemyRangeSearchState(EnemyRange enemy) : base(enemy)
     {
@@ -28,12 +32,28 @@ public class EnemyRangeSearchState : EnemyRangeState
             Enemy.StopMoving();
         }
 
+        stillWaiting = true;
+
         searchTimer = 0f;
+        waitTimer = 0f;
+        
     }
 
     public override void Tick()
     {
-        if (Enemy.HasPath)
+        if (stillWaiting)
+        {
+            waitTimer += Time.deltaTime;
+            if (waitTimer > waitDuration)
+            {
+                stillWaiting = false;
+                return;
+            }
+            return;
+        }
+
+
+        if (Enemy.HasPath && !Enemy.IsPlayerDetected())
         {
             Enemy.FollowCurrentPath();
             return;

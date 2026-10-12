@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 3973624927977919438}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.131, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -214,11 +214,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRange
   startingState: 0
+  CurrentStateInspector: 0
   detectionRadius: 12
+  playerCollider:
+    serializedVersion: 2
+    m_Bits: 129
   moveSpeed: 1
   idleWanderRadius: 6
   locateWaitDuration: 2.5
-  attackRange: 6
+  radiusX: 2.4
+  radiusY: 1.2
   projectileDamageType: 1
   projectileDamage: 10
   attackCooldown: 2.5
