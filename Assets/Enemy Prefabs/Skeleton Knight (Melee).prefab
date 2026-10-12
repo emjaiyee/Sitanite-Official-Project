@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 6450712593730380577}
   - component: {fileID: 5812311695043802781}
   m_Layer: 6
-  m_Name: EnemyMelee (GOBLIN STABER)
+  m_Name: Skeleton Knight (Melee)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,7 +93,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1257497385422938067, guid: 9f3c7672880d6a5409717c18d946855e, type: 3}
+  m_Sprite: {fileID: -4020912982772356824, guid: 3879a36a176aedb4998e6f0826febdeb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -152,10 +152,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 40
-  damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
-  damageFlashDuration: 0.12
-  isMiniBoss: 0
-  enemyName: Brute Goblin
   basePierceResistance: 5
   baseStabResistance: 5
   baseSlashResistance: 5
