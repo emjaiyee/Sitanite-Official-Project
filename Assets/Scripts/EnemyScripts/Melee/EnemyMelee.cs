@@ -86,6 +86,8 @@ public class EnemyMelee : MonoBehaviour
     [Min(0f)] [SerializeField] private float damage = 5f;
     [Min(0.01f)] [SerializeField] private float attackCooldown = 1.5f;
     [SerializeField] private bool useChargedAttack;
+    [SerializeField] private GameObject attackPrefab;
+    [SerializeField] private float markPoint = 0.2f;
 
     [Header("Charged Attack")]
     [SerializeField] private float chargeRadiusX = 1.5f;
@@ -108,7 +110,9 @@ public class EnemyMelee : MonoBehaviour
     public float radiusX => useChargedAttack ? chargeRadiusX : attackRadiusX;
     public float radiusY => useChargedAttack ? chargeRadiusY : attackRadiusY;
 
-
+    private DamageType damageType;
+    private float damageAmount;
+   
     // =========================================================
     // ANIMATION
     // =========================================================
@@ -692,12 +696,12 @@ public class EnemyMelee : MonoBehaviour
             return (normalizedX + normalizedY) <= 1.0f;
         }
 
-        else
+        else  
         {
-            Debug.LogWarning(
-                 $"[EnemyMelee] {name} could not see Player " +
-                 $"Could only see {ray.transform.name}."
-                 );
+            /* Debug.Log(                                                [This is for Debugging the raycast (can be deleted)]
+                  $"[EnemyMelee] {name} could not see Player " +
+                  $"Could only see {ray.transform.name}."
+                  );*/
             return false;
         }
     }
@@ -760,10 +764,10 @@ public class EnemyMelee : MonoBehaviour
             return;
         }
 
-        DamageType damageType = useChargedAttack
+        damageType = useChargedAttack
             ? chargedAttackDamageType
             : attackDamageType;
-        float damageAmount = useChargedAttack
+        damageAmount = useChargedAttack
             ? chargedDamage
             : damage;
         if (useChargedAttack)
@@ -782,10 +786,42 @@ public class EnemyMelee : MonoBehaviour
         if (enemySFX != null)
             enemySFX.PlayAttackSFX();
 
-        playerStats.TakeDamage(
-            damageAmount,
-            damageType
-        );
+        //-----------------------------------
+        // Spawn Attack
+        //-----------------------------------
+
+        Vector2 attackDirection =
+           (Vector2)player.position -
+           (Vector2)transform.position;
+
+        Vector2 attackPoint =
+            (Vector2)transform.position +
+            (Vector2)attackDirection.normalized * markPoint;
+
+        float angle =
+            Mathf.Atan2(attackDirection.y, attackDirection.x)
+            * Mathf.Rad2Deg;
+
+        Quaternion rotation = Quaternion.Euler(0f, 0f, angle + 90f);
+
+        GameObject attackObject =
+            Instantiate(
+                attackPrefab,
+                attackPoint,
+                rotation
+                );
+
+        //-----------------------------------
+        // Set Attack Damage
+        //-----------------------------------
+
+        BaseAttack attack = 
+            attackObject.GetComponent<BaseAttack>();
+
+        attack.SetDamage(
+            damageType,
+            damageAmount
+            );
     }
 
 
