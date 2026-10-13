@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ public class BossHealthBarUI : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Slider healthSlider;
+    [SerializeField] private TMP_Text bossNameText;
     [SerializeField, Min(0f)] private float fadeDuration = 0.2f;
 
     private EnemySpawnerManager spawnerManager;
@@ -23,6 +25,7 @@ public class BossHealthBarUI : MonoBehaviour
 
         targetAlpha = 0f;
         SetAlphaImmediately(targetAlpha);
+        RefreshName();
     }
 
     private void OnEnable()
@@ -39,6 +42,7 @@ public class BossHealthBarUI : MonoBehaviour
             spawnerManager.ActiveBossHealth != bossHealth)
             BindBoss(spawnerManager.ActiveBossHealth);
 
+        RefreshName();
         UpdateVisibility();
         UpdateFade();
     }
@@ -88,16 +92,18 @@ public class BossHealthBarUI : MonoBehaviour
 
     private void UnbindBoss()
     {
-        if (bossHealth == null)
-            return;
-
-        bossHealth.OnHealthChanged -= Refresh;
-        bossHealth.OnEnemyDied -= HandleBossDied;
+        if (bossHealth != null)
+        {
+            bossHealth.OnHealthChanged -= Refresh;
+            bossHealth.OnEnemyDied -= HandleBossDied;
+        }
         bossHealth = null;
+        RefreshName();
     }
 
     private void Refresh(EnemyHealth health)
     {
+        RefreshName();
         if (healthSlider == null)
             return;
 
@@ -108,6 +114,24 @@ public class BossHealthBarUI : MonoBehaviour
                 ? 0f
                 : Mathf.Clamp01((float)health.CurrentHealth / health.MaxHealth)
         );
+    }
+
+    private void RefreshName()
+    {
+        if (bossNameText == null)
+            return;
+
+        if (bossHealth == null || !bossHealth.IsMiniBoss || bossHealth.CurrentHealth <= 0 ||
+            string.IsNullOrWhiteSpace(bossHealth.EnemyName))
+        {
+            bossNameText.text = string.Empty;
+            return;
+        }
+
+        FallenDescenderLevelXP fallenLevel = bossHealth.GetComponent<FallenDescenderLevelXP>();
+        EnemyLevelXP enemyLevel = bossHealth.GetComponent<EnemyLevelXP>();
+        int level = fallenLevel != null ? fallenLevel.Level : enemyLevel != null ? enemyLevel.Level : 1;
+        bossNameText.text = $"{bossHealth.EnemyName} | Lvl {level}";
     }
 
     private void HandleBossDied(GameObject deadBoss)

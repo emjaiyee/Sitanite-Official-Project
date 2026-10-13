@@ -6,6 +6,9 @@ public class Gateway : MonoBehaviour
     [SerializeField] private GatewayDirection direction;
     [SerializeField] private GatewayFlow flow;
 
+    [Header("Elevation")]
+    [SerializeField] private int elevationLevel;
+
     [Header("Destination")]
     [SerializeField] private Transform destination;
 
@@ -13,6 +16,7 @@ public class Gateway : MonoBehaviour
 
     public GatewayDirection Direction => direction;
     public GatewayFlow Flow => flow;
+    public int ElevationLevel => elevationLevel;
     public Transform Destination => destination;
 
     public void SetDestination(Transform newDestination)

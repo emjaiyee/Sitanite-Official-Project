@@ -2,6 +2,15 @@ using UnityEngine;
 
 public class BaseMissile : MonoBehaviour, IProjectileType
 {
+    private EnemyHealth attacker;
+    private DamageType adaptiveDamageType;
+
+    public void SetAttacker(EnemyHealth source)
+    {
+        attacker = source;
+        adaptiveDamageType = AdaptiveEnemy.GetAdaptedDamageType(source);
+    }
+
 
     [Header("Collision")]
     [SerializeField] private LayerMask hittableLayers = Physics2D.AllLayers;
@@ -283,7 +292,10 @@ public class BaseMissile : MonoBehaviour, IProjectileType
 
         playerStats.TakeDamage(
             damage,
-            damageType);
+            damageType,
+            transform.position,
+            attacker,
+            adaptiveDamageType);
 
         if (enableDebugLogs)
         {
@@ -315,8 +327,6 @@ public class BaseMissile : MonoBehaviour, IProjectileType
         OnTriggerEnter2D(collision.collider);
     }
 }
-
-
 
 
 

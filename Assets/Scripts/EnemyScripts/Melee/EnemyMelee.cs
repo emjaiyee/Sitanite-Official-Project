@@ -100,6 +100,7 @@ public class EnemyMelee : MonoBehaviour
     private float baseMoveSpeed;
     private float baseDamage;
     private float baseChargedDamage;
+    private float staggeredUntil;
 
 
     public float radiusX => useChargedAttack ? chargeRadiusX : attackRadiusX;
@@ -410,6 +411,22 @@ public class EnemyMelee : MonoBehaviour
             return;
         }
 
+        if (Time.time < staggeredUntil)
+        {
+            movementPaused = true;
+            chargingAttack = false;
+            chargedAttackTimer = 0f;
+            SetAnimatorBool(IsMovingHash, false);
+            SetAnimatorBool(IsAttackingHash, false);
+            return;
+        }
+
+        if (staggeredUntil > 0f)
+        {
+            staggeredUntil = 0f;
+            movementPaused = false;
+        }
+
         if (Alerted && Time.time >= alertedUntilTime)
             Alerted = false;
 
@@ -638,6 +655,14 @@ public class EnemyMelee : MonoBehaviour
         if (player == null)
             return false;
 
+        AdaptiveEnemy adaptation = GetComponent<AdaptiveEnemy>();
+        if (adaptation != null && adaptation.Swarming)
+        {
+            if (!adaptation.DetectsPlayerInRoom())
+                return false;
+            LastKnownPlayerPosition = player.position;
+            return true;
+        }
 
         if (AStarManager.Instance == null)
             return false;
@@ -821,6 +846,17 @@ public class EnemyMelee : MonoBehaviour
             );
     }
 
+    public void ApplyStagger(float duration)
+    {
+        if (duration <= 0f || CurrentState == EnemyState.Death)
+            return;
+
+        staggeredUntil = Mathf.Max(staggeredUntil, Time.time + duration);
+        nextAttackTime = Mathf.Max(nextAttackTime, staggeredUntil);
+        chargingAttack = false;
+        chargedAttackTimer = 0f;
+        movementPaused = true;
+    }
 
     // =========================================================
     // MOVEMENT

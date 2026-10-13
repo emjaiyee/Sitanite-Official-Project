@@ -203,6 +203,7 @@ public class EnemyRange : MonoBehaviour
     private List<Vector3> currentPath;
     private int currentPathIndex;
     private bool movementPaused;
+    private float staggeredUntil;
 
     public bool IsOnStairLink =>
         AStarManager.Instance != null &&
@@ -353,6 +354,20 @@ public class EnemyRange : MonoBehaviour
             return;
         }
 
+        if (Time.time < staggeredUntil)
+        {
+            movementPaused = true;
+            SetAnimatorBool(IsMovingHash, false);
+            SetAnimatorBool(IsAttackingHash, false);
+            return;
+        }
+
+        if (staggeredUntil > 0f)
+        {
+            staggeredUntil = 0f;
+            movementPaused = false;
+        }
+
         // -----------------------------------------------------
         // FIND PLAYER IF MISSING                                    // expect to remove for performance
         // -----------------------------------------------------
@@ -387,6 +402,14 @@ public class EnemyRange : MonoBehaviour
         currentState.Tick();
     }
 
+    public void ApplyStagger(float duration)
+    {
+        if (duration <= 0f || CurrentState == EnemyState.Death)
+            return;
+
+        staggeredUntil = Mathf.Max(staggeredUntil, Time.time + duration);
+        movementPaused = true;
+    }
 
     private void LateUpdate()
     {
@@ -739,6 +762,7 @@ public class EnemyRange : MonoBehaviour
             return false;
         }
 
+        projectile.SetAttacker(GetComponent<EnemyHealth>());
 
         // -----------------------------------------------------
         // LAUNCH

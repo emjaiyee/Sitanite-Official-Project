@@ -1,7 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BaseSplash : MonoBehaviour, IProjectileType
 {
+    private EnemyHealth attacker;
+    private DamageType adaptiveDamageType;
+
+    public void SetAttacker(EnemyHealth source)
+    {
+        attacker = source;
+        adaptiveDamageType = AdaptiveEnemy.GetAdaptedDamageType(source);
+    }
+
     [Header("Collision")]
     [SerializeField] private LayerMask hittableLayers = Physics2D.AllLayers;
 
@@ -269,13 +279,14 @@ public class BaseSplash : MonoBehaviour, IProjectileType
     private void Splash()
     {
         Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, splashRadius, hittableLayers);
+        HashSet<PlayerStats> damagedPlayers = new HashSet<PlayerStats>();
 
         foreach (Collider2D hit in hitColliders)
         {
 
-            var health = hit.GetComponent<PlayerStats>();
+            PlayerStats health = hit.GetComponentInParent<PlayerStats>();
 
-            if (health != null)
+            if (health != null && damagedPlayers.Add(health))
             {
                 Vector2 hitPos = hit.transform.position;
                 float distance = Vector2.Distance(transform.position, hitPos);
@@ -288,7 +299,10 @@ public class BaseSplash : MonoBehaviour, IProjectileType
 
                 health.TakeDamage(
                     finalDamage,
-                    damageType);
+                    damageType,
+                    transform.position,
+                    attacker,
+                    adaptiveDamageType);
 
 
             }
@@ -310,6 +324,4 @@ public class BaseSplash : MonoBehaviour, IProjectileType
     }
 
 }
-
-
 

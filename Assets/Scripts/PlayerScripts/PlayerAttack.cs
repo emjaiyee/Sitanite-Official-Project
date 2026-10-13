@@ -17,6 +17,7 @@ public class PlayerAttack : MonoBehaviour
     private PlayerStats stats;
     private PlayerAnimationController animationController;
     private PlayerSkill playerSkill;
+    private PlayerShieldDefense shieldDefense;
 
     private bool attackActive;
     private Coroutine attackRecovery;
@@ -30,6 +31,7 @@ public class PlayerAttack : MonoBehaviour
         stats = GetComponent<PlayerStats>();
         animationController = GetComponent<PlayerAnimationController>();
         playerSkill = GetComponent<PlayerSkill>();
+        shieldDefense = GetComponent<PlayerShieldDefense>();
 
         if (equipment == null)
         {
@@ -109,17 +111,27 @@ public class PlayerAttack : MonoBehaviour
         if (playerSkill != null && playerSkill.IsTargetingSkill)
             return;
 
-        Attack();
+        bool isCounterAttack =
+            shieldDefense != null &&
+            shieldDefense.HasCounterOpportunity;
+
+        if (Attack(
+                isCounterAttack ? shieldDefense.CounterDamageMultiplier : 1f,
+                isCounterAttack) &&
+            isCounterAttack)
+        {
+            shieldDefense.ConsumeCounterOpportunity();
+        }
     }
 
 
-    private void Attack()
+    private bool Attack(float damageMultiplier, bool isCounterAttack)
     {
         if (!CombatInputGate.IsCombatInputAllowed)
-            return;
+            return false;
 
         if (attackActive)
-            return;
+            return false;
 
 
         if (equipment == null ||
@@ -128,21 +140,26 @@ public class PlayerAttack : MonoBehaviour
             equipment.CurrentWeaponData.EquipmentType != EquipmentType.Weapon)
         {
             Debug.Log("No weapon equipped!");
-            return;
+            return false;
         }
 
 
         if (!equipment.CurrentWeapon.CanAttack)
-            return;
+            return false;
 
 
         if (movement == null)
-            return;
+            return false;
 
 
         ItemData weaponData =
             equipment.CurrentWeaponData;
 
+        Vector2 attackDirection =
+            GetMouseDirection();
+
+        if (attackDirection.sqrMagnitude <= 0.0001f)
+            return false;
 
         if (weaponData.AttackResourceType != ResourceType.None &&
             weaponData.AttackCost > 0 &&
@@ -156,17 +173,8 @@ public class PlayerAttack : MonoBehaviour
                 $"{weaponData.AttackResourceType} to attack."
             );
 
-            return;
+            return false;
         }
-
-
-        Vector2 attackDirection =
-            GetMouseDirection();
-
-
-        if (attackDirection.sqrMagnitude <= 0.0001f)
-            return;
-
 
         // Face player toward mouse
         movement.FaceDirection(attackDirection);
@@ -191,12 +199,18 @@ public class PlayerAttack : MonoBehaviour
 
 
         // Send attack direction to weapon
-        equipment.CurrentWeapon.Attack(attackDirection);
+        equipment.CurrentWeapon.Attack(
+            attackDirection,
+            damageMultiplier,
+            isCounterAttack
+        );
 
 
         attackRecovery = StartCoroutine(
             EndAttackMovementLockAfterDelay()
         );
+
+        return true;
     }
 
 

@@ -169,6 +169,61 @@ public class CharacterRenderer : MonoBehaviour
         UpdateAppearance();
     }
 
+    public Sprite GetPreviewSprite(SpriteRenderer renderer, CharacterDirection direction)
+    {
+        if (renderer == null || appearance == null)
+            return null;
+
+        if (renderer == weaponUnderRenderer || renderer == weaponOverRenderer)
+        {
+            bool weaponIsUnder = direction == CharacterDirection.SouthWest ||
+                direction == CharacterDirection.South ||
+                direction == CharacterDirection.SouthEast ||
+                direction == CharacterDirection.East ||
+                direction == CharacterDirection.West;
+
+            if (currentAnimationState == CharacterAnimationState.Melee ||
+                currentAnimationState == CharacterAnimationState.Cast ||
+                currentAnimationState == CharacterAnimationState.Ranged)
+            {
+                weaponIsUnder = !weaponIsUnder;
+            }
+
+            bool rendererShowsWeapon = renderer == weaponUnderRenderer
+                ? weaponIsUnder
+                : !weaponIsUnder;
+            return rendererShowsWeapon
+                ? GetPreviewSprite(appearance.weapon, direction)
+                : null;
+        }
+
+        if (renderer == bodyRenderer)
+            return GetPreviewSprite(appearance.body, direction);
+        if (renderer == legsRenderer)
+            return GetPreviewSprite(appearance.legs, direction);
+        if (renderer == torsoRenderer)
+            return GetPreviewSprite(appearance.torso, direction);
+        if (renderer == eyesRenderer)
+            return GetPreviewSprite(appearance.eyes, direction);
+        if (renderer == hairRenderer)
+        {
+            bool hairHiddenByHeadwear = appearance.headwear != null &&
+                appearance.headwear.hidesHair &&
+                !appearance.hideHeadwear;
+            return hairHiddenByHeadwear ? null : GetPreviewSprite(appearance.hair, direction);
+        }
+        if (renderer == headwearRenderer)
+        {
+            return appearance.headwear == null || appearance.hideHeadwear
+                ? null
+                : appearance.headwear.GetSprite(direction, currentAnimationState, currentAnimationFrame);
+        }
+        if (renderer == shieldRenderer)
+            return GetPreviewSprite(appearance.shield, direction);
+
+        return renderer.enabled ? renderer.sprite : null;
+    }
+
     public void SetAnimationState(
         CharacterAnimationState animationState,
         int frame)
@@ -180,5 +235,12 @@ public class CharacterRenderer : MonoBehaviour
         currentAnimationState = animationState;
         currentAnimationFrame = frame;
         UpdateAppearance();
+    }
+
+    private Sprite GetPreviewSprite(CharacterPartDefinition definition, CharacterDirection direction)
+    {
+        return definition != null
+            ? definition.GetSprite(direction, currentAnimationState, currentAnimationFrame)
+            : null;
     }
 }

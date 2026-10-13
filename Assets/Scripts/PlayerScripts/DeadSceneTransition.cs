@@ -21,8 +21,19 @@ public class DeadSceneTransition : MonoBehaviour
     [Header("Death Vignette")]
     [SerializeField] private Image deathVignetteImage;
 
+    [Header("Death Results")]
+    [SerializeField] private DeathResultsPanel deathResults;
+    [Range(0f, 1f)] [SerializeField] private float reanimationChance = 0.5f;
+
+    [Header("Dungeon Memory")]
+    [SerializeField] private DungeonMemory dungeonMemory;
+    [SerializeField] private FloorManager floorManager;
+
     private PlayerStats playerStats;
     private bool isTransitioning;
+    private Player.RunStatistics finalStatistics;
+    private string finalCharacterName;
+    private bool reanimated;
 
     private void Awake()
     {
@@ -31,6 +42,11 @@ public class DeadSceneTransition : MonoBehaviour
 
         if (deathVignetteImage != null)
             deathVignetteImage.gameObject.SetActive(false);
+
+        if (deathResults == null)
+            deathResults = FindFirstObjectByType<DeathResultsPanel>(FindObjectsInactive.Include);
+        if (deathResults != null)
+            deathResults.Hide();
     }
 
     private void OnEnable()
@@ -74,6 +90,44 @@ public class DeadSceneTransition : MonoBehaviour
         if (isTransitioning)
             return;
 
+        isTransitioning = true;
+        if (Player.Instance != null)
+            finalStatistics = Player.Instance.FinishRun();
+        finalCharacterName = playerStats != null ? playerStats.CharacterName : null;
+
+        reanimated = Random.value < reanimationChance;
+
+        if (dungeonMemory == null)
+            dungeonMemory = FindFirstObjectByType<DungeonMemory>();
+        if (floorManager == null)
+            floorManager = FindFirstObjectByType<FloorManager>();
+
+        if (dungeonMemory != null && floorManager != null)
+        {
+            dungeonMemory.RememberDeath(
+                Player.Instance, playerStats, floorManager.CurrentFloor,
+                reanimated ? DungeonMemory.DeathOutcome.Reanimated : DungeonMemory.DeathOutcome.Dead
+            );
+        }
+        else
+            Debug.LogWarning("DeadSceneTransition: Dungeon memory or floor manager is missing; death was not saved.", this);
+
+        PlayerInventory inventory = Player.Instance != null
+            ? Player.Instance.GetComponentInChildren<PlayerInventory>(true)
+            : null;
+        if (inventory != null)
+        {
+            inventory.SetInventoryState(false);
+            inventory.enabled = false;
+        }
+
+        PlayerStatsUI statsUI = FindFirstObjectByType<PlayerStatsUI>(FindObjectsInactive.Include);
+        if (statsUI != null)
+        {
+            statsUI.SetStatsWindowState(false);
+            statsUI.enabled = false;
+        }
+
         if (deathVignetteImage != null)
             deathVignetteImage.gameObject.SetActive(true);
 
@@ -107,6 +161,14 @@ public class DeadSceneTransition : MonoBehaviour
         }
 
         yield return FadeToBlack();
+
+        if (deathVignetteImage != null)
+            deathVignetteImage.gameObject.SetActive(false);
+
+        if (deathResults != null)
+            yield return deathResults.Show(finalStatistics, reanimated, fadeCanvas, finalCharacterName);
+        else
+            Debug.LogWarning("DeadSceneTransition: Death results panel is not assigned.", this);
 
         if (Player.Instance != null)
         {

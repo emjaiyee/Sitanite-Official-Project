@@ -17,11 +17,27 @@ public class CharacterPartDefinitionEditor : Editor
         "deathAnimation"
     };
 
+    private static readonly string[] excludedProperties =
+    {
+        "idleAnimation", "walkAnimation", "runningAnimation", "meleeAnimation",
+        "castAnimation", "rangedAnimation", "dashAnimation", "deathAnimation",
+        "slightlyDamagedPortrait", "injuredPortrait", "gravelyInjuredPortrait", "deadPortrait"
+    };
+
     public override void OnInspectorGUI()
     {
         serializedObject.Update();
 
-        DrawPropertiesExcluding(serializedObject, animationProperties);
+        DrawPropertiesExcluding(serializedObject, excludedProperties);
+
+        CharacterPartDefinition definition = (CharacterPartDefinition)target;
+        if (definition.Type == CharacterPartType.Body || definition.Type == CharacterPartType.Eyes)
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("slightlyDamagedPortrait"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("injuredPortrait"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("gravelyInjuredPortrait"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("deadPortrait"));
+        }
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Animation Frames", EditorStyles.boldLabel);
