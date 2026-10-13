@@ -186,19 +186,19 @@ MonoBehaviour:
   startingState: 0
   CurrentStateInspector: 0
   detectionRadius: 8
-  alertedDuration: 5
+  alertedDuration: 20
   playerCollider:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 129
   moveSpeed: 0.5
-  attackRadiusX: 0.3
-  attackRadiusY: 0.2
+  attackRadiusX: 0.4
+  attackRadiusY: 0.25
   attackDamageType: 2
   damage: 7
-  attackCooldown: 2
+  attackCooldown: 1.5
   useChargedAttack: 0
   attackPrefab: {fileID: 9219959829639980943, guid: e1560b468edb77e4aa486a1d9604ab7f, type: 3}
-  markPoint: 0.2
+  markPoint: 0.3
   chargeRadiusX: 1.5
   chargeRadiusY: 1.2
   chargedAttackDamageType: 4

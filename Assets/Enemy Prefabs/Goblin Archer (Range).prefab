@@ -184,6 +184,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 25
+  damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+  damageFlashDuration: 0.12
+  isMiniBoss: 0
+  enemyName: 
   basePierceResistance: 5
   baseStabResistance: 5
   baseSlashResistance: 5
@@ -212,11 +216,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRange
   startingState: 0
-  detectionRadius: 6
+  CurrentStateInspector: 0
+  detectionRadius: 8
+  playerCollider:
+    serializedVersion: 2
+    m_Bits: 129
   moveSpeed: 0.7
   idleWanderRadius: 6
   locateWaitDuration: 2.5
-  attackRange: 6
+  radiusX: 0.5
+  radiusY: 0.2
   projectileDamageType: 1
   projectileDamage: 10
   attackCooldown: 2.5
