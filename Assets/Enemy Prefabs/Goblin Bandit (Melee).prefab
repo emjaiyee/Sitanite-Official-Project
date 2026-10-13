@@ -152,6 +152,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 35
+  damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+  damageFlashDuration: 0.12
+  isMiniBoss: 0
+  enemyName: 
   basePierceResistance: 5
   baseStabResistance: 5
   baseSlashResistance: 5
@@ -180,21 +184,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyMelee
   startingState: 0
-  detectionRadius: 3
-  alertedDuration: 5
+  CurrentStateInspector: 0
+  detectionRadius: 8
+  alertedDuration: 20
+  playerCollider:
+    serializedVersion: 2
+    m_Bits: 129
   moveSpeed: 0.5
-  attackRange: 0.5
+  attackRadiusX: 0.4
+  attackRadiusY: 0.25
   attackDamageType: 2
   damage: 7
-  attackCooldown: 2
+  attackCooldown: 1.5
   useChargedAttack: 0
-  chargedAttackRange: 1.2
+  attackPrefab: {fileID: 9219959829639980943, guid: e1560b468edb77e4aa486a1d9604ab7f, type: 3}
+  markPoint: 0.3
+  chargeRadiusX: 1.5
+  chargeRadiusY: 1.2
   chargedAttackDamageType: 4
   chargedDamage: 10
   chargedAttackCooldown: 2.5
   chargedAttackTime: 0.75
   chargedAttackMultiplier: 2
   takingAim: 0
+  stillMovement: 0
   idleWanderRadius: 4
   locateWaitDuration: 2.5
   deathAnimationDelay: 1
