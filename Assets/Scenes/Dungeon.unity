@@ -166,14 +166,181 @@ MonoBehaviour:
   floorManager: {fileID: 1969959510}
   lootPrefab: {fileID: 7909839741886251486, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
   lootConfigurations:
-  - minimumFloor: 0
-    maximumFloor: 0
-    lootChance: 0
+  - minimumFloor: 1
+    maximumFloor: 9
+    lootChance: 0.1
     lootPool:
-    - itemData: {fileID: 0}
-      minimumQuantity: 0
-      maximumQuantity: 0
-  bossLootConfigurations: []
+    - itemData: {fileID: 11400000, guid: a549c781c0eb1474d89bd61f9dd5e310, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: eb80f60a7a2f7234aa6535006fc0fbbc, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: d17d0ac44f894844a877211a01f4b1ec, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: a4e96c2e5585c0749969155fd3747e75, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: eb643c99370babb4bac4552bfd727242, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 5f159eed38fe42a4b9bd5d87a587b52a, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 6a4387ed918a8da4ba0635659bc5f3b3, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 372562734ef5f0849821879849d3543c, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: d90ca4398413d8f4d83a8516cfb5eebc, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+  - minimumFloor: 4
+    maximumFloor: 9
+    lootChance: 0.1
+    lootPool:
+    - itemData: {fileID: 11400000, guid: 4ec3c5ee4c2415c48adf8487cbe809f6, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: f2590726a92b6a0479c119404c57fc98, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: f67454d4d704b724c8cd1be30599420a, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+  - minimumFloor: 6
+    maximumFloor: 9
+    lootChance: 0.1
+    lootPool:
+    - itemData: {fileID: 11400000, guid: 4ec3c5ee4c2415c48adf8487cbe809f6, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: f2590726a92b6a0479c119404c57fc98, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: f67454d4d704b724c8cd1be30599420a, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+  - minimumFloor: 6
+    maximumFloor: 9
+    lootChance: 0.1
+    lootPool:
+    - itemData: {fileID: 11400000, guid: 32d5249177fe8b945821e845080b273e, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 3f8d0309b3c91d34fb7e7351f853b348, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: ee485c054c9380a4dae7f2556c65d76d, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 686b6fc7523871b44b538f2c722ef339, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 66ed7666b801976419967ba0c874dffa, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 00246a4c895120841ab42f88f9f48268, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+  - minimumFloor: 8
+    maximumFloor: 9
+    lootChance: 0.1
+    lootPool:
+    - itemData: {fileID: 11400000, guid: 32d5249177fe8b945821e845080b273e, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 3f8d0309b3c91d34fb7e7351f853b348, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: ee485c054c9380a4dae7f2556c65d76d, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: ae276fa1e1669b749ad9e94eaac3083e, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 5cc523ddee7651f49a69b30957960879, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 00246a4c895120841ab42f88f9f48268, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+  - minimumFloor: 1
+    maximumFloor: 9
+    lootChance: 0.16
+    lootPool:
+    - itemData: {fileID: 11400000, guid: 39cf8bd642b9c314082f2b6ac232719c, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 2
+    - itemData: {fileID: 11400000, guid: 423d67ff89335784b9133301ee09979c, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 2
+    - itemData: {fileID: 11400000, guid: 8941febcd1e8b004da101ca23f4f876e, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 2
+  - minimumFloor: 1
+    maximumFloor: 9
+    lootChance: 0.08
+    lootPool:
+    - itemData: {fileID: 11400000, guid: 7f9d2c1a4e6b48d0a13f5c8e9b027641, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 3921c627c6ec1f84b82bce67b425f452, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 5220c9ba8ccf9304e9764d4472168edb, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 80d107fb911d022438723e0719533275, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 0cb8e0d9658240b48a58555304596dc2, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: dfb5ff6536537fa44b6a06bc9ce73882, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 00bb00e9cb3fe3a4da3617c52998eb85, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: f7bfb2e326990f242866c910c07ea0fc, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 8941febcd1e8b004da101ca23f4f876e, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+  bossLootConfigurations:
+  - minimumFloor: 10
+    maximumFloor: 10
+    lootChance: 1
+    lootPool:
+    - itemData: {fileID: 11400000, guid: 056730cfe2c04ee41b688c20326812b2, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 014f6986329a4b74980a822f4e8c2dab, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 9a673e3d0528d9c429399e448cff6f7b, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+  - minimumFloor: 1
+    maximumFloor: 10
+    lootChance: 0.01
+    lootPool:
+    - itemData: {fileID: 11400000, guid: 056730cfe2c04ee41b688c20326812b2, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 014f6986329a4b74980a822f4e8c2dab, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
+    - itemData: {fileID: 11400000, guid: 9a673e3d0528d9c429399e448cff6f7b, type: 2}
+      minimumQuantity: 1
+      maximumQuantity: 1
   spawnSearchRadius: 1
   spawnSearchAttempts: 8
 --- !u!1 &242918382
@@ -4587,25 +4754,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ea0848cc8c10ba48b78f4470ae573fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryToggle
-  inventoryPanel: {fileID: 0}
-  inventoryAction:
-    m_Name: Inventory
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 766755a6-8263-4366-8644-9b363f88199f
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 5c6d7765-edc9-4b0c-b409-83cd6a4ea7f5
-      m_Path: <Keyboard>/i
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Inventory
-      m_Flags: 0
-    m_Flags: 0
-  startOpen: 0
 --- !u!4 &1973740229
 Transform:
   m_ObjectHideFlags: 0
