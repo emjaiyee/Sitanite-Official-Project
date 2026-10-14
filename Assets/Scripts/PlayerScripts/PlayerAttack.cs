@@ -15,7 +15,9 @@ public class PlayerAttack : MonoBehaviour
     private PlayerWASD movement;
     private PlayerDash dash;
     private PlayerStats stats;
+    private PlayerAttributesNTraits playerAttributes;
     private PlayerAnimationController animationController;
+    private CharacterRenderer characterRenderer;
     private PlayerSkill playerSkill;
     private PlayerShieldDefense shieldDefense;
 
@@ -29,7 +31,9 @@ public class PlayerAttack : MonoBehaviour
         movement = GetComponent<PlayerWASD>();
         dash = GetComponent<PlayerDash>();
         stats = GetComponent<PlayerStats>();
+        playerAttributes = GetComponent<PlayerAttributesNTraits>();
         animationController = GetComponent<PlayerAnimationController>();
+        characterRenderer = GetComponent<CharacterRenderer>();
         playerSkill = GetComponent<PlayerSkill>();
         shieldDefense = GetComponent<PlayerShieldDefense>();
 
@@ -121,6 +125,10 @@ public class PlayerAttack : MonoBehaviour
             isCounterAttack)
         {
             shieldDefense.ConsumeCounterOpportunity();
+            characterRenderer?.PlayCounterAttackFlash(
+                attackMovementLockDuration * 2f
+            );
+            characterRenderer?.PlayCounterAttackWeaponVisual();
         }
     }
 
@@ -176,6 +184,16 @@ public class PlayerAttack : MonoBehaviour
             return false;
         }
 
+        float effectiveDamageMultiplier = damageMultiplier;
+        bool isCriticalHit = false;
+        if (!isCounterAttack &&
+            playerAttributes != null &&
+            Random.value < playerAttributes.BasicAttackCriticalChance)
+        {
+            effectiveDamageMultiplier *= 2f;
+            isCriticalHit = true;
+        }
+
         // Face player toward mouse
         movement.FaceDirection(attackDirection);
 
@@ -193,7 +211,6 @@ public class PlayerAttack : MonoBehaviour
             animationController.PlayAttack();
         }
 
-
         if (dash != null)
             dash.LockDash();
 
@@ -201,13 +218,17 @@ public class PlayerAttack : MonoBehaviour
         // Send attack direction to weapon
         equipment.CurrentWeapon.Attack(
             attackDirection,
-            damageMultiplier,
-            isCounterAttack
+            effectiveDamageMultiplier,
+            isCounterAttack,
+            isCriticalHit,
+            characterRenderer != null
+                ? characterRenderer.CriticalHitVisualPrefab
+                : null
         );
 
 
         attackRecovery = StartCoroutine(
-            EndAttackMovementLockAfterDelay()
+            EndAttackMovementLockAfterDelay(isCounterAttack)
         );
 
         return true;
@@ -262,12 +283,22 @@ public class PlayerAttack : MonoBehaviour
     }
 
 
-    private IEnumerator EndAttackMovementLockAfterDelay()
+    private IEnumerator EndAttackMovementLockAfterDelay(
+        bool isCounterAttack)
     {
         yield return new WaitForSeconds(
             attackMovementLockDuration
         );
 
+        if (isCounterAttack && animationController != null)
+            animationController.PlayAttack();
+
+        if (isCounterAttack)
+        {
+            yield return new WaitForSeconds(
+                attackMovementLockDuration
+            );
+        }
 
         attackRecovery = null;
 

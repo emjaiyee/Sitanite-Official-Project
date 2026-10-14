@@ -4,6 +4,8 @@ using UnityEngine;
 public abstract class ProjectileBase : MonoBehaviour, IProjectile
 {
     public WeaponAttackType SourceAttackType { get; set; } = WeaponAttackType.Ranged;
+    public bool IsCriticalHit { get; set; }
+    public GameObject CriticalHitVisualPrefab { get; set; }
 
     [Header("Damage")]
     [SerializeField] private LayerMask hittableLayers;
@@ -32,10 +34,23 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
     private bool enemyImpactEffects;
     protected BossBalance.HostileDamage EnemyDamage { get; private set; }
 
-    public void InitializeForEnemy(IReadOnlyList<DungeonMemory.DamageStat> hits, float speed, float range, bool homing, int elevation, bool impactEffects = false)
+    public void InitializeForEnemy(
+        IReadOnlyList<DungeonMemory.DamageStat> hits,
+        float speed,
+        float range,
+        bool homing,
+        int elevation,
+        bool impactEffects = false,
+        EnemyHealth attacker = null,
+        Vector3? damageSource = null)
     {
         enemyHits = new List<DungeonMemory.DamageStat>(hits);
-        EnemyDamage = new BossBalance.HostileDamage(hits, elevation);
+        EnemyDamage = new BossBalance.HostileDamage(
+            hits,
+            elevation,
+            attacker,
+            damageSource
+        );
         enemyElevation = elevation;
         enemyHit = false;
         enemyImpactEffects = impactEffects;
@@ -211,7 +226,7 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
             enemyHit = true;
             if (!enemyImpactEffects || ShouldDealDirectDamage)
-                BossBalance.HitPlayer(player, enemyHits, enemyElevation);
+                EnemyDamage.Hit(player);
             if (enemyImpactEffects)
                 OnImpact(transform.position);
             initialized = false;
@@ -236,6 +251,18 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         // Normal projectile damage
         if (ShouldDealDirectDamage)
         {
+            if (IsCriticalHit &&
+                ((damage > 0 && damageType != DamageType.None) ||
+                 (secondaryDamage > 0 && secondaryDamageType != DamageType.None) ||
+                 (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)))
+            {
+                PlayerDamage.PlayCriticalHitVisual(
+                    target,
+                    CriticalHitVisualPrefab,
+                    startPosition
+                );
+            }
+
             if (counterHitVisualPrefab != null &&
                 target is EnemyHealth enemyHealth)
             {
@@ -250,7 +277,8 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
                 damage,
                 damageType,
                 startPosition,
-                SourceAttackType
+                SourceAttackType,
+                IsCriticalHit
             );
 
             if (secondaryDamage > 0 &&
@@ -261,7 +289,8 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
                     secondaryDamage,
                     secondaryDamageType,
                     startPosition,
-                    SourceAttackType
+                    SourceAttackType,
+                    IsCriticalHit
                 );
             }
 
@@ -273,7 +302,8 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
                     tertiaryDamage,
                     tertiaryDamageType,
                     startPosition,
-                    SourceAttackType
+                    SourceAttackType,
+                    IsCriticalHit
                 );
             }
         }

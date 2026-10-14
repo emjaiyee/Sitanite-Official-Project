@@ -1216,6 +1216,10 @@ MonoBehaviour:
   headwearRenderer: {fileID: 7266763579535133445}
   weaponOverRenderer: {fileID: 2491044693711779770}
   shieldRenderer: {fileID: 867530900000000003}
+  meleeCounterFireVisualPrefab: {fileID: 1204842434327493669, guid: 47dc4ed0f3189454e8420a9bbbbb06d3, type: 3}
+  blockedVisualPrefab: {fileID: 1204842434327493669, guid: 432b358fd004bc84da29b724b145a960, type: 3}
+  parryVisualPrefab: {fileID: 1204842434327493669, guid: 31ba31c1a7fb71145bc624d39c587ae8, type: 3}
+  criticalHitVisualPrefab: {fileID: 1204842434327493669, guid: 161914fb9440db64aa93449754299d5d, type: 3}
 --- !u!114 &8044024218569010500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1390,9 +1394,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ed8f20832f242e592f44a0dcf512140, type: 3}
   m_Name: ""
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShieldDefense
-  blockingSkill: 0
-  skillExperience: 0
-  minimumSkillArmorMultiplier: 0.5
   parryArmorMultiplier: 1.5
   counterOpportunityDuration: 0.6
   counterDamageMultiplier: 1.5
@@ -1400,8 +1401,14 @@ MonoBehaviour:
   blockedSfx: {fileID: 0}
   successfulParrySfx: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
   successfulCounterSfx: {fileID: 8300000, guid: 7b3102123949fa044876597c6c7ad35a, type: 3}
-  feedbackHeight: 1.1
   feedbackDuration: 0.7
+  feedbackIconHeight: 0.35
+  feedbackShakeAmount: 0.025
+  feedbackShakeFrequency: 22
+  parryFeedbackSprite: {fileID: 2094730840173597636, guid: 999e6d9a5a9e8914980d51ead1fe9f96, type: 3}
+  blockedFeedbackSprite: {fileID: 3364847379591482952, guid: ad44c78eeaea427408a81c33d783c7c7, type: 3}
+  unsuccessfulBlockFeedbackSprite: {fileID: -8051091215052046005, guid: 11f9b6a59ed2a0249b5f1b463c27c641, type: 3}
+  counterFeedbackSprite: {fileID: 6459305140957623979, guid: 528565492703b2844980a5d0817dafea, type: 3}
 --- !u!95 &6756481364951381221
 Animator:
   serializedVersion: 7

@@ -151,7 +151,7 @@ public class BaseArrow : MonoBehaviour, IProjectileType
                 return;
 
             hasHitPlayer = true;
-            BossBalance.HitPlayer(player, enemyHits, enemyElevation);
+            BossBalance.HitPlayer(player, enemyHits, enemyElevation, attacker);
             Destroy(gameObject);
             return;
         }

@@ -839,6 +839,7 @@ public class EnemyLich : MonoBehaviour
             return false;
         }
 
+        projectile.SetAttacker(GetComponent<EnemyHealth>());
 
         // -----------------------------------------------------
         // LAUNCH

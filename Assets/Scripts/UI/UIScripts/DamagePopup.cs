@@ -35,14 +35,19 @@ public class DamagePopup : MonoBehaviour
     }
 
     /// <summary>Sets the displayed value and tint.</summary>
-    public void Setup(float amount, Color color)
+    public void Setup(float amount, Color color, bool isCriticalHit = false)
     {
         EnsureText();
 
         baseColor = color;
 
         int rounded = Mathf.RoundToInt(amount);
-        textMesh.text = rounded.ToString();
+        textMesh.text = isCriticalHit
+            ? $"<color=#FF3030><voffset=0.8em><size=40%>CRITICAL</size></voffset></color>\n{rounded}"
+            : rounded.ToString();
+        textMesh.rectTransform.sizeDelta = isCriticalHit
+            ? new Vector2(2f, 2f)
+            : new Vector2(1f, 1f);
         textMesh.color = baseColor;
 
         driftX = Random.Range(horizontalJitter.x, horizontalJitter.y);

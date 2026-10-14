@@ -9,6 +9,8 @@ public class SpriteArrayVisual : MonoBehaviour
     [SerializeField] private bool fadeWhenFinished;
     [Min(0.01f)] [SerializeField] private float fadeDuration = 0.25f;
     [SerializeField] private bool randomizeRotation;
+    [Tooltip("Local scale used when this visual is spawned as a melee counter effect.")]
+    [SerializeField] private Vector3 counterEffectScale = Vector3.one * 0.75f;
 
     private SpriteRenderer[] spriteRenderers;
     private Color[] initialColors;
@@ -22,6 +24,8 @@ public class SpriteArrayVisual : MonoBehaviour
         get => destroyWhenFinished;
         set => destroyWhenFinished = value;
     }
+
+    public Vector3 CounterEffectScale => counterEffectScale;
 
     private void Awake()
     {

@@ -9,6 +9,8 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 {
+    private const float CounterProjectileDelay = 0.12f;
+
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform firePoint;
     /// <summary>
@@ -35,6 +37,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private SpriteRenderer[] indicatorSprites;
     private bool hasReachedFullCharge;
     private bool arrowRainTargeting;
+    private GameObject criticalHitVisualPrefab;
     private GameObject activeArrowRainPreview;
     private Vector3 arrowRainTargetPosition;
     private float fullChargeReachedTime;
@@ -42,6 +45,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private float nextAttackTime;
     private float nextSkillTime;
     private float attackDamageMultiplier = 1f;
+    private bool attackIsCritical;
     private Coroutine spinAxeRoutine;
     private BossBalance.HostileDamage enemyDamage;
     private Transform enemyOwner;
@@ -106,7 +110,15 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
         int elevation, Transform owner, Transform muzzle)
     {
         Configure(weaponData);
-        enemyDamage = new BossBalance.HostileDamage(balancedDamage, elevation);
+        EnemyHealth attacker = owner != null
+            ? owner.GetComponentInParent<EnemyHealth>()
+            : null;
+        enemyDamage = new BossBalance.HostileDamage(
+            balancedDamage,
+            elevation,
+            attacker,
+            owner != null ? owner.position : (Vector3?)null
+        );
         enemyOwner = owner;
         attackPoint = owner;
         firePoint = muzzle != null ? muzzle : owner;
@@ -120,7 +132,12 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
             data.WeaponSkillType == WeaponSkillType.None)
             return;
 
-        enemyDamage = new BossBalance.HostileDamage(enemyDamage.Hits, elevation);
+        enemyDamage = new BossBalance.HostileDamage(
+            enemyDamage.Hits,
+            elevation,
+            enemyDamage.Attacker,
+            enemyDamage.DamageSource
+        );
         UseSkill(direction);
         if (IsTargetingSkill)
         {
@@ -191,16 +208,37 @@ public void Attack(Vector2 direction)
 
 public void Attack(Vector2 direction, float damageMultiplier)
 {
-    Attack(direction, damageMultiplier, false);
+    Attack(direction, damageMultiplier, false, false);
 }
 
 public void Attack(Vector2 direction, float damageMultiplier, bool isCounterAttack)
+{
+    Attack(direction, damageMultiplier, isCounterAttack, false);
+}
+
+public void Attack(
+    Vector2 direction,
+    float damageMultiplier,
+    bool isCounterAttack,
+    bool isCriticalHit)
+{
+    Attack(direction, damageMultiplier, isCounterAttack, isCriticalHit, null);
+}
+
+public void Attack(
+    Vector2 direction,
+    float damageMultiplier,
+    bool isCounterAttack,
+    bool isCriticalHit,
+    GameObject criticalHitVisualPrefab)
 {
     if (!IsConfigured() || !CanAttack ||
         direction.sqrMagnitude <= 0.0001f)
         return;
 
     attackDamageMultiplier = Mathf.Max(1f, damageMultiplier);
+    attackIsCritical = isCriticalHit;
+    this.criticalHitVisualPrefab = criticalHitVisualPrefab;
     try
     {
         PerformAttack(direction, isCounterAttack);
@@ -208,6 +246,8 @@ public void Attack(Vector2 direction, float damageMultiplier, bool isCounterAtta
     finally
     {
         attackDamageMultiplier = 1f;
+        attackIsCritical = false;
+        this.criticalHitVisualPrefab = null;
     }
 }
 
@@ -255,14 +295,60 @@ private void PerformAttack(Vector2 direction, bool isCounterAttack)
                     ? data.SpellProjectileSpeed
                     : data.ProjectileSpeed;
 
-            FireProjectile(
-                data.ProjectilePrefab,
-                data.AttackRange,
-                GetPrimaryDamage(),
-                projectileSpeed,
-                direction,
-                counterHitVisualPrefab: isCounterAttack ? data.AttackVisualPrefab : null
-            );
+            if (isCounterAttack)
+            {
+                if (data.ProjectilePrefab == null || firePoint == null)
+                {
+                    FireProjectile(
+                        data.ProjectilePrefab,
+                        data.AttackRange,
+                        GetPrimaryDamage(),
+                        projectileSpeed,
+                        direction,
+                        counterHitVisualPrefab: data.AttackVisualPrefab
+                    );
+                    break;
+                }
+
+                int counterDamage = GetPrimaryDamage();
+                int regularDamage = GetPrimaryDamageWithoutAttackMultiplier();
+                int counterBonusDamage = Mathf.Max(
+                    0,
+                    counterDamage - regularDamage
+                );
+                Vector3 counterFirePosition = firePoint.position;
+
+                FireProjectile(
+                    data.ProjectilePrefab,
+                    data.AttackRange,
+                    regularDamage,
+                    projectileSpeed,
+                    direction,
+                    counterHitVisualPrefab: data.AttackVisualPrefab,
+                    spawnPositionOverride: counterFirePosition
+                );
+                StartCoroutine(FireCounterProjectile(
+                    data.ProjectilePrefab,
+                    data.AttackRange,
+                    counterBonusDamage,
+                    projectileSpeed,
+                    direction,
+                    data.AttackVisualPrefab,
+                    counterFirePosition
+                ));
+            }
+            else
+            {
+                FireProjectile(
+                    data.ProjectilePrefab,
+                    data.AttackRange,
+                    GetPrimaryDamage(),
+                    projectileSpeed,
+                    direction,
+                    isCriticalHit: attackIsCritical,
+                    criticalHitVisualPrefab: criticalHitVisualPrefab
+                );
+            }
 
             break;
 
@@ -329,16 +415,39 @@ private void PerformAttack(Vector2 direction, bool isCounterAttack)
                     (target as MonoBehaviour)?.transform))
                 continue;
 
-            ApplyMeleeDamage(target, primaryDamage, isCounterAttack);
+            ApplyMeleeDamage(
+                target,
+                primaryDamage,
+                isCounterAttack,
+                attackIsCritical
+            );
         }
     }
 
     private void ApplyMeleeDamage(
         IDamageable target,
         int primaryDamage,
-        bool isCounterAttack)
+        bool isCounterAttack,
+        bool isCriticalHit)
     {
         Vector3 source = WeaponOwner.position;
+        int secondaryDamage = GetWeaponDamage(DamageSlot.Secondary);
+        DamageType secondaryDamageType = data.GetDamageType(DamageSlot.Secondary);
+        int tertiaryDamage = GetWeaponDamage(DamageSlot.Tertiary);
+        DamageType tertiaryDamageType = data.GetDamageType(DamageSlot.Tertiary);
+
+        if (isCriticalHit &&
+            ((primaryDamage > 0 && data.PrimaryDamageType != DamageType.None) ||
+             (secondaryDamage > 0 && secondaryDamageType != DamageType.None) ||
+             (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)))
+        {
+            PlayerDamage.PlayCriticalHitVisual(
+                target,
+                criticalHitVisualPrefab,
+                source
+            );
+        }
+
         if (isCounterAttack &&
             target is EnemyHealth enemyHealth &&
             ((primaryDamage > 0 && data.PrimaryDamageType != DamageType.None) ||
@@ -351,17 +460,13 @@ private void PerformAttack(Vector2 direction, bool isCounterAttack)
         }
 
         if (primaryDamage > 0 && data.PrimaryDamageType != DamageType.None)
-            PlayerDamage.Deal(target, primaryDamage, data.PrimaryDamageType, source, data.WeaponAttackType);
+            PlayerDamage.Deal(target, primaryDamage, data.PrimaryDamageType, source, data.WeaponAttackType, isCriticalHit);
 
-        int secondaryDamage = GetWeaponDamage(DamageSlot.Secondary);
-        DamageType secondaryDamageType = data.GetDamageType(DamageSlot.Secondary);
         if (secondaryDamage > 0 && secondaryDamageType != DamageType.None)
-            PlayerDamage.Deal(target, secondaryDamage, secondaryDamageType, source, data.WeaponAttackType);
+            PlayerDamage.Deal(target, secondaryDamage, secondaryDamageType, source, data.WeaponAttackType, isCriticalHit);
 
-        int tertiaryDamage = GetWeaponDamage(DamageSlot.Tertiary);
-        DamageType tertiaryDamageType = data.GetDamageType(DamageSlot.Tertiary);
         if (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)
-            PlayerDamage.Deal(target, tertiaryDamage, tertiaryDamageType, source, data.WeaponAttackType);
+            PlayerDamage.Deal(target, tertiaryDamage, tertiaryDamageType, source, data.WeaponAttackType, isCriticalHit);
     }
 
     // =========================================================
@@ -629,7 +734,11 @@ private void UseCrossbowExplosionSkill(Vector2 direction)
     {
         BossBalance.HostileDamage hits = BuildEnemySkillDamage(primaryDamage);
         explosiveArrow.InitializeForEnemy(hits.Hits, data.ProjectileSpeed, data.SkillRange,
-            data.Homing, hits.Elevation, true);
+            data.Homing,
+            hits.Elevation,
+            true,
+            hits.Attacker,
+            hits.DamageSource);
     }
 }
 
@@ -1481,7 +1590,10 @@ public void ReleaseSkill(bool fullyCharged)
         Vector2 direction,
         bool isSkill = false,
         DamageType primaryDamageTypeOverride = DamageType.None,
-        GameObject counterHitVisualPrefab = null)
+        GameObject counterHitVisualPrefab = null,
+        Vector3? spawnPositionOverride = null,
+        bool isCriticalHit = false,
+        GameObject criticalHitVisualPrefab = null)
     {
         if (projectilePrefab == null ||
             firePoint == null)
@@ -1507,7 +1619,7 @@ public void ReleaseSkill(bool fullyCharged)
         GameObject projectile =
             Instantiate(
                 projectilePrefab,
-                firePoint.position,
+                spawnPositionOverride ?? firePoint.position,
                 Quaternion.Euler(
                     0f,
                     0f,
@@ -1521,9 +1633,20 @@ public void ReleaseSkill(bool fullyCharged)
             ProjectileBase hostileProjectile = projectile.GetComponentInChildren<ProjectileBase>();
             BaseArrow hostileArrow = projectile.GetComponentInChildren<BaseArrow>();
             if (hostileProjectile != null)
-                hostileProjectile.InitializeForEnemy(hits.Hits, speed, range, data.Homing, hits.Elevation);
-            else if (hostileArrow != null)
-                hostileArrow.LaunchForEnemy(direction, hits.Hits, speed, range, data.Homing, hits.Elevation);
+                hostileProjectile.InitializeForEnemy(
+                    hits.Hits,
+                    speed,
+                    range,
+                    data.Homing,
+                    hits.Elevation,
+                    attacker: hits.Attacker,
+                    damageSource: hits.DamageSource
+                );
+                else if (hostileArrow != null)
+                {
+                    hostileArrow.SetAttacker(hits.Attacker);
+                    hostileArrow.LaunchForEnemy(direction, hits.Hits, speed, range, data.Homing, hits.Elevation);
+                }
             else
             {
                 Debug.LogWarning($"{WeaponId}: Fallen skill projectile requires ProjectileBase or BaseArrow.", this);
@@ -1546,7 +1669,11 @@ public void ReleaseSkill(bool fullyCharged)
         }
 
         if (projectileComponent is ProjectileBase trackedProjectile)
+        {
             trackedProjectile.SourceAttackType = data.WeaponAttackType;
+            trackedProjectile.IsCriticalHit = isCriticalHit;
+            trackedProjectile.CriticalHitVisualPrefab = criticalHitVisualPrefab;
+        }
         if (isSkill)
         {
             DamageType primaryDamageType =
@@ -1599,6 +1726,28 @@ public void ReleaseSkill(bool fullyCharged)
                 projectileBase.SetCounterHitVisual(counterHitVisualPrefab);
             }
         }
+    }
+
+    private IEnumerator FireCounterProjectile(
+        GameObject projectilePrefab,
+        float range,
+        int damage,
+        float speed,
+        Vector2 direction,
+        GameObject counterHitVisualPrefab,
+        Vector3 firePosition)
+    {
+        yield return new WaitForSeconds(CounterProjectileDelay);
+
+        FireProjectile(
+            projectilePrefab,
+            range,
+            damage,
+            speed,
+            direction,
+            counterHitVisualPrefab: counterHitVisualPrefab,
+            spawnPositionOverride: firePosition
+        );
     }
 
     // =========================================================
@@ -1688,7 +1837,12 @@ public void ReleaseSkill(bool fullyCharged)
             if (type != DamageType.None)
                 hits.Add(new DungeonMemory.DamageStat { type = type, damage = data.GetSkillDamage(slot, primaryDamage) });
         }
-        return new BossBalance.HostileDamage(hits, enemyDamage.Elevation);
+        return new BossBalance.HostileDamage(
+            hits,
+            enemyDamage.Elevation,
+            enemyDamage.Attacker,
+            enemyDamage.DamageSource
+        );
     }
 
     private int CalculateSkillDamage(int rawDamage)
@@ -1780,6 +1934,20 @@ public void ReleaseSkill(bool fullyCharged)
             damage += data.PrimaryDamage * GetWeaponUpgradeMultiplier();
 
         return Mathf.RoundToInt(damage * attackDamageMultiplier);
+    }
+
+    private int GetPrimaryDamageWithoutAttackMultiplier()
+    {
+        float damageMultiplier = attackDamageMultiplier;
+        attackDamageMultiplier = 1f;
+        try
+        {
+            return GetPrimaryDamage();
+        }
+        finally
+        {
+            attackDamageMultiplier = damageMultiplier;
+        }
     }
 
     private float GetWeaponUpgradeMultiplier()

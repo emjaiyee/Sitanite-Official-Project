@@ -348,7 +348,7 @@ public class FallenDescender : MonoBehaviour
                 if (hit.GetComponentInParent<PlayerStats>() != target)
                     continue;
 
-                BossBalance.HitPlayer(target, attackHits, elevation.CurrentLevel);
+                BossBalance.HitPlayer(target, attackHits, elevation.CurrentLevel, health);
                 break;
             }
         }
@@ -358,9 +358,19 @@ public class FallenDescender : MonoBehaviour
                 Quaternion.Euler(0f, 0f, Mathf.Atan2(attackDirection.y, attackDirection.x) * Mathf.Rad2Deg));
             float speed = weapon.WeaponAttackType == WeaponAttackType.Spell ? weapon.SpellProjectileSpeed : weapon.ProjectileSpeed;
             if (projectile.TryGetComponent(out ProjectileBase playerProjectile))
-                playerProjectile.InitializeForEnemy(attackHits, Mathf.Max(0.01f, speed), weapon.AttackRange, weapon.Homing, elevation.CurrentLevel);
+                playerProjectile.InitializeForEnemy(
+                    attackHits,
+                    Mathf.Max(0.01f, speed),
+                    weapon.AttackRange,
+                    weapon.Homing,
+                    elevation.CurrentLevel,
+                    attacker: health
+                );
             else if (projectile.TryGetComponent(out BaseArrow enemyProjectile))
+            {
+                enemyProjectile.SetAttacker(health);
                 enemyProjectile.LaunchForEnemy(attackDirection, attackHits, speed, weapon.AttackRange, weapon.Homing, elevation.CurrentLevel);
+            }
         }
     }
 

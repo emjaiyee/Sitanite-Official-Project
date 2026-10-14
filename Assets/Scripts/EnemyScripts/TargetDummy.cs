@@ -4,8 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public sealed class TargetDummy : MonoBehaviour, IDamageable
+public sealed class TargetDummy : MonoBehaviour, IDamageable, ICriticalDamageable
 {
+    private enum AttackMode
+    {
+        Melee,
+        Ranged
+    }
+
     [Header("Target Dummy")]
     [Min(1)]
     [SerializeField] private int maxHealth = 1000;
@@ -21,6 +27,7 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
 
     [Header("Attack")]
     [SerializeField] private bool canAttack = true;
+    [SerializeField] private AttackMode attackMode = AttackMode.Melee;
     [Min(0f)]
     [SerializeField] private float attackDamage = 10f;
     [SerializeField] private DamageType attackDamageType = DamageType.Slash;
@@ -33,6 +40,12 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
     [Min(0.01f)]
     [SerializeField] private float attackHitWindow = 0.25f;
     [SerializeField] private SpriteArrayVisual attackVisualPrefab;
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private GameObject rangedProjectilePrefab;
+    [Min(0.01f)]
+    [SerializeField] private float rangedProjectileSpeed = 2.5f;
+    [Min(0.01f)]
+    [SerializeField] private float rangedProjectileLifetime = 16f;
 
     public int CurrentHealth { get; private set; }
     public int MaxHealth => maxHealth;
@@ -121,6 +134,8 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
         attackCooldown = Mathf.Max(0.01f, attackCooldown);
         attackWindup = Mathf.Max(0f, attackWindup);
         attackHitWindow = Mathf.Max(0.01f, attackHitWindow);
+        rangedProjectileSpeed = Mathf.Max(0.01f, rangedProjectileSpeed);
+        rangedProjectileLifetime = Mathf.Max(0.01f, rangedProjectileLifetime);
     }
 
     private IEnumerator AttackAfterWindup(PlayerStats target)
@@ -132,10 +147,57 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
             !target.IsDead &&
             Vector2.Distance(transform.position, target.transform.position) <= attackRange)
         {
-            yield return ShowAttackAndDamage(target);
+            if (attackMode == AttackMode.Ranged)
+                FireRangedProjectile(target);
+            else
+                yield return ShowAttackAndDamage(target);
         }
 
         attackRoutine = null;
+    }
+
+    private void FireRangedProjectile(PlayerStats target)
+    {
+        if (rangedProjectilePrefab == null)
+        {
+            Debug.LogWarning(
+                "[TargetDummy] Assign a ranged projectile prefab before using ranged attack mode.",
+                this
+            );
+            return;
+        }
+
+        Vector3 spawnPosition = attackPoint != null
+            ? attackPoint.position
+            : transform.position;
+        Vector3 direction = target.transform.position - spawnPosition;
+
+        GameObject projectileObject = Instantiate(
+            rangedProjectilePrefab,
+            spawnPosition,
+            Quaternion.identity
+        );
+
+        IProjectileType projectile = projectileObject.GetComponent<IProjectileType>();
+        if (projectile == null)
+        {
+            Debug.LogError(
+                $"[TargetDummy] Ranged projectile prefab '{rangedProjectilePrefab.name}' " +
+                "does not contain an IProjectileType component.",
+                projectileObject
+            );
+            Destroy(projectileObject);
+            return;
+        }
+
+        projectile.SetAttacker(GetComponent<EnemyHealth>());
+        projectile.Launch(
+            direction,
+            Mathf.RoundToInt(attackDamage),
+            attackDamageType,
+            rangedProjectileSpeed,
+            rangedProjectileLifetime
+        );
     }
 
     private IEnumerator ShowAttackAndDamage(PlayerStats target)
@@ -254,6 +316,24 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
         DamageType damageType = DamageType.Slash,
         Vector3? damageSource = null)
     {
+        ApplyDamage(amount, damageType, damageSource, false);
+    }
+
+    public void TakeCriticalDamage(
+        int amount,
+        DamageType damageType,
+        Vector3? damageSource,
+        WeaponAttackType attackType)
+    {
+        ApplyDamage(amount, damageType, damageSource, true);
+    }
+
+    private void ApplyDamage(
+        int amount,
+        DamageType damageType,
+        Vector3? damageSource,
+        bool isCriticalHit)
+    {
         if (amount <= 0 || IsDead)
             return;
 
@@ -263,7 +343,13 @@ public sealed class TargetDummy : MonoBehaviour, IDamageable
         CurrentHealth -= appliedDamage;
 
         if (showDamageNumbers)
-            DamagePopupSpawner.Spawn(transform, appliedDamage, damageType);
+            DamagePopupSpawner.Spawn(
+                transform,
+                appliedDamage,
+                damageType,
+                0.8f,
+                isCriticalHit
+            );
 
         OnHealthChanged?.Invoke(this);
         Debug.Log($"[TargetDummy] {name} took {appliedDamage} {damageType} damage. HP: {CurrentHealth}/{maxHealth}");

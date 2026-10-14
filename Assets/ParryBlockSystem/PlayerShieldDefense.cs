@@ -1,27 +1,25 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerStats), typeof(PlayerWASD))]
 public class PlayerShieldDefense : MonoBehaviour
 {
-    [Header("Blocking Skill")]
-    [Range(0f, 100f)]
-    [SerializeField] private float blockingSkill;
-    [Min(0f)]
-    [SerializeField] private float skillExperience;
+    public const float MinimumBlockChance = 0.1f;
+    public const float MaximumBlockChance = 0.7f;
+    public const float DefaultParryArmorMultiplier = 1.5f;
+    public const float DefaultCounterOpportunityDuration = 0.6f;
+    public const float DefaultCounterDamageMultiplier = 1.5f;
 
     [Header("Block Tuning")]
-    [Range(0.1f, 1f)]
-    [SerializeField] private float minimumSkillArmorMultiplier = 0.5f;
     [Min(1f)]
-    [SerializeField] private float parryArmorMultiplier = 1.5f;
+    [SerializeField] private float parryArmorMultiplier = DefaultParryArmorMultiplier;
 
     [Header("Parry Counter")]
     [Min(0f)]
-    [SerializeField] private float counterOpportunityDuration = 0.6f;
+    [SerializeField] private float counterOpportunityDuration =
+        DefaultCounterOpportunityDuration;
     [Min(1f)]
-    [SerializeField] private float counterDamageMultiplier = 1.5f;
+    [SerializeField] private float counterDamageMultiplier = DefaultCounterDamageMultiplier;
 
     [Header("Defense SFX")]
     [SerializeField] private AudioSource audioSource;
@@ -29,39 +27,64 @@ public class PlayerShieldDefense : MonoBehaviour
     [SerializeField] private AudioClip successfulParrySfx;
     [SerializeField] private AudioClip successfulCounterSfx;
 
-    [Header("Debug Feedback")]
-    [Min(0f)]
-    [SerializeField] private float feedbackHeight = 1.1f;
+    [Header("Defense Feedback")]
     [Min(0.1f)]
     [SerializeField] private float feedbackDuration = 0.7f;
-
-    private static readonly Color GuardColor = new Color(0.45f, 0.85f, 1f);
-    private static readonly Color BlockColor = new Color(0.5f, 0.9f, 1f);
-    private static readonly Color ParryColor = new Color(1f, 0.85f, 0.25f);
+    [Tooltip("Displayed icon height in world units.")]
+    [Min(0.05f)]
+    [SerializeField] private float feedbackIconHeight = 0.35f;
+    [Tooltip("Maximum position offset for icon shake, in local units.")]
+    [Min(0f)]
+    [SerializeField] private float feedbackShakeAmount = 0.025f;
+    [Tooltip("Shake oscillations per second.")]
+    [Min(0f)]
+    [SerializeField] private float feedbackShakeFrequency = 22f;
+    [SerializeField] private Transform headAnchor;
+    [SerializeField] private Sprite parryFeedbackSprite;
+    [SerializeField] private Sprite blockedFeedbackSprite;
+    [SerializeField] private Sprite unsuccessfulBlockFeedbackSprite;
+    [SerializeField] private Sprite counterFeedbackSprite;
 
     private PlayerStats stats;
     private PlayerWASD movement;
+    private CharacterRenderer characterRenderer;
+    private CharacterSpriteController characterSpriteController;
     private Camera mainCamera;
-    private TextMeshPro feedbackText;
+    private SpriteRenderer feedbackIcon;
     private bool wasGuarding;
     private float guardStartedAt;
     private float feedbackUntil;
     private float counterOpportunityUntil;
+    private float counterOpportunityDamageMultiplier = 1f;
 
     public bool IsGuarding { get; private set; }
-    public float BlockingSkill => blockingSkill;
+    public float ParryArmorMultiplier => parryArmorMultiplier;
+    public float CounterOpportunityDuration => counterOpportunityDuration;
+    public float BaseCounterDamageMultiplier => counterDamageMultiplier;
     public bool HasCounterOpportunity =>
         Time.time < counterOpportunityUntil;
+
+    public static float GetBlockChance(int upgradeLevel)
+    {
+        float levelProgress = Mathf.Clamp(
+            upgradeLevel,
+            0,
+            InventoryItem.MaximumUpgradeLevel
+        ) / (float)InventoryItem.MaximumUpgradeLevel;
+        return Mathf.Lerp(MinimumBlockChance, MaximumBlockChance, levelProgress);
+    }
 
     private void Awake()
     {
         stats = GetComponent<PlayerStats>();
         movement = GetComponent<PlayerWASD>();
+        characterRenderer = GetComponent<CharacterRenderer>();
+        characterSpriteController = GetComponent<CharacterSpriteController>();
         mainCamera = Camera.main;
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
 
-        CreateFeedbackText();
+        CreateFeedbackDisplay();
     }
 
     private void Update()
@@ -83,16 +106,6 @@ public class PlayerShieldDefense : MonoBehaviour
 
         IsGuarding = guarding;
         wasGuarding = guarding;
-
-        if (guarding)
-        {
-            if (Time.time >= feedbackUntil)
-                SetFeedback("GUARD", GuardColor, float.PositiveInfinity);
-        }
-        else if (feedbackText.text == "GUARD")
-        {
-            ClearFeedback();
-        }
 
         UpdateFeedbackFade();
     }
@@ -120,7 +133,7 @@ public class PlayerShieldDefense : MonoBehaviour
 
         if (damage <= 0f ||
             !IsGuarding ||
-            damageSource == null ||
+            (damageSource == null && attacker == null) ||
             !HasEquippedShield())
         {
             return damage;
@@ -128,54 +141,89 @@ public class PlayerShieldDefense : MonoBehaviour
 
         InventoryItem shield = EquipmentManager.Instance.GetEquippedItem(EquipmentType.Shield);
         ItemData shieldData = shield.Data;
+        Vector3 attackerPosition = attacker != null
+            ? attacker.transform.position
+            : damageSource.Value;
         Vector2 directionToAttacker =
-            (Vector2)(damageSource.Value - transform.position);
+            (Vector2)(attackerPosition - transform.position);
 
         if (directionToAttacker.sqrMagnitude <= 0.0001f)
+        {
+            SetFeedback(
+                unsuccessfulBlockFeedbackSprite,
+                Time.time + feedbackDuration
+            );
             return damage;
+        }
 
         directionToAttacker.Normalize();
         Vector2 facing = movement.FacingDirection;
         if (facing.sqrMagnitude <= 0.0001f)
+        {
+            SetFeedback(
+                unsuccessfulBlockFeedbackSprite,
+                Time.time + feedbackDuration
+            );
             return damage;
+        }
 
         float minimumDot = Mathf.Cos(shieldData.BlockArcDegrees * 0.5f * Mathf.Deg2Rad);
         if (Vector2.Dot(facing.normalized, directionToAttacker) < minimumDot)
+        {
+            SetFeedback(
+                unsuccessfulBlockFeedbackSprite,
+                Time.time + feedbackDuration
+            );
             return damage;
+        }
 
         float staminaCost =
             shieldData.BlockStaminaCost +
             damage * shieldData.BlockStaminaCostPerDamage;
 
         if (staminaCost > 0f && !stats.UseStamina(staminaCost))
+        {
+            SetFeedback(
+                unsuccessfulBlockFeedbackSprite,
+                Time.time + feedbackDuration
+            );
             return damage;
+        }
+
+        float blockChance = GetBlockChance(shield.UpgradeLevel);
+        if (Random.value >= blockChance)
+        {
+            SetFeedback(
+                unsuccessfulBlockFeedbackSprite,
+                Time.time + feedbackDuration
+            );
+            return damage;
+        }
 
         wasBlocked = true;
 
-        float skillFactor = Mathf.Lerp(
-            minimumSkillArmorMultiplier,
-            1f,
-            blockingSkill / 100f
-        );
         bool isParry = Time.time - guardStartedAt <= shieldData.ParryWindow;
         float blockArmor =
             shieldData.BlockArmor *
             shield.UpgradeMultiplier *
-            skillFactor *
             (isParry ? parryArmorMultiplier : 1f);
 
-        GainBlockingExperience(Mathf.Min(damage, blockArmor));
         SetFeedback(
-            isParry ? "PARRY! LEFT CLICK" : "BLOCK",
-            isParry ? ParryColor : BlockColor,
+            isParry ? parryFeedbackSprite : blockedFeedbackSprite,
             Time.time + feedbackDuration
         );
+        if (characterRenderer != null)
+            characterRenderer.PlayShieldDefenseVisual(isParry);
+        if (isParry && characterSpriteController != null)
+            characterSpriteController.PlayWeaponAction(WeaponAttackType.Melee);
         PlayDefenseSfx(isParry);
 
         if (isParry)
         {
             counterOpportunityUntil =
                 Time.time + counterOpportunityDuration;
+            counterOpportunityDamageMultiplier =
+                counterDamageMultiplier * shield.UpgradeMultiplier;
 
             if (attacker != null)
                 StaggerEnemy(attacker, shieldData.ParryStaggerDuration);
@@ -184,7 +232,7 @@ public class PlayerShieldDefense : MonoBehaviour
         return Mathf.Max(0f, damage - blockArmor);
     }
 
-    public float CounterDamageMultiplier => counterDamageMultiplier;
+    public float CounterDamageMultiplier => counterOpportunityDamageMultiplier;
 
     public void ConsumeCounterOpportunity()
     {
@@ -192,11 +240,8 @@ public class PlayerShieldDefense : MonoBehaviour
             return;
 
         counterOpportunityUntil = 0f;
-        SetFeedback(
-            "COUNTER!",
-            ParryColor,
-            Time.time + feedbackDuration
-        );
+        counterOpportunityDamageMultiplier = counterDamageMultiplier;
+        SetFeedback(counterFeedbackSprite, Time.time + feedbackDuration);
         if (successfulCounterSfx != null && audioSource != null)
             audioSource.PlayOneShot(successfulCounterSfx);
     }
@@ -231,24 +276,6 @@ public class PlayerShieldDefense : MonoBehaviour
             movement.FaceDirection(direction);
     }
 
-    private void GainBlockingExperience(float blockedDamage)
-    {
-        if (blockingSkill >= 100f)
-            return;
-
-        skillExperience += Mathf.Max(0.1f, blockedDamage * 0.1f);
-
-        while (blockingSkill < 100f)
-        {
-            float nextLevelCost = 10f + blockingSkill * 2f;
-            if (skillExperience < nextLevelCost)
-                break;
-
-            skillExperience -= nextLevelCost;
-            blockingSkill = Mathf.Min(100f, blockingSkill + 1f);
-        }
-    }
-
     private void PlayDefenseSfx(bool isParry)
     {
         AudioClip clip = isParry ? successfulParrySfx : blockedSfx;
@@ -256,71 +283,109 @@ public class PlayerShieldDefense : MonoBehaviour
             audioSource.PlayOneShot(clip);
     }
 
-    private void CreateFeedbackText()
+    private void CreateFeedbackDisplay()
     {
-        GameObject label = new GameObject("Shield Debug Feedback");
-        label.transform.SetParent(transform, false);
-        label.transform.localPosition = Vector3.up * feedbackHeight;
-        label.transform.localRotation = Quaternion.identity;
+        if (headAnchor == null)
+            headAnchor = FindHeadAnchor();
 
-        feedbackText = label.AddComponent<TextMeshPro>();
-        feedbackText.alignment = TextAlignmentOptions.Center;
-        feedbackText.fontSize = 3f;
-        feedbackText.fontStyle = FontStyles.Bold;
-        feedbackText.textWrappingMode = TextWrappingModes.NoWrap;
-        feedbackText.rectTransform.sizeDelta = new Vector2(3f, 1f);
-        feedbackText.text = string.Empty;
-        feedbackText.alpha = 0f;
-
-        MeshRenderer textRenderer = feedbackText.GetComponent<MeshRenderer>();
-        if (textRenderer != null)
+        if (headAnchor == null)
         {
-            textRenderer.sortingLayerName = "Effects";
-            textRenderer.sortingOrder = 10001;
+            Debug.LogError(
+                "PlayerShieldDefense requires a child Transform named HeadAnchor.",
+                this
+            );
+            return;
         }
+
+        GameObject feedback = new GameObject("Shield Defense Feedback");
+        feedback.transform.SetParent(headAnchor, false);
+        feedback.transform.localPosition = Vector3.zero;
+        feedback.transform.localRotation = Quaternion.identity;
+
+        feedbackIcon = feedback.AddComponent<SpriteRenderer>();
+        feedbackIcon.enabled = false;
+        feedbackIcon.sortingLayerName = "Player";
+        feedbackIcon.sortingOrder = 100;
     }
 
-    private void SetFeedback(string message, Color color, float until)
+    private Transform FindHeadAnchor()
     {
-        feedbackText.text = message;
-        feedbackText.color = color;
-        feedbackText.alpha = 1f;
+        Transform[] childTransforms = GetComponentsInChildren<Transform>(true);
+        foreach (Transform childTransform in childTransforms)
+        {
+            if (childTransform != transform &&
+                childTransform.name == "HeadAnchor")
+            {
+                return childTransform;
+            }
+        }
+
+        return null;
+    }
+
+    private void SetFeedback(Sprite sprite, float until)
+    {
+        if (feedbackIcon == null)
+            return;
+
+        if (sprite == null)
+        {
+            Debug.LogError(
+                "A shield defense feedback sprite is not assigned.",
+                this
+            );
+            ClearFeedback();
+            return;
+        }
+
+        feedbackIcon.sprite = sprite;
+        feedbackIcon.color = Color.white;
+        feedbackIcon.transform.localScale =
+            Vector3.one * (feedbackIconHeight / sprite.bounds.size.y);
+        feedbackIcon.transform.localPosition = Vector3.zero;
+        feedbackIcon.transform.localRotation = Quaternion.identity;
+        feedbackIcon.enabled = true;
         feedbackUntil = until;
     }
 
     private void ClearFeedback()
     {
-        if (feedbackText == null)
-            return;
-
-        feedbackText.text = string.Empty;
-        feedbackText.alpha = 0f;
+        if (feedbackIcon != null)
+        {
+            feedbackIcon.enabled = false;
+            feedbackIcon.transform.localPosition = Vector3.zero;
+            feedbackIcon.transform.localRotation = Quaternion.identity;
+        }
         feedbackUntil = 0f;
     }
 
     private void UpdateFeedbackFade()
     {
-        if (feedbackText == null ||
-            feedbackText.text == "GUARD")
+        if (feedbackIcon == null ||
+            !feedbackIcon.enabled ||
+            feedbackUntil <= 0f)
         {
             return;
         }
 
-        if (feedbackText.text == "PARRY! LEFT CLICK" &&
-            !HasCounterOpportunity)
-        {
-            feedbackText.text = "PARRY!";
-            feedbackUntil = Mathf.Min(
-                feedbackUntil,
-                Time.time + feedbackDuration * 0.5f
-            );
-        }
+        Color color = feedbackIcon.color;
+        float remaining = feedbackUntil - Time.time;
+        color.a = Mathf.Clamp01(remaining / feedbackDuration);
+        feedbackIcon.color = color;
 
-        if (feedbackUntil <= 0f)
-            return;
-
-        feedbackText.alpha = Mathf.Clamp01(
-            (feedbackUntil - Time.time) / feedbackDuration
+        float elapsed = feedbackDuration - remaining;
+        float shakeEnvelope = Mathf.Clamp01(remaining / feedbackDuration);
+        float shakePhase = elapsed * feedbackShakeFrequency * Mathf.PI * 2f;
+        feedbackIcon.transform.localPosition = new Vector3(
+            Mathf.Sin(shakePhase) * feedbackShakeAmount * shakeEnvelope,
+            Mathf.Sin(shakePhase * 1.37f) *
+                feedbackShakeAmount * 0.5f * shakeEnvelope,
+            0f
+        );
+        feedbackIcon.transform.localRotation = Quaternion.Euler(
+            0f,
+            0f,
+            Mathf.Sin(shakePhase * 0.8f) * 3f * shakeEnvelope
         );
 
         if (Time.time >= feedbackUntil)

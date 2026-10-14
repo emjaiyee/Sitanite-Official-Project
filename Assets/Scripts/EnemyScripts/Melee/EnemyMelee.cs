@@ -845,7 +845,8 @@ public class EnemyMelee : MonoBehaviour
 
         attack.SetDamage(
             damageType,
-            damageAmount
+            damageAmount,
+            GetComponent<EnemyHealth>()
             );
     }
 

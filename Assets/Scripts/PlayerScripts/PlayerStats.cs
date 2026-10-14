@@ -678,7 +678,12 @@ public class PlayerStats : MonoBehaviour
             );
 
             if (amount <= 0f)
+            {
+                if (wasBlocked)
+                    StopDamageFlash(restoreColors: true);
+
                 return;
+            }
         }
 
         amount = Mathf.Max(1f, amount - GetDamageResistance(damageType));

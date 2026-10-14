@@ -8,13 +8,23 @@ public static class BossBalance
     {
         public readonly List<DungeonMemory.DamageStat> Hits;
         public readonly int Elevation;
+        public readonly EnemyHealth Attacker;
+        public readonly Vector3? DamageSource;
         public LayerMask Layers => LayerMask.GetMask("Player");
         private readonly Dictionary<PlayerStats, float> nextHitTimes = new Dictionary<PlayerStats, float>();
 
-        public HostileDamage(IReadOnlyList<DungeonMemory.DamageStat> hits, int elevation)
+        public HostileDamage(
+            IReadOnlyList<DungeonMemory.DamageStat> hits,
+            int elevation,
+            EnemyHealth attacker = null,
+            Vector3? damageSource = null)
         {
             Hits = new List<DungeonMemory.DamageStat>(hits);
             Elevation = elevation;
+            Attacker = attacker;
+            DamageSource = attacker != null
+                ? attacker.transform.position
+                : damageSource;
         }
 
         public PlayerStats Resolve(Collider2D collider)
@@ -33,7 +43,7 @@ public static class BossBalance
             {
                 int damage = Mathf.RoundToInt(hit.damage * scale);
                 if (hit.type != DamageType.None && damage > 0)
-                    player.TakeDamage(damage, hit.type);
+                    player.TakeDamage(damage, hit.type, DamageSource, Attacker);
             }
         }
 
@@ -78,7 +88,11 @@ public static class BossBalance
             (PlayerElevationLevel.Instance == null || Mathf.Abs(PlayerElevationLevel.Instance.CurrentLevel - elevation) <= 1);
     }
 
-    public static void HitPlayer(PlayerStats player, IReadOnlyList<DungeonMemory.DamageStat> hits, int elevation)
+    public static void HitPlayer(
+        PlayerStats player,
+        IReadOnlyList<DungeonMemory.DamageStat> hits,
+        int elevation,
+        EnemyHealth attacker = null)
     {
         if (!CanHitPlayer(player, elevation))
             return;
@@ -86,7 +100,17 @@ public static class BossBalance
         foreach (DungeonMemory.DamageStat hit in hits)
         {
             if (hit.type != DamageType.None && hit.damage > 0f)
-                player.TakeDamage(Mathf.RoundToInt(hit.damage), hit.type);
+            {
+                Vector3? source = attacker != null
+                    ? attacker.transform.position
+                    : null;
+                player.TakeDamage(
+                    Mathf.RoundToInt(hit.damage),
+                    hit.type,
+                    source,
+                    attacker
+                );
+            }
         }
     }
 

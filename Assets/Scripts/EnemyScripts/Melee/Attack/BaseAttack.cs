@@ -10,6 +10,7 @@ public class BaseAttack : MonoBehaviour
     [SerializeField] private float endTime = 1f;
 
     private bool hasHitPlayer;
+    private EnemyHealth attacker;
 
     public void Awake()
     {
@@ -17,11 +18,12 @@ public class BaseAttack : MonoBehaviour
     }
     public void SetDamage(
         DamageType damageType,
-        float damageAmount)
+        float damageAmount,
+        EnemyHealth attacker)
     { 
         this.damageType = damageType;
         this.damageAmount = damageAmount;
-
+        this.attacker = attacker;
     }
 
     public void Update()
@@ -58,7 +60,9 @@ public class BaseAttack : MonoBehaviour
 
         playerStats.TakeDamage(
            damageAmount,
-           damageType
+           damageType,
+           attacker != null ? attacker.transform.position : (Vector3?)transform.position,
+           attacker
        );
 
         

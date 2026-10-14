@@ -243,6 +243,9 @@ public class ItemUIController : MonoBehaviour
                 $"Upgrade Level: {item.UpgradeLevel}/{InventoryItem.MaximumUpgradeLevel}"
             );
 
+            if (data.EquipmentType == EquipmentType.Shield)
+                AppendShieldDetails(text, data, item);
+
             if (data.StatCapType != StatCapType.None)
             {
                 string capName = data.StatCapType == StatCapType.PrimaryAttribute
@@ -292,6 +295,47 @@ public class ItemUIController : MonoBehaviour
         }
 
         return text.ToString().TrimEnd();
+    }
+
+    private static void AppendShieldDetails(
+        StringBuilder text,
+        ItemData data,
+        InventoryItem item)
+    {
+        PlayerShieldDefense defense =
+            FindFirstObjectByType<PlayerShieldDefense>();
+        float parryArmorMultiplier = defense != null
+            ? defense.ParryArmorMultiplier
+            : PlayerShieldDefense.DefaultParryArmorMultiplier;
+        float counterDamageMultiplier = defense != null
+            ? defense.BaseCounterDamageMultiplier
+            : PlayerShieldDefense.DefaultCounterDamageMultiplier;
+        float upgradeMultiplier = item.UpgradeMultiplier;
+
+        text.AppendLine();
+        text.AppendLine("Shield Defense:");
+        text.AppendLine(
+            $"Block Chance: {PlayerShieldDefense.GetBlockChance(item.UpgradeLevel):P0}"
+        );
+        text.AppendLine($"Block Armor: {data.BlockArmor * upgradeMultiplier:0.##}");
+        text.AppendLine(
+            $"Parry Armor: {data.BlockArmor * upgradeMultiplier * parryArmorMultiplier:0.##}"
+        );
+        text.AppendLine($"Parry Window: {data.ParryWindow:0.##} sec");
+        text.AppendLine($"Block Arc: {data.BlockArcDegrees:0.#}\u00B0");
+        text.AppendLine(
+            $"Stamina Cost: {data.BlockStaminaCost:0.##} + " +
+            $"{data.BlockStaminaCostPerDamage:0.##} per incoming damage"
+        );
+        text.AppendLine(
+            $"Parry Stagger: {data.ParryStaggerDuration:0.##} sec"
+        );
+        text.AppendLine(
+            $"Parry Counter Damage: {counterDamageMultiplier * upgradeMultiplier:0.##}x weapon damage"
+        );
+        text.AppendLine(
+            $"Counter Window: {defense?.CounterOpportunityDuration ?? PlayerShieldDefense.DefaultCounterOpportunityDuration:0.##} sec"
+        );
     }
 
     private string GetRarityColor(ItemRarity rarity)

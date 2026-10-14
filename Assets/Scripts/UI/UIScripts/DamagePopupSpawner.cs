@@ -31,7 +31,11 @@ public class DamagePopupSpawner : MonoBehaviour
     }
 
     /// <summary>Spawns a damage number at a world position.</summary>
-    public static void Spawn(Vector3 position, float amount, Color color)
+    public static void Spawn(
+        Vector3 position,
+        float amount,
+        Color color,
+        bool isCriticalHit = false)
     {
         if (amount <= 0f)
             return;
@@ -53,22 +57,43 @@ public class DamagePopupSpawner : MonoBehaviour
             popup = popupObject.AddComponent<DamagePopup>();
         }
 
-        popup.Setup(amount, color);
+        popup.Setup(amount, color, isCriticalHit);
     }
 
     /// <summary>Spawns a damage number above a target transform.</summary>
-    public static void Spawn(Transform target, float amount, Color color, float heightOffset = 0.8f)
+    public static void Spawn(
+        Transform target,
+        float amount,
+        Color color,
+        float heightOffset = 0.8f,
+        bool isCriticalHit = false)
     {
         if (target == null)
             return;
 
-        Spawn(target.position + Vector3.up * heightOffset, amount, color);
+        Spawn(
+            target.position + Vector3.up * heightOffset,
+            amount,
+            color,
+            isCriticalHit
+        );
     }
 
     /// <summary>Spawns a damage number colored by its damage type.</summary>
-    public static void Spawn(Transform target, float amount, DamageType damageType, float heightOffset = 0.8f)
+    public static void Spawn(
+        Transform target,
+        float amount,
+        DamageType damageType,
+        float heightOffset = 0.8f,
+        bool isCriticalHit = false)
     {
-        Spawn(target, amount, GetColor(damageType), heightOffset);
+        Spawn(
+            target,
+            amount,
+            GetColor(damageType),
+            heightOffset,
+            isCriticalHit
+        );
     }
 
     /// <summary>

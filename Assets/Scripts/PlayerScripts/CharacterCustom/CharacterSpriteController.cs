@@ -168,12 +168,14 @@ public class CharacterSpriteController : MonoBehaviour
     {
         actionActive = true;
         actionEndTime = Time.time + duration;
-        SetState(animationState);
+        SetState(animationState, true);
     }
 
-    private void SetState(CharacterAnimationState animationState)
+    private void SetState(
+        CharacterAnimationState animationState,
+        bool restart = false)
     {
-        if (currentAnimationState == animationState)
+        if (currentAnimationState == animationState && !restart)
             return;
 
         currentAnimationState = animationState;

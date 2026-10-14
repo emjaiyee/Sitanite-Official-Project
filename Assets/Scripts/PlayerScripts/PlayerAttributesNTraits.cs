@@ -6,7 +6,7 @@ public class AttributeTraitDefaults
 {
     [Tooltip("Increases Slash, Blunt, and Physical damage, plus maximum health.")]
     [Min(0)] public int strength = 5;
-    [Tooltip("Increases Pierce and Stab damage, plus maximum stamina.")]
+    [Tooltip("Increases Pierce and Stab damage, maximum stamina, and basic attack critical chance by 1% per point above 5.")]
     [Min(0)] public int dexterity = 5;
     [Tooltip("Increases maximum mana by 7 per point above 5, and magical damage, including Frost, Poison, Lightning, Psychic, Necrosis, Water, Earth, Fire, and Air, by 3.")]
     [Min(0)] public int intelligence = 5;
@@ -17,7 +17,7 @@ public class AttributeTraitDefaults
     [Min(1)] public int focus = 1;
     [Tooltip("Increases stamina regeneration by 0.2 per point above 1.")]
     [Min(1)] public int endurance = 1;
-    [Tooltip("Increases maximum stamina by 2 per point above 1.")]
+    [Tooltip("Increases maximum stamina by 2 and basic attack critical chance by 1% per point above 1.")]
     [Min(1)] public int agility = 1;
     [Tooltip("Increases health regeneration by 0.2 per point above 1.")]
     [Min(1)] public int vigor = 1;
@@ -72,6 +72,12 @@ public class PlayerAttributesNTraits : MonoBehaviour
     [Min(1)] [SerializeField] private int precision = 1;
     [Min(1)] [SerializeField] private int fortitude = 1;
     [Min(1)] [SerializeField] private int willpower = 1;
+
+    [Header("Basic Attack Critical Chance")]
+    [SerializeField, Range(0f, 1f)] private float baseBasicAttackCriticalChance = 0.05f;
+    [SerializeField, Min(0f)] private float criticalChancePerDexterity = 0.01f;
+    [SerializeField, Min(0f)] private float criticalChancePerAgility = 0.01f;
+    [SerializeField, Range(0f, 1f)] private float maximumBasicAttackCriticalChance = 0.75f;
 
     [Header("Class Defaults")]
     [SerializeField] private AttributeTraitDefaults warriorDefaults = new AttributeTraitDefaults
@@ -132,6 +138,13 @@ public class PlayerAttributesNTraits : MonoBehaviour
     public float CooldownReduction => (Haste - 1) * 0.002f;
     public float DamageResistanceModifier => (Fortitude - 1) * 0.5f;
     public float MagicalResistanceModifier => (Willpower - 1) * 0.5f;
+    public float BasicAttackCriticalChance => Mathf.Clamp(
+        baseBasicAttackCriticalChance +
+        Mathf.Max(0, Dexterity - 5) * criticalChancePerDexterity +
+        Mathf.Max(0, Agility - 1) * criticalChancePerAgility,
+        0f,
+        maximumBasicAttackCriticalChance
+    );
 
     public void NotifyEquipmentChanged()
     {
