@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     private readonly HashSet<RoomInstance> clearedRooms = new HashSet<RoomInstance>();
     private readonly HashSet<string> rolledDungeonMemories = new HashSet<string>();
     private readonly HashSet<string> encounteredDungeonMemories = new HashSet<string>();
+    private readonly List<DungeonMemory.DamageUse> adaptiveDamageUses = new List<DungeonMemory.DamageUse>();
     private bool runFinished;
 
     public bool TryRollDungeonMemory(string memoryId, int floor = 0)
@@ -45,6 +46,60 @@ public class Player : MonoBehaviour
             runStatistics.miniBossKills++;
         else
             runStatistics.kills++;
+    }
+
+    public void RecordAdaptiveKill(DamageType damageType, bool ranged)
+    {
+        if (runFinished)
+            return;
+
+        DamageType selected = DamageType.None;
+        foreach (DamageType type in BossBalance.DamageTypes())
+        {
+            if ((damageType & type) != 0)
+            {
+                selected = type;
+                break;
+            }
+        }
+        if (selected == DamageType.None)
+            return;
+
+        DungeonMemory.DamageUse current = adaptiveDamageUses.Find(use => use.type == selected);
+        if (current == null)
+        {
+            current = new DungeonMemory.DamageUse { type = selected };
+            adaptiveDamageUses.Add(current);
+        }
+        foreach (DungeonMemory.DamageUse use in adaptiveDamageUses)
+        {
+            use.kills = use == current ? Mathf.Min(use.kills, int.MaxValue - 1) + 1 : Mathf.Max(0, use.kills - 1);
+            if (!ranged)
+                use.rangedKills = Mathf.Max(0, use.rangedKills - 1);
+        }
+        if (ranged)
+            current.rangedKills = Mathf.Min(current.rangedKills, int.MaxValue - 1) + 1;
+    }
+
+    public DungeonMemory.Adaptation GetAdaptation(int threshold = 50)
+    {
+        DungeonMemory.DamageUse resistant = null;
+        DungeonMemory.DamageUse ranged = null;
+        long rangedTotal = 0;
+        foreach (DungeonMemory.DamageUse use in adaptiveDamageUses)
+        {
+            if (resistant == null || use.kills > resistant.kills)
+                resistant = use;
+            if (ranged == null || use.rangedKills > ranged.rangedKills)
+                ranged = use;
+            rangedTotal += use.rangedKills;
+        }
+        bool swarm = ranged != null && rangedTotal >= Mathf.Max(1, threshold);
+        return new DungeonMemory.Adaptation
+        {
+            damageType = swarm ? ranged.type : resistant != null && resistant.kills >= Mathf.Max(1, threshold) ? resistant.type : DamageType.None,
+            swarm = swarm
+        };
     }
 
     public void RecordRoomCleared(RoomInstance room)

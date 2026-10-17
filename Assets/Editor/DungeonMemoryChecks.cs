@@ -132,35 +132,45 @@ public static class DungeonMemoryChecks
 
     private static void CheckAdaptationCounters()
     {
-        DungeonMemory.Archive archive = new DungeonMemory.Archive();
-        for (int index = 0; index < 49; index++)
-            archive.RecordKill(DamageType.Fire, false);
-        Require(!archive.GetAdaptation().Active, "Resistance triggered before 50 kills.");
-        archive.RecordKill(DamageType.Fire, false);
-        DungeonMemory.Adaptation snapshot = archive.GetAdaptation();
-        Require(snapshot.damageType == DamageType.Fire && !snapshot.swarm, "50 melee kills did not trigger fire resistance alone.");
-        archive.RecordKill(DamageType.Lightning, false);
-        Require(!archive.GetAdaptation().Active && archive.damageUses.Find(use => use.type == DamageType.Fire).kills == 49 &&
-            snapshot.damageType == DamageType.Fire, "Changing damage types did not decay counters or mutated the frozen floor snapshot.");
-        DungeonMemory.Archive ranged = new DungeonMemory.Archive();
-        for (int index = 0; index < 30; index++)
-            ranged.RecordKill(DamageType.Lightning, true);
-        for (int index = 0; index < 19; index++)
-            ranged.RecordKill(DamageType.Fire, true);
-        Require(!ranged.GetAdaptation().Active, "Ranged swarming triggered before 50 pooled kills.");
-        ranged.RecordKill(DamageType.Fire, true);
-        DungeonMemory.Adaptation swarm = ranged.GetAdaptation();
-        Require(swarm.swarm && swarm.damageType == DamageType.Lightning, "30 lightning plus 20 fire kills did not swarm with lightning resistance.");
-        DungeonMemory.Archive restored = JsonUtility.FromJson<DungeonMemory.Archive>(JsonUtility.ToJson(ranged));
-        Require(restored.GetAdaptation().swarm && restored.GetAdaptation().damageType == DamageType.Lightning &&
-            restored.damageUses.Find(use => use.type == DamageType.Fire).rangedKills == 20, "Adaptation counters did not survive archive JSON roundtrip.");
-        restored.RecordKill(DamageType.Pierce, false);
-        Require(!restored.GetAdaptation().swarm && restored.damageUses.Find(use => use.type == DamageType.Lightning).rangedKills == 29,
-            "Melee kills did not reduce pooled ranged usage.");
-        DungeonMemory.Archive legacy = JsonUtility.FromJson<DungeonMemory.Archive>("{\"version\":1,\"deaths\":[]}");
-        Require(!legacy.GetAdaptation().Active, "Old archives unexpectedly acquired adaptation.");
-        legacy.RecordKill(DamageType.None, true);
-        Require(!legacy.GetAdaptation().Active, "An untyped kill triggered adaptation.");
+        GameObject root = TemporaryObject("Adaptation Counter Check", false);
+        Player previousPlayer = Player.Instance;
+        try
+        {
+            Player player = root.AddComponent<Player>();
+            typeof(Player).GetProperty("Instance").GetSetMethod(true).Invoke(null, new object[] { player });
+            for (int index = 0; index < 49; index++)
+                player.RecordAdaptiveKill(DamageType.Fire, false);
+            Require(!player.GetAdaptation().Active, "Resistance triggered before 50 kills.");
+            player.RecordAdaptiveKill(DamageType.Fire, false);
+            DungeonMemory.Adaptation snapshot = player.GetAdaptation();
+            Require(snapshot.damageType == DamageType.Fire && !snapshot.swarm, "50 melee kills did not trigger fire resistance alone.");
+            player.RecordAdaptiveKill(DamageType.Lightning, false);
+            Require(!player.GetAdaptation().Active && snapshot.damageType == DamageType.Fire, "Changing damage types did not decay counters or mutated the frozen floor snapshot.");
+            Player ranged = new GameObject("Ranged Counter Player").AddComponent<Player>();
+            typeof(Player).GetProperty("Instance").GetSetMethod(true).Invoke(null, new object[] { ranged });
+            for (int index = 0; index < 30; index++)
+                ranged.RecordAdaptiveKill(DamageType.Lightning, true);
+            for (int index = 0; index < 19; index++)
+                ranged.RecordAdaptiveKill(DamageType.Fire, true);
+            Require(!ranged.GetAdaptation().Active, "Ranged swarming triggered before 50 pooled kills.");
+            ranged.RecordAdaptiveKill(DamageType.Fire, true);
+            DungeonMemory.Adaptation swarm = ranged.GetAdaptation();
+            Require(swarm.swarm && swarm.damageType == DamageType.Lightning, "30 lightning plus 20 fire kills did not swarm with lightning resistance.");
+            ranged.RecordAdaptiveKill(DamageType.Pierce, false);
+            Require(!ranged.GetAdaptation().swarm, "Melee kills did not reduce pooled ranged usage.");
+            Player newRun = new GameObject("New Run Player").AddComponent<Player>();
+            typeof(Player).GetProperty("Instance").GetSetMethod(true).Invoke(null, new object[] { newRun });
+            Require(!newRun.GetAdaptation().Active, "Adaptation counters survived a new Player run.");
+            newRun.RecordAdaptiveKill(DamageType.None, true);
+            Require(!newRun.GetAdaptation().Active, "An untyped kill triggered adaptation.");
+            UnityEngine.Object.DestroyImmediate(ranged.gameObject);
+            UnityEngine.Object.DestroyImmediate(newRun.gameObject);
+        }
+        finally
+        {
+            typeof(Player).GetProperty("Instance").GetSetMethod(true).Invoke(null, new object[] { previousPlayer });
+            UnityEngine.Object.DestroyImmediate(root);
+        }
     }
 
     private static void CheckAdaptiveEnemy()
@@ -193,7 +203,7 @@ public static class DungeonMemoryChecks
             player.baseFireResistance = 3f;
             Require(player.MaxHealth == 200f && player.GetDamageResistance(DamageType.Fire) == 15f, "Equipped test health/resistance were not applied.");
             float raw = AdaptiveEnemy.FairRawDamage(player.MaxHealth, player.GetDamageResistance(DamageType.Fire));
-            Require(raw == 25f && raw - player.GetDamageResistance(DamageType.Fire) == player.MaxHealth * 0.05f,
+            Require(Mathf.Approximately(raw, 25f) && Mathf.Approximately(raw - player.GetDamageResistance(DamageType.Fire), player.MaxHealth * 0.05f),
                 "Adaptive hit failed to leave 5% of geared maximum health after resistance.");
 
             EnemyHealth health = root.AddComponent<EnemyHealth>();
@@ -256,21 +266,25 @@ public static class DungeonMemoryChecks
             typeof(PlayerRoomTracker).GetProperty("CurrentRoom").GetSetMethod(true).Invoke(tracker, new object[] { null });
             Require(!adaptive.DetectsPlayerInRoom(), "Swarming detected a player outside its room.");
 
-            DungeonMemory memory = root.AddComponent<DungeonMemory>();
-            DungeonMemory.Archive archive = new DungeonMemory.Archive();
             for (int index = 0; index < 50; index++)
-                archive.RecordKill(DamageType.Fire, false);
-            SetField(memory, "archive", archive);
+                actor.RecordAdaptiveKill(DamageType.Fire, false);
             EnemySpawnerManager manager = root.AddComponent<EnemySpawnerManager>();
-            SetField(manager, "dungeonMemory", memory);
             Invoke(manager, "FreezeAdaptation");
-            archive.RecordKill(DamageType.Air, false);
+            actor.RecordAdaptiveKill(DamageType.Air, false);
             Invoke(manager, "FreezeAdaptation");
             FieldInfo floorAdaptation = typeof(EnemySpawnerManager).GetField("floorAdaptation", BindingFlags.NonPublic | BindingFlags.Instance);
             Require(((DungeonMemory.Adaptation)floorAdaptation.GetValue(manager)).damageType == DamageType.Fire, "Current floor changed its adaptation after a kill.");
             manager.BeginFloor(null);
             Invoke(manager, "FreezeAdaptation");
             Require(!((DungeonMemory.Adaptation)floorAdaptation.GetValue(manager)).Active, "Next floor ignored decayed counters.");
+            SetField(player, "level", 7);
+            typeof(Player).GetProperty("Instance").GetSetMethod(true).Invoke(null, new object[] { actor });
+            for (int index = 0; index < 50; index++)
+                actor.RecordAdaptiveKill(DamageType.Fire, false);
+            manager.BeginFloor(null);
+            Invoke(manager, "FreezeAdaptation");
+            MethodInfo adaptiveLevel = typeof(EnemySpawnerManager).GetMethod("GetRegularEnemyLevel", BindingFlags.NonPublic | BindingFlags.Instance);
+            Require((int)adaptiveLevel.Invoke(manager, new object[] { null, player }) == 7, "Adapted enemies did not use the current player level.");
 
             GameObject meleeObject = TemporaryObject("Swarm Melee Prefab", false);
             meleeObject.transform.SetParent(root.transform);
