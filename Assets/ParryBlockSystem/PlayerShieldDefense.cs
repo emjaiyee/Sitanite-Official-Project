@@ -190,8 +190,8 @@ public class PlayerShieldDefense : MonoBehaviour
             return damage;
         }
 
-        float blockChance = GetBlockChance(shield.UpgradeLevel);
-        if (Random.value >= blockChance)
+        bool isParry = Time.time - guardStartedAt <= shieldData.ParryWindow;
+        if (!isParry && Random.value >= GetBlockChance(shield.UpgradeLevel))
         {
             SetFeedback(
                 unsuccessfulBlockFeedbackSprite,
@@ -199,10 +199,8 @@ public class PlayerShieldDefense : MonoBehaviour
             );
             return damage;
         }
-
         wasBlocked = true;
 
-        bool isParry = Time.time - guardStartedAt <= shieldData.ParryWindow;
         float blockArmor =
             shieldData.BlockArmor *
             shield.UpgradeMultiplier *

@@ -6,6 +6,13 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
     public WeaponAttackType SourceAttackType { get; set; } = WeaponAttackType.Ranged;
     public bool IsCriticalHit { get; set; }
     public GameObject CriticalHitVisualPrefab { get; set; }
+    public bool ShowAttackHitFeedback { get; set; }
+    public Sprite AttackHitIcon { get; set; }
+    public Sprite AttackHitImpactSprite { get; set; }
+    public Sprite[] AttackHitImpactSprites { get; set; }
+    public float AttackHitImpactFramesPerSecond { get; set; } = 12f;
+    public float AttackHitIconSize { get; set; } = 0.45f;
+    public float AttackHitImpactSize { get; set; } = 0.45f;
 
     [Header("Damage")]
     [SerializeField] private LayerMask hittableLayers;
@@ -246,6 +253,35 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
                 (target as MonoBehaviour)?.transform))
         {
             return;
+        }
+
+        if (ShowAttackHitFeedback)
+        {
+            if (AttackHitImpactSprites != null &&
+                AttackHitImpactSprites.Length > 0)
+            {
+                AttackHitIconVisual.PlayImpact(
+                    target,
+                    AttackHitImpactSprites,
+                    AttackHitImpactFramesPerSecond,
+                    AttackHitImpactSize
+                );
+            }
+            else
+            {
+                AttackHitIconVisual.PlayImpact(
+                    target,
+                    AttackHitImpactSprite,
+                    AttackHitImpactSize
+                );
+            }
+
+            AttackHitIconVisual.Play(
+                target,
+                AttackHitIcon,
+                startPosition,
+                AttackHitIconSize
+            );
         }
 
         // Normal projectile damage

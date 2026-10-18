@@ -13,6 +13,50 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform firePoint;
+    [Header("Basic Attack Hit Feedback")]
+    [Tooltip("Optional icon override for melee hits. Defaults to the equipped weapon's inventory icon.")]
+    [SerializeField] private Sprite meleeAttackHitIcon;
+    [Tooltip("Optional icon override for ranged hits. Defaults to the equipped weapon's inventory icon.")]
+    [SerializeField] private Sprite rangedAttackHitIcon;
+    [Tooltip("Optional icon override for spell hits. Defaults to the equipped weapon's inventory icon.")]
+    [SerializeField] private Sprite spellAttackHitIcon;
+    [Tooltip("Optional sprite burst shown over the enemy for melee hits.")]
+    [SerializeField] private Sprite meleeHitImpactSprite;
+    [Tooltip("Optional sprite burst shown over the enemy for ranged hits.")]
+    [SerializeField] private Sprite rangedHitImpactSprite;
+    [Tooltip("Optional sprite burst shown over the enemy for spell hits.")]
+    [SerializeField] private Sprite spellHitImpactSprite;
+    [Header("Melee and Ranged Hit Impact Animations")]
+    [Tooltip("Impact frames used by all melee weapons, in playback order (assign 8 frames).")]
+    [SerializeField] private Sprite[] meleeHitImpactSprites;
+    [Tooltip("Impact frames used by all ranged weapons, in playback order (assign 8 frames).")]
+    [SerializeField] private Sprite[] rangedHitImpactSprites;
+    [Tooltip("Scale multiplier applied only to the melee impact animation. Lower this if the impact appears too large.")]
+    [Range(0.1f, 2f)]
+    [SerializeField] private float meleeHitImpactAnimationScale = 0.5f;
+    [Tooltip("Scale multiplier applied only to the ranged impact animation. Lower this if the impact appears too large.")]
+    [Range(0.1f, 2f)]
+    [SerializeField] private float rangedHitImpactAnimationScale = 0.5f;
+    [Header("Tome Hit Impact Animations")]
+    [Tooltip("Impact frames for Tome of Air, in playback order (for example, 8 frames).")]
+    [SerializeField] private Sprite[] airTomeHitImpactSprites;
+    [Tooltip("Impact frames for Tome of Fire, in playback order (for example, 8 frames).")]
+    [SerializeField] private Sprite[] fireTomeHitImpactSprites;
+    [Tooltip("Impact frames for Tome of Lightning, in playback order (for example, 8 frames).")]
+    [SerializeField] private Sprite[] lightningTomeHitImpactSprites;
+    [Tooltip("Playback speed shared by weapon hit impact animations.")]
+    [Min(1f)]
+    [SerializeField] private float tomeHitImpactFramesPerSecond = 12f;
+    [Header("Hit Impact Sizes")]
+    [Min(0.01f)]
+    [SerializeField] private float meleeHitImpactSize = 0.45f;
+    [Min(0.01f)]
+    [SerializeField] private float rangedHitImpactSize = 0.45f;
+    [Min(0.01f)]
+    [SerializeField] private float spellHitImpactSize = 0.45f;
+    [Header("Floating Hit Icon Size")]
+    [Min(0.01f)]
+    [SerializeField] private float attackHitIconSize = 0.45f;
     /// <summary>
     /// <forsounds>
     private WeaponAudioController weaponAudio;
@@ -346,7 +390,8 @@ private void PerformAttack(Vector2 direction, bool isCounterAttack)
                     projectileSpeed,
                     direction,
                     isCriticalHit: attackIsCritical,
-                    criticalHitVisualPrefab: criticalHitVisualPrefab
+                    criticalHitVisualPrefab: criticalHitVisualPrefab,
+                    showAttackHitFeedback: true
                 );
             }
 
@@ -467,6 +512,17 @@ private void PerformAttack(Vector2 direction, bool isCounterAttack)
 
         if (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)
             PlayerDamage.Deal(target, tertiaryDamage, tertiaryDamageType, source, data.WeaponAttackType, isCriticalHit);
+
+        if (!isCounterAttack)
+        {
+            PlayAttackHitImpact(target);
+            AttackHitIconVisual.Play(
+                target,
+                GetAttackHitIcon(),
+                source,
+                attackHitIconSize
+            );
+        }
     }
 
     // =========================================================
@@ -1593,7 +1649,8 @@ public void ReleaseSkill(bool fullyCharged)
         GameObject counterHitVisualPrefab = null,
         Vector3? spawnPositionOverride = null,
         bool isCriticalHit = false,
-        GameObject criticalHitVisualPrefab = null)
+        GameObject criticalHitVisualPrefab = null,
+        bool showAttackHitFeedback = false)
     {
         if (projectilePrefab == null ||
             firePoint == null)
@@ -1673,6 +1730,20 @@ public void ReleaseSkill(bool fullyCharged)
             trackedProjectile.SourceAttackType = data.WeaponAttackType;
             trackedProjectile.IsCriticalHit = isCriticalHit;
             trackedProjectile.CriticalHitVisualPrefab = criticalHitVisualPrefab;
+            trackedProjectile.ShowAttackHitFeedback = showAttackHitFeedback;
+            trackedProjectile.AttackHitIcon = showAttackHitFeedback
+                ? GetAttackHitIcon()
+                : null;
+            trackedProjectile.AttackHitIconSize = attackHitIconSize;
+            trackedProjectile.AttackHitImpactSprite = showAttackHitFeedback
+                ? GetAttackHitImpactSprite()
+                : null;
+            trackedProjectile.AttackHitImpactSprites = showAttackHitFeedback
+                ? GetAttackHitImpactSprites()
+                : null;
+            trackedProjectile.AttackHitImpactFramesPerSecond =
+                tomeHitImpactFramesPerSecond;
+            trackedProjectile.AttackHitImpactSize = GetAttackHitImpactVisualSize();
         }
         if (isSkill)
         {
@@ -1748,6 +1819,107 @@ public void ReleaseSkill(bool fullyCharged)
             counterHitVisualPrefab: counterHitVisualPrefab,
             spawnPositionOverride: firePosition
         );
+    }
+
+    private Sprite GetAttackHitIcon()
+    {
+        Sprite icon = data.WeaponAttackType switch
+        {
+            WeaponAttackType.Melee => meleeAttackHitIcon,
+            WeaponAttackType.Ranged => rangedAttackHitIcon,
+            WeaponAttackType.Spell => spellAttackHitIcon,
+            _ => null
+        };
+
+        if (icon != null)
+            return icon;
+
+        return data.inventoryIcon != null
+            ? data.inventoryIcon
+            : data.equipmentIcon;
+    }
+
+    private Sprite GetAttackHitImpactSprite()
+    {
+        Sprite icon = data.WeaponAttackType switch
+        {
+            WeaponAttackType.Melee => meleeHitImpactSprite,
+            WeaponAttackType.Ranged => rangedHitImpactSprite,
+            WeaponAttackType.Spell => spellHitImpactSprite,
+            _ => null
+        };
+
+        return icon != null ? icon : GetAttackHitIcon();
+    }
+
+    private Sprite[] GetTomeHitImpactSprites()
+    {
+        return data.WeaponId switch
+        {
+            "TomeOfAir" => airTomeHitImpactSprites,
+            "TomeOfFire" => fireTomeHitImpactSprites,
+            "TomeOfLightning" or "TomeLightning" => lightningTomeHitImpactSprites,
+            _ => null
+        };
+    }
+
+    private Sprite[] GetAttackHitImpactSprites()
+    {
+        return data.WeaponAttackType switch
+        {
+            WeaponAttackType.Melee => meleeHitImpactSprites,
+            WeaponAttackType.Ranged => rangedHitImpactSprites,
+            WeaponAttackType.Spell => GetTomeHitImpactSprites(),
+            _ => null
+        };
+    }
+
+    private void PlayAttackHitImpact(IDamageable target)
+    {
+        Sprite[] impactSprites = GetAttackHitImpactSprites();
+        if (impactSprites != null && impactSprites.Length > 0)
+        {
+            AttackHitIconVisual.PlayImpact(
+                target,
+                impactSprites,
+                tomeHitImpactFramesPerSecond,
+                GetAttackHitImpactVisualSize()
+            );
+            return;
+        }
+
+        AttackHitIconVisual.PlayImpact(
+            target,
+            GetAttackHitImpactSprite(),
+            GetAttackHitImpactSize()
+        );
+    }
+
+    private float GetAttackHitImpactSize()
+    {
+        return data.WeaponAttackType switch
+        {
+            WeaponAttackType.Melee => meleeHitImpactSize,
+            WeaponAttackType.Ranged => rangedHitImpactSize,
+            WeaponAttackType.Spell => spellHitImpactSize,
+            _ => attackHitIconSize
+        };
+    }
+
+    private float GetAttackHitImpactAnimationScale()
+    {
+        return data.WeaponAttackType switch
+        {
+            WeaponAttackType.Melee => meleeHitImpactAnimationScale,
+            WeaponAttackType.Ranged => rangedHitImpactAnimationScale,
+            _ => 1f
+        };
+    }
+
+    private float GetAttackHitImpactVisualSize()
+    {
+        return GetAttackHitImpactSize() *
+            GetAttackHitImpactAnimationScale();
     }
 
     // =========================================================

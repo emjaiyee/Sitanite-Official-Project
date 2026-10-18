@@ -315,9 +315,12 @@ public class ItemUIController : MonoBehaviour
         text.AppendLine();
         text.AppendLine("Shield Defense:");
         text.AppendLine(
-            $"Block Chance: {PlayerShieldDefense.GetBlockChance(item.UpgradeLevel):P0}"
+            $"Normal Block Chance: {PlayerShieldDefense.GetBlockChance(item.UpgradeLevel):P0}"
         );
         text.AppendLine($"Block Armor: {data.BlockArmor * upgradeMultiplier:0.##}");
+        text.AppendLine(
+            $"Timed Parry: Guaranteed within {data.ParryWindow:0.##} sec of raising guard"
+        );
         text.AppendLine(
             $"Parry Armor: {data.BlockArmor * upgradeMultiplier * parryArmorMultiplier:0.##}"
         );
