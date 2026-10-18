@@ -1,7 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ProjectileBase : MonoBehaviour, IProjectile
 {
+    public WeaponAttackType SourceAttackType { get; set; } = WeaponAttackType.Ranged;
+
     [Header("Damage")]
     [SerializeField] private LayerMask hittableLayers;
 
@@ -22,6 +25,22 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private Vector3 startPosition;
     private bool initialized;
+    private GameObject counterHitVisualPrefab;
+    private List<DungeonMemory.DamageStat> enemyHits;
+    private int enemyElevation;
+    private bool enemyHit;
+    private bool enemyImpactEffects;
+    protected BossBalance.HostileDamage EnemyDamage { get; private set; }
+
+    public void InitializeForEnemy(IReadOnlyList<DungeonMemory.DamageStat> hits, float speed, float range, bool homing, int elevation, bool impactEffects = false)
+    {
+        enemyHits = new List<DungeonMemory.DamageStat>(hits);
+        EnemyDamage = new BossBalance.HostileDamage(hits, elevation);
+        enemyElevation = elevation;
+        enemyHit = false;
+        enemyImpactEffects = impactEffects;
+        Initialize(0, DamageType.None, speed, range, homing, EnemyDamage.Layers);
+    }
 
     /// <summary>
     /// Time.time when this projectile was initialized.
@@ -74,6 +93,14 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private void Awake()
     {
+        Rigidbody2D projectileBody = GetComponent<Rigidbody2D>();
+        if (projectileBody == null)
+            projectileBody = gameObject.AddComponent<Rigidbody2D>();
+
+        projectileBody.bodyType = RigidbodyType2D.Kinematic;
+        projectileBody.gravityScale = 0f;
+        projectileBody.simulated = true;
+        projectileBody.useFullKinematicContacts = true;
     }
 
     public void Initialize(
@@ -101,6 +128,11 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         initialized = true;
 
         OnInitialized();
+    }
+
+    public void SetCounterHitVisual(GameObject visualPrefab)
+    {
+        counterHitVisualPrefab = visualPrefab;
     }
 
     public void InitializeSkill(
@@ -157,7 +189,8 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
                 startPosition,
                 transform.position) >= maxDistance)
         {
-            OnMaxRangeReached();
+            if (enemyHits == null || enemyImpactEffects)
+                OnMaxRangeReached();
 
             Destroy(gameObject);
 
@@ -170,10 +203,19 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Check layer
-        if ((hittableLayers.value &
-             (1 << other.gameObject.layer)) == 0)
+        if (enemyHits != null)
         {
+            PlayerStats player = EnemyDamage.Resolve(other);
+            if (enemyHit || player == null)
+                return;
+
+            enemyHit = true;
+            if (!enemyImpactEffects || ShouldDealDirectDamage)
+                BossBalance.HitPlayer(player, enemyHits, enemyElevation);
+            if (enemyImpactEffects)
+                OnImpact(transform.position);
+            initialized = false;
+            Destroy(gameObject);
             return;
         }
 
@@ -194,29 +236,44 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         // Normal projectile damage
         if (ShouldDealDirectDamage)
         {
-            target.TakeDamage(
+            if (counterHitVisualPrefab != null &&
+                target is EnemyHealth enemyHealth)
+            {
+                enemyHealth.PlayCounterHitVisual(
+                    counterHitVisualPrefab,
+                    startPosition
+                );
+            }
+
+            PlayerDamage.Deal(
+                target,
                 damage,
                 damageType,
-                startPosition
+                startPosition,
+                SourceAttackType
             );
 
             if (secondaryDamage > 0 &&
                 secondaryDamageType != DamageType.None)
             {
-                target.TakeDamage(
+                PlayerDamage.Deal(
+                    target,
                     secondaryDamage,
                     secondaryDamageType,
-                    startPosition
+                    startPosition,
+                    SourceAttackType
                 );
             }
 
             if (tertiaryDamage > 0 &&
                 tertiaryDamageType != DamageType.None)
             {
-                target.TakeDamage(
+                PlayerDamage.Deal(
+                    target,
                     tertiaryDamage,
                     tertiaryDamageType,
-                    startPosition
+                    startPosition,
+                    SourceAttackType
                 );
             }
         }
@@ -288,6 +345,9 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
     /// </summary>
     private Transform FindNearestTarget()
     {
+        if (enemyHits != null)
+            return Player.Instance != null ? Player.Instance.transform : null;
+
         Collider2D[] candidates =
             Physics2D.OverlapCircleAll(
                 startPosition,

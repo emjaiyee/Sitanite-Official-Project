@@ -135,7 +135,7 @@ public class AStarManager : MonoBehaviour
                 continue;
 
             Vector3Int cell =
-                walkableMap.Tilemap.WorldToCell(worldPosition);
+                ProceduralTilemapPlane.WorldToCell(walkableMap.Tilemap, worldPosition);
 
             if (walkableMap.Tilemap.HasTile(cell))
             {
@@ -160,7 +160,7 @@ public class AStarManager : MonoBehaviour
                 continue;
 
             Vector3Int cell =
-                walkableMap.Tilemap.WorldToCell(worldPosition);
+                ProceduralTilemapPlane.WorldToCell(walkableMap.Tilemap, worldPosition);
 
             if (walkableMap.Tilemap.HasTile(cell))
                 return walkableMap.Tilemap;
@@ -178,10 +178,7 @@ public class AStarManager : MonoBehaviour
             if (tilemap == null)
                 continue;
 
-            Vector3Int cell =
-                tilemap.WorldToCell(worldPosition);
-
-            if (tilemap.HasTile(cell))
+            if (ProceduralTilemapPlane.ContainsDetection(tilemap, worldPosition))
             {
                 return tilemap;
             }
@@ -273,7 +270,7 @@ public class AStarManager : MonoBehaviour
             return null;
 
         return tilemap.GetCellCenterWorld(
-            tilemap.WorldToCell(worldPosition)
+            ProceduralTilemapPlane.WorldToCell(tilemap, worldPosition)
         );
     }
 
@@ -291,7 +288,7 @@ public class AStarManager : MonoBehaviour
             return null;
 
         return tilemap.GetCellCenterWorld(
-            tilemap.WorldToCell(worldPosition)
+            ProceduralTilemapPlane.WorldToCell(tilemap, worldPosition)
         );
     }
 
@@ -495,10 +492,10 @@ public class AStarManager : MonoBehaviour
             return null;
 
         Vector3Int startCell =
-            tilemap.WorldToCell(startWorldPosition);
+            ProceduralTilemapPlane.WorldToCell(tilemap, startWorldPosition);
 
         Vector3Int targetCell =
-            tilemap.WorldToCell(targetWorldPosition);
+            ProceduralTilemapPlane.WorldToCell(tilemap, targetWorldPosition);
 
         if (!tilemap.HasTile(targetCell))
             return null;
@@ -684,7 +681,7 @@ public class AStarManager : MonoBehaviour
 
 
         Vector3Int originCell =
-            tilemap.WorldToCell(
+            ProceduralTilemapPlane.WorldToCell(tilemap,
                 originWorldPosition);
 
 
@@ -749,7 +746,7 @@ public class AStarManager : MonoBehaviour
             return null;
 
         Vector3Int originCell =
-            tilemap.WorldToCell(originWorldPosition);
+            ProceduralTilemapPlane.WorldToCell(tilemap, originWorldPosition);
 
         List<Vector3Int> possibleCells =
             new List<Vector3Int>();
@@ -829,7 +826,7 @@ public class AStarManager : MonoBehaviour
             return 1f;
 
         Vector3Int cell =
-            tilemap.WorldToCell(worldPosition);
+            ProceduralTilemapPlane.WorldToCell(tilemap, worldPosition);
 
         Vector3 center =
             tilemap.GetCellCenterWorld(cell);

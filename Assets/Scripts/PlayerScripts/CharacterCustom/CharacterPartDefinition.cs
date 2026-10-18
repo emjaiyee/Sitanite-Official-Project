@@ -137,6 +137,26 @@ public class CharacterPartDefinition : ScriptableObject
 
     public Sprite portrait;
 
+    [Header("Health Portraits (Body And Eyes Only)")]
+    public Sprite slightlyDamagedPortrait;
+    public Sprite injuredPortrait;
+    public Sprite gravelyInjuredPortrait;
+    public Sprite deadPortrait;
+
+    public Sprite GetPortrait(float healthFraction)
+    {
+        if (type != CharacterPartType.Body && type != CharacterPartType.Eyes)
+            return portrait;
+
+        Sprite healthPortrait = healthFraction <= 0f ? deadPortrait
+            : healthFraction <= 0.25f ? gravelyInjuredPortrait
+            : healthFraction <= 0.5f ? injuredPortrait
+            : healthFraction <= 0.75f ? slightlyDamagedPortrait
+            : portrait;
+
+        return healthPortrait != null ? healthPortrait : portrait;
+    }
+
     public Sprite GetSprite(CharacterDirection direction)
     {
         return direction switch

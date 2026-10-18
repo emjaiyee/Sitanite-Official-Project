@@ -115,20 +115,21 @@ public class AStarStairLink : MonoBehaviour
 
     private Vector3 GetColliderEndpoint(bool upperEnd)
     {
-        if (rampMovement == null ||
-            rampMovement.RampCollider == null ||
-            rampMovement.RampForward.sqrMagnitude <= 0.0001f)
+        RampMovementTrigger movement = rampMovement != null ? rampMovement : GetComponent<RampMovementTrigger>();
+        if (movement == null ||
+            movement.RampCollider == null ||
+            movement.RampForward.sqrMagnitude <= 0.0001f)
         {
             return transform.position;
         }
 
-        Vector2 direction = rampMovement.RampForward;
-        Bounds bounds = rampMovement.RampCollider.bounds;
+        Vector2 direction = movement.RampForward;
+        Bounds bounds = movement.RampCollider.bounds;
         float distance = bounds.extents.magnitude * 2f + 0.1f;
         Vector2 probe = (Vector2)bounds.center +
             direction * (upperEnd ? distance : -distance);
 
-        Vector2 edge = rampMovement.RampCollider.ClosestPoint(probe);
+        Vector2 edge = movement.RampCollider.ClosestPoint(probe);
 
         return edge + direction * (upperEnd ? 0.05f : -0.05f);
     }

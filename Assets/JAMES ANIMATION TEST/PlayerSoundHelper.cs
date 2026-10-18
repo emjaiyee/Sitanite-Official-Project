@@ -28,11 +28,30 @@ public class PlayerSoundHelper : MonoBehaviour
 
 
     [Header("Damage")]
+    [Tooltip("Hurt clips used when the character is male.")]
     [SerializeField]
     private List<AudioClip> hurtClips;
 
+    [Tooltip("Hurt clips used when the character is female.")]
+    [SerializeField]
+    private List<AudioClip> femaleHurtClips;
+
+    [Tooltip("Death clips used when the character is male.")]
     [SerializeField]
     private List<AudioClip> deathClips;
+
+    [Tooltip("Death clips used when the character is female.")]
+    [SerializeField]
+    private List<AudioClip> femaleDeathClips;
+
+    [Min(0f)]
+    [SerializeField] private float hurtCooldown = 2f;
+
+    [Range(0f, 1f)]
+    [SerializeField] private float hurtDamageThreshold = 0.15f;
+
+    private PlayerStats playerStats;
+    private float nextHurtTime = float.NegativeInfinity;
 
 
 
@@ -46,6 +65,12 @@ public class PlayerSoundHelper : MonoBehaviour
         if(audioSource == null)
         {
             audioSource = GetComponentInChildren<AudioSource>(true);
+        }
+
+        playerStats = GetComponentInParent<PlayerStats>();
+        if (playerStats == null)
+        {
+            playerStats = GetComponentInChildren<PlayerStats>(true);
         }
     }
 
@@ -75,34 +100,55 @@ public class PlayerSoundHelper : MonoBehaviour
     }
 
 
-    public void PlayHurt()
+    public void PlayHurt(float damageTaken, float healthBeforeDamage)
     {
-        PlayRandomClip(hurtClips);
+        if (damageTaken <= 0f || healthBeforeDamage <= 0f ||
+            Time.time < nextHurtTime)
+            return;
+
+        float damageFraction = damageTaken / healthBeforeDamage;
+        if (damageFraction < hurtDamageThreshold &&
+            !Mathf.Approximately(damageFraction, hurtDamageThreshold))
+            return;
+
+        List<AudioClip> clips =
+            playerStats != null && playerStats.Gender == CharacterGender.Female
+                ? femaleHurtClips
+                : hurtClips;
+
+        if (PlayRandomClip(clips))
+            nextHurtTime = Time.time + hurtCooldown;
     }
 
 
     public void PlayDeath()
     {
-        PlayRandomClip(deathClips);
+        List<AudioClip> clips =
+            playerStats != null && playerStats.Gender == CharacterGender.Female
+                ? femaleDeathClips
+                : deathClips;
+
+        PlayRandomClip(clips);
     }
 
 
 
-    private void PlayRandomClip(List<AudioClip> clips)
+    private bool PlayRandomClip(List<AudioClip> clips)
     {
         if(audioSource == null)
-            return;
+            return false;
 
 
         if(clips == null || clips.Count == 0)
-            return;
+            return false;
 
 
         AudioClip clip = clips[Random.Range(0, clips.Count)];
         if(clip == null)
-            return;
+            return false;
 
 
         audioSource.PlayOneShot(clip);
+        return true;
     }
 }

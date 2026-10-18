@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1732267195625577801}
   - component: {fileID: 5204218540512400505}
   - component: {fileID: 5261118297067342347}
+  - component: {fileID: 2663530073650424119}
   m_Layer: 0
   m_Name: Breakable Pot
   m_TagString: Untagged
@@ -82,7 +83,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 5027754878765594241, guid: 4cb5f0891cdb996499c0f0302f60a444, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -155,24 +156,19 @@ MonoBehaviour:
   potRenderer: {fileID: 1732267195625577801}
   brokenSprite: {fileID: -9076975531980210453, guid: a072f9a08b2011243babeb840998b95f, type: 3}
   spawnPoint: {fileID: 5815378549084358261}
-  lootPrefab: {fileID: 7909839741886251486, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
-  lootPool:
-  - itemData: {fileID: 11400000, guid: 727b3716660ad6e48ab413c90834554b, type: 2}
-    minQuantity: 1
-    maxQuantity: 1
-    dropChance: 0.3
-  - itemData: {fileID: 11400000, guid: 56694018357bb9049b9cf6dde64848de, type: 2}
-    minQuantity: 1
-    maxQuantity: 1
-    dropChance: 0.3
-  - itemData: {fileID: 11400000, guid: 1d2696802b090af4d889fc0903d4fca1, type: 2}
-    minQuantity: 1
-    maxQuantity: 1
-    dropChance: 0.3
-  scatterForce: 0.25
-  verticalRatio: 0.5
-  interactionRange: 1.2
-  breakableDamageTypes: 260
+--- !u!114 &2663530073650424119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7131290305310796765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c86bc595062f6264c8edcae271fcea03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProceduralDecorationSettings
+  cutsWalkableTiles: 0
 --- !u!1 &8282592375895630425
 GameObject:
   m_ObjectHideFlags: 0

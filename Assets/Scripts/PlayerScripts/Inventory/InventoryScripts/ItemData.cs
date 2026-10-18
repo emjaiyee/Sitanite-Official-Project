@@ -299,6 +299,9 @@ public class ItemData : ScriptableObject
     [Tooltip("Rarity classification used by item data and inventory presentation.")]
     [SerializeField] private ItemRarity rarity = ItemRarity.Common;
 
+    [Tooltip("Marks this stackable item as spendable currency.")]
+    [SerializeField] private bool isCurrency;
+
     [Tooltip("Character definition applied while this item is equipped.")]
     [SerializeField] private CharacterPartDefinition characterDefinition;
 
@@ -311,6 +314,14 @@ public class ItemData : ScriptableObject
     [Header("Armor and Consumable Stats")]
     [Tooltip("Attributes added or multiplied by armor, shields, or consumables.")]
     [SerializeField] private List<EquipmentStat> statModifiers = new List<EquipmentStat>();
+
+    [Header("Shield Blocking")]
+    [Min(0f)] [SerializeField] private float blockArmor;
+    [Min(0f)] [SerializeField] private float blockStaminaCost = 5f;
+    [Min(0f)] [SerializeField] private float blockStaminaCostPerDamage = 0.2f;
+    [Min(0f)] [SerializeField] private float parryWindow = 0.2f;
+    [Range(0f, 180f)] [SerializeField] private float blockArcDegrees = 160f;
+    [Min(0f)] [SerializeField] private float parryStaggerDuration = 1f;
 
     [Header("Weapon Stats")]
     [SerializeField] private WeaponStats weaponStats = new WeaponStats();
@@ -380,8 +391,16 @@ public class ItemData : ScriptableObject
     /// <summary>Get the item's rarity classification.</summary>
     public ItemRarity Rarity => rarity;
 
+    /// <summary>Gets whether this item is spendable currency.</summary>
+    public bool IsCurrency => isCurrency;
     /// <summary>Get the character definition applied by this item.</summary>
     public CharacterPartDefinition CharacterDefinition => characterDefinition;
+    public float BlockArmor => Mathf.Max(0f, blockArmor);
+    public float BlockStaminaCost => Mathf.Max(0f, blockStaminaCost);
+    public float BlockStaminaCostPerDamage => Mathf.Max(0f, blockStaminaCostPerDamage);
+    public float ParryWindow => Mathf.Max(0f, parryWindow);
+    public float BlockArcDegrees => Mathf.Clamp(blockArcDegrees, 0f, 180f);
+    public float ParryStaggerDuration => Mathf.Max(0f, parryStaggerDuration);
     public StatCapType StatCapType => statCapType;
     public PrimaryAttribute StatCapAttribute => statCapAttribute;
     public SecondaryTrait StatCapTrait => statCapTrait;

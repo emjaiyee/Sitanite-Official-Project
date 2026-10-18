@@ -120,7 +120,9 @@ public class EnemySpawnPoint : MonoBehaviour
     public List<GameObject> SpawnEnemies(
         GameObject managedEnemyPrefab,
         int enemyLevel,
-        Transform parentOverride)
+        Transform parentOverride,
+        float countMultiplier = 1f,
+        float clearanceMultiplier = 1f)
     {
         if (managedEnemyPrefab == null)
         {
@@ -141,6 +143,8 @@ public class EnemySpawnPoint : MonoBehaviour
             count = UnityEngine.Random.Range(min, max + 1);
         }
 
+        count = Mathf.CeilToInt(count * Mathf.Max(1f, countMultiplier));
+        float placementRadius = spawnRadius * Mathf.Sqrt(Mathf.Max(1f, countMultiplier)) * Mathf.Max(1f, clearanceMultiplier);
         List<GameObject> spawned = new List<GameObject>();
 
         if (count <= 0)
@@ -152,7 +156,7 @@ public class EnemySpawnPoint : MonoBehaviour
 
         if (evenDistribution && count > 1)
         {
-            float baseRadius = Mathf.Max(0.01f, spawnRadius);
+            float baseRadius = Mathf.Max(0.01f, placementRadius);
 
             for (int i = 0; i < count; i++)
             {
@@ -176,7 +180,7 @@ public class EnemySpawnPoint : MonoBehaviour
                         (Vector2)transform.position +
                         new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * r;
 
-                    if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab))
+                    if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab, clearanceMultiplier))
                     {
                         chosenPos = pos;
                         found = true;
@@ -190,9 +194,9 @@ public class EnemySpawnPoint : MonoBehaviour
                     {
                         Vector2 pos =
                             (Vector2)transform.position +
-                            UnityEngine.Random.insideUnitCircle * spawnRadius;
+                            UnityEngine.Random.insideUnitCircle * placementRadius;
 
-                        if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab))
+                        if (IsPositionAcceptable(pos, spawned, managedEnemyPrefab, clearanceMultiplier))
                         {
                             chosenPos = pos;
                             found = true;
@@ -235,9 +239,9 @@ public class EnemySpawnPoint : MonoBehaviour
                 {
                     pos2D =
                         (Vector2)transform.position +
-                        UnityEngine.Random.insideUnitCircle * spawnRadius;
+                        UnityEngine.Random.insideUnitCircle * placementRadius;
 
-                    if (IsPositionAcceptable(pos2D, spawned, managedEnemyPrefab))
+                    if (IsPositionAcceptable(pos2D, spawned, managedEnemyPrefab, clearanceMultiplier))
                     {
                         found = true;
                         break;
@@ -251,7 +255,7 @@ public class EnemySpawnPoint : MonoBehaviour
                 {
                     Vector2 centerPos = transform.position;
 
-                    if (IsPositionAcceptable(centerPos, spawned, managedEnemyPrefab))
+                    if (IsPositionAcceptable(centerPos, spawned, managedEnemyPrefab, clearanceMultiplier))
                     {
                         pos2D = centerPos;
                         found = true;
@@ -353,13 +357,25 @@ public class EnemySpawnPoint : MonoBehaviour
 
         enemyElevation.SetLevel(elevationLevel);
 
-        EnemyLevelXP enemyLevelXp =
-            instance.GetComponent<EnemyLevelXP>();
+        FallenDescender fallen = instance.GetComponent<FallenDescender>();
+        if (fallen != null)
+        {
+            EnemyLevelXP legacyExperience = instance.GetComponent<EnemyLevelXP>();
+            if (legacyExperience != null)
+                legacyExperience.enabled = false;
 
-        if (enemyLevelXp == null)
-            enemyLevelXp = instance.AddComponent<EnemyLevelXP>();
-
-        enemyLevelXp.SetLevel(enemyLevel);
+            FallenDescenderLevelXP experience = instance.GetComponent<FallenDescenderLevelXP>();
+            if (experience == null)
+                experience = instance.AddComponent<FallenDescenderLevelXP>();
+            experience.SetLevel(enemyLevel);
+        }
+        else
+        {
+            EnemyLevelXP enemyLevelXp = instance.GetComponent<EnemyLevelXP>();
+            if (enemyLevelXp == null)
+                enemyLevelXp = instance.AddComponent<EnemyLevelXP>();
+            enemyLevelXp.SetLevel(enemyLevel);
+        }
 
         EnemyHealth enemyHealth = instance.GetComponent<EnemyHealth>();
 
@@ -368,7 +384,10 @@ public class EnemySpawnPoint : MonoBehaviour
 
         EnsureEnemyPhysics(instance);
 
-        enemyHealth.OnEnemyDied += HandleTrackedEnemyDied;
+        if (fallen != null)
+            fallen.CorpseCreated += HandleTrackedEnemyDied;
+        else
+            enemyHealth.OnEnemyDied += HandleTrackedEnemyDied;
         trackedEnemies.Add(instance);
 
         OnEnemySpawned?.Invoke(instance);
@@ -380,6 +399,17 @@ public class EnemySpawnPoint : MonoBehaviour
     /// <summary>
     /// Called when one of the enemies spawned by this spawn point dies.
     /// </summary>
+    public void DiscardSpawnedEnemy(GameObject enemy)
+    {
+        EnemyHealth health = enemy != null ? enemy.GetComponent<EnemyHealth>() : null;
+        if (health != null)
+            health.OnEnemyDied -= HandleTrackedEnemyDied;
+        FallenDescender fallen = enemy != null ? enemy.GetComponent<FallenDescender>() : null;
+        if (fallen != null)
+            fallen.CorpseCreated -= HandleTrackedEnemyDied;
+        trackedEnemies.RemoveAll(tracked => tracked == null || tracked == enemy);
+    }
+
     private void HandleTrackedEnemyDied(GameObject enemy)
     {
         // Unsubscribe if possible.
@@ -390,6 +420,10 @@ public class EnemySpawnPoint : MonoBehaviour
 
         if (eh != null)
             eh.OnEnemyDied -= HandleTrackedEnemyDied;
+
+        FallenDescender fallen = enemy != null ? enemy.GetComponent<FallenDescender>() : null;
+        if (fallen != null)
+            fallen.CorpseCreated -= HandleTrackedEnemyDied;
 
 
         // Remove the dead enemy and any destroyed references.
@@ -431,12 +465,13 @@ public class EnemySpawnPoint : MonoBehaviour
     private bool IsPositionAcceptable(
         Vector2 pos,
         List<GameObject> alreadySpawned,
-        GameObject prefab)
+        GameObject prefab,
+        float clearanceMultiplier = 1f)
     {
         // Compute approximate collision radius from prefab/sprite
         // and combine with minSeparation.
-        float approxRadius = GetApproximateRadius(prefab);
-        float required = Mathf.Max(minSeparation, approxRadius);
+        float approxRadius = GetApproximateRadius(prefab) * Mathf.Max(1f, clearanceMultiplier);
+        float required = Mathf.Max(minSeparation * Mathf.Max(1f, clearanceMultiplier), approxRadius);
 
 
         // Reject if any world collider overlaps here.
@@ -458,7 +493,7 @@ public class EnemySpawnPoint : MonoBehaviour
                 continue;
 
             float otherRadius =
-                GetApproximateRadiusForGameObject(go);
+                GetApproximateRadiusForGameObject(go) * Mathf.Max(1f, clearanceMultiplier);
 
             float dist =
                 Vector2.Distance(
@@ -520,16 +555,19 @@ public class EnemySpawnPoint : MonoBehaviour
         var srs =
             root.GetComponentsInChildren<SpriteRenderer>(true);
 
+        bool paperdoll = root.GetComponent<FallenDescender>() != null;
+
         foreach (var sr in srs)
         {
             if (!string.IsNullOrEmpty(sortingLayer))
                 sr.sortingLayerName = sortingLayer;
 
-            sr.sortingOrder = sortingOrder;
+            if (!paperdoll)
+                sr.sortingOrder = sortingOrder;
         }
 
 
-        if (addSortingGroupIfMultipleRenderers &&
+        if ((paperdoll || addSortingGroupIfMultipleRenderers) &&
             srs.Length > 1)
         {
             var sg =
@@ -572,7 +610,9 @@ public class EnemySpawnPoint : MonoBehaviour
         body.bodyType = RigidbodyType2D.Dynamic;
         body.simulated = true;
         body.gravityScale = 0f;
-        body.constraints = RigidbodyConstraints2D.FreezeAll;
+        body.constraints = instance.GetComponent<FallenDescender>() != null
+            ? RigidbodyConstraints2D.FreezeRotation
+            : RigidbodyConstraints2D.FreezeAll;
         body.collisionDetectionMode =
             CollisionDetectionMode2D.Continuous;
 

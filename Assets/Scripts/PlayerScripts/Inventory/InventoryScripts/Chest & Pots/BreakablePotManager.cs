@@ -10,8 +10,12 @@ public class BreakablePotManager : MonoBehaviour
     public struct LootDrop
     {
         public ItemData itemData;
+        [Tooltip("For a fixed coin reward, set minimum and maximum to the same amount (for example, 20 or 50).")]
         [Min(1)] public int minimumQuantity;
+        [Tooltip("For a fixed coin reward, use the same amount as the minimum quantity.")]
         [Min(1)] public int maximumQuantity;
+        [Tooltip("Relative chance weight within this floor's loot pool. A weight of 2 is twice as likely as a weight of 1.")]
+        [Min(1f)] public float dropWeight;
     }
 
     [Serializable]
@@ -20,6 +24,7 @@ public class BreakablePotManager : MonoBehaviour
         [Min(1)] public int minimumFloor = 1;
         [Min(1)] public int maximumFloor = 1;
         [Range(0f, 1f)] public float lootChance = 1f;
+        [Tooltip("Add one entry per reward. Reuse the Coin ItemData with different fixed quantities and weights for level-based coin drops.")]
         public List<LootDrop> lootPool = new List<LootDrop>();
 
         public bool ContainsFloor(int floor)
@@ -88,22 +93,35 @@ public class BreakablePotManager : MonoBehaviour
         if (!drop.HasValue || lootPrefab == null)
             return;
 
+        LootDrop selectedDrop = drop.Value;
+        SpawnLoot(
+            selectedDrop.itemData,
+            UnityEngine.Random.Range(
+                Mathf.Min(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity),
+                Mathf.Max(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity) + 1
+            ),
+            origin
+        );
+    }
+
+    public bool SpawnLoot(ItemData itemData, int quantity, Vector3 origin, Transform parent = null)
+    {
+        if (itemData == null || quantity <= 0 || lootPrefab == null)
+            return false;
+
         Vector3? spawnPosition = FindWalkableSpawnPosition(origin);
         if (!spawnPosition.HasValue)
-            return;
+            return false;
 
-        LootDrop selectedDrop = drop.Value;
-        GameObject lootObject = Instantiate(lootPrefab, spawnPosition.Value, Quaternion.identity);
+        GameObject lootObject = Instantiate(lootPrefab, spawnPosition.Value, Quaternion.identity, parent);
         if (lootObject.TryGetComponent(out Loot loot))
         {
-            loot.Setup(
-                selectedDrop.itemData,
-                UnityEngine.Random.Range(
-                    Mathf.Min(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity),
-                    Mathf.Max(selectedDrop.minimumQuantity, selectedDrop.maximumQuantity) + 1
-                )
-            );
+            loot.Setup(itemData, quantity);
+            return true;
         }
+
+        Destroy(lootObject);
+        return false;
     }
 
     private List<FloorLootConfiguration> GetCurrentConfigurations()
@@ -132,16 +150,29 @@ public class BreakablePotManager : MonoBehaviour
     private static LootDrop? GetRandomDrop(List<LootDrop> lootPool)
     {
         List<LootDrop> validDrops = new List<LootDrop>();
+        float totalWeight = 0f;
+
         foreach (LootDrop drop in lootPool)
         {
             if (drop.itemData != null)
+            {
                 validDrops.Add(drop);
+                totalWeight += Mathf.Max(1f, drop.dropWeight);
+            }
         }
 
         if (validDrops.Count == 0)
             return null;
 
-        return validDrops[UnityEngine.Random.Range(0, validDrops.Count)];
+        float selectedWeight = UnityEngine.Random.value * totalWeight;
+        foreach (LootDrop drop in validDrops)
+        {
+            selectedWeight -= Mathf.Max(1f, drop.dropWeight);
+            if (selectedWeight < 0f)
+                return drop;
+        }
+
+        return validDrops[validDrops.Count - 1];
     }
 
     private Vector3? FindWalkableSpawnPosition(Vector3 origin)

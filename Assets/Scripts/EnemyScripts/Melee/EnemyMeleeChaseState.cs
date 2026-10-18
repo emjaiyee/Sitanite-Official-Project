@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class EnemyMeleeChaseState : EnemyMeleeState
@@ -6,6 +7,10 @@ public class EnemyMeleeChaseState : EnemyMeleeState
     private float repathTimer;
 
     private const float RepathInterval = 0.15f;
+
+    private float waitTimer = 0f;
+
+    private const float waitDuration = 1f;
 
 
     public EnemyMeleeChaseState(
@@ -22,6 +27,7 @@ public class EnemyMeleeChaseState : EnemyMeleeState
     public override void Enter()
     {
         repathTimer = 0f;
+        Enemy.stillMovement = false;
 
         Debug.Log(
             $"[Chase] {Enemy.name} started chasing."
@@ -68,6 +74,7 @@ public class EnemyMeleeChaseState : EnemyMeleeState
                 "Lost the player. Entering Search."
             );
 
+            Enemy.stillMovement = false;
             Enemy.SetTakingAim(false);
 
             Enemy.ChangeState(
@@ -81,11 +88,25 @@ public class EnemyMeleeChaseState : EnemyMeleeState
         Enemy.SetTakingAim(false);
 
 
-        // -----------------------------------------------------
-        // REPATH
-        // -----------------------------------------------------
+        if (Enemy.stillMovement == true)
+        {
+            waitTimer += Time.deltaTime;
+            if (waitTimer > waitDuration)
+            {
+                Enemy.stillMovement = false;
+                return;
+            }
+            return;
+        }
+        else { waitTimer = 0f; }
 
-        repathTimer += Time.deltaTime;
+
+
+            // -----------------------------------------------------
+            // REPATH
+            // -----------------------------------------------------
+
+            repathTimer += Time.deltaTime;
 
         if (!Enemy.IsOnStairLink &&
             repathTimer >= RepathInterval)

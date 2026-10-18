@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +14,14 @@ public class CharacterPortrait : MonoBehaviour
     [SerializeField] private Image weaponPortrait;
     [SerializeField] private Image shieldPortrait;
     [SerializeField] private Image classPortrait;
+
+    [Header("Damage Shake")]
+    [Tooltip("Optional common parent of the paperdoll layers, excluding buttons. If empty, the layers shake together individually.")]
+    [SerializeField] private RectTransform portraitShakeRoot;
+    [SerializeField, Min(0.01f)] private float shakeDuration = 0.2f;
+    [SerializeField, Min(0f)] private float minimumShakeDistance = 2f;
+    [SerializeField, Min(0f)] private float maximumShakeDistance = 16f;
+    [SerializeField, Min(1f)] private float shakeFrequency = 40f;
 
     [Header("Class Icons")]
     [SerializeField] private Sprite warriorIcon;
@@ -43,6 +53,10 @@ public class CharacterPortrait : MonoBehaviour
     private PlayerInventory playerInventory;
     private PlayerStatsUI playerStatsUI;
     private PlayerAttributesNTraits playerAttributes;
+    private PlayerStats playerStats;
+    private Coroutine shakeRoutine;
+    private readonly List<RectTransform> shakeTargets = new List<RectTransform>();
+    private readonly List<Vector3> shakeOrigins = new List<Vector3>();
 
     private bool shouldHighlightStats;
     private float pulseTimer;
@@ -68,6 +82,11 @@ public class CharacterPortrait : MonoBehaviour
         FindPlayerUIReferences();
         BindButtons();
         SubscribeToAttributeChanges();
+        if (playerStats != null)
+        {
+            playerStats.Changed += OnHealthChanged;
+            playerStats.Damaged += OnDamaged;
+        }
 
         Refresh();
         UpdateStatsButtonHighlight();
@@ -88,6 +107,16 @@ public class CharacterPortrait : MonoBehaviour
 
         UnsubscribeFromAttributeChanges();
         UnbindButtons();
+        if (playerStats != null)
+        {
+            playerStats.Changed -= OnHealthChanged;
+            playerStats.Damaged -= OnDamaged;
+        }
+    }
+
+    private void OnDisable()
+    {
+        StopShake();
     }
 
     private void Update()
@@ -134,6 +163,7 @@ public class CharacterPortrait : MonoBehaviour
             FindObjectsInactive.Include
         );
         playerAttributes = Player.Instance.GetComponent<PlayerAttributesNTraits>();
+        playerStats = Player.Instance.GetComponent<PlayerStats>();
     }
 
     private void BindButtons()
@@ -241,16 +271,110 @@ public class CharacterPortrait : MonoBehaviour
         if (image == null)
             return;
 
-        if (definition == null || definition.portrait == null)
-        {
-            image.sprite = null;
-            image.enabled = false;
+        float healthFraction = playerStats != null
+            ? playerStats.CurrentHealth / playerStats.MaxHealth
+            : 1f;
+        image.sprite = definition != null ? definition.GetPortrait(healthFraction) : null;
+        image.enabled = image.sprite != null;
+    }
+
+    private void OnHealthChanged(PlayerStats source)
+    {
+        if (customizationController == null)
             return;
+
+        CharacterAppearance appearance = customizationController.GetAppearance();
+        SetPortrait(bodyPortrait, appearance.body);
+        SetPortrait(eyesPortrait, appearance.eyes);
+    }
+
+    private void OnDamaged(float damageTaken, float healthBeforeDamage)
+    {
+        if (!isActiveAndEnabled || damageTaken <= 0f || healthBeforeDamage <= 0f)
+            return;
+
+        StopShake();
+        shakeTargets.Clear();
+        shakeOrigins.Clear();
+
+        if (portraitShakeRoot != null)
+        {
+            shakeTargets.Add(portraitShakeRoot);
+        }
+        else
+        {
+            Image[] layers = { bodyPortrait, eyesPortrait, hairPortrait, torsoPortrait,
+                headwearPortrait, weaponPortrait, shieldPortrait };
+            foreach (Image layer in layers)
+            {
+                if (layer != null && !shakeTargets.Contains(layer.rectTransform))
+                    shakeTargets.Add(layer.rectTransform);
+            }
+
+            for (int targetIndex = shakeTargets.Count - 1; targetIndex >= 0; targetIndex--)
+            {
+                for (int parentIndex = 0; parentIndex < shakeTargets.Count; parentIndex++)
+                {
+                    if (targetIndex != parentIndex &&
+                        shakeTargets[targetIndex].IsChildOf(shakeTargets[parentIndex]))
+                    {
+                        shakeTargets.RemoveAt(targetIndex);
+                        break;
+                    }
+                }
+            }
         }
 
-        image.sprite = definition.portrait;
-        image.enabled = true;
+        foreach (RectTransform target in shakeTargets)
+            shakeOrigins.Add(target.localPosition);
+
+        float intensity = Mathf.Clamp01(damageTaken / healthBeforeDamage);
+        shakeRoutine = StartCoroutine(ShakePortrait(intensity));
     }
+
+    private IEnumerator ShakePortrait(float intensity)
+    {
+        float duration = Mathf.Max(0.01f, shakeDuration);
+        float distance = Mathf.Lerp(minimumShakeDistance, maximumShakeDistance, intensity);
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            float direction = Mathf.FloorToInt(elapsed * shakeFrequency) % 2 == 0 ? 1f : -1f;
+            float offset = direction * distance * (1f - elapsed / duration);
+            for (int targetIndex = 0; targetIndex < shakeTargets.Count; targetIndex++)
+            {
+                if (shakeTargets[targetIndex] != null)
+                    shakeTargets[targetIndex].localPosition = shakeOrigins[targetIndex] + Vector3.right * offset;
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        RestoreShakePositions();
+        shakeRoutine = null;
+    }
+
+    private void StopShake()
+    {
+        if (shakeRoutine != null)
+        {
+            StopCoroutine(shakeRoutine);
+            shakeRoutine = null;
+        }
+
+        RestoreShakePositions();
+    }
+
+    private void RestoreShakePositions()
+    {
+        for (int targetIndex = 0; targetIndex < shakeTargets.Count; targetIndex++)
+        {
+            if (shakeTargets[targetIndex] != null)
+                shakeTargets[targetIndex].localPosition = shakeOrigins[targetIndex];
+        }
+    }
+
     private void UpdateHairPortrait(CharacterAppearance appearance)
     {
         if (hairPortrait == null)

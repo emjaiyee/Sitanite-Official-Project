@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(PlayerAttributesNTraits))]
@@ -87,6 +88,11 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float currentHealth;
     [SerializeField] private float currentMana;
     [SerializeField] private float currentStamina;
+
+    [Header("Damage Feedback")]
+    [SerializeField] private Color damageFlashColor = new Color(1f, 0.25f, 0.25f, 1f);
+    [Min(0.01f)]
+    [SerializeField] private float damageFlashDuration = 0.12f;
 
     [Header("Experience and Level")]
     [Min(1)] [SerializeField] private int level = 1;
@@ -374,6 +380,7 @@ public class PlayerStats : MonoBehaviour
 
     public event Action<PlayerStats> Changed;
     public event Action Died;
+    public event Action<float, float> Damaged;
 
     // -------------------------------------------------
     // REGENERATION ACCUMULATORS
@@ -391,6 +398,9 @@ public class PlayerStats : MonoBehaviour
     // -------------------------------------------------
 
     private float sprintDrainAccumulator;
+    private Coroutine damageFlashRoutine;
+    private SpriteRenderer[] damageFeedbackRenderers;
+    private Color[] originalRendererColors;
 
     private float MaxHealthModifier => attributes != null ? attributes.MaxHealthModifier : 0f;
     private float MaxManaModifier => attributes != null ? attributes.MaxManaModifier : 0f;
@@ -474,6 +484,8 @@ public class PlayerStats : MonoBehaviour
         if (attributes == null)
             attributes = GetComponent<PlayerAttributesNTraits>();
 
+        CacheDamageFeedbackRenderers();
+
         level = Mathf.Max(1, level);
         experiencePoints = Mathf.Max(0f, experiencePoints);
         experienceToNextLevel = GetExperienceRequiredForLevel(level);
@@ -541,6 +553,8 @@ public class PlayerStats : MonoBehaviour
     {
         if (attributes != null)
             attributes.Changed -= HandleAttributesChanged;
+
+        StopDamageFlash(restoreColors: true);
     }
 
     private void HandleAttributesChanged(PlayerAttributesNTraits source)
@@ -609,6 +623,8 @@ public class PlayerStats : MonoBehaviour
     /// </summary>
     public void ResetToFull()
     {
+        StopDamageFlash(restoreColors: true);
+
         currentHealth = MaxHealth;
         currentMana = MaxMana;
         currentStamina = MaxStamina;
@@ -633,21 +649,60 @@ public class PlayerStats : MonoBehaviour
     // HEALTH
     // -------------------------------------------------
 
-    public void TakeDamage(float amount, DamageType damageType = DamageType.Slash)
+    public void TakeDamage(
+        float amount,
+        DamageType damageType = DamageType.Slash,
+        Vector3? damageSource = null,
+        EnemyHealth attacker = null,
+        DamageType adaptiveDamageType = DamageType.None)
     {
         if (amount <= 0 || IsDead || currentHealth <= 0)
             return;
 
+        if (adaptiveDamageType == DamageType.None)
+            adaptiveDamageType = AdaptiveEnemy.GetAdaptedDamageType(attacker);
+        if (adaptiveDamageType != DamageType.None)
+        {
+            damageType = adaptiveDamageType;
+            amount = AdaptiveEnemy.FairRawDamage(MaxHealth, GetDamageResistance(damageType));
+        }
+        PlayerShieldDefense shieldDefense = GetComponent<PlayerShieldDefense>();
+        bool wasBlocked = false;
+        if (shieldDefense != null)
+        {
+            amount = shieldDefense.ModifyIncomingDamage(
+                amount,
+                damageSource,
+                attacker,
+                out wasBlocked
+            );
+
+            if (amount <= 0f)
+                return;
+        }
+
         amount = Mathf.Max(1f, amount - GetDamageResistance(damageType));
 
+        float healthBeforeDamage = currentHealth;
         currentHealth = Mathf.Max(
             0,
             currentHealth - amount
         );
+        float damageTaken = healthBeforeDamage - currentHealth;
+
+        if (currentHealth > 0f)
+        {
+            if (wasBlocked)
+                StopDamageFlash(restoreColors: true);
+            else
+                StartDamageFlash();
+        }
 
         PlayerSoundHelper sound = GetComponentInChildren<PlayerSoundHelper>(true);
         if (sound != null)
-            sound.PlayHurt();
+            sound.PlayHurt(damageTaken, healthBeforeDamage);
+
+        Damaged?.Invoke(damageTaken, healthBeforeDamage);
 
         // Show the damage number above the player, colored by type.
         DamagePopupSpawner.Spawn(transform, amount, damageType, 1f);
@@ -659,6 +714,7 @@ public class PlayerStats : MonoBehaviour
 
         if (currentHealth == 0)
         {
+            StopDamageFlash(restoreColors: true);
             IsDead = true;
 
             Debug.Log("PLAYER IS DEAD");
@@ -666,6 +722,94 @@ public class PlayerStats : MonoBehaviour
             HandlePlayerDied();
 
             Died?.Invoke();
+        }
+    }
+
+    private void CacheDamageFeedbackRenderers()
+    {
+        damageFeedbackRenderers = GetComponentsInChildren<SpriteRenderer>(true);
+        originalRendererColors = new Color[damageFeedbackRenderers.Length];
+
+        for (int i = 0; i < damageFeedbackRenderers.Length; i++)
+            originalRendererColors[i] = damageFeedbackRenderers[i].color;
+    }
+
+    private void StartDamageFlash()
+    {
+        if (damageFeedbackRenderers == null || damageFeedbackRenderers.Length == 0)
+            CacheDamageFeedbackRenderers();
+
+        if (damageFeedbackRenderers.Length == 0)
+            return;
+
+        StopDamageFlash(restoreColors: false);
+        damageFlashRoutine = StartCoroutine(PlayDamageFlash());
+    }
+
+    private IEnumerator PlayDamageFlash()
+    {
+        float halfDuration = Mathf.Max(0.01f, damageFlashDuration) * 0.5f;
+        float elapsed = 0f;
+
+        while (elapsed < halfDuration * 2f)
+        {
+            elapsed += Time.deltaTime;
+            float progress = elapsed < halfDuration
+                ? elapsed / halfDuration
+                : 1f - ((elapsed - halfDuration) / halfDuration);
+            ApplyDamageFlash(Mathf.Clamp01(progress));
+            yield return null;
+        }
+
+        RestoreDamageFeedbackColors();
+        damageFlashRoutine = null;
+    }
+
+    private void ApplyDamageFlash(float amount)
+    {
+        for (int i = 0; i < damageFeedbackRenderers.Length; i++)
+        {
+            SpriteRenderer spriteRenderer = damageFeedbackRenderers[i];
+            if (spriteRenderer == null)
+                continue;
+
+            Color originalColor = originalRendererColors[i];
+            Color flashColor = damageFlashColor;
+            Color currentColor = spriteRenderer.color;
+            flashColor.a = currentColor.a;
+
+            Color result = Color.Lerp(originalColor, flashColor, amount);
+            result.a = currentColor.a;
+            spriteRenderer.color = result;
+        }
+    }
+
+    private void StopDamageFlash(bool restoreColors)
+    {
+        if (damageFlashRoutine != null)
+        {
+            StopCoroutine(damageFlashRoutine);
+            damageFlashRoutine = null;
+        }
+
+        if (restoreColors)
+            RestoreDamageFeedbackColors();
+    }
+
+    private void RestoreDamageFeedbackColors()
+    {
+        if (damageFeedbackRenderers == null || originalRendererColors == null)
+            return;
+
+        for (int i = 0; i < damageFeedbackRenderers.Length; i++)
+        {
+            SpriteRenderer spriteRenderer = damageFeedbackRenderers[i];
+            if (spriteRenderer == null)
+                continue;
+
+            Color restoredColor = originalRendererColors[i];
+            restoredColor.a = spriteRenderer.color.a;
+            spriteRenderer.color = restoredColor;
         }
     }
 

@@ -29,6 +29,8 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
     #region Private Fields
     private RectTransform equippedVisual;
     private bool dropHandled;
+    private Color slotBaseColor = Color.white;
+    private Image rarityBorderImage;
     #endregion
 
     #region Properties
@@ -45,6 +47,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
     private void Awake()
     {
         if (slotRectTransform == null) slotRectTransform = GetComponent<RectTransform>();
+        if (slotImage != null) slotBaseColor = slotImage.color;
 
         Graphic dropTarget = GetComponent<Graphic>();
         if (dropTarget == null)
@@ -179,7 +182,11 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
             slotImage.sprite = equippedItem == null
                 ? emptySlotSprite
                 : occupiedSlotSprite;
+            slotImage.color = slotBaseColor;
         }
+
+        if (equippedItem == null)
+            ClearRarityBorder();
     }
     #endregion
 
@@ -219,6 +226,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
             return;
         }
 
+        ClearVisualOnly();
         UpdateSlotAppearance(newItem);
 
         if (incomingVisual != null)
@@ -294,6 +302,13 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
         if (visual.TryGetComponent<ItemUIController>(out var controller))
         {
             controller.SetupForEquipment(item, slotSize);
+            if (slotImage != null && item?.Data != null)
+            {
+                slotImage.color = slotBaseColor *
+                                  controller.GetRarityBackgroundColor(item.Data.Rarity);
+            }
+
+            UpdateRarityBorder(controller, item);
         }
 
         if (visual.TryGetComponent<CanvasGroup>(out var canvasGroup))
@@ -337,6 +352,7 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
     {
         if (equippedVisual != null)
         {
+            equippedVisual.gameObject.SetActive(false);
             Destroy(equippedVisual.gameObject);
             equippedVisual = null;
         }
@@ -346,8 +362,52 @@ public class EquipmentSlotUI : MonoBehaviour, IPointerClickHandler, IDropHandler
             Transform child = slotRectTransform.GetChild(i);
             if (child.GetComponent<ItemUIController>() != null)
             {
+                child.gameObject.SetActive(false);
                 Destroy(child.gameObject);
             }
+        }
+    }
+
+    private void UpdateRarityBorder(ItemUIController itemController, InventoryItem item)
+    {
+        if (itemController == null || item?.Data == null)
+        {
+            ClearRarityBorder();
+            return;
+        }
+
+        if (rarityBorderImage == null)
+        {
+            GameObject borderObject = new GameObject(
+                "Equipment Rarity Border",
+                typeof(RectTransform),
+                typeof(CanvasRenderer),
+                typeof(Image)
+            );
+            RectTransform borderRect = borderObject.GetComponent<RectTransform>();
+            borderRect.SetParent(slotRectTransform, false);
+            borderRect.anchorMin = Vector2.zero;
+            borderRect.anchorMax = Vector2.one;
+            borderRect.offsetMin = Vector2.zero;
+            borderRect.offsetMax = Vector2.zero;
+
+            rarityBorderImage = borderObject.GetComponent<Image>();
+            rarityBorderImage.raycastTarget = false;
+            rarityBorderImage.color = Color.white;
+            rarityBorderImage.preserveAspect = false;
+        }
+
+        rarityBorderImage.sprite = itemController.GetRarityBorderSprite(item.Data.Rarity);
+        rarityBorderImage.enabled = rarityBorderImage.sprite != null;
+        rarityBorderImage.transform.SetAsLastSibling();
+    }
+
+    private void ClearRarityBorder()
+    {
+        if (rarityBorderImage != null)
+        {
+            rarityBorderImage.sprite = null;
+            rarityBorderImage.enabled = false;
         }
     }
     #endregion

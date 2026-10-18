@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 
 public class GatewayVisibility : MonoBehaviour
@@ -19,9 +20,11 @@ public class GatewayVisibility : MonoBehaviour
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private TilemapRenderer tilemapRenderer;
     [SerializeField] private Collider2D gatewayCollider;
+    [SerializeField] private Light2D light2D;
 
     private bool currentState;
     private Color originalColor;
+    private float originalLightIntensity;
     private Coroutine fadeCoroutine;
 
 
@@ -54,10 +57,15 @@ public class GatewayVisibility : MonoBehaviour
         if (gatewayCollider == null)
             gatewayCollider = GetComponentInParent<Collider2D>();
 
+        if (light2D != null)
+            originalLightIntensity = light2D.intensity;
+
         if (spriteRenderer != null)
             originalColor = spriteRenderer.color;
         else if (tilemap != null)
             originalColor = tilemap.color;
+        else if (light2D != null)
+            originalColor = Color.white;
 
         // Establish the prefab's default state first.
         // RoomManager will override this afterward
@@ -186,7 +194,7 @@ public class GatewayVisibility : MonoBehaviour
 
     private IEnumerator FadeTo(float targetAlpha)
     {
-        if (spriteRenderer == null && tilemap == null)
+        if (spriteRenderer == null && tilemap == null && light2D == null)
         {
             fadeCoroutine = null;
             yield break;
@@ -198,7 +206,8 @@ public class GatewayVisibility : MonoBehaviour
 
         Color color = spriteRenderer != null
             ? spriteRenderer.color
-            : tilemap.color;
+            : tilemap != null ? tilemap.color : new Color(1f, 1f, 1f,
+                originalLightIntensity > 0f ? light2D.intensity / originalLightIntensity : 0f);
 
         float startAlpha = color.a;
         float time = 0f;
@@ -233,6 +242,9 @@ public class GatewayVisibility : MonoBehaviour
 
     private void SetAlpha(float alpha)
     {
+        if (light2D != null)
+            light2D.intensity = originalLightIntensity * alpha;
+
         if (spriteRenderer != null)
         {
             Color color = spriteRenderer.color;

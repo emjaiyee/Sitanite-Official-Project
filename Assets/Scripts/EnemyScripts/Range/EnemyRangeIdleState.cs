@@ -52,6 +52,7 @@ public class EnemyRangeIdleState : EnemyRangeState
             Enemy.FollowCurrentPath();
             return;
         }
+        else { Enemy.StopMoving(); }
 
         if (waitingForNewDestination)
         {

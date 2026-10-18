@@ -63,7 +63,13 @@ public class CameraAim : MonoBehaviour
         Vector3 desiredPosition =
             target.position;
 
+        PlayerShieldDefense shieldDefense =
+            target.GetComponent<PlayerShieldDefense>();
+        bool playerIsGuarding =
+            shieldDefense != null && shieldDefense.IsGuarding;
+
         if (inputEnabled &&
+            !playerIsGuarding &&
             cameraLookAction != null &&
             cameraLookAction.action.IsPressed()
         )

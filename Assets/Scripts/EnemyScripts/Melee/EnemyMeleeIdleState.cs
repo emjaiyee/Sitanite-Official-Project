@@ -101,7 +101,7 @@ public class EnemyMeleeIdleState : EnemyMeleeState
 
             return;
         }
-
+        else { Enemy.StopMoving(); }
 
         // =====================================================
         // WAIT BEFORE PICKING DESTINATION

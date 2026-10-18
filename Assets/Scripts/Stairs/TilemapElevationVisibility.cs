@@ -11,6 +11,7 @@ public class TilemapElevationVisibility : MonoBehaviour
     [Header("Visibility")]
     [SerializeField] private bool disableAtThreshold = true;
     [SerializeField] [Min(0)] private int disableThreshold = 3;
+    [SerializeField] private bool affectColliders = true;
 
     [Header("Fade")]
     [SerializeField] private bool smoothFade = true;
@@ -100,10 +101,10 @@ public class TilemapElevationVisibility : MonoBehaviour
             tilemap.color = c;
         }
 
-        if (tilemapCollider != null)
+        if (affectColliders && tilemapCollider != null)
             tilemapCollider.enabled = enabled;
 
-        if (compositeCollider != null)
+        if (affectColliders && compositeCollider != null)
             compositeCollider.enabled = enabled;
     }
 
