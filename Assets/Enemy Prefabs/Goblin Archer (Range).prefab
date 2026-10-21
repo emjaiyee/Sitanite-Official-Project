@@ -125,12 +125,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8170555316554546650, guid: eb24af4481fb18949ae65c25257373be, type: 3}
+  m_Sprite: {fileID: 8630892933290312361, guid: 2d76fe3e39ea96c47a79ebb9712c2a0a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.23}
+  m_Size: {x: 0.48, y: 0.48}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -224,8 +224,8 @@ MonoBehaviour:
   moveSpeed: 0.7
   idleWanderRadius: 6
   locateWaitDuration: 2.5
-  radiusX: 0.5
-  radiusY: 0.2
+  radiusX: 2.2
+  radiusY: 1.8
   projectileDamageType: 1
   projectileDamage: 10
   attackCooldown: 2.5
@@ -296,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteLibrary
   m_Library: []
-  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 4f9914fef55d1d84d823e07dae7af7d4, type: 3}
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: dda3eccd99752ea49932d2534a7f2c78, type: 3}
 --- !u!114 &644558589115014614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,9 +310,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteResolver
   m_CategoryHash: 1.8990936e-26
-  m_labelHash: 2.480907e-28
+  m_labelHash: 1.6911767e-21
   m_SpriteKey: 0
-  m_SpriteHash: 211543085
+  m_SpriteHash: 1041379584
 --- !u!95 &3463651732144763740
 Animator:
   serializedVersion: 7
@@ -465,4 +465,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   enemyType: 0
-  lootSpawnPoint: {fileID: 4074788260977273869, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}
+  lootSpawnPoint: {fileID: 0}

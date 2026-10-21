@@ -123,12 +123,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -1158581314517614047, guid: cb2642c08745f1944b42cc18fbc5cb11, type: 3}
+  m_Sprite: {fileID: 5911757713531226814, guid: e62d20ad34fad66498b2a0dae018b704, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.23}
+  m_Size: {x: 0.96, y: 0.96}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -209,7 +209,7 @@ MonoBehaviour:
   nextSummonTime: 0
   hittableLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 200
   checkRadius: 0.5
   takingAim: 0
   deathAnimationDelay: 0.5
@@ -227,6 +227,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 150
+  damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+  damageFlashDuration: 0.12
   isMiniBoss: 1
   enemyName: Lich
   basePierceResistance: 6
@@ -303,7 +305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteLibrary
   m_Library: []
-  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 9a754defecf106345a4fda9404e80976, type: 3}
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 79e80e6fa2629fd4b83f882d66b58a32, type: 3}
 --- !u!114 &7168415976655415684
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -317,9 +319,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteResolver
   m_CategoryHash: 1.8990936e-26
-  m_labelHash: 2.480907e-28
+  m_labelHash: 1.6911767e-21
   m_SpriteKey: 0
-  m_SpriteHash: 643579979
+  m_SpriteHash: 1041379584
 --- !u!95 &4941687366284714724
 Animator:
   serializedVersion: 7
@@ -355,4 +357,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   enemyType: 0
-  lootSpawnPoint: {fileID: 0}
+  lootSpawnPoint: {fileID: 4074788260977273869, guid: a13ab738fc0b6bb4f9f6fc6b42bf4e74, type: 3}

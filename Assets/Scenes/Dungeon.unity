@@ -5938,6 +5938,1118 @@ PrefabInstance:
       propertyPath: dungeonMemory
       value: 
       objectReference: {fileID: 1775428404}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.size
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootChance
+      value: 0.751
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootChance
+      value: 0.204
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootChance
+      value: 0.156
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootChance
+      value: 0.134
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootChance
+      value: 0.111
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootChance
+      value: 0.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootChance
+      value: 0.145
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootChance
+      value: 0.095
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootChance
+      value: 0.095
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootChance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].minimumFloor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].minimumFloor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].minimumFloor
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].minimumFloor
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].minimumFloor
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].minimumFloor
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].minimumFloor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].minimumFloor
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].minimumFloor
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].minimumFloor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].maximumFloor
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].minimumFloor
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.size
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 47332dcf82319f14bb1079669c1f2ff4, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: afcf9a321fddc074280691cca2052f45, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: b572685af3aa44943b2962ebf3be448b, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 63a619380b08d55479ad76b7672ee149, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: ab59b5d8b1b1fdc49aab773d0628d828, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6edc49bc30a7c0947a2fa7c6eb015509, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[3].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 9fc0f09a282c2594cbae6329029ad609, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[4].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 7138a7da4f590e4458ecde51737c696e, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[5].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6e06c0a729177df4cbb8c29ba2d1d87d, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[6].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[7].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: d3ec1a675e1627b49a2bb7cd282e4739, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[8].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 12b486c90eeea3841a4f7554aefebdd0, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4a48c207325251e42a6082b78602d574, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f5cdaf684596054db0668c25d6c7f80, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: a341a71a84c83f740a9aa60bee6840e2, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[3].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: d5c35b90ddf6d054da96ca8f28fd02c3, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[4].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 70c241ebb7d75724e8539e925c30ec0a, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[5].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: be62349fd56ad89418bb4907c16d90bb, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[6].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: efed96c827124d041bb7f3e99ed763c7, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[7].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 139f6f8abc72d13419968967b386e2c2, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[8].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 44f91363b31cc14479b5b297d5389d10, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: bc9289adc1905c4449a8ce613ad4f215, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: d469020feb09ff04a8f46220fd81761c, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 1f399959a8f4f9f41ad25435ea30a6d2, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: fe86ba7c94620e94ba442d5ee32e2b48, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 98b34c695b8599b43a323e82e9a78c9d, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 87b967588346274428222f3313067917, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[3].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 643a2458feb9edb4d86b12cad3afae8a, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[4].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 1216dd5679cd31f48b485b47890b75cf, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[5].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: cfbd39b342ee6b04390521ca58875a5c, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[6].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 06570974789f63b4b906eb7982e0929d, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[7].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 55b254f478ed57243992feba8c45547f, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[8].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 7123e621308920e4b9a91c74ffdcbd45, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 42ba12dcb2e121c45a7d530dde9cf369, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4a029611aa1038e41aab833074469383, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 10e1a5d6c5c06474da44bbaaf0c4befb, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[3].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: f2868e5ed778cfb419963fb4b325ca8b, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[4].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: a0165877883ec4549a5e00bdf66b21df, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[5].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6dda70e6930cad042b874565a46229df, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[6].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 472308c27d9e72d4a84ec5e3835cc2ec, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[7].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 43270d1245e386747860756bce7c8c0a, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[8].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4bf547214ac531d49ae2edd129490415, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 5220c9ba8ccf9304e9764d4472168edb, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 80d107fb911d022438723e0719533275, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: dfb5ff6536537fa44b6a06bc9ce73882, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[3].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 05209c6759f80f44980eb67a74c3320b, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[4].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: ed569c196d0e09c4e8f25dfad0af92c2, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 7f9d2c1a4e6b48d0a13f5c8e9b027641, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 3921c627c6ec1f84b82bce67b425f452, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[3].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0cb8e0d9658240b48a58555304596dc2, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[4].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: f7bfb2e326990f242866c910c07ea0fc, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[5].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 00bb00e9cb3fe3a4da3617c52998eb85, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 7f9d2c1a4e6b48d0a13f5c8e9b027641, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 3921c627c6ec1f84b82bce67b425f452, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[3].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0cb8e0d9658240b48a58555304596dc2, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[4].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: f7bfb2e326990f242866c910c07ea0fc, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[5].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 00bb00e9cb3fe3a4da3617c52998eb85, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 783ea7c9365446d194b7d07af7582724, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 3921c627c6ec1f84b82bce67b425f452, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[3].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 0cb8e0d9658240b48a58555304596dc2, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[4].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: f7bfb2e326990f242866c910c07ea0fc, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[5].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 00bb00e9cb3fe3a4da3617c52998eb85, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[0].dropWeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[1].dropWeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[2].dropWeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 47332dcf82319f14bb1079669c1f2ff4, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[1].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: afcf9a321fddc074280691cca2052f45, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[2].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: b572685af3aa44943b2962ebf3be448b, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[3].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 472308c27d9e72d4a84ec5e3835cc2ec, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[4].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 43270d1245e386747860756bce7c8c0a, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[5].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4bf547214ac531d49ae2edd129490415, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[6].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: f2868e5ed778cfb419963fb4b325ca8b, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[7].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: a0165877883ec4549a5e00bdf66b21df, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[8].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 6dda70e6930cad042b874565a46229df, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[9].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 42ba12dcb2e121c45a7d530dde9cf369, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[10].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 4a029611aa1038e41aab833074469383, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[11].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 10e1a5d6c5c06474da44bbaaf0c4befb, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[0].maximumQuantity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[1].maximumQuantity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[2].maximumQuantity
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[0].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[1].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[2].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[3].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[3].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[4].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[4].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[5].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[5].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[6].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[6].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[7].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[7].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[8].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[1].lootPool.Array.data[8].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[0].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[1].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[2].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[3].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[3].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[4].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[4].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[5].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[5].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[6].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[6].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[7].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[7].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[8].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[2].lootPool.Array.data[8].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.data[0].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.data[1].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.data[2].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[3].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[0].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[1].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[2].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[3].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[3].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[4].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[4].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[5].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[5].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[6].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[6].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[7].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[7].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[8].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[4].lootPool.Array.data[8].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[0].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[1].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[2].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[3].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[3].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[4].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[4].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[5].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[5].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[6].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[6].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[7].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[7].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[8].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[5].lootPool.Array.data[8].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[0].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[1].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[2].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[3].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[3].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[4].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[6].lootPool.Array.data[4].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[0].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[1].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[2].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[3].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[3].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[4].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[4].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[5].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[5].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[0].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[1].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[2].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[3].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[3].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[4].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[4].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[5].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[8].lootPool.Array.data[5].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[0].maximumQuantity
+      value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[0].minimumQuantity
+      value: 42
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[1].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[2].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[3].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[3].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[4].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[4].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[5].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[9].lootPool.Array.data[5].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[0].maximumQuantity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[0].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[1].maximumQuantity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[1].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[2].maximumQuantity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[2].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[3].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[3].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[4].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[4].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[5].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[5].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[6].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[6].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[7].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[7].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[8].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[8].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[9].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[9].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[10].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[10].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[11].maximumQuantity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossLootConfigurations.Array.data[0].lootPool.Array.data[11].minimumQuantity
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -5981,6 +7093,46 @@ PrefabInstance:
     - target: {fileID: 3440333574984988740, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: m_Name
       value: IsometricGrid
+      objectReference: {fileID: 0}
+    - target: {fileID: 3496339421555157357, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963490508984323510, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963490508984323510, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootChance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963490508984323510, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].maximumFloor
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963490508984323510, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].minimumFloor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963490508984323510, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963490508984323510, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 783ea7c9365446d194b7d07af7582724, type: 2}
+    - target: {fileID: 4963490508984323510, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[0].dropWeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963490508984323510, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[0].maximumQuantity
+      value: 215
+      objectReference: {fileID: 0}
+    - target: {fileID: 4963490508984323510, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[7].lootPool.Array.data[0].minimumQuantity
+      value: 23
       objectReference: {fileID: 0}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: dungeonMemory

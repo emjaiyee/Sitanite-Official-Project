@@ -92,12 +92,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 4534616980471887105, guid: 8942c2d5c56b6e24793c10d6c838d9b8, type: 3}
+  m_Sprite: {fileID: 6469597922705101968, guid: 9c44106c12c086547b2ef6c472d2cacb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.23}
+  m_Size: {x: 0.48, y: 0.48}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -151,11 +151,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
   maxHealth: 35
+  damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+  damageFlashDuration: 0.12
   isMiniBoss: 0
   enemyName: Crossbowman Skeleton
-  basePierceResistance: 0
-  baseStabResistance: 0
-  baseSlashResistance: 0
+  basePierceResistance: 2
+  baseStabResistance: 2
+  baseSlashResistance: 2
   baseBluntResistance: 0
   baseFrostResistance: 0
   basePoisonResistance: 0
@@ -181,15 +183,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRange
   startingState: 0
-  detectionRadius: 12
-  moveSpeed: 1
+  CurrentStateInspector: 0
+  detectionRadius: 10
+  playerCollider:
+    serializedVersion: 2
+    m_Bits: 129
+  moveSpeed: 0.6
   idleWanderRadius: 6
   locateWaitDuration: 2.5
-  attackRange: 6
+  radiusX: 2.6
+  radiusY: 2
   projectileDamageType: 1
   projectileDamage: 10
-  attackCooldown: 2.5
-  projectileSpeed: 2.5
+  attackCooldown: 3
+  projectileSpeed: 2
   projectileLifetime: 16
   attackPoint: {fileID: 3630610358147121951}
   projectilePrefab: {fileID: 7280552908879159887, guid: 219083c3bbab5c340bdbfeeba73e1861, type: 3}
@@ -256,7 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteLibrary
   m_Library: []
-  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 082362426704e77459180f0ae501095f, type: 3}
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: b46312155ce66cf4196aca5c082d7219, type: 3}
 --- !u!114 &5186203932507762558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -272,7 +279,7 @@ MonoBehaviour:
   m_CategoryHash: 1.8990936e-26
   m_labelHash: 2.480907e-28
   m_SpriteKey: 0
-  m_SpriteHash: 211543085
+  m_SpriteHash: 1041379584
 --- !u!95 &6784845555405096029
 Animator:
   serializedVersion: 7
