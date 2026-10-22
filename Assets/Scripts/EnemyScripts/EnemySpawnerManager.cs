@@ -279,7 +279,8 @@ public class EnemySpawnerManager : MonoBehaviour
                 continue;
             }
 
-            int enemyLevel = floorAdaptation.Active ? 1 : RollEnemyLevel(configuration);
+            PlayerStats player = Player.Instance != null ? Player.Instance.GetComponent<PlayerStats>() : null;
+            int enemyLevel = GetRegularEnemyLevel(configuration, player);
 
             Action handler = null;
             handler = () => HandleSpawnPointCleared(spawnPoint, handler);
@@ -301,7 +302,6 @@ public class EnemySpawnerManager : MonoBehaviour
                     AdaptiveEnemy adaptation = enemy.GetComponent<AdaptiveEnemy>();
                     if (adaptation == null)
                         adaptation = enemy.AddComponent<AdaptiveEnemy>();
-                    PlayerStats player = Player.Instance != null ? Player.Instance.GetComponent<PlayerStats>() : null;
                     adaptation.Configure(floorAdaptation, room, player);
                 }
                 else
@@ -320,11 +320,14 @@ public class EnemySpawnerManager : MonoBehaviour
     {
         if (adaptationFrozen)
             return;
-        if (dungeonMemory == null)
-            dungeonMemory = FindFirstObjectByType<DungeonMemory>();
-        floorAdaptation = enableAdaptation && dungeonMemory != null
-            ? dungeonMemory.GetAdaptation(adaptationKillThreshold) : default;
+        floorAdaptation = enableAdaptation && Player.Instance != null
+            ? Player.Instance.GetAdaptation(adaptationKillThreshold) : default;
         adaptationFrozen = true;
+    }
+
+    private int GetRegularEnemyLevel(SpawnConfiguration configuration, PlayerStats player)
+    {
+        return floorAdaptation.Active && player != null ? Mathf.Max(1, player.Level) : RollEnemyLevel(configuration);
     }
 
     private static bool IsRegularPrefab(GameObject prefab, bool meleeOnly)

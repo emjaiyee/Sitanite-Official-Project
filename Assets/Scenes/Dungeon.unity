@@ -6124,7 +6124,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: mediumRoomPrefabs.Array.size
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: secretRoomPrefabs.Array.size
@@ -6258,6 +6258,10 @@ PrefabInstance:
       propertyPath: 'smallRoomPrefabs.Array.data[13]'
       value: 
       objectReference: {fileID: 7012170165141816406, guid: 4a80fdb2b5f7132408594860f6c61e5b, type: 3}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'mediumRoomPrefabs.Array.data[10]'
+      value: 
+      objectReference: {fileID: 3311995938712963364, guid: 8a6f28b2595c71c4e9a1b7779e8f6cd9, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
