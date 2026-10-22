@@ -124,6 +124,7 @@ public class LootDropEffectsManager : MonoBehaviour
         source.playOnAwake = false;
         source.spatialBlend = 0f;
         source.outputAudioMixerGroup = audioMixerGroup;
+        AudioManager.RegisterSfxSource(source);
         source.Play();
 
         Destroy(soundObject, effect.dropSound.length);

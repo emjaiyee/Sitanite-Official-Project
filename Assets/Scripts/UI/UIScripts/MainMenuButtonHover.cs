@@ -118,6 +118,7 @@ public class MainMenuButtonHover : MonoBehaviour, IPointerEnterHandler, IPointer
         sfxSource.volume = hoverSfxVolume;
         sfxSource.pitch = pitch;
         sfxSource.spatialBlend = 0f;
+        AudioManager.RegisterSfxSource(sfxSource);
         sfxSource.Play();
         nextHoverSfxTime = Time.unscaledTime + hoverSfxCooldown;
 

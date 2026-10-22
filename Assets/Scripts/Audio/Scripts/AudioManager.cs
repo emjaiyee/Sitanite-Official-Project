@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Plays a playlist of AudioClips in order on the main menu, looping back
 /// to the first track once the last one finishes. Hook a settings volume
 /// slider to SetVolume() to control playback volume, and it persists
 /// between sessions via PlayerPrefs.
+/// The SFX volume applies to all active AudioSources except this music source.
 ///
 /// SETUP:
 /// 1. Create an empty GameObject in your main menu scene, name it "AudioManager".
@@ -18,6 +20,11 @@ using UnityEngine.Audio;
 [RequireComponent(typeof(AudioSource))]
 public class AudioManager : MonoBehaviour
 {
+    private const string SfxVolumePrefsKey = "SfxVolume";
+    private const float DefaultSfxVolume = 1f;
+    private static readonly Dictionary<AudioSource, float> PendingSfxSources =
+        new Dictionary<AudioSource, float>();
+
     public static AudioManager Instance { get; private set; }
 
     [Header("Playlist (plays in order, then loops back to start)")]
@@ -31,6 +38,8 @@ public class AudioManager : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float defaultVolume = 0.75f;
     [SerializeField] private string volumePrefsKey = "MusicVolume";
+    [Range(0f, 1f)]
+    [SerializeField] private float defaultSfxVolume = DefaultSfxVolume;
 
     [Header("Behavior")]
     [SerializeField] private bool playOnStart = true;
@@ -38,6 +47,10 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource audioSource;
     private int currentTrackIndex = 0;
+    private float sfxVolume;
+    private float nextSfxSourceCleanupTime;
+    private readonly Dictionary<AudioSource, float> sfxSources =
+        new Dictionary<AudioSource, float>();
 
     private void Awake()
     {
@@ -61,6 +74,17 @@ public class AudioManager : MonoBehaviour
         // Load saved volume, or fall back to default
         float savedVolume = PlayerPrefs.GetFloat(volumePrefsKey, defaultVolume);
         SetVolume(savedVolume);
+        sfxVolume = PlayerPrefs.GetFloat(SfxVolumePrefsKey, defaultSfxVolume);
+
+        foreach (KeyValuePair<AudioSource, float> pendingSource in PendingSfxSources)
+        {
+            if (pendingSource.Key != audioSource)
+                RegisterSfxSource(pendingSource.Key, pendingSource.Value);
+        }
+
+        PendingSfxSources.Clear();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        RefreshSfxSources();
     }
 
     private void Start()
@@ -71,13 +95,34 @@ public class AudioManager : MonoBehaviour
 
     private void Update()
     {
-        // When the current track finishes, advance to the next one (looping playlist)
-        if (playlist.Count == 0) return;
-
-        if (!audioSource.isPlaying && audioSource.time == 0f && HasPlayedAtLeastOnce())
+        if (playlist.Count > 0 &&
+            !audioSource.isPlaying &&
+            audioSource.time == 0f &&
+            HasPlayedAtLeastOnce())
         {
             PlayNextTrack();
         }
+
+        if (Time.unscaledTime >= nextSfxSourceCleanupTime)
+        {
+            RefreshSfxSources();
+            RemoveDestroyedSfxSources();
+            nextSfxSourceCleanupTime = Time.unscaledTime + 1f;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance != this)
+            return;
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        Instance = null;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        RefreshSfxSources();
     }
 
     private bool hasStartedPlaylist = false;
@@ -132,4 +177,63 @@ public class AudioManager : MonoBehaviour
 
     /// <summary>Returns the current volume (0–1), useful for initializing a slider's value.</summary>
     public float GetVolume() => audioSource.volume;
+
+    /// <summary>Sets the persisted global SFX volume (0–1).</summary>
+    public void SetSfxVolume(float value)
+    {
+        sfxVolume = Mathf.Clamp01(value);
+        PlayerPrefs.SetFloat(SfxVolumePrefsKey, sfxVolume);
+
+        foreach (KeyValuePair<AudioSource, float> registeredSource in sfxSources)
+        {
+            if (registeredSource.Key != null)
+                registeredSource.Key.volume = registeredSource.Value * sfxVolume;
+        }
+    }
+
+    public float GetSfxVolume() => sfxVolume;
+
+    public static void RegisterSfxSource(AudioSource source)
+    {
+        if (source == null)
+            return;
+
+        if (Instance != null)
+        {
+            Instance.RegisterSfxSource(source, source.volume);
+            return;
+        }
+
+        if (!PendingSfxSources.ContainsKey(source))
+            PendingSfxSources.Add(source, source.volume);
+
+        source.volume = PendingSfxSources[source] *
+            PlayerPrefs.GetFloat(SfxVolumePrefsKey, DefaultSfxVolume);
+    }
+
+    private void RegisterSfxSource(AudioSource source, float baseVolume)
+    {
+        if (source == null || source == audioSource || sfxSources.ContainsKey(source))
+            return;
+
+        sfxSources.Add(source, baseVolume);
+        source.volume = baseVolume * sfxVolume;
+    }
+
+    private void RefreshSfxSources()
+    {
+        AudioSource[] sources = FindObjectsByType<AudioSource>(FindObjectsSortMode.None);
+        foreach (AudioSource source in sources)
+            RegisterSfxSource(source, source.volume);
+    }
+
+    private void RemoveDestroyedSfxSources()
+    {
+        List<AudioSource> sources = new List<AudioSource>(sfxSources.Keys);
+        foreach (AudioSource source in sources)
+        {
+            if (source == null)
+                sfxSources.Remove(source);
+        }
+    }
 }

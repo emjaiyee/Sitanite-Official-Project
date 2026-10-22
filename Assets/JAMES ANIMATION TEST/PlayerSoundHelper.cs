@@ -67,6 +67,9 @@ public class PlayerSoundHelper : MonoBehaviour
             audioSource = GetComponentInChildren<AudioSource>(true);
         }
 
+        if (audioSource != null)
+            AudioManager.RegisterSfxSource(audioSource);
+
         playerStats = GetComponentInParent<PlayerStats>();
         if (playerStats == null)
         {

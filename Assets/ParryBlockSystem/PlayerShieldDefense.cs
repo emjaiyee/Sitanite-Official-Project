@@ -61,6 +61,9 @@ public class PlayerShieldDefense : MonoBehaviour
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
 
+        if (audioSource != null)
+            AudioManager.RegisterSfxSource(audioSource);
+
         CreateFeedbackText();
     }
 

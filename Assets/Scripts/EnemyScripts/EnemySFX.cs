@@ -23,6 +23,7 @@ public class EnemySFX : MonoBehaviour
         {
             audioSource.spatialBlend = 1f;
             audioSource.playOnAwake = false;
+            AudioManager.RegisterSfxSource(audioSource);
         }
     }
 
@@ -65,4 +66,3 @@ public class EnemySFX : MonoBehaviour
     }
 
 }
-

@@ -45,6 +45,7 @@ public class MainMenuOptionsTransition : MonoBehaviour
 
         audioSource.playOnAwake = false;
         audioSource.spatialBlend = 0f;
+        AudioManager.RegisterSfxSource(audioSource);
 
         SetAlpha(menuButtons, 1f);
         SetAlpha(menuLogos, 1f);

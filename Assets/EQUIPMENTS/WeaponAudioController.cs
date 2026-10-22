@@ -104,6 +104,9 @@ public class WeaponAudioController : MonoBehaviour
             audioSource =
                 GetComponent<AudioSource>();
 
+        if (audioSource != null)
+            AudioManager.RegisterSfxSource(audioSource);
+
         CreateChargeLoopSource();
     }
 
@@ -479,5 +482,6 @@ public class WeaponAudioController : MonoBehaviour
 
         chargeLoopSource.playOnAwake = false;
         chargeLoopSource.loop = true;
+        AudioManager.RegisterSfxSource(chargeLoopSource);
     }
 }
