@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7161118017781214675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1092138702509689232}
+  m_Layer: 0
+  m_Name: spawnOffsey
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1092138702509689232
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7161118017781214675}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.1068, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7718120262145220399}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7446725338791815757
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,8 +41,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7718120262145220399}
   - component: {fileID: 5313999288747196682}
-  - component: {fileID: -4241178874733805798}
   - component: {fileID: 1118169751818491256}
+  - component: {fileID: 3866605402287103540}
+  - component: {fileID: 76370025206110865}
   m_Layer: 0
   m_Name: NewStuff_0
   m_TagString: Untagged
@@ -31,7 +63,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1092138702509689232}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5313999288747196682
@@ -93,8 +126,21 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &-4241178874733805798
-BoxCollider2D:
+--- !u!114 &1118169751818491256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7446725338791815757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c86bc595062f6264c8edcae271fcea03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProceduralDecorationSettings
+  cutsWalkableTiles: 0
+--- !u!60 &3866605402287103540
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -127,7 +173,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.08}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.25}
@@ -137,9 +183,18 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.32, y: 0.32}
-  m_EdgeRadius: 0
---- !u!114 &1118169751818491256
+  m_Points:
+    m_Paths:
+    - - {x: -0.015157856, y: 0.24096213}
+      - {x: -0.15711358, y: 0.16477928}
+      - {x: -0.15711357, y: -0.005741425}
+      - {x: -0.011309274, y: -0.08}
+      - {x: 0.019179985, y: -0.07807571}
+      - {x: 0.16, y: -0.0030599963}
+      - {x: 0.1580757, y: 0.16594642}
+      - {x: 0.014369279, y: 0.24}
+  m_UseDelaunayMesh: 1
+--- !u!114 &76370025206110865
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,7 +203,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7446725338791815757}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c86bc595062f6264c8edcae271fcea03, type: 3}
+  m_Script: {fileID: 11500000, guid: 671ed5d2e3990d843b1df3b47d463260, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProceduralDecorationSettings
-  cutsWalkableTiles: 0
+  m_EditorClassIdentifier: Assembly-CSharp::BreakablePot
+  potRenderer: {fileID: 5313999288747196682}
+  brokenSprite: {fileID: 1708088274, guid: f10ea92b60d1c27429916ab8d4bcf67a, type: 3}
+  spawnPoint: {fileID: 7718120262145220399}
