@@ -16,6 +16,9 @@ public class RoomManager : MonoBehaviour
     [SerializeField] private List<GameObject> xlRoomPrefabs =
         new List<GameObject>();
 
+    [Header("Manggagaway Boss Room")]
+    [SerializeField] private GameObject manggagawayBossRoomPrefab;
+
     [Header("Room Spacing")]
     [SerializeField] private float roomSpacingX = 30f;
 
@@ -156,15 +159,27 @@ public class RoomManager : MonoBehaviour
 
 
     public void GenerateFloor(
-        FloorConfiguration configuration)
+        FloorConfiguration configuration,
+        bool isManggagawayBossFloor = false)
     {
-        if (configuration == null)
+        if (configuration == null && !isManggagawayBossFloor)
         {
             Debug.LogError(
                 "RoomManager cannot generate a floor: " +
                 "FloorConfiguration is null."
             );
 
+            return;
+        }
+
+        if (isManggagawayBossFloor &&
+            (manggagawayBossRoomPrefab == null ||
+             manggagawayBossRoomPrefab.GetComponent<RoomInstance>() == null ||
+             manggagawayBossRoomPrefab.GetComponentsInChildren<EnemySpawnPoint>(true).Length == 0))
+        {
+            Debug.LogError(
+                "RoomManager requires a Manggagaway boss room prefab with a " +
+                "RoomInstance and at least one EnemySpawnPoint.", this);
             return;
         }
 
@@ -187,7 +202,9 @@ public class RoomManager : MonoBehaviour
             HandleRoomWaveCleared;
 
         List<GameObject> prefabPool =
-            GetAllowedRoomPrefabs(configuration);
+            isManggagawayBossFloor
+                ? new List<GameObject> { manggagawayBossRoomPrefab }
+                : GetAllowedRoomPrefabs(configuration);
 
         if (prefabPool.Count == 0)
         {
@@ -202,13 +219,13 @@ public class RoomManager : MonoBehaviour
         int minimumRooms =
             Mathf.Max(
                 1,
-                configuration.minimumRooms
+                isManggagawayBossFloor ? 1 : configuration.minimumRooms
             );
 
         int maximumRooms =
             Mathf.Max(
                 1,
-                configuration.maximumRooms
+                isManggagawayBossFloor ? 1 : configuration.maximumRooms
             );
 
         if (minimumRooms > maximumRooms)
@@ -325,7 +342,7 @@ public class RoomManager : MonoBehaviour
             );
         }
 
-        ConfigureSpecialGateways();
+        ConfigureSpecialGateways(!isManggagawayBossFloor);
 
         // ---------------------------------------------
         // ROOM PROGRESSION
@@ -706,7 +723,7 @@ public class RoomManager : MonoBehaviour
             currentPlayerRoom = destinationRoom;
     }
 
-    private void ConfigureSpecialGateways()
+    private void ConfigureSpecialGateways(bool allowSecretRooms = true)
     {
         List<Gateway> floorGateways = new List<Gateway>();
         List<Gateway> secretGateways = new List<Gateway>();
@@ -754,6 +771,9 @@ public class RoomManager : MonoBehaviour
             SetSecretGatewayVisible(gateway, false);
             eligibleSecretGateways.Add(gateway);
         }
+
+        if (!allowSecretRooms)
+            return;
 
         if (
             eligibleSecretGateways.Count == 0 ||

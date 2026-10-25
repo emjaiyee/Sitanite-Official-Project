@@ -66,6 +66,12 @@ public class EnemySpawnerManager : MonoBehaviour
     }
 
     [Serializable]
+    private class ManggagawayConfiguration
+    {
+        public GameObject enemyPrefab = null;
+    }
+
+    [Serializable]
     private class FallenDescenderConfiguration
     {
         public List<GameObject> enemyPrefabs = new List<GameObject>();
@@ -93,6 +99,9 @@ public class EnemySpawnerManager : MonoBehaviour
     [Header("Boss Floor Spawn Configurations")]
     [SerializeField] private List<BossSpawnConfiguration> bossSpawnConfigurations =
         new List<BossSpawnConfiguration>();
+
+    [Header("Manggagaway Configuration")]
+    [SerializeField] private ManggagawayConfiguration manggagawayConfiguration = new ManggagawayConfiguration();
 
     [Header("Fallen Descender Configuration")]
     [SerializeField] private FallenDescenderConfiguration fallenDescenderConfiguration = new FallenDescenderConfiguration();
@@ -202,6 +211,13 @@ public class EnemySpawnerManager : MonoBehaviour
     {
         if (floorManager == null)
             floorManager = FindFirstObjectByType<FloorManager>();
+
+        if (floorManager != null && floorManager.IsManggagawayBossFloor)
+        {
+            SpawnManggagaway();
+            return;
+        }
+
         if (dungeonMemory == null)
             dungeonMemory = FindFirstObjectByType<DungeonMemory>();
 
@@ -232,6 +248,9 @@ public class EnemySpawnerManager : MonoBehaviour
     public void SpawnRoomEnemies(RoomInstance room)
     {
         if (room == null || !registeredRooms.Contains(room))
+            return;
+
+        if (floorManager != null && floorManager.IsManggagawayBossFloor)
             return;
 
         FreezeAdaptation();
@@ -335,7 +354,7 @@ public class EnemySpawnerManager : MonoBehaviour
         if (prefab == null || prefab.GetComponent<EnemyLich>() != null || prefab.GetComponent<FallenDescender>() != null)
             return false;
         EnemyHealth health = prefab.GetComponent<EnemyHealth>();
-        if (health != null && health.IsMiniBoss)
+        if (health != null && (health.IsMiniBoss || health.IsMainBoss))
             return false;
         return !meleeOnly || (prefab.GetComponent<EnemyMelee>() != null && prefab.GetComponent<EnemyRange>() == null);
     }
@@ -522,6 +541,49 @@ public class EnemySpawnerManager : MonoBehaviour
             ApplyModifiers(boss, configuration);
         }
 
+        TrackActiveBoss(boss, room);
+    }
+
+    private void SpawnManggagaway()
+    {
+        GameObject prefab = manggagawayConfiguration != null ? manggagawayConfiguration.enemyPrefab : null;
+        if (prefab == null || prefab.GetComponent<EnemyManggagaway>() == null ||
+            prefab.GetComponent<EnemyHealth>() == null || prefab.GetComponent<EnemyLevelXP>() == null)
+        {
+            Debug.LogError(
+                "EnemySpawnerManager requires a Manggagaway prefab with EnemyManggagaway, " +
+                "EnemyHealth and EnemyLevelXP on its root.", this);
+            return;
+        }
+
+        List<RoomInstance> rooms = GetEligibleBossRooms();
+        if (registeredRooms.Count != 1 || rooms.Count != 1)
+        {
+            Debug.LogError(
+                "Manggagaway requires exactly one room with at least one EnemySpawnPoint.", this);
+            return;
+        }
+
+        RoomInstance room = rooms[0];
+        EnemySpawnPoint[] spawnPoints = room.GetComponentsInChildren<EnemySpawnPoint>(true);
+        EnemySpawnPoint spawnPoint = spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
+        GameObject boss = spawnPoint.SpawnEnemyAt(
+            spawnPoint.transform.position,
+            prefab,
+            prefab.GetComponent<EnemyLevelXP>().Level,
+            room.transform);
+
+        if (boss == null)
+        {
+            Debug.LogError("EnemySpawnerManager failed to spawn Manggagaway.", this);
+            return;
+        }
+
+        TrackActiveBoss(boss, room);
+    }
+
+    private void TrackActiveBoss(GameObject boss, RoomInstance room)
+    {
         ActiveBossHealth = boss.GetComponent<EnemyHealth>();
         if (ActiveBossHealth != null)
         {
@@ -535,6 +597,9 @@ public class EnemySpawnerManager : MonoBehaviour
     {
         if (ActiveBossHealth != null)
             ActiveBossHealth.OnEnemyDied -= HandleActiveBossDied;
+
+        if (floorManager != null && floorManager.IsManggagawayBossFloor)
+            RaiseRoomWaveCleared(ActiveBossRoom);
 
         ActiveBossHealth = null;
         ActiveBossRoom = null;

@@ -36,7 +36,10 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public int CurrentHealth { get; private set; }
     public int MaxHealth => maxHealth;
     public bool IsMiniBoss => isMiniBoss;
+    public bool IsMainBoss => GetComponent<EnemyManggagaway>() != null;
     public string EnemyName => enemyName;
+    public bool IsInvulnerable { get; private set; }
+    public int DamageHealthFloor { get; private set; }
 
     [Header("Runtime (Debug)")]
     [Tooltip("Runtime current HP. Read-only display for the Inspector.")]
@@ -46,6 +49,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public event Action<EnemyHealth> OnHealthChanged;
     /// <summary>Fired after damage is applied. Second arg is the damage origin, if known.</summary>
     public event Action<EnemyHealth, Vector3?> OnDamaged;
+    public event Action<int, int> OnDamageTaken;
+
+    public void SetDamageProtection(bool invulnerable, int healthFloor = 0)
+    {
+        IsInvulnerable = invulnerable;
+        DamageHealthFloor = Mathf.Clamp(healthFloor, 0, maxHealth);
+    }
 
     private bool hasDied;
     private Dictionary<DamageType, float> configuredResistances;
@@ -240,7 +250,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         if (amount <= 0)
             return;
 
-        if (hasDied)
+        if (hasDied || IsInvulnerable)
             return;
 
         if (CurrentHealth <= 0)
@@ -249,13 +259,15 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         lastDamageType = damageType;
         if (adaptation == null)
             adaptation = GetComponent<AdaptiveEnemy>();
-        amount = adaptation != null && !isMiniBoss && adaptation.Matches(damageType)
+        amount = adaptation != null && !isMiniBoss && !IsMainBoss && adaptation.Matches(damageType)
             ? adaptation.Mitigate(amount, damageType)
             : Mathf.RoundToInt(
             Mathf.Max(1f, amount - GetDamageResistance(damageType))
         );
 
-        CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
+        int healthBefore = CurrentHealth;
+        CurrentHealth = Mathf.Max(DamageHealthFloor, CurrentHealth - amount);
+        int appliedDamage = healthBefore - CurrentHealth;
         runtimeCurrentHealth = CurrentHealth;
 
         if (CurrentHealth > 0)
@@ -264,6 +276,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         // Show the damage number above the enemy, colored by type.
         DamagePopupSpawner.Spawn(transform, amount, damageType, 0.8f);
 
+        OnDamageTaken?.Invoke(healthBefore, appliedDamage);
         OnHealthChanged?.Invoke(this);
         OnDamaged?.Invoke(this, damageSource);
 
@@ -318,7 +331,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     {
         if (adaptation == null)
             adaptation = GetComponent<AdaptiveEnemy>();
-        if (adaptation != null && !isMiniBoss && adaptation.Matches(damageType))
+        if (adaptation != null && !isMiniBoss && !IsMainBoss && adaptation.Matches(damageType))
             return adaptation.DamageResistance;
         if (configuredResistances != null)
         {
@@ -566,7 +579,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         if (Player.Instance != null)
         {
             Player.Instance.RecordEnemyDefeated(
-                isMiniBoss || GetComponentInParent<EnemyLich>() != null
+                isMiniBoss || IsMainBoss || GetComponentInParent<EnemyLich>() != null
             );
         }
 

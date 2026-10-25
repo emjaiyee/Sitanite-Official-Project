@@ -116,6 +116,25 @@ The physical boundary remains flat and independent of wall art. Southern edges s
 
 ## Authoring details
 
+### Manggagaway boss floor
+
+On **FloorManager**, set **Manggagaway Boss Floor > Floor** to the exact boss floor number. Zero leaves it unassigned. This floor takes priority over regular floor ranges and does not need a regular Floor Configuration entry.
+
+On **RoomManager**, assign **Manggagaway Boss Room Prefab**. The prefab must contain a root **RoomInstance**, a player spawn, a Floor gateway for progression, and at least one child **EnemySpawnPoint**. Exactly one copy of this room is generated, with no secret rooms; regular room-size and room-count settings are ignored.
+
+On **EnemySpawnerManager**, assign **Manggagaway Configuration > Enemy Prefab** to the Manggagaway enemy prefab. Its root must contain **EnemyManggagaway**, **EnemyHealth**, and **EnemyLevelXP**. Set the fixed boss level on the prefab's **EnemyLevelXP**. The manager spawns exactly one boss at a randomly selected spawn point's position, using that point's elevation and rendering settings, ignoring its spawn count/scatter. No regular enemies, mini-bosses, Fallen Descenders, adaptation, random level modifiers, or player-based boss balancing are applied to this encounter. Manggagaway's own combat abilities, including summons, are unchanged.
+
+Leave **EnemyManggagaway > Room** unassigned on the enemy prefab. The boss resolves its spawned parent room automatically; a room prefab asset is not the same room as the player's runtime room. Parent-room changes also refresh the cached room bounds used for teleportation.
+**Tools > Manggagaway > Run Room Checks (Empty Scene)** verifies prefab-reference recovery, parent-room changes, and position-based room lookup outside Play Mode.
+
+On **EnemyManggagaway**, configure **Projectile Damage Type**, **Beam Damage Type**, and **Aoe Damage Type** under their respective attack sections. Each attack uses its own type in both forms. Summoned creatures retain their own damage settings. The existing boss prefab keeps Lightning for all three attacks until changed.
+
+The room clears and its Floor gateway unlocks when Manggagaway dies, regardless of the selected spawn point's **Clear When All Dead** setting. The existing **Boss Floor Spawn Configurations** still control mini-boss encounters on ordinary floors.
+
+**Tools > Manggagaway > Run Floor Checks (Empty Scene)** verifies boss-floor generation, fixed-level spawning, spawn-point placement, and death-driven progression. Run it outside Play Mode in an empty scene.
+
+### Regular room population
+
 Enemy Spawn Point Prefab is optional and must contain exactly one EnemySpawnPoint. Generated markers use the profile's **Elevation Level** and have autonomous spawning disabled; the existing scene EnemySpawnerManager remains responsible for spawning. Without a template, each marker requests one enemy at its own location.
 
 **Enemy Boundary Clearance** defaults to three cells (range 1-8). Enemy markers require a fully walkable neighborhood of that radius, keeping them away from outer boundaries, ring holes, and cut decoration footprints. Marker prefabs with a nonzero Spawn Radius receive additional conservative clearance in world units. Narrow passages can fit fewer markers than requested; the generator warns instead of placing unsafe markers. Verify the largest enemy collider and its actual spawn scatter in Play Mode, and increase clearance as needed.
