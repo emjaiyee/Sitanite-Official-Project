@@ -62,9 +62,9 @@ MonoBehaviour:
   baseBluntResistance: 0
   baseFrostResistance: 0
   basePoisonResistance: 59
-  baseLightningResistance: 0
+  baseLightningResistance: 5
   basePsychicResistance: 0
-  baseNecrosisResistance: 0
+  baseNecrosisResistance: 15
   baseWaterResistance: 0
   baseEarthResistance: 0
   baseFireResistance: 0
@@ -133,8 +133,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Radius: 0.35
+  m_Offset: {x: -0.0078615695, y: 0.061769255}
+  m_Radius: 0.11639992
 --- !u!50 &4651437813404688453
 Rigidbody2D:
   serializedVersion: 5
@@ -209,9 +209,9 @@ MonoBehaviour:
   summonPrefab: {fileID: 1636909773633105260, guid: 0e30733826f0b3948a709453f0d95b63, type: 3}
   summonPool:
   - {fileID: 1602161633568627328, guid: 95d02915be4766c44a1ba686e0f87317, type: 3}
-  summonCooldown: 30
+  summonCooldown: 60
   summonCount: 3
-  maxLivingSummons: 6
+  maxLivingSummons: 5
   summonRadius: 3
   healPrefab: {fileID: 8772149163865101170, guid: fda38f715998f7a47878fa474e3599a2, type: 3}
   healCooldown: 80
@@ -219,8 +219,8 @@ MonoBehaviour:
   healDuration: 60
   teleportPrefab: {fileID: 4314980141992138859, guid: 61986a2371583584a93664f02ee50fb7, type: 3}
   teleportCooldown: 120
-  overwhelmHitCount: 10
-  overwhelmDamageFraction: 0.3
+  overwhelmHitCount: 5
+  overwhelmDamageFraction: 0.2
   successionWindow: 5
   teleportMinPlayerDistance: 6
   blockingLayers:
