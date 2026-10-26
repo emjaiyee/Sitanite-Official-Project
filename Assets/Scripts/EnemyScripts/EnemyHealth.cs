@@ -673,9 +673,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
 
         if (playerHit && Player.Instance != null)
         {
-            DungeonMemory memory = FindFirstObjectByType<DungeonMemory>();
-            if (memory != null)
-                memory.RecordAdaptiveKill(lastDamageType, playerAttackType != WeaponAttackType.Melee);
+            Player.Instance.RecordAdaptiveKill(lastDamageType, playerAttackType != WeaponAttackType.Melee);
         }
         if (Player.Instance != null)
         {
