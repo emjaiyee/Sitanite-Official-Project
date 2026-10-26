@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "InputSystem_Actions",
     "maps": [
         {
@@ -81,7 +82,16 @@
                     "name": "Sprint",
                     "type": "Button",
                     "id": "641cd816-40e6-41b4-8c3d-04687c349290",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Skill",
+                    "type": "Button",
+                    "id": "6b1e433b-1d44-4316-bbd2-4fdd80a0591b",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -484,12 +494,21 @@
                 },
                 {
                     "name": "",
+<<<<<<< Updated upstream
                     "id": "aa7405c1-7af6-4f86-8570-2a0aef4b5b2c",
                     "path": "<Keyboard>/h",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Stats",
+=======
+                    "id": "ac634441-88c4-4360-9744-3edb91fc4979",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill",
+>>>>>>> Stashed changes
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
