@@ -84,7 +84,7 @@ public class PlayerShieldDefense : MonoBehaviour
         if (audioSource == null)
             audioSource = GetComponent<AudioSource>();
 
-        CreateFeedbackText();
+        CreateFeedbackDisplay();
     }
 
     private void Update()
