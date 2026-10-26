@@ -1,18 +1,19 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 /// <summary>
 /// Attach this to the same GameObject as your volume Slider.
-/// Binds the slider to AudioManager.Instance at runtime instead of via an
-/// Inspector-dragged reference, so it keeps working correctly even after
-/// the persisted AudioManager singleton survives a scene reload (which
-/// destroys any new AudioManager instance spawned in the reloaded scene,
-/// breaking Inspector references pointed at that local copy).
+/// Binds the slider to either music or SFX volume on AudioManager.Instance,
+/// so it keeps working after the persisted singleton survives a scene reload.
 /// </summary>
 [RequireComponent(typeof(Slider))]
 public class VolumeSliderBinder : MonoBehaviour
 {
+    [SerializeField] private bool controlSfxVolume;
+
     private Slider slider;
+    private UnityAction<float> volumeChangedListener;
 
     private void Awake()
     {
@@ -27,18 +28,24 @@ public class VolumeSliderBinder : MonoBehaviour
             return;
         }
 
-        // Set the slider's visual position to match current volume,
-        // without re-triggering SetVolume via the listener below.
-        slider.SetValueWithoutNotify(AudioManager.Instance.GetVolume());
+        if (controlSfxVolume)
+            volumeChangedListener = AudioManager.Instance.SetSfxVolume;
+        else
+            volumeChangedListener = AudioManager.Instance.SetVolume;
 
-        // Clear any stale listeners, then bind fresh to the current instance.
-        slider.onValueChanged.RemoveListener(AudioManager.Instance.SetVolume);
-        slider.onValueChanged.AddListener(AudioManager.Instance.SetVolume);
+        float currentVolume = controlSfxVolume
+            ? AudioManager.Instance.GetSfxVolume()
+            : AudioManager.Instance.GetVolume();
+        slider.SetValueWithoutNotify(currentVolume);
+        slider.onValueChanged.RemoveListener(volumeChangedListener);
+        slider.onValueChanged.AddListener(volumeChangedListener);
     }
 
     private void OnDisable()
     {
-        if (AudioManager.Instance != null)
-            slider.onValueChanged.RemoveListener(AudioManager.Instance.SetVolume);
+        if (volumeChangedListener != null)
+            slider.onValueChanged.RemoveListener(volumeChangedListener);
+
+        volumeChangedListener = null;
     }
 }
