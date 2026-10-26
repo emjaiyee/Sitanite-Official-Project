@@ -361,6 +361,7 @@ public class PlayerStats : MonoBehaviour
         {
             experiencePoints -= experienceToNextLevel;
             level++;
+            LeveledUp?.Invoke();
             if (attributes != null)
                 attributes.AddAllocationPoints(1, 3);
             experienceToNextLevel = GetExperienceRequiredForLevel(level);
@@ -379,6 +380,7 @@ public class PlayerStats : MonoBehaviour
     // -------------------------------------------------
 
     public event Action<PlayerStats> Changed;
+    public event Action LeveledUp;
     public event Action Died;
     public event Action<float, float> Damaged;
 

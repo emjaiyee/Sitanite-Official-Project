@@ -44,6 +44,10 @@ public class PlayerSoundHelper : MonoBehaviour
     [SerializeField]
     private List<AudioClip> femaleDeathClips;
 
+    [Header("Progression")]
+    [SerializeField]
+    private AudioClip levelUpClip;
+
     [Min(0f)]
     [SerializeField] private float hurtCooldown = 2f;
 
@@ -72,6 +76,18 @@ public class PlayerSoundHelper : MonoBehaviour
         {
             playerStats = GetComponentInChildren<PlayerStats>(true);
         }
+    }
+
+    private void OnEnable()
+    {
+        if (playerStats != null)
+            playerStats.LeveledUp += PlayLevelUp;
+    }
+
+    private void OnDisable()
+    {
+        if (playerStats != null)
+            playerStats.LeveledUp -= PlayLevelUp;
     }
 
 
@@ -129,6 +145,12 @@ public class PlayerSoundHelper : MonoBehaviour
                 : deathClips;
 
         PlayRandomClip(clips);
+    }
+
+    private void PlayLevelUp()
+    {
+        if (audioSource != null && levelUpClip != null)
+            audioSource.PlayOneShot(levelUpClip);
     }
 
 

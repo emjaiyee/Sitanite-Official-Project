@@ -4,8 +4,11 @@ using UnityEngine;
 public abstract class ProjectileBase : MonoBehaviour, IProjectile
 {
     public WeaponAttackType SourceAttackType { get; set; } = WeaponAttackType.Ranged;
+    public string SourceWeaponId { get; set; }
     public bool IsCriticalHit { get; set; }
     public GameObject CriticalHitVisualPrefab { get; set; }
+    public WeaponAudioController CriticalHitAudioController { get; set; }
+    public WeaponAudioController HitImpactAudioController { get; set; }
     public bool ShowAttackHitFeedback { get; set; }
     public Sprite AttackHitIcon { get; set; }
     public Sprite AttackHitImpactSprite { get; set; }
@@ -287,11 +290,18 @@ public abstract class ProjectileBase : MonoBehaviour, IProjectile
         // Normal projectile damage
         if (ShouldDealDirectDamage)
         {
+            HitImpactAudioController?.PlayHitImpactSound(
+                SourceWeaponId,
+                SourceAttackType
+            );
+
             if (IsCriticalHit &&
                 ((damage > 0 && damageType != DamageType.None) ||
                  (secondaryDamage > 0 && secondaryDamageType != DamageType.None) ||
                  (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)))
             {
+                CriticalHitAudioController?.PlayCriticalHitSound();
+
                 PlayerDamage.PlayCriticalHitVisual(
                     target,
                     CriticalHitVisualPrefab,

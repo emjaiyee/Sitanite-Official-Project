@@ -10,6 +10,7 @@ using UnityEngine.InputSystem;
 public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 {
     private const float CounterProjectileDelay = 0.12f;
+    private const float MeleeHitRadius = 0.1f;
 
     [SerializeField] private Transform attackPoint;
     [SerializeField] private Transform firePoint;
@@ -72,6 +73,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
 
     private ItemData data;
     private PlayerStats playerStats;
+    private CharacterRenderer characterRenderer;
 
     private float chargeStartTime;
     private bool isCharging;
@@ -124,6 +126,7 @@ public class WeaponController : MonoBehaviour, IWeapon, IChargeableWeapon
     private void Awake()
 {
     playerStats = GetComponentInParent<PlayerStats>();
+    characterRenderer = GetComponentInParent<CharacterRenderer>();
 
     weaponAudio = GetComponentInParent<WeaponAudioController>();
 
@@ -427,19 +430,40 @@ private void PerformAttack(Vector2 direction, bool isCounterAttack)
             );
         }
 
-        // Place the melee hit area in front of the player.
-        Vector2 attackPosition =
-            (Vector2)WeaponOwner.position +
-            direction * data.AttackRange;
+        Vector2 attackPosition;
+        float hitRadius;
+        if (enemyDamage != null)
+        {
+            attackPosition =
+                (Vector2)WeaponOwner.position +
+                direction * data.AttackRange;
+            hitRadius = data.AttackRange;
+        }
+        else if (characterRenderer != null &&
+                 characterRenderer.TryGetWeaponTipPosition(
+                     direction,
+                     out Vector3 weaponTipPosition))
+        {
+            attackPosition = weaponTipPosition;
+            hitRadius = MeleeHitRadius;
+        }
+        else
+        {
+            attackPosition =
+                (Vector2)attackPoint.position +
+                direction * data.AttackRange;
+            hitRadius = MeleeHitRadius;
+        }
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             attackPosition,
-            data.AttackRange,
+            hitRadius,
             Physics2D.AllLayers
         );
 
         int primaryDamage = GetPrimaryDamage();
-        HashSet<IDamageable> damagedTargets = new HashSet<IDamageable>();
+        IDamageable closestTarget = null;
+        float closestTargetDistance = float.PositiveInfinity;
 
         foreach (Collider2D hit in hits)
         {
@@ -453,15 +477,23 @@ private void PerformAttack(Vector2 direction, bool isCounterAttack)
             if (target == null)
                 continue;
 
-            if (!damagedTargets.Add(target))
-                continue;
-
             if (!PlayerElevationLevel.CanAffectTarget(
                     (target as MonoBehaviour)?.transform))
                 continue;
 
+            float distance = (hit.ClosestPoint(attackPosition) - attackPosition)
+                .sqrMagnitude;
+            if (distance >= closestTargetDistance)
+                continue;
+
+            closestTarget = target;
+            closestTargetDistance = distance;
+        }
+
+        if (closestTarget != null)
+        {
             ApplyMeleeDamage(
-                target,
+                closestTarget,
                 primaryDamage,
                 isCounterAttack,
                 attackIsCritical
@@ -486,6 +518,8 @@ private void PerformAttack(Vector2 direction, bool isCounterAttack)
              (secondaryDamage > 0 && secondaryDamageType != DamageType.None) ||
              (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)))
         {
+            weaponAudio?.PlayCriticalHitSound();
+
             PlayerDamage.PlayCriticalHitVisual(
                 target,
                 criticalHitVisualPrefab,
@@ -512,6 +546,8 @@ private void PerformAttack(Vector2 direction, bool isCounterAttack)
 
         if (tertiaryDamage > 0 && tertiaryDamageType != DamageType.None)
             PlayerDamage.Deal(target, tertiaryDamage, tertiaryDamageType, source, data.WeaponAttackType, isCriticalHit);
+
+        weaponAudio?.PlayHitImpactSound(data.WeaponId, data.WeaponAttackType);
 
         if (!isCounterAttack)
         {
@@ -1673,10 +1709,11 @@ public void ReleaseSkill(bool fullyCharged)
                 direction.x
             ) * Mathf.Rad2Deg;
 
+        Vector3 projectileSpawnPosition = spawnPositionOverride ?? firePoint.position;
         GameObject projectile =
             Instantiate(
                 projectilePrefab,
-                spawnPositionOverride ?? firePoint.position,
+                projectileSpawnPosition,
                 Quaternion.Euler(
                     0f,
                     0f,
@@ -1728,8 +1765,11 @@ public void ReleaseSkill(bool fullyCharged)
         if (projectileComponent is ProjectileBase trackedProjectile)
         {
             trackedProjectile.SourceAttackType = data.WeaponAttackType;
+            trackedProjectile.SourceWeaponId = data.WeaponId;
             trackedProjectile.IsCriticalHit = isCriticalHit;
             trackedProjectile.CriticalHitVisualPrefab = criticalHitVisualPrefab;
+            trackedProjectile.CriticalHitAudioController = weaponAudio;
+            trackedProjectile.HitImpactAudioController = weaponAudio;
             trackedProjectile.ShowAttackHitFeedback = showAttackHitFeedback;
             trackedProjectile.AttackHitIcon = showAttackHitFeedback
                 ? GetAttackHitIcon()
@@ -1795,6 +1835,34 @@ public void ReleaseSkill(bool fullyCharged)
                 projectileComponent is ProjectileBase projectileBase)
             {
                 projectileBase.SetCounterHitVisual(counterHitVisualPrefab);
+            }
+        }
+
+        if (enemyDamage == null && !isSkill)
+        {
+            switch (data.WeaponAttackType)
+            {
+                case WeaponAttackType.Ranged:
+                    if (characterRenderer != null)
+                        characterRenderer.PlayRangedShotFlash(firePoint, direction);
+                    else
+                        AttackHitIconVisual.PlayMuzzleFlash(
+                            firePoint,
+                            null,
+                            direction
+                        );
+                    break;
+
+                case WeaponAttackType.Spell:
+                    if (characterRenderer != null)
+                        characterRenderer.PlayMageCastFlash(firePoint, direction);
+                    else
+                        AttackHitIconVisual.PlaySpellCastFlash(
+                            firePoint,
+                            null,
+                            direction
+                        );
+                    break;
             }
         }
     }

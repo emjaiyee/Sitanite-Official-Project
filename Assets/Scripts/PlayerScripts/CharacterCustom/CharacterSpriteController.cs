@@ -153,6 +153,8 @@ public class CharacterSpriteController : MonoBehaviour
     public void PlayDash()
     {
         PlayAction(CharacterAnimationState.Dash, dashDuration);
+        if (characterRenderer != null)
+            characterRenderer.PlayDashAfterimages();
     }
 
     public void PlayDeath()

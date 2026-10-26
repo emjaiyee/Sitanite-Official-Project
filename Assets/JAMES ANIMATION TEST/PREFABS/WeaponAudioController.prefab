@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4186759088098511465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4282244175314280749}
+  - component: {fileID: 8591955533989256645}
+  m_Layer: 7
+  m_Name: WeaponAudioController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4282244175314280749
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4186759088098511465}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8591955533989256645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4186759088098511465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6a3fe7befbe6244c93f5ddbac4ce69c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponAudioController
+  playerEquipment: {fileID: 0}
+  audioSource: {fileID: 0}
+  meleeHitImpactSounds:
+  - {fileID: 8300000, guid: 508059041b32a1b4cab94e4d80b81144, type: 3}
+  - {fileID: 8300000, guid: b29357629def7b344ac8298dda691bf2, type: 3}
+  - {fileID: 8300000, guid: 8e4068e4d2933074b84c72edfdc42fb2, type: 3}
+  rangedHitImpactSounds:
+  - {fileID: 8300000, guid: 508059041b32a1b4cab94e4d80b81144, type: 3}
+  - {fileID: 8300000, guid: b29357629def7b344ac8298dda691bf2, type: 3}
+  - {fileID: 8300000, guid: 8e4068e4d2933074b84c72edfdc42fb2, type: 3}
+  weaponHitImpactProfiles:
+  - weaponId: TomeOfAir
+    hitImpactSound: {fileID: 8300000, guid: ad66b3402ae26fe49b3f3ae58073a1ca, type: 3}
+  - weaponId: TomeOfFire
+    hitImpactSound: {fileID: 8300000, guid: 5b49261ee03191a42a9d73b804fdc936, type: 3}
+  - weaponId: TomeOfLightning
+    hitImpactSound: {fileID: 8300000, guid: 39c7ef639a35f1f479e9e36b58824574, type: 3}
+  weaponProfiles:
+  - weaponId: Dagger
+    attackSounds:
+    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 5
+      skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: IronSword
+    attackSounds:
+    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 7
+      skillSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: GreatSword
+    attackSounds:
+    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
+    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
+    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 1
+      skillSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}
+  - weaponId: BattleAxe
+    attackSounds:
+    - {fileID: 8300000, guid: 01d267fcac7ae6f4c9683ba9bac13dd5, type: 3}
+    - {fileID: 8300000, guid: 5da2630e84fd85d40b2fc2451e0e6e8b, type: 3}
+    - {fileID: 8300000, guid: 83917e694569d99479e544d119509e0e, type: 3}
+    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    skills:
+    - skillType: 8
+      skillSound: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+      chargeStartSound: {fileID: 0}
+      chargeLoopSound: {fileID: 0}
+      fullyChargedSound: {fileID: 0}
+      chargeReleaseSound: {fileID: 0}

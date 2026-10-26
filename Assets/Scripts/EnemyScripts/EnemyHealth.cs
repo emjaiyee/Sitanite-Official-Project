@@ -15,9 +15,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
 
     [Header("Hit Reaction")]
     [Min(0f)]
-    [SerializeField] private float hitBounceDistance = 0.03f;
+    [SerializeField] private float hitBounceDistance = 0.02f;
     [Min(0f)]
-    [SerializeField] private float hitBounceDuration = 0.2f;
+    [SerializeField] private float hitBounceDuration = 0.1f;
 
     [Header("Run Statistics")]
     [SerializeField] private bool isMiniBoss;

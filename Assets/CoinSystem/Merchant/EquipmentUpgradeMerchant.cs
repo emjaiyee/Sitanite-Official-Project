@@ -62,6 +62,8 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
     [Header("Custom UI References")]
     [Tooltip("Parent where equipped gear option prefabs are added. Add a layout group here to control their arrangement.")]
     [SerializeField] private Transform equipmentListParent;
+    [Tooltip("Optional background sprite for equipment slots in the merchant UI.")]
+    [SerializeField] private Sprite equipmentSlotSprite;
     [Tooltip("Text displaying the player's current coin count.")]
     [SerializeField] private TextMeshProUGUI coinText;
     [Tooltip("Text area displaying the selected item's upgrade preview.")]
@@ -682,6 +684,13 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
                 Vector2.zero,
                 new Color(0.08f, 0.1f, 0.14f, 0.9f)
             );
+            Image slotImage = slot.GetComponent<Image>();
+            if (equipmentSlotSprite != null)
+            {
+                slotImage.sprite = equipmentSlotSprite;
+                slotImage.color = Color.white;
+            }
+
             Outline outline = slot.AddComponent<Outline>();
             outline.effectColor = new Color(0.36f, 0.4f, 0.47f, 0.75f);
             outline.effectDistance = new Vector2(1f, -1f);
@@ -902,10 +911,21 @@ public class EquipmentUpgradeMerchant : MonoBehaviour
 
             Image slotBackground = equippedSlotIcons[index].transform.parent.GetComponent<Image>();
             if (slotBackground != null)
-                slotBackground.color = equippedSlotBaseColors[index] *
-                    (item != null && item.Data != null && rarityStyleSource != null
-                        ? rarityStyleSource.GetRarityBackgroundColor(item.Data.Rarity)
-                        : Color.white);
+            {
+                Color rarityBackgroundColor = item != null && item.Data != null && rarityStyleSource != null
+                    ? rarityStyleSource.GetRarityBackgroundColor(item.Data.Rarity)
+                    : Color.white;
+
+                if (equipmentSlotSprite != null)
+                {
+                    slotBackground.sprite = equipmentSlotSprite;
+                    slotBackground.color = rarityBackgroundColor;
+                }
+                else
+                {
+                    slotBackground.color = equippedSlotBaseColors[index] * rarityBackgroundColor;
+                }
+            }
 
             if (item == null || item.Data == null || rarityStyleSource == null)
             {

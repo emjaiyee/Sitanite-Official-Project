@@ -1,9 +1,15 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterRenderer : MonoBehaviour
 {
     private static readonly Color CounterAttackColor = new Color(1f, 0.12f, 0.12f);
+    private const int DashAfterimageCount = 8;
+    private const float DashAfterimageInterval = 0.025f;
+    private const float DashAfterimageFadeDuration = 0.18f;
+    private static readonly Color DashAfterimageTint =
+        new Color(1.5f, 1.5f, 1.5f, 1.5f);
 
     [Header("Character Appearance")]
     [SerializeField] private CharacterAppearance appearance;
@@ -25,12 +31,22 @@ public class CharacterRenderer : MonoBehaviour
     [SerializeField] private GameObject parryVisualPrefab;
     [SerializeField] private GameObject criticalHitVisualPrefab;
 
+    [Header("Level Up Animation")]
+    [SerializeField] private Sprite[] levelUpAnimationFrames = new Sprite[8];
+    [Min(1f)] [SerializeField] private float levelUpAnimationFramesPerSecond = 12f;
+    [Min(0.01f)] [SerializeField] private float levelUpAnimationScale = 0.5f;
+    [Range(0f, 1f)] [SerializeField] private float levelUpAnimationOpacity = 0.5f;
+
     public GameObject CriticalHitVisualPrefab => criticalHitVisualPrefab;
 
     private CharacterDirection currentDirection = CharacterDirection.SouthWest;
     private CharacterAnimationState currentAnimationState = CharacterAnimationState.Idle;
     private int currentAnimationFrame;
     private Coroutine counterAttackFlashRoutine;
+    private Coroutine dashAfterimageRoutine;
+    private Coroutine levelUpAnimationRoutine;
+    private readonly List<GameObject> activeDashAfterimages = new List<GameObject>();
+    private SpriteRenderer levelUpAnimationRenderer;
     private Color originalWeaponUnderColor;
     private Color originalWeaponOverColor;
     private bool hasCounterAttackFlashColors;
@@ -51,11 +67,246 @@ public class CharacterRenderer : MonoBehaviour
     private void Awake()
     {
         Debug.Log("CharacterRenderer Awake!");
+        CreateLevelUpAnimationRenderer();
+    }
+
+    private void OnEnable()
+    {
+        PlayerStats playerStats = GetComponent<PlayerStats>();
+        if (playerStats != null)
+            playerStats.LeveledUp += PlayLevelUpAnimation;
     }
 
     private void OnDisable()
     {
         StopCounterAttackFlash();
+        StopDashAfterimages();
+
+        PlayerStats playerStats = GetComponent<PlayerStats>();
+        if (playerStats != null)
+            playerStats.LeveledUp -= PlayLevelUpAnimation;
+
+        if (levelUpAnimationRoutine != null)
+        {
+            StopCoroutine(levelUpAnimationRoutine);
+            levelUpAnimationRoutine = null;
+        }
+
+        if (levelUpAnimationRenderer != null)
+        {
+            levelUpAnimationRenderer.sprite = null;
+            levelUpAnimationRenderer.enabled = false;
+        }
+    }
+
+    private void CreateLevelUpAnimationRenderer()
+    {
+        GameObject animationObject = new GameObject("LevelUpAnimation");
+        animationObject.transform.SetParent(transform, false);
+        animationObject.transform.localScale = Vector3.one * levelUpAnimationScale;
+        levelUpAnimationRenderer = animationObject.AddComponent<SpriteRenderer>();
+        levelUpAnimationRenderer.color = new Color(1f, 1f, 1f, levelUpAnimationOpacity);
+        levelUpAnimationRenderer.enabled = false;
+
+        SpriteRenderer sortingReference = bodyRenderer != null
+            ? bodyRenderer
+            : GetComponentInChildren<SpriteRenderer>();
+        if (sortingReference != null)
+        {
+            levelUpAnimationRenderer.sortingLayerID = sortingReference.sortingLayerID;
+            levelUpAnimationRenderer.sortingOrder = sortingReference.sortingOrder;
+
+            foreach (SpriteRenderer renderer in GetComponentsInChildren<SpriteRenderer>())
+            {
+                if (renderer != levelUpAnimationRenderer &&
+                    renderer.sortingLayerID == sortingReference.sortingLayerID)
+                {
+                    levelUpAnimationRenderer.sortingOrder = Mathf.Max(
+                        levelUpAnimationRenderer.sortingOrder,
+                        renderer.sortingOrder
+                    );
+                }
+            }
+
+            levelUpAnimationRenderer.sortingOrder++;
+        }
+    }
+
+    private void PlayLevelUpAnimation()
+    {
+        if (levelUpAnimationRenderer == null ||
+            levelUpAnimationFrames == null ||
+            levelUpAnimationFrames.Length == 0)
+        {
+            return;
+        }
+
+        if (levelUpAnimationRoutine != null)
+            StopCoroutine(levelUpAnimationRoutine);
+
+        levelUpAnimationRoutine = StartCoroutine(PlayLevelUpAnimationRoutine());
+    }
+
+    private IEnumerator PlayLevelUpAnimationRoutine()
+    {
+        float frameDuration = 1f / Mathf.Max(1f, levelUpAnimationFramesPerSecond);
+        foreach (Sprite frame in levelUpAnimationFrames)
+        {
+            levelUpAnimationRenderer.sprite = frame;
+            levelUpAnimationRenderer.enabled = frame != null;
+            yield return new WaitForSeconds(frameDuration);
+        }
+
+        levelUpAnimationRenderer.sprite = null;
+        levelUpAnimationRenderer.enabled = false;
+        levelUpAnimationRoutine = null;
+    }
+
+    public void PlayDashAfterimages()
+    {
+        if (dashAfterimageRoutine != null)
+            StopCoroutine(dashAfterimageRoutine);
+
+        dashAfterimageRoutine = StartCoroutine(SpawnDashAfterimages());
+    }
+
+    public void PlayRangedShotFlash(Transform firePoint, Vector2 direction)
+    {
+        AttackHitIconVisual.PlayMuzzleFlash(
+            firePoint,
+            GetAttackWeaponRenderer(),
+            direction
+        );
+    }
+
+    public void PlayMageCastFlash(Transform firePoint, Vector2 direction)
+    {
+        AttackHitIconVisual.PlaySpellCastFlash(
+            firePoint,
+            GetAttackWeaponRenderer(),
+            direction
+        );
+    }
+
+    private IEnumerator SpawnDashAfterimages()
+    {
+        for (int index = 0; index < DashAfterimageCount; index++)
+        {
+            CreateDashAfterimage();
+            yield return new WaitForSeconds(DashAfterimageInterval);
+        }
+
+        dashAfterimageRoutine = null;
+    }
+
+    private void CreateDashAfterimage()
+    {
+        GameObject afterimage = new GameObject("DashAfterimage");
+        afterimage.transform.SetPositionAndRotation(transform.position, transform.rotation);
+        activeDashAfterimages.Add(afterimage);
+
+        SpriteRenderer[] sourceRenderers =
+        {
+            weaponUnderRenderer,
+            bodyRenderer,
+            legsRenderer,
+            torsoRenderer,
+            eyesRenderer,
+            hairRenderer,
+            headwearRenderer,
+            weaponOverRenderer,
+            shieldRenderer
+        };
+        List<SpriteRenderer> afterimageRenderers = new List<SpriteRenderer>();
+
+        foreach (SpriteRenderer source in sourceRenderers)
+        {
+            if (source == null || !source.enabled || source.sprite == null)
+                continue;
+
+            GameObject part = new GameObject(source.name);
+            part.layer = source.gameObject.layer;
+            part.transform.SetParent(afterimage.transform, false);
+            part.transform.localPosition =
+                transform.InverseTransformPoint(source.transform.position);
+            part.transform.localRotation =
+                Quaternion.Inverse(transform.rotation) * source.transform.rotation;
+            part.transform.localScale = source.transform.lossyScale * 1.1f;
+
+            SpriteRenderer renderer = part.AddComponent<SpriteRenderer>();
+            renderer.sprite = source.sprite;
+            renderer.sharedMaterial = source.sharedMaterial;
+            renderer.color = new Color(
+                DashAfterimageTint.r,
+                DashAfterimageTint.g,
+                DashAfterimageTint.b,
+                source.color.a * DashAfterimageTint.a
+            );
+            renderer.flipX = source.flipX;
+            renderer.flipY = source.flipY;
+            renderer.sortingLayerID = source.sortingLayerID;
+            renderer.sortingOrder = source.sortingOrder - 1;
+            renderer.maskInteraction = source.maskInteraction;
+            renderer.drawMode = source.drawMode;
+            renderer.size = source.size;
+            afterimageRenderers.Add(renderer);
+        }
+
+        if (afterimageRenderers.Count == 0)
+        {
+            activeDashAfterimages.Remove(afterimage);
+            Destroy(afterimage);
+            return;
+        }
+
+        StartCoroutine(FadeDashAfterimage(afterimage, afterimageRenderers));
+    }
+
+    private IEnumerator FadeDashAfterimage(
+        GameObject afterimage,
+        List<SpriteRenderer> renderers)
+    {
+        List<Color> initialColors = new List<Color>(renderers.Count);
+        foreach (SpriteRenderer renderer in renderers)
+            initialColors.Add(renderer.color);
+
+        float elapsed = 0f;
+        while (elapsed < DashAfterimageFadeDuration)
+        {
+            float alpha = 1f - elapsed / DashAfterimageFadeDuration;
+            for (int index = 0; index < renderers.Count; index++)
+            {
+                if (renderers[index] == null)
+                    continue;
+
+                Color color = initialColors[index];
+                color.a *= alpha;
+                renderers[index].color = color;
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        activeDashAfterimages.Remove(afterimage);
+        Destroy(afterimage);
+    }
+
+    private void StopDashAfterimages()
+    {
+        if (dashAfterimageRoutine != null)
+        {
+            StopCoroutine(dashAfterimageRoutine);
+            dashAfterimageRoutine = null;
+        }
+
+        foreach (GameObject afterimage in activeDashAfterimages)
+        {
+            if (afterimage != null)
+                Destroy(afterimage);
+        }
+
+        activeDashAfterimages.Clear();
     }
 
     public void PlayCounterAttackFlash(float duration)
@@ -153,6 +404,37 @@ public class CharacterRenderer : MonoBehaviour
         return weaponIsUnder
             ? weaponUnderRenderer
             : weaponOverRenderer;
+    }
+
+    public bool TryGetWeaponTipPosition(
+        Vector2 direction,
+        out Vector3 tipPosition)
+    {
+        SpriteRenderer renderer =
+            weaponUnderRenderer != null &&
+            weaponUnderRenderer.enabled &&
+            weaponUnderRenderer.sprite != null
+                ? weaponUnderRenderer
+                : weaponOverRenderer;
+
+        if (renderer == null ||
+            !renderer.enabled ||
+            renderer.sprite == null ||
+            direction.sqrMagnitude <= 0.0001f)
+        {
+            tipPosition = transform.position;
+            return false;
+        }
+
+        direction.Normalize();
+        Bounds weaponBounds = renderer.bounds;
+        float extentAlongDirection =
+            Mathf.Abs(direction.x) * weaponBounds.extents.x +
+            Mathf.Abs(direction.y) * weaponBounds.extents.y;
+
+        tipPosition =
+            weaponBounds.center + (Vector3)(direction * extentAlongDirection);
+        return true;
     }
 
     public void PlayShieldDefenseVisual(bool isParry)

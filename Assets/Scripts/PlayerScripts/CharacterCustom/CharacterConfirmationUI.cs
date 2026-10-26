@@ -23,10 +23,19 @@ public class CharacterConfirmationUI : MonoBehaviour
 
     // Temporary name used for the confirmation screen.
     private string previewName;
+    private bool initialized;
 
     private void OnEnable()
     {
-        FindReferences();
+        if (initialized)
+        {
+            Refresh();
+        }
+    }
+
+    private void Start()
+    {
+        initialized = true;
         Refresh();
     }
 

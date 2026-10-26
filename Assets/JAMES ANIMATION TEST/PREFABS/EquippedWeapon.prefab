@@ -1,0 +1,166 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1588851084925780275
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2127932684660858038}
+  - component: {fileID: 7783633498295871111}
+  m_Layer: 7
+  m_Name: EquippedWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2127932684660858038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588851084925780275}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2059764499978823789}
+  - {fileID: 6946317191554595599}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7783633498295871111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588851084925780275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9151eaabf0d9249468e3ef8e7db168de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponController
+  attackPoint: {fileID: 2059764499978823789}
+  firePoint: {fileID: 6946317191554595599}
+  meleeAttackHitIcon: {fileID: 5860520732734022520, guid: d7f37ae496cd76940ab7898c44433fce, type: 3}
+  rangedAttackHitIcon: {fileID: -415446080585258355, guid: 74b6e97e4d16b094c906767ff06ac10b, type: 3}
+  spellAttackHitIcon: {fileID: 9087382598824751646, guid: e89bf042aa6107447a32b35dd867c02f, type: 3}
+  meleeHitImpactSprite: {fileID: 8143209405666569851, guid: 7e8e0100cb7886848ac4af575c0c816e, type: 3}
+  rangedHitImpactSprite: {fileID: -4643097303080971243, guid: 0a01080d51fc5c9488be49d6d4e0b273, type: 3}
+  spellHitImpactSprite: {fileID: -2174163284124869246, guid: 0a01080d51fc5c9488be49d6d4e0b273, type: 3}
+  meleeHitImpactSprites:
+  - {fileID: 4700236355478268897, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: -4517724868450821911, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 164341638057162896, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 2574299327220513861, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 6030980039057921079, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  rangedHitImpactSprites:
+  - {fileID: 4700236355478268897, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: -4517724868450821911, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 164341638057162896, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 2574299327220513861, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 6030980039057921079, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  meleeHitImpactAnimationScale: 0.4
+  rangedHitImpactAnimationScale: 0.4
+  airTomeHitImpactSprites:
+  - {fileID: 1679817834216870078, guid: 060d34e97b100ad468215c3d8cdae3f7, type: 3}
+  - {fileID: 4235429567275493950, guid: 060d34e97b100ad468215c3d8cdae3f7, type: 3}
+  - {fileID: -2083636004794133557, guid: 060d34e97b100ad468215c3d8cdae3f7, type: 3}
+  - {fileID: 6174521685786194121, guid: 060d34e97b100ad468215c3d8cdae3f7, type: 3}
+  fireTomeHitImpactSprites:
+  - {fileID: 5758761366942597453, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: -5160090253338139024, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: 7545543559299576297, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: 8937004231079439934, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: 288368275741848637, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: -1302614737226487090, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: -1302614737226487090, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: -1302614737226487090, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  lightningTomeHitImpactSprites:
+  - {fileID: 8657385633858729600, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: 6223061409204288474, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: 6223061409204288474, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: -431893521208912307, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: 6241556379378038001, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: 6241556379378038001, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: -431893521208912307, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  tomeHitImpactFramesPerSecond: 12
+  meleeHitImpactSize: 0.4
+  rangedHitImpactSize: 0.4
+  spellHitImpactSize: 0.4
+  attackHitIconSize: 0.2
+  fullyChargedIndicatorPrefab: {fileID: 0}
+  indicatorRotationSpeed: 180
+  indicatorPulseSpeed: 3
+  indicatorPulseMin: 0.9
+  indicatorPulseMax: 1.1
+  rotateIndicator: 1
+  pulseIndicator: 1
+--- !u!1 &8528349308578578160
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6946317191554595599}
+  m_Layer: 7
+  m_Name: Range
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6946317191554595599
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8528349308578578160}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2127932684660858038}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9050186931064768761
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2059764499978823789}
+  m_Layer: 7
+  m_Name: Melee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2059764499978823789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9050186931064768761}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2127932684660858038}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

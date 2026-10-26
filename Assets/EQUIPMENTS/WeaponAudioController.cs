@@ -11,6 +11,8 @@ using UnityEngine;
 ///
 /// Supports:
 /// - Normal attacks
+/// - Critical hits
+/// - Melee and ranged hit impacts
 /// - Individual skill sounds
 /// - Charge start
 /// - Charge loop
@@ -37,9 +39,19 @@ public class WeaponAudioController : MonoBehaviour
         [Tooltip("Fallback used when no normal attack clips are configured.")]
         public AudioClip attackSound;
 
+        [Header("Critical Hit")]
+        public AudioClip criticalHitSound;
+
         [Header("Skill Sounds")]
         public List<SkillAudioProfile> skills =
             new List<SkillAudioProfile>();
+    }
+
+    [Serializable]
+    public class WeaponHitImpactProfile
+    {
+        public string weaponId;
+        public AudioClip hitImpactSound;
     }
 
 
@@ -68,6 +80,12 @@ public class WeaponAudioController : MonoBehaviour
     [SerializeField] private PlayerEquipment playerEquipment;
 
     [SerializeField] private AudioSource audioSource;
+
+    [Header("Hit Impact Sounds")]
+    [SerializeField] private AudioClip[] meleeHitImpactSounds;
+    [SerializeField] private AudioClip[] rangedHitImpactSounds;
+    [SerializeField] private List<WeaponHitImpactProfile> weaponHitImpactProfiles =
+        new List<WeaponHitImpactProfile>();
 
 
     // =========================================================
@@ -240,6 +258,62 @@ public class WeaponAudioController : MonoBehaviour
             GetNextAttackSound(currentWeaponProfile);
 
         PlayOneShot(attackSound);
+    }
+
+    public void PlayCriticalHitSound()
+    {
+        RefreshCurrentWeapon();
+
+        if (currentWeaponProfile == null)
+            return;
+
+        PlayOneShot(currentWeaponProfile.criticalHitSound);
+    }
+
+    public void PlayHitImpactSound(
+        string weaponId,
+        WeaponAttackType attackType)
+    {
+        if (weaponHitImpactProfiles != null)
+        {
+            foreach (WeaponHitImpactProfile profile in weaponHitImpactProfiles)
+            {
+                if (profile != null &&
+                    string.Equals(
+                        profile.weaponId,
+                        weaponId,
+                        StringComparison.OrdinalIgnoreCase) &&
+                    profile.hitImpactSound != null)
+                {
+                    PlayOneShot(profile.hitImpactSound);
+                    return;
+                }
+            }
+        }
+
+        AudioClip impactSound = attackType switch
+        {
+            WeaponAttackType.Melee => GetRandomClip(meleeHitImpactSounds),
+            WeaponAttackType.Ranged => GetRandomClip(rangedHitImpactSounds),
+            _ => null
+        };
+        PlayOneShot(impactSound);
+    }
+
+    private static AudioClip GetRandomClip(AudioClip[] clips)
+    {
+        if (clips == null || clips.Length == 0)
+            return null;
+
+        int startIndex = UnityEngine.Random.Range(0, clips.Length);
+        for (int offset = 0; offset < clips.Length; offset++)
+        {
+            AudioClip clip = clips[(startIndex + offset) % clips.Length];
+            if (clip != null)
+                return clip;
+        }
+
+        return null;
     }
 
 
