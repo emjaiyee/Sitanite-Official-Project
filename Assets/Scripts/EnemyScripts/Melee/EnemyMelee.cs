@@ -9,8 +9,6 @@ public class EnemyMelee : MonoBehaviour
     // =========================================================
     // STATE
     // =========================================================
-
-
     public enum EnemyState
     {
         Idle,
@@ -20,11 +18,9 @@ public class EnemyMelee : MonoBehaviour
         Death
     }
 
-
     [Header("State")]
     [SerializeField] private EnemyState startingState =
         EnemyState.Idle;
-
 
     public EnemyState? CurrentState { get; private set; }
 
@@ -36,9 +32,7 @@ public class EnemyMelee : MonoBehaviour
     // STATE INSTANCE
     // =========================================================
 
-
     private EnemyMeleeState currentState;
-
 
     // =========================================================
     // DETECTION
@@ -47,12 +41,12 @@ public class EnemyMelee : MonoBehaviour
     [Header("Detection")]
 
     [Tooltip("Detection distance measured in A* grid cells.")]
-    [SerializeField] private int detectionRadius = 6;
+    [SerializeField] private int detectionRadius = 8;
 
-    [Min(0f)] [SerializeField] private float alertedDuration = 15f;
+    [Min(0f)] 
+    [SerializeField] private float alertedDuration = 20f;
 
     public bool Alerted { get; private set; }
-
     private float alertedUntilTime;
 
     public int DetectionRadius =>
@@ -60,7 +54,7 @@ public class EnemyMelee : MonoBehaviour
             ? Mathf.CeilToInt(detectionRadius * 1.5f)
             : detectionRadius;
 
-    [SerializeField] private LayerMask playerCollider = Physics2D.AllLayers;
+    [SerializeField] private LayerMask raycastLayerDetection = Physics2D.AllLayers;
 
 
     // =========================================================
@@ -69,7 +63,7 @@ public class EnemyMelee : MonoBehaviour
 
     [Header("Movement")]
 
-    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float moveSpeed = 1f;
 
     public float MoveSpeed =>
         moveSpeed;
@@ -83,13 +77,14 @@ public class EnemyMelee : MonoBehaviour
     [SerializeField] private float attackRadiusX = 0.8f;
     [SerializeField] private float attackRadiusY = 0.6f;
     [SerializeField] private DamageType attackDamageType = DamageType.Slash;
-    [Min(0f)] [SerializeField] private float damage = 5f;
+    [Min(0f)] [SerializeField] private float damage = 15f;
     [Min(0.01f)] [SerializeField] private float attackCooldown = 1.5f;
-    [SerializeField] private bool useChargedAttack;
     [SerializeField] private GameObject attackPrefab;
     [SerializeField] private float markPoint = 0.2f;
 
     [Header("Charged Attack")]
+    [SerializeField] private bool useChargedAttack;
+    [Space(1)]
     [SerializeField] private float chargeRadiusX = 1.5f;
     [SerializeField] private float chargeRadiusY = 1.2f;
     [SerializeField] private DamageType chargedAttackDamageType = DamageType.Blunt;
@@ -199,7 +194,7 @@ public class EnemyMelee : MonoBehaviour
         "How long the enemy remains fully visible " +
         "before the fade begins."
     )]
-    [SerializeField] private float deathAnimationDelay = 0.5f;
+    [SerializeField] private float deathAnimationDelay = 1f;
 
     public float DeathAnimationDelay =>
         deathAnimationDelay;
@@ -228,6 +223,8 @@ public class EnemyMelee : MonoBehaviour
     private Vector3 spawnPosition;
     private float nextFootstepTime;
 
+    //-----------------SFX---------------------------------
+    [Header("Footstep SFX")]
     [SerializeField] private float footstepInterval = 0.42f;
 
 
@@ -698,7 +695,7 @@ public class EnemyMelee : MonoBehaviour
                 transform.position,
                 rayDirection,
                 2f,
-                playerCollider
+                raycastLayerDetection
                 );
 
         if (ray.collider == null)

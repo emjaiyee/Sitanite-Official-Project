@@ -93,7 +93,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1257497385422938067, guid: 9f3c7672880d6a5409717c18d946855e, type: 3}
+  m_Sprite: {fileID: -2499986054201142404, guid: 02d0c6c6390fbfa498845cf14ed79b65, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -151,21 +151,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8ab9ceee96b684593ff9daf9b2dc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 40
-  basePierceResistance: 5
-  baseStabResistance: 5
-  baseSlashResistance: 5
-  baseBluntResistance: 0
-  baseFrostResistance: 0
-  basePoisonResistance: 0
-  baseLightningResistance: 0
+  maxHealth: 80
+  damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+  damageFlashDuration: 0.12
+  isMiniBoss: 0
+  enemyName: 
+  basePierceResistance: 8
+  baseStabResistance: 8
+  baseSlashResistance: 8
+  baseBluntResistance: 2
+  baseFrostResistance: 2
+  basePoisonResistance: 2
+  baseLightningResistance: 2
   basePsychicResistance: 0
   baseNecrosisResistance: 0
   baseWaterResistance: 0
-  baseEarthResistance: 0
-  baseFireResistance: 0
-  baseAirResistance: 0
-  basePhysicalResistance: 0
+  baseEarthResistance: 2
+  baseFireResistance: 2
+  baseAirResistance: 2
+  basePhysicalResistance: 2
   runtimeCurrentHealth: 0
 --- !u!114 &5897817779390478996
 MonoBehaviour:
@@ -183,18 +187,18 @@ MonoBehaviour:
   CurrentStateInspector: 0
   detectionRadius: 8
   alertedDuration: 20
-  playerCollider:
+  raycastLayerDetection:
     serializedVersion: 2
     m_Bits: 129
-  moveSpeed: 1
-  attackRadiusX: 0.8
-  attackRadiusY: 0.6
-  attackDamageType: 2
-  damage: 15
-  attackCooldown: 1.5
-  useChargedAttack: 0
+  moveSpeed: 0.3
+  attackRadiusX: 0.6
+  attackRadiusY: 0.45
+  attackDamageType: 4
+  damage: 5
+  attackCooldown: 2.5
   attackPrefab: {fileID: 9219959829639980943, guid: e1560b468edb77e4aa486a1d9604ab7f, type: 3}
-  markPoint: 0.2
+  markPoint: 0.5
+  useChargedAttack: 0
   chargeRadiusX: 1.5
   chargeRadiusY: 1.2
   chargedAttackDamageType: 4
@@ -202,8 +206,6 @@ MonoBehaviour:
   chargedAttackCooldown: 2.5
   chargedAttackTime: 0.75
   chargedAttackMultiplier: 2
-  damageType: 0
-  damageAmount: 0
   takingAim: 0
   stillMovement: 0
   idleWanderRadius: 4
@@ -270,7 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteLibrary
   m_Library: []
-  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 678e7df0723290143bae5db56d639fc1, type: 3}
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: b6a29f00855face4b8047032c529a8d8, type: 3}
 --- !u!114 &95327859484872687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,9 +286,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteResolver
   m_CategoryHash: 1.8990936e-26
-  m_labelHash: 2.480907e-28
+  m_labelHash: 1.6911767e-21
   m_SpriteKey: 0
-  m_SpriteHash: 211543085
+  m_SpriteHash: 1041379584
 --- !u!95 &4259996642940716189
 Animator:
   serializedVersion: 7

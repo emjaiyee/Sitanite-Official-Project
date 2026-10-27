@@ -1,0 +1,522 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteLibrarySourceAsset
+  m_Library:
+  - m_Name: IDLE_DOWN
+    m_Hash: 347870142
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: down
+      m_Hash: 486510651
+      m_Sprite: {fileID: -3439016380264426996, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 2824184886573865713, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 1
+  - m_Name: IDLE_LEFT
+    m_Hash: 841245933
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: left
+      m_Hash: 979887976
+      m_Sprite: {fileID: -1122012182083177789, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -7593245332317054472, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 1
+  - m_Name: IDLE_RIGHT
+    m_Hash: 306078192
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: right
+      m_Hash: 885683476
+      m_Sprite: {fileID: 3075316067556043823, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -2341644985766651645, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 1
+  - m_Name: IDLE_UP
+    m_Hash: 582495105
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: up
+      m_Hash: 60092016
+      m_Sprite: {fileID: 6169849039467351348, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -7760997136795409561, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 1
+  - m_Name: IDLE_NE
+    m_Hash: 642974960
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: ne
+      m_Hash: 125812993
+      m_Sprite: {fileID: -9054388592739515454, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -1204828448553617640, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 1
+  - m_Name: IDLE_NW
+    m_Hash: 367687096
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: nw
+      m_Hash: 885436489
+      m_Sprite: {fileID: -450725694045384551, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 466256532395804853, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 1
+  - m_Name: IDLE_SE
+    m_Hash: 423586028
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: se
+      m_Hash: 940813597
+      m_Sprite: {fileID: 8669881989919309364, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 5247867548876202736, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 1
+  - m_Name: IDLE_SW
+    m_Hash: 713431460
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: sw
+      m_Hash: 195746901
+      m_Sprite: {fileID: -8887350768033008980, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 2681622432948283680, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 1
+  - m_Name: ATTACK_DOWN
+    m_Hash: 656862266
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: A down 1
+      m_Hash: 928306113
+      m_Sprite: {fileID: -6892279270905001599, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -5469885285097259155, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A down 2
+      m_Hash: 777880187
+      m_Sprite: {fileID: 7831357679984566848, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 1293712312391604679, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A down 3
+      m_Hash: 425374445
+      m_Sprite: {fileID: -1809490153151489432, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -6335589295026228099, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A down 4
+      m_Hash: 121513806
+      m_Sprite: {fileID: -7064925731830812240, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 2505504350097341942, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: ATTACK_LEFT
+    m_Hash: 29268841
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: A left 1
+      m_Hash: 681795409
+      m_Sprite: {fileID: -7078432978307791558, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -572886651241363747, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A left 2
+      m_Hash: 833228523
+      m_Sprite: {fileID: -7874369584241605939, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 1714186041155680084, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A left 3
+      m_Hash: 112017021
+      m_Sprite: {fileID: 6207906125021884093, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8409986869946384859, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A left 4
+      m_Hash: 415869918
+      m_Sprite: {fileID: 745806345647199510, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -2894468965011400175, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: ATTACK_RIGHT
+    m_Hash: 941145142
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: A right 1
+      m_Hash: 12086921
+      m_Sprite: {fileID: 745014978184078961, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 6022062201158434708, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A right 2
+      m_Hash: 431046451
+      m_Sprite: {fileID: 810348744896990144, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8541381259882299555, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A right 3
+      m_Hash: 783683493
+      m_Sprite: {fileID: 5169128883986893116, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -5925696444491590185, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A right 4
+      m_Hash: 819108358
+      m_Sprite: {fileID: 7967136111938545875, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -6148582978627420152, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: ATTACK_UP
+    m_Hash: 890472054
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: A up 1
+      m_Hash: 944589576
+      m_Sprite: {fileID: 2599133604854047785, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -2969471652804265984, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A up 2
+      m_Hash: 558111410
+      m_Sprite: {fileID: 8000885328574223364, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8825738243625525299, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A up 3
+      m_Hash: 373500452
+      m_Sprite: {fileID: -2924830959380081958, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -6499039334201427230, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A up 4
+      m_Hash: 136822663
+      m_Sprite: {fileID: 8250999098567173245, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -3121823278310716324, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: ATTACK_NE
+    m_Hash: 838379783
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: A ne 1
+      m_Hash: 632879629
+      m_Sprite: {fileID: 7517777093288803864, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 3068409302579284165, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A ne 2
+      m_Hash: 1018276791
+      m_Sprite: {fileID: 6602855240673578501, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -9144387637425584027, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A ne 3
+      m_Hash: 196516641
+      m_Sprite: {fileID: -7337254330691385838, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -3938304792852560047, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A ne 4
+      m_Hash: 366087810
+      m_Sprite: {fileID: -761758994796259567, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -5514995857546207818, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: ATTACK_NW
+    m_Hash: 37869647
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: A nw 1
+      m_Hash: 974818579
+      m_Sprite: {fileID: 4014662357844138725, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8528265381110192649, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A nw 2
+      m_Hash: 588504233
+      m_Sprite: {fileID: 198714464875781822, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -4559687048226170283, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A nw 3
+      m_Hash: 336915519
+      m_Sprite: {fileID: 3204517929709904015, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -5105456817869714864, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A nw 4
+      m_Hash: 175143324
+      m_Sprite: {fileID: 8018999098725260435, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8021896939973669514, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: ATTACK_SE
+    m_Hash: 244630811
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: A se 1
+      m_Hash: 130774351
+      m_Sprite: {fileID: 3816611778998335384, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 2597630716967817825, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A se 2
+      m_Hash: 516039925
+      m_Sprite: {fileID: 3098698884227317118, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 276028396077782452, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A se 3
+      m_Hash: 700781667
+      m_Sprite: {fileID: -8677956023196741825, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 1435451473974546120, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A se 4
+      m_Hash: 933331392
+      m_Sprite: {fileID: -5007864624954870818, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -7482071931935914455, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: ATTACK_SW
+    m_Hash: 1026405459
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: A sw 1
+      m_Hash: 409535057
+      m_Sprite: {fileID: -2079110916219207975, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -4941747889601842026, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A sw 2
+      m_Hash: 23090155
+      m_Sprite: {fileID: -9173940220225484129, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 6380635040290938176, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A sw 3
+      m_Hash: 912745341
+      m_Sprite: {fileID: -7059005529347618866, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -1896353341053941112, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: A sw 4
+      m_Hash: 671348446
+      m_Sprite: {fileID: -2014762322148106270, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 5571721444412149262, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: WALK_DOWN
+    m_Hash: 39118153
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: W down 1
+      m_Hash: 226552685
+      m_Sprite: {fileID: 5852092095664107663, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -5469885285097259155, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W down 2
+      m_Hash: 344570583
+      m_Sprite: {fileID: 754096327171821523, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -6335589295026228099, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W down 3
+      m_Hash: 596544065
+      m_Sprite: {fileID: 4766283396607358480, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -6335589295026228099, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W down 4
+      m_Hash: 1038753762
+      m_Sprite: {fileID: -3320797340066266455, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 2505504350097341942, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: WALK_LEFT
+    m_Hash: 617386522
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: W left 1
+      m_Hash: 309815293
+      m_Sprite: {fileID: 5782281729836603471, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -572886651241363747, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W left 2
+      m_Hash: 192820807
+      m_Sprite: {fileID: -5837730080703345618, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 1714186041155680084, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W left 3
+      m_Hash: 1014564561
+      m_Sprite: {fileID: -4113275991768104473, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8409986869946384859, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W left 4
+      m_Hash: 572363634
+      m_Sprite: {fileID: 5707320783477995114, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -2894468965011400175, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: WALK_RIGHT
+    m_Hash: 837938873
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: W right 1
+      m_Hash: 526538098
+      m_Sprite: {fileID: 326947500758050681, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 6022062201158434708, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W right 2
+      m_Hash: 107676872
+      m_Sprite: {fileID: 1825297750578853129, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8541381259882299555, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W right 3
+      m_Hash: 829174878
+      m_Sprite: {fileID: -4139759130349813148, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -5925696444491590185, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W right 4
+      m_Hash: 789094909
+      m_Sprite: {fileID: -406088548892665249, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -6148582978627420152, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: WALK_UP
+    m_Hash: 625683090
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: W up 1
+      m_Hash: 767732366
+      m_Sprite: {fileID: 7237826858410623096, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -2969471652804265984, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W up 2
+      m_Hash: 885783348
+      m_Sprite: {fileID: 8669323368276889828, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8825738243625525299, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W up 3
+      m_Hash: 63753122
+      m_Sprite: {fileID: 8362538982861599263, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -6499039334201427230, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W up 4
+      m_Hash: 497573377
+      m_Sprite: {fileID: -5730359137842233801, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -3121823278310716324, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: WALK_NE
+    m_Hash: 564135395
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: W ne 1
+      m_Hash: 808917899
+      m_Sprite: {fileID: 4979227455436089302, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 3068409302579284165, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W ne 2
+      m_Hash: 691948081
+      m_Sprite: {fileID: -780691784843524168, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -9144387637425584027, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W ne 3
+      m_Hash: 507083431
+      m_Sprite: {fileID: -4253412237274540767, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -3938304792852560047, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W ne 4
+      m_Hash: 6156036
+      m_Sprite: {fileID: 5799258777615909580, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -5514995857546207818, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: WALK_NW
+    m_Hash: 303658155
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: W nw 1
+      m_Hash: 798321813
+      m_Sprite: {fileID: -3156407415186790166, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8528265381110192649, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W nw 2
+      m_Hash: 916208943
+      m_Sprite: {fileID: -8764570543338153852, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -4559687048226170283, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W nw 3
+      m_Hash: 26938809
+      m_Sprite: {fileID: -493886771392060628, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -5105456817869714864, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W nw 4
+      m_Hash: 536844314
+      m_Sprite: {fileID: -8583882815709471418, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 8021896939973669514, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: WALK_SE
+    m_Hash: 516712959
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: W se 1
+      m_Hash: 306484425
+      m_Sprite: {fileID: 4078734451173223508, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 2597630716967817825, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W se 2
+      m_Hash: 189646195
+      m_Sprite: {fileID: 234858825570474546, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 276028396077782452, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W se 3
+      m_Hash: 1011545573
+      m_Sprite: {fileID: 4898386806795009699, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 1435451473974546120, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W se 4
+      m_Hash: 573464646
+      m_Sprite: {fileID: -7502082795130396332, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -7482071931935914455, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  - m_Name: WALK_SW
+    m_Hash: 762648759
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: W sw 1
+      m_Hash: 233235415
+      m_Sprite: {fileID: 2877626644806458688, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -4941747889601842026, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W sw 2
+      m_Hash: 351253101
+      m_Sprite: {fileID: 9134140618443691286, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 6380635040290938176, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W sw 3
+      m_Hash: 602440443
+      m_Sprite: {fileID: 8150551893848917443, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: -1896353341053941112, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    - m_Name: W sw 4
+      m_Hash: 1032591192
+      m_Sprite: {fileID: -2353311071648653456, guid: 14abc8353daf09c4fa9709bada19587b, type: 3}
+      m_FromMain: 1
+      m_SpriteOverride: {fileID: 5571721444412149262, guid: c350d0c93d909524fb158743c96476a6, type: 3}
+    m_FromMain: 1
+    m_EntryOverrideCount: 4
+  m_PrimaryLibraryGUID: 678e7df0723290143bae5db56d639fc1
+  m_ModificationHash: 639281340823706464
+  m_Version: 1

@@ -125,12 +125,12 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 5
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -8170555316554546650, guid: eb24af4481fb18949ae65c25257373be, type: 3}
+  m_Sprite: {fileID: -4479218994124490775, guid: 9feccc978f92fb5468f88e52041d4a61, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.23}
+  m_Size: {x: 0.32, y: 0.48}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -183,23 +183,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af8ab9ceee96b684593ff9daf9b2dc08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 30
+  maxHealth: 40
+  damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
+  damageFlashDuration: 0.12
   isMiniBoss: 0
-  enemyName: Archer Goblin
+  enemyName: Witch
   basePierceResistance: 5
   baseStabResistance: 5
   baseSlashResistance: 5
-  baseBluntResistance: 0
-  baseFrostResistance: 0
-  basePoisonResistance: 0
-  baseLightningResistance: 0
-  basePsychicResistance: 0
-  baseNecrosisResistance: 0
-  baseWaterResistance: 0
-  baseEarthResistance: 0
-  baseFireResistance: 0
-  baseAirResistance: 0
-  basePhysicalResistance: 0
+  baseBluntResistance: 3
+  baseFrostResistance: 3
+  basePoisonResistance: 3
+  baseLightningResistance: 3
+  basePsychicResistance: 3
+  baseNecrosisResistance: 3
+  baseWaterResistance: 3
+  baseEarthResistance: 3
+  baseFireResistance: 3
+  baseAirResistance: 3
+  basePhysicalResistance: 3
   runtimeCurrentHealth: 0
 --- !u!114 &885509303626944699
 MonoBehaviour:
@@ -215,22 +217,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyRange
   startingState: 0
   CurrentStateInspector: 0
-  detectionRadius: 12
+  detectionRadius: 9
   playerCollider:
     serializedVersion: 2
     m_Bits: 129
-  moveSpeed: 1
+  moveSpeed: 0.6
   idleWanderRadius: 6
   locateWaitDuration: 2.5
   radiusX: 2.4
   radiusY: 1.2
-  projectileDamageType: 1
+  projectileDamageType: 64
   projectileDamage: 10
   attackCooldown: 2.5
   projectileSpeed: 2.5
   projectileLifetime: 16
   attackPoint: {fileID: 2598113663948595218}
-  projectilePrefab: {fileID: 7280552908879159887, guid: 219083c3bbab5c340bdbfeeba73e1861, type: 3}
+  projectilePrefab: {fileID: 7280552908879159887, guid: 1bc2a513f254b0e4eae356aa96cd64a0, type: 3}
   takingAim: 0
   footstepInterval: 0.42
   deathAnimationDelay: 0.5
@@ -294,7 +296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteLibrary
   m_Library: []
-  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 4f9914fef55d1d84d823e07dae7af7d4, type: 3}
+  m_SpriteLibraryAsset: {fileID: 7108339969198208228, guid: 48adf18ce13cbad49aa8389529a3a7ce, type: 3}
 --- !u!114 &644558589115014614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,7 +312,7 @@ MonoBehaviour:
   m_CategoryHash: 1.8990936e-26
   m_labelHash: 2.480907e-28
   m_SpriteKey: 0
-  m_SpriteHash: 211543085
+  m_SpriteHash: 1041379584
 --- !u!95 &3463651732144763740
 Animator:
   serializedVersion: 7

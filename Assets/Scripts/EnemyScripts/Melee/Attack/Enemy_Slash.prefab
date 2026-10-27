@@ -142,7 +142,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c0a5ed59e9d4c4e89522c233de4239, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BaseAttack
+  damageCollider: {fileID: 0}
+  attackSprite: {fileID: 0}
   damageAmount: 0
   damageType: 0
   lifeTime: 0
   endTime: 1
+  windUpTime: 0
+  windUpEnd: 0
+  windUp: 0

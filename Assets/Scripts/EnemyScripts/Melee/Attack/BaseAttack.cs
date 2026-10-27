@@ -1,13 +1,26 @@
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class BaseAttack : MonoBehaviour
 {
+    [Header("Component Variables")]
+    [SerializeField] private Collider2D damageCollider;
+    [SerializeField] private SpriteRenderer attackSprite;
 
+    [Header("Attack Variables")]
     [SerializeField] private float damageAmount;
     [SerializeField] private DamageType damageType;
+
+    [Header("LifeTime Variables")]
     [SerializeField] private float lifeTime;
     [SerializeField] private float endTime = 1f;
+
+    [Header("WindUp Variables")]
+    [SerializeField] private float windUpTime;
+    [Range(0f,1f)]
+    [SerializeField] private float windUpEnd = 0.4f;
+    [SerializeField] private bool windUp;
 
     private bool hasHitPlayer;
     private EnemyHealth attacker;
@@ -15,6 +28,13 @@ public class BaseAttack : MonoBehaviour
     public void Awake()
     {
         lifeTime = 0;
+        windUp = true;
+
+        damageCollider = GetComponent<Collider2D>();
+        attackSprite = GetComponent<SpriteRenderer>();
+
+        if (damageCollider != null) damageCollider.enabled = false;
+        if (attackSprite != null) attackSprite.enabled = false;
     }
     public void SetDamage(
         DamageType damageType,
@@ -28,6 +48,17 @@ public class BaseAttack : MonoBehaviour
 
     public void Update()
     {
+
+        if (windUpTime >= windUpEnd)
+        {
+            windUp = false;
+            damageCollider.enabled = true;
+            attackSprite.enabled = true;
+        }
+        else { windUpTime += Time.deltaTime; }
+
+        if (windUp)
+            return;
 
         if (lifeTime >= endTime)
         {
