@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerSkill : MonoBehaviour
 {
+    public bool IsSkillActive => skillActive;
+
     [Header("Input")]
     [SerializeField] private InputActionReference skillAction;
 

@@ -40,6 +40,9 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     public string EnemyName => enemyName;
     public bool IsInvulnerable { get; private set; }
     public int DamageHealthFloor { get; private set; }
+    public bool IsReceivingPlayerDamage => playerHit;
+    public bool IsReceivingPlayerSkillDamage =>
+        playerHit && playerSkillHit;
 
     [Header("Runtime (Debug)")]
     [Tooltip("Runtime current HP. Read-only display for the Inspector.")]
@@ -60,6 +63,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
     private bool hasDied;
     private Dictionary<DamageType, float> configuredResistances;
     private bool playerHit;
+    private bool playerSkillHit;
     private WeaponAttackType playerAttackType;
     private DamageType lastDamageType;
     private AdaptiveEnemy adaptation;
@@ -294,9 +298,15 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         }
     }
 
-    public void TakePlayerDamage(int amount, DamageType type, Vector3? source, WeaponAttackType attackType)
+    public void TakePlayerDamage(
+        int amount,
+        DamageType type,
+        Vector3? source,
+        WeaponAttackType attackType,
+        bool isSkillDamage = false)
     {
         playerHit = true;
+        playerSkillHit = isSkillDamage;
         playerAttackType = attackType;
         try
         {
@@ -305,6 +315,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable
         finally
         {
             playerHit = false;
+            playerSkillHit = false;
         }
     }
 

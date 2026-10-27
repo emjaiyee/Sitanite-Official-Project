@@ -984,6 +984,9 @@ public class EnemyMelee : MonoBehaviour
 
         direction.Normalize();
 
+        if (animator == null)
+            return;
+
         animator.SetFloat(MoveXHash, Mathf.Round(direction.x));
         animator.SetFloat(MoveYHash, Mathf.Round(direction.y));
     }

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class FloorManager : MonoBehaviour
 {
+    public const int TutorialFloor = 0;
+
     [System.Serializable]
     private class ManggagawayBossFloor
     {
@@ -11,8 +13,8 @@ public class FloorManager : MonoBehaviour
     }
 
     [Header("Current Floor")]
-    [SerializeField, Min(1)]
-    private int currentFloor = 1;
+    [SerializeField, Min(TutorialFloor)]
+    private int currentFloor = TutorialFloor;
 
     [Header("Floor Configurations")]
     [SerializeField]
@@ -30,6 +32,7 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private DungeonMemory dungeonMemory;
 
     public int CurrentFloor => currentFloor;
+    public bool IsTutorialFloor => currentFloor == TutorialFloor;
     public bool IsManggagawayBossFloor => IsManggagawayFloor(currentFloor);
 
     public FloorConfiguration CurrentConfiguration
@@ -43,18 +46,20 @@ public class FloorManager : MonoBehaviour
     private void Awake()
     {
         ValidateConfigurations();
+        ApplyRequestedStartingFloor();
     }
 
     public bool HasFloor(int floor)
     {
-        return IsManggagawayFloor(floor) ||
+        return floor == TutorialFloor ||
+               IsManggagawayFloor(floor) ||
                GetConfigurationForFloor(floor) != null;
     }
 
     // Debug only: must be called before Start generates the first floor.
     public bool SetStartingFloor(int floor)
     {
-        if (floor < 1 || !HasFloor(floor))
+        if (floor < TutorialFloor || !HasFloor(floor))
             return false;
 
         currentFloor = floor;
@@ -71,7 +76,11 @@ public class FloorManager : MonoBehaviour
         FloorConfiguration configuration =
             CurrentConfiguration;
 
-        if (configuration == null && !IsManggagawayBossFloor)
+        if (
+            configuration == null &&
+            !IsTutorialFloor &&
+            !IsManggagawayBossFloor
+        )
         {
             Debug.LogError(
                 $"Cannot generate Floor {currentFloor}: " +
@@ -92,7 +101,8 @@ public class FloorManager : MonoBehaviour
 
         roomManager.GenerateFloor(
             configuration,
-            IsManggagawayBossFloor
+            IsManggagawayBossFloor,
+            IsTutorialFloor
         );
 
         if (roomManager.GeneratedRooms.Count > 0 && Player.Instance != null)
@@ -112,7 +122,9 @@ public class FloorManager : MonoBehaviour
     {
         int nextFloor = currentFloor + 1;
 
-        if (!IsManggagawayFloor(nextFloor) &&
+        if (
+            nextFloor != TutorialFloor &&
+            !IsManggagawayFloor(nextFloor) &&
             GetConfigurationForFloor(nextFloor) == null)
         {
             Debug.LogError(
@@ -206,6 +218,34 @@ public class FloorManager : MonoBehaviour
                     "any room sizes."
                 );
             }
+        }
+    }
+
+    private void ApplyRequestedStartingFloor()
+    {
+        if (Player.Instance == null)
+            return;
+
+        PlayerStats playerStats =
+            Player.Instance.GetComponent<PlayerStats>();
+
+        if (
+            playerStats == null ||
+            !playerStats.TryConsumeRequestedStartingFloor(
+                out int requestedFloor
+            )
+        )
+        {
+            return;
+        }
+
+        if (!SetStartingFloor(requestedFloor))
+        {
+            Debug.LogError(
+                $"Cannot start on requested Floor {requestedFloor}: " +
+                "no matching floor is configured.",
+                this
+            );
         }
     }
 }

@@ -11,7 +11,19 @@ public static class PlayerDamage
     public static void Deal(IDamageable target, int amount, DamageType type, Vector3? source, WeaponAttackType attackType)
     {
         if (target is EnemyHealth enemy)
-            enemy.TakePlayerDamage(amount, type, source, attackType);
+        {
+            PlayerSkill playerSkill = Player.Instance != null
+                ? Player.Instance.GetComponent<PlayerSkill>()
+                : null;
+
+            enemy.TakePlayerDamage(
+                amount,
+                type,
+                source,
+                attackType,
+                playerSkill != null && playerSkill.IsSkillActive
+            );
+        }
         else
             target.TakeDamage(amount, type, source);
     }

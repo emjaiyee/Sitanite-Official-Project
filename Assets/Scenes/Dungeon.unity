@@ -1823,7 +1823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 804af26327dfafb4c892aeda8eaf2ac4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorSkipper
-  skipOnPlay: 1
+  skipOnPlay: 0
   targetFloor: 10
   floorManager: {fileID: 1969959510}
 --- !u!1 &876980277
@@ -1857,26 +1857,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TutorialManager
   steps:
   - stepName: Movement
-    promptText: W, A, S, D to walk
+    promptText: Press W,A,S,D to walk.
     requiredKeys: 77000000610000007300000064000000
-    onStepStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onStepComplete:
-      m_PersistentCalls:
-        m_Calls: []
-  - stepName: Aim and attack
-    promptText: Drag mouse to aim and left mouse button (LMB) to attack
-    requiredKeys: 43010000
-    onStepStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onStepComplete:
-      m_PersistentCalls:
-        m_Calls: []
-  - stepName: Weapon skill
-    promptText: Press F key to trigger weapon skill
-    requiredKeys: 66000000
+    waitForActivation: 0
+    requiresExternalCompletion: 0
+    completionRequirement: 0
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1884,17 +1873,112 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - stepName: Dash
-    promptText: To dash press SPACEBAR Key
+    promptText: Press SPACEBAR to Dash
     requiredKeys: 20000000
+    waitForActivation: 0
+    requiresExternalCompletion: 0
+    completionRequirement: 0
+    unlockRoomGatewayOnCompletion: 1
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
     onStepComplete:
       m_PersistentCalls:
         m_Calls: []
-  - stepName: Player attributes
-    promptText: To access player stats and attributes press the C Key.
-    requiredKeys: 63000000
+  - stepName: Aim and attack
+    promptText: Aim your cursor at the Dummy and press Left Click (LMB) to attack.
+    requiredKeys: 
+    waitForActivation: 1
+    requiresExternalCompletion: 1
+    completionRequirement: 1
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Weapon skill
+    promptText: Now do the same thing with your weapon's skill by pressing F.
+    requiredKeys: 
+    waitForActivation: 0
+    requiresExternalCompletion: 1
+    completionRequirement: 1
+    unlockRoomGatewayOnCompletion: 2
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Fight
+    promptText: Defeat the slime.
+    requiredKeys: 
+    waitForActivation: 1
+    requiresExternalCompletion: 1
+    completionRequirement: 1
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 1
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Player Attribute
+    promptText: You have just leveled up. To access player stats and attributes press
+      the C Key.
+    requiredKeys: 
+    waitForActivation: 0
+    requiresExternalCompletion: 0
+    completionRequirement: 2
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Points
+    promptText: Spend your available attribute and trait points.
+    requiredKeys: 
+    waitForActivation: 0
+    requiresExternalCompletion: 0
+    completionRequirement: 3
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 5
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Attribute Exit
+    promptText: Close the player stats panel.
+    requiredKeys: 
+    waitForActivation: 0
+    requiresExternalCompletion: 0
+    completionRequirement: 4
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1903,7 +1987,31 @@ MonoBehaviour:
         m_Calls: []
   - stepName: Player Inventory
     promptText: To open your inventory press the TAB Key.
-    requiredKeys: 09000000
+    requiredKeys: 
+    waitForActivation: 0
+    requiresExternalCompletion: 0
+    completionRequirement: 5
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 5
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Inventory Exit
+    promptText: 'Once you familiarized yourself with your inventory, you may close
+      it and continue to the next floor. '
+    requiredKeys: 
+    waitForActivation: 0
+    requiresExternalCompletion: 0
+    completionRequirement: 6
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 1
+    promptLifetime: 0
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1912,6 +2020,14 @@ MonoBehaviour:
         m_Calls: []
   promptTextUI: {fileID: 719744662}
   tutorialPanel: {fileID: 993998113}
+  floorManager: {fileID: 1969959510}
+  roomManager: {fileID: 0}
+  playerStats: {fileID: 0}
+  playerAttributes: {fileID: 0}
+  playerStatsUI: {fileID: 0}
+  playerInventory: {fileID: 0}
+  fightRewardAttributePoints: 1
+  fightRewardTraitPoints: 3
   panelCanvasGroup: {fileID: 993998117}
   panelFadeDuration: 1
   textFadeDuration: 0.5
@@ -2045,6 +2161,7 @@ GameObject:
   - component: {fileID: 993998116}
   - component: {fileID: 993998115}
   - component: {fileID: 993998117}
+  - component: {fileID: 993998118}
   m_Layer: 5
   m_Name: TutorialPanel
   m_TagString: Untagged
@@ -2122,6 +2239,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &993998118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993998113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0ba87cb429d4ae42a5afd8a5fe3653f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TMPFontApplier
+  fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
 --- !u!1 &1073644083
 GameObject:
   m_ObjectHideFlags: 0
@@ -3141,7 +3271,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: -1
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!224 &1254526037
 RectTransform:
@@ -6372,6 +6502,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1560379032716864039, guid: e8a0919e694201b4fae8a35112632897, type: 3}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: tutorialSpawnConfiguration.trainingDummyPrefab
+      value: 
+      objectReference: {fileID: 6230687625572412080, guid: 1f11ede1bcbd83f4cb6a3d5daae68e6e, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: tutorialSpawnConfiguration.tutorialSlimePrefab
+      value: 
+      objectReference: {fileID: 1872629995945725381, guid: 704391d698ee8c449b87184a23ee3b68, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: bossSpawnConfigurations.Array.data[0].spawnChance
       value: 0.15
       objectReference: {fileID: 0}
@@ -6543,6 +6681,18 @@ PrefabInstance:
       propertyPath: 'mediumRoomPrefabs.Array.data[10]'
       value: 
       objectReference: {fileID: 3311995938712963364, guid: 8a6f28b2595c71c4e9a1b7779e8f6cd9, type: 3}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'tutorialRoomPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 802901454201602906, guid: 37423d43b07f83947ad892a6d763923d, type: 3}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'tutorialRoomPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1366119760007661333, guid: 3b842742bd520b34d9521b35f9362ed3, type: 3}
+    - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'tutorialRoomPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 5057742948653434056, guid: 3d714e3f77e354f41828a999034be26e, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

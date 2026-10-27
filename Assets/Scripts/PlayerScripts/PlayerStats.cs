@@ -95,7 +95,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float damageFlashDuration = 0.12f;
 
     [Header("Experience and Level")]
-    [Min(1)] [SerializeField] private int level = 1;
+    [Min(0)] [SerializeField] private int level = 1;
     [Min(0f)] [SerializeField] private float experiencePoints;
     [Min(100f)] [SerializeField] private float experienceToNextLevel = 100f;
 
@@ -149,6 +149,7 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private float effectiveHealthRegen;
     [SerializeField] private float effectiveManaRegen;
     [SerializeField] private float effectiveStaminaRegen;
+    private int requestedStartingFloor = -1;
 
     [Header("Death Visual")]
     [Range(0f, 1f)]
@@ -173,6 +174,27 @@ public class PlayerStats : MonoBehaviour
     public int Level => level;
     public float ExperiencePoints => experiencePoints;
     public float ExperienceToNextLevel => experienceToNextLevel;
+
+    public void RequestStartingFloor(int floor)
+    {
+        if (floor < FloorManager.TutorialFloor)
+        {
+            Debug.LogError(
+                $"PlayerStats cannot request invalid starting Floor {floor}.",
+                this
+            );
+            return;
+        }
+
+        requestedStartingFloor = floor;
+    }
+
+    public bool TryConsumeRequestedStartingFloor(out int floor)
+    {
+        floor = requestedStartingFloor;
+        requestedStartingFloor = -1;
+        return floor >= FloorManager.TutorialFloor;
+    }
 
     public float MaxHealth => Mathf.Max(1f, ApplyEquipmentModifier(maxHealth + MaxHealthModifier, StatType.Health));
     public float MaxMana => Mathf.Max(1f, ApplyEquipmentModifier(maxMana + MaxManaModifier, StatType.Mana));
@@ -353,6 +375,9 @@ public class PlayerStats : MonoBehaviour
         if (amount <= 0f)
             return;
 
+        if (level < 1)
+            level = 1;
+
         experiencePoints += amount;
 
         experienceToNextLevel = GetExperienceRequiredForLevel(level);
@@ -366,6 +391,19 @@ public class PlayerStats : MonoBehaviour
             experienceToNextLevel = GetExperienceRequiredForLevel(level);
         }
 
+        NotifyChanged();
+    }
+
+    public void SetLevelAndExperience(
+        int targetLevel,
+        float targetExperience = 0f)
+    {
+        level = Mathf.Max(0, targetLevel);
+        experiencePoints = Mathf.Max(0f, targetExperience);
+        experienceToNextLevel = level > 0
+            ? GetExperienceRequiredForLevel(level)
+            : 0f;
+        UpdateEffectiveRuntimeValues();
         NotifyChanged();
     }
 
@@ -486,7 +524,7 @@ public class PlayerStats : MonoBehaviour
 
         CacheDamageFeedbackRenderers();
 
-        level = Mathf.Max(1, level);
+        level = Mathf.Max(0, level);
         experiencePoints = Mathf.Max(0f, experiencePoints);
         experienceToNextLevel = GetExperienceRequiredForLevel(level);
 

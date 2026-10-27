@@ -92,6 +92,18 @@ public class EnemySpawnerManager : MonoBehaviour
         }
     }
 
+    [Serializable]
+    private class TutorialSpawnConfiguration
+    {
+        [Header("Training Dummy")]
+        public GameObject trainingDummyPrefab;
+        [Min(1)] public int trainingDummyRoom = 2;
+
+        [Header("Tutorial Slime")]
+        public GameObject tutorialSlimePrefab;
+        [Min(1)] public int tutorialSlimeRoom = 3;
+    }
+
     [Header("Floor Spawn Configurations")]
     [SerializeField] private List<SpawnConfiguration> spawnConfigurations =
         new List<SpawnConfiguration>();
@@ -106,6 +118,10 @@ public class EnemySpawnerManager : MonoBehaviour
     [Header("Fallen Descender Configuration")]
     [SerializeField] private FallenDescenderConfiguration fallenDescenderConfiguration = new FallenDescenderConfiguration();
     [SerializeField] private DungeonMemory dungeonMemory;
+
+    [Header("Tutorial Spawn Configuration")]
+    [SerializeField] private TutorialSpawnConfiguration tutorialSpawnConfiguration =
+        new TutorialSpawnConfiguration();
 
     [Header("Spawn Options")]
     [SerializeField] private bool spawnOnStart = true;
@@ -218,6 +234,12 @@ public class EnemySpawnerManager : MonoBehaviour
             return;
         }
 
+        if (floorManager != null && floorManager.IsTutorialFloor)
+        {
+            SpawnTutorialEnemies();
+            return;
+        }
+
         if (dungeonMemory == null)
             dungeonMemory = FindFirstObjectByType<DungeonMemory>();
 
@@ -250,7 +272,13 @@ public class EnemySpawnerManager : MonoBehaviour
         if (room == null || !registeredRooms.Contains(room))
             return;
 
-        if (floorManager != null && floorManager.IsManggagawayBossFloor)
+        if (
+            floorManager != null &&
+            (
+                floorManager.IsManggagawayBossFloor ||
+                floorManager.IsTutorialFloor
+            )
+        )
             return;
 
         FreezeAdaptation();
@@ -342,6 +370,90 @@ public class EnemySpawnerManager : MonoBehaviour
         floorAdaptation = enableAdaptation && Player.Instance != null
             ? Player.Instance.GetAdaptation(adaptationKillThreshold) : default;
         adaptationFrozen = true;
+    }
+
+    private void SpawnTutorialEnemies()
+    {
+        SpawnTutorialEnemy(
+            tutorialSpawnConfiguration.trainingDummyPrefab,
+            tutorialSpawnConfiguration.trainingDummyRoom,
+            "training dummy"
+        );
+        SpawnTutorialEnemy(
+            tutorialSpawnConfiguration.tutorialSlimePrefab,
+            tutorialSpawnConfiguration.tutorialSlimeRoom,
+            "tutorial slime"
+        );
+    }
+
+    private void SpawnTutorialEnemy(
+        GameObject prefab,
+        int roomNumber,
+        string enemyName)
+    {
+        if (prefab == null)
+        {
+            Debug.LogError(
+                $"EnemySpawnerManager requires a {enemyName} prefab " +
+                "for the tutorial floor.",
+                this
+            );
+            return;
+        }
+
+        RoomInstance room = FindRegisteredRoom(roomNumber);
+        if (room == null)
+        {
+            Debug.LogError(
+                $"Cannot spawn the {enemyName}: tutorial Room " +
+                $"{roomNumber} was not generated.",
+                this
+            );
+            return;
+        }
+
+        EnemySpawnPoint[] spawnPoints =
+            room.GetComponentsInChildren<EnemySpawnPoint>(true);
+
+        if (spawnPoints.Length == 0)
+        {
+            Debug.LogError(
+                $"Cannot spawn the {enemyName}: tutorial Room " +
+                $"{roomNumber} has no EnemySpawnPoint.",
+                room
+            );
+            return;
+        }
+
+        EnemySpawnPoint spawnPoint =
+            spawnPoints[UnityEngine.Random.Range(0, spawnPoints.Length)];
+
+        GameObject spawnedEnemy = spawnPoint.SpawnEnemyAt(
+            spawnPoint.transform.position,
+            prefab,
+            1,
+            spawnParent
+        );
+
+        if (spawnedEnemy == null)
+        {
+            Debug.LogError(
+                $"Failed to spawn the {enemyName} in tutorial Room " +
+                $"{roomNumber}.",
+                spawnPoint
+            );
+        }
+    }
+
+    private RoomInstance FindRegisteredRoom(int roomNumber)
+    {
+        foreach (RoomInstance room in registeredRooms)
+        {
+            if (room != null && room.RoomNumber == roomNumber)
+                return room;
+        }
+
+        return null;
     }
 
     private int GetRegularEnemyLevel(SpawnConfiguration configuration, PlayerStats player)

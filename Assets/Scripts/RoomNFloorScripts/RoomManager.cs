@@ -16,6 +16,11 @@ public class RoomManager : MonoBehaviour
     [SerializeField] private List<GameObject> xlRoomPrefabs =
         new List<GameObject>();
 
+    [Header("Tutorial Room Pool")]
+    [Tooltip("Floor 0 uses these rooms in list order, without random selection.")]
+    [SerializeField] private List<GameObject> tutorialRoomPrefabs =
+        new List<GameObject>();
+
     [Header("Manggagaway Boss Room")]
     [SerializeField] private GameObject manggagawayBossRoomPrefab;
 
@@ -45,6 +50,48 @@ public class RoomManager : MonoBehaviour
     public Gateway ActiveFloorGateway => selectedFloorGateway;
     public bool IsFloorGatewayUnlocked => floorGatewayUnlocked;
     public RoomInstance CurrentPlayerRoom => currentPlayerRoom;
+
+    public bool SetTutorialRoomGatewayLocked(
+        int roomNumber,
+        bool locked)
+    {
+        foreach (RoomInstance room in generatedRooms)
+        {
+            if (room != null && room.RoomNumber == roomNumber)
+            {
+                SetRoomGatewayState(room, !locked);
+                return true;
+            }
+        }
+
+        Debug.LogError(
+            $"Cannot {(locked ? "lock" : "unlock")} tutorial Room " +
+            $"{roomNumber}: the room has not been generated.",
+            this
+        );
+        return false;
+    }
+
+    public void UnlockTutorialFloorGateway()
+    {
+        if (floorGatewayUnlocked)
+            return;
+
+        if (validFloorGateways.Count == 0)
+        {
+            Debug.LogError(
+                "Cannot unlock the tutorial Floor gateway: no Floor gateway " +
+                "was generated.",
+                this
+            );
+            return;
+        }
+
+        foreach (Gateway gateway in validFloorGateways)
+            SetGatewayVisible(gateway, true);
+
+        floorGatewayUnlocked = true;
+    }
 
     private readonly List<RoomInstance> generatedRooms =
         new List<RoomInstance>();
@@ -160,9 +207,14 @@ public class RoomManager : MonoBehaviour
 
     public void GenerateFloor(
         FloorConfiguration configuration,
-        bool isManggagawayBossFloor = false)
+        bool isManggagawayBossFloor = false,
+        bool isTutorialFloor = false)
     {
-        if (configuration == null && !isManggagawayBossFloor)
+        if (
+            configuration == null &&
+            !isManggagawayBossFloor &&
+            !isTutorialFloor
+        )
         {
             Debug.LogError(
                 "RoomManager cannot generate a floor: " +
@@ -204,13 +256,17 @@ public class RoomManager : MonoBehaviour
         List<GameObject> prefabPool =
             isManggagawayBossFloor
                 ? new List<GameObject> { manggagawayBossRoomPrefab }
-                : GetAllowedRoomPrefabs(configuration);
+                : isTutorialFloor
+                    ? tutorialRoomPrefabs
+                    : GetAllowedRoomPrefabs(configuration);
 
         if (prefabPool.Count == 0)
         {
             Debug.LogError(
-                "No room prefabs are available for " +
-                "the current FloorConfiguration."
+                isTutorialFloor
+                    ? "The tutorial room pool is empty."
+                    : "No room prefabs are available for " +
+                      "the current FloorConfiguration."
             );
 
             return;
@@ -219,13 +275,21 @@ public class RoomManager : MonoBehaviour
         int minimumRooms =
             Mathf.Max(
                 1,
-                isManggagawayBossFloor ? 1 : configuration.minimumRooms
+                isManggagawayBossFloor
+                    ? 1
+                    : isTutorialFloor
+                        ? prefabPool.Count
+                        : configuration.minimumRooms
             );
 
         int maximumRooms =
             Mathf.Max(
                 1,
-                isManggagawayBossFloor ? 1 : configuration.maximumRooms
+                isManggagawayBossFloor
+                    ? 1
+                    : isTutorialFloor
+                        ? prefabPool.Count
+                        : configuration.maximumRooms
             );
 
         if (minimumRooms > maximumRooms)
@@ -233,10 +297,13 @@ public class RoomManager : MonoBehaviour
             maximumRooms = minimumRooms;
         }
 
-        int roomCount = Random.Range(
-            minimumRooms,
-            maximumRooms + 1
-        );
+        int roomCount =
+            isTutorialFloor
+                ? prefabPool.Count
+                : Random.Range(
+                    minimumRooms,
+                    maximumRooms + 1
+                );
 
         Debug.Log(
             $"Generating floor with {roomCount} rooms."
@@ -248,7 +315,10 @@ public class RoomManager : MonoBehaviour
         // ---------------------------------------------
 
         RoomInstance firstRoom =
-            GenerateFirstRoom(prefabPool);
+            GenerateFirstRoom(
+                prefabPool,
+                isTutorialFloor
+            );
 
         if (firstRoom == null)
         {
@@ -309,10 +379,12 @@ public class RoomManager : MonoBehaviour
             }
 
             GameObject compatiblePrefab =
-                FindCompatibleRoomPrefab(
-                    previousForwardGateway,
-                    prefabPool
-                );
+                isTutorialFloor
+                    ? prefabPool[roomNumber - 1]
+                    : FindCompatibleRoomPrefab(
+                        previousForwardGateway,
+                        prefabPool
+                    );
 
             if (compatiblePrefab == null)
             {
@@ -342,7 +414,10 @@ public class RoomManager : MonoBehaviour
             );
         }
 
-        ConfigureSpecialGateways(!isManggagawayBossFloor);
+        ConfigureSpecialGateways(
+            !isManggagawayBossFloor &&
+            !isTutorialFloor
+        );
 
         // ---------------------------------------------
         // ROOM PROGRESSION
@@ -412,15 +487,18 @@ public class RoomManager : MonoBehaviour
 
 
     private RoomInstance GenerateFirstRoom(
-        List<GameObject> prefabPool)
+        List<GameObject> prefabPool,
+        bool useFirstPrefab)
     {
         GameObject selectedPrefab =
-            prefabPool[
-                Random.Range(
-                    0,
-                    prefabPool.Count
-                )
-            ];
+            useFirstPrefab
+                ? prefabPool[0]
+                : prefabPool[
+                    Random.Range(
+                        0,
+                        prefabPool.Count
+                    )
+                ];
 
         return GenerateRoom(
             1,
