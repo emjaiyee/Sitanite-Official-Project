@@ -115,6 +115,13 @@ public class PlayerAttack : MonoBehaviour
         if (playerSkill != null && playerSkill.IsTargetingSkill)
             return;
 
+        if (shieldDefense != null &&
+            shieldDefense.IsGuarding &&
+            !shieldDefense.HasCounterOpportunity)
+        {
+            return;
+        }
+
         bool isCounterAttack =
             shieldDefense != null &&
             shieldDefense.HasCounterOpportunity;

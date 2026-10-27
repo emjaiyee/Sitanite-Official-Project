@@ -31,6 +31,14 @@ public class CharacterRenderer : MonoBehaviour
     [SerializeField] private GameObject parryVisualPrefab;
     [SerializeField] private GameObject criticalHitVisualPrefab;
 
+    [Header("Shield Guard Stance")]
+    [Min(0f)] [SerializeField] private float shieldGuardForwardOffset = 0.12f;
+    [Min(0f)] [SerializeField] private float shieldGuardBobAmount = 0.015f;
+    [Min(0f)] [SerializeField] private float shieldGuardBobFrequency = 4f;
+    [Min(0.01f)] [SerializeField] private float shieldGuardEaseDuration = 0.12f;
+    [Min(0.01f)] [SerializeField] private float shieldRecoilDuration = 0.16f;
+    [Min(0f)] [SerializeField] private float shieldRecoilDistance = 0.08f;
+
     [Header("Level Up Animation")]
     [SerializeField] private Sprite[] levelUpAnimationFrames = new Sprite[8];
     [Min(1f)] [SerializeField] private float levelUpAnimationFramesPerSecond = 12f;
@@ -50,6 +58,10 @@ public class CharacterRenderer : MonoBehaviour
     private Color originalWeaponUnderColor;
     private Color originalWeaponOverColor;
     private bool hasCounterAttackFlashColors;
+    private Vector3 shieldRestingLocalPosition;
+    private float shieldGuardBlend;
+    private float shieldRecoilStartedAt = -1f;
+    private bool shieldGuarding;
 
     public CharacterDirection CurrentDirection
     {
@@ -67,7 +79,14 @@ public class CharacterRenderer : MonoBehaviour
     private void Awake()
     {
         Debug.Log("CharacterRenderer Awake!");
+        if (shieldRenderer != null)
+            shieldRestingLocalPosition = shieldRenderer.transform.localPosition;
         CreateLevelUpAnimationRenderer();
+    }
+
+    private void Update()
+    {
+        UpdateShieldGuardStance();
     }
 
     private void OnEnable()
@@ -81,6 +100,10 @@ public class CharacterRenderer : MonoBehaviour
     {
         StopCounterAttackFlash();
         StopDashAfterimages();
+        shieldGuarding = false;
+        shieldGuardBlend = 0f;
+        shieldRecoilStartedAt = -1f;
+        ResetShieldPosition();
 
         PlayerStats playerStats = GetComponent<PlayerStats>();
         if (playerStats != null)
@@ -439,10 +462,99 @@ public class CharacterRenderer : MonoBehaviour
 
     public void PlayShieldDefenseVisual(bool isParry)
     {
+        if (shieldRenderer != null)
+            shieldRecoilStartedAt = Time.time;
+
         PlayAttachedVisual(
             isParry ? parryVisualPrefab : blockedVisualPrefab,
             shieldRenderer
         );
+    }
+
+    public void SetShieldGuarding(bool guarding)
+    {
+        shieldGuarding = guarding;
+    }
+
+    private void UpdateShieldGuardStance()
+    {
+        if (shieldRenderer == null)
+            return;
+
+        float easeDuration = Mathf.Max(0.01f, shieldGuardEaseDuration);
+        shieldGuardBlend = Mathf.MoveTowards(
+            shieldGuardBlend,
+            shieldGuarding ? 1f : 0f,
+            Time.deltaTime / easeDuration
+        );
+
+        float blend = Mathf.SmoothStep(0f, 1f, shieldGuardBlend);
+        Vector2 facing = GetShieldFacingOffset();
+        Vector2 offset = facing * shieldGuardForwardOffset * blend;
+        offset.y += Mathf.Sin(Time.time * shieldGuardBobFrequency * Mathf.PI * 2f) *
+            shieldGuardBobAmount * blend;
+
+        if (shieldRecoilStartedAt >= 0f)
+        {
+            float recoilProgress =
+                (Time.time - shieldRecoilStartedAt) /
+                Mathf.Max(0.01f, shieldRecoilDuration);
+            if (recoilProgress >= 1f)
+            {
+                shieldRecoilStartedAt = -1f;
+            }
+            else
+            {
+                offset -= facing * shieldRecoilDistance *
+                    Mathf.Sin(recoilProgress * Mathf.PI);
+            }
+        }
+
+        shieldRenderer.transform.localPosition =
+            shieldRestingLocalPosition + new Vector3(offset.x, offset.y, 0f);
+    }
+
+    private Vector2 GetShieldFacingOffset()
+    {
+        Vector2 facing;
+        switch (currentDirection)
+        {
+            case CharacterDirection.South:
+                facing = Vector2.down;
+                break;
+            case CharacterDirection.SouthWest:
+                facing = new Vector2(-1f, -1f);
+                break;
+            case CharacterDirection.West:
+                facing = Vector2.left;
+                break;
+            case CharacterDirection.NorthWest:
+                facing = new Vector2(-1f, 1f);
+                break;
+            case CharacterDirection.North:
+                facing = Vector2.up;
+                break;
+            case CharacterDirection.NorthEast:
+                facing = Vector2.one;
+                break;
+            case CharacterDirection.East:
+                facing = Vector2.right;
+                break;
+            case CharacterDirection.SouthEast:
+                facing = new Vector2(1f, -1f);
+                break;
+            default:
+                facing = Vector2.down;
+                break;
+        }
+
+        return facing.normalized;
+    }
+
+    private void ResetShieldPosition()
+    {
+        if (shieldRenderer != null)
+            shieldRenderer.transform.localPosition = shieldRestingLocalPosition;
     }
 
     private void PlayAttachedVisual(
@@ -568,6 +680,13 @@ public class CharacterRenderer : MonoBehaviour
 
     private void UpdateWeapon()
     {
+        if (shieldGuarding)
+        {
+            SetSprite(weaponUnderRenderer, null);
+            SetSprite(weaponOverRenderer, null);
+            return;
+        }
+
         bool weaponIsUnder = currentDirection == CharacterDirection.SouthWest ||
             currentDirection == CharacterDirection.South ||
             currentDirection == CharacterDirection.SouthEast ||

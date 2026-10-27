@@ -352,7 +352,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: TestShield8x_0
+      name: Sout
       rect:
         serializedVersion: 2
         x: 0
@@ -374,7 +374,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestShield8x_1
+      name: SouthEast
       rect:
         serializedVersion: 2
         x: 19
@@ -396,7 +396,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestShield8x_2
+      name: northeast
       rect:
         serializedVersion: 2
         x: 35
@@ -418,7 +418,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestShield8x_3
+      name: East
       rect:
         serializedVersion: 2
         x: 49
@@ -440,7 +440,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestShield8x_4
+      name: West
       rect:
         serializedVersion: 2
         x: 64
@@ -462,7 +462,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestShield8x_5
+      name: northwest
       rect:
         serializedVersion: 2
         x: 77
@@ -484,7 +484,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestShield8x_6
+      name: SouthWest
       rect:
         serializedVersion: 2
         x: 90
@@ -506,7 +506,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TestShield8x_7
+      name: South
       rect:
         serializedVersion: 2
         x: 105
@@ -543,14 +543,15 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":48.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      TestShield8x_0: -1000111048
-      TestShield8x_1: -7417282645805836539
-      TestShield8x_2: -7322196337398044759
-      TestShield8x_3: 2540664014215973720
-      TestShield8x_4: 1936385244968270749
-      TestShield8x_5: -1962972963
-      TestShield8x_6: 5564164948549525025
-      TestShield8x_7: -8565301220053031917
+      East: 2540664014215973720
+      Sout: -1000111048
+      South: -8565301220053031917
+      SouthEast: -7417282645805836539
+      SouthWest: 5564164948549525025
+      West: 1936385244968270749
+      northeast: -7322196337398044759
+      northwest: -1962972963
+      s: 5564164948549525025
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

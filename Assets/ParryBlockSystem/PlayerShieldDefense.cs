@@ -24,6 +24,7 @@ public class PlayerShieldDefense : MonoBehaviour
     [Header("Defense SFX")]
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip blockedSfx;
+    [SerializeField] private AudioClip unsuccessfulBlockSfx;
     [SerializeField] private AudioClip successfulParrySfx;
     [SerializeField] private AudioClip successfulCounterSfx;
 
@@ -114,12 +115,21 @@ public class PlayerShieldDefense : MonoBehaviour
     {
         if (IsGuarding)
             FaceCursorWhileGuarding();
+
+        if (characterRenderer != null)
+            characterRenderer.SetShieldGuarding(IsGuarding);
+        if (characterSpriteController != null)
+            characterSpriteController.SetShieldGuarding(IsGuarding);
     }
 
     private void OnDisable()
     {
         IsGuarding = false;
         wasGuarding = false;
+        if (characterRenderer != null)
+            characterRenderer.SetShieldGuarding(false);
+        if (characterSpriteController != null)
+            characterSpriteController.SetShieldGuarding(false);
         ClearFeedback();
     }
 
@@ -153,6 +163,7 @@ public class PlayerShieldDefense : MonoBehaviour
                 unsuccessfulBlockFeedbackSprite,
                 Time.time + feedbackDuration
             );
+            PlayUnsuccessfulBlockSfx();
             return damage;
         }
 
@@ -164,6 +175,7 @@ public class PlayerShieldDefense : MonoBehaviour
                 unsuccessfulBlockFeedbackSprite,
                 Time.time + feedbackDuration
             );
+            PlayUnsuccessfulBlockSfx();
             return damage;
         }
 
@@ -174,6 +186,7 @@ public class PlayerShieldDefense : MonoBehaviour
                 unsuccessfulBlockFeedbackSprite,
                 Time.time + feedbackDuration
             );
+            PlayUnsuccessfulBlockSfx();
             return damage;
         }
 
@@ -187,6 +200,7 @@ public class PlayerShieldDefense : MonoBehaviour
                 unsuccessfulBlockFeedbackSprite,
                 Time.time + feedbackDuration
             );
+            PlayUnsuccessfulBlockSfx();
             return damage;
         }
 
@@ -197,6 +211,7 @@ public class PlayerShieldDefense : MonoBehaviour
                 unsuccessfulBlockFeedbackSprite,
                 Time.time + feedbackDuration
             );
+            PlayUnsuccessfulBlockSfx();
             return damage;
         }
         wasBlocked = true;
@@ -279,6 +294,12 @@ public class PlayerShieldDefense : MonoBehaviour
         AudioClip clip = isParry ? successfulParrySfx : blockedSfx;
         if (clip != null && audioSource != null)
             audioSource.PlayOneShot(clip);
+    }
+
+    private void PlayUnsuccessfulBlockSfx()
+    {
+        if (unsuccessfulBlockSfx != null && audioSource != null)
+            audioSource.PlayOneShot(unsuccessfulBlockSfx);
     }
 
     private void CreateFeedbackDisplay()

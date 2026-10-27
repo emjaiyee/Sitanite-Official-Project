@@ -85,6 +85,7 @@ public class CharacterSpriteController : MonoBehaviour
     private float actionEndTime;
     private float stateStartTime;
     private bool actionActive;
+    private bool shieldGuarding;
     private int previousAnimationFrame = -1;
 
     private void Awake()
@@ -115,7 +116,9 @@ public class CharacterSpriteController : MonoBehaviour
         if (actionActive && Time.time >= actionEndTime)
             actionActive = false;
 
-        CharacterAnimationState nextState = actionActive
+        CharacterAnimationState nextState = shieldGuarding
+            ? CharacterAnimationState.Melee
+            : actionActive
             ? currentAnimationState
             : playerWASD.MoveDirection.sqrMagnitude > 0.0001f
                 ? playerWASD.IsSprinting
@@ -131,7 +134,20 @@ public class CharacterSpriteController : MonoBehaviour
         );
 
         characterRenderer.SetAnimationState(currentAnimationState, frame);
-        PlayFrameSoundEvents(frame);
+        if (shieldGuarding)
+            previousAnimationFrame = frame;
+        else
+            PlayFrameSoundEvents(frame);
+    }
+
+    public void SetShieldGuarding(bool guarding)
+    {
+        if (shieldGuarding == guarding)
+            return;
+
+        shieldGuarding = guarding;
+        if (shieldGuarding)
+            SetState(CharacterAnimationState.Melee, true);
     }
 
     public void PlayWeaponAction(WeaponAttackType weaponAttackType)
