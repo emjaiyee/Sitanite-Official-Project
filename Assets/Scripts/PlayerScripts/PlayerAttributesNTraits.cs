@@ -161,6 +161,15 @@ public class PlayerAttributesNTraits : MonoBehaviour
         Changed?.Invoke(this);
     }
 
+    public void SetAllocationPoints(
+        int attributePoints,
+        int traitPoints)
+    {
+        availableAttributePoints = Mathf.Max(0, attributePoints);
+        availableTraitPoints = Mathf.Max(0, traitPoints);
+        Changed?.Invoke(this);
+    }
+
     public int GetAttributeValue(PrimaryAttribute attribute)
     {
         int value = attribute switch
