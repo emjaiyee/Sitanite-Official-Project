@@ -154,6 +154,8 @@ MonoBehaviour:
   maxHealth: 28
   damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   damageFlashDuration: 0.12
+  hitBounceDistance: 0.02
+  hitBounceDuration: 0.1
   isMiniBoss: 0
   enemyName: 
   basePierceResistance: 0
@@ -286,7 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteResolver
   m_CategoryHash: 1.8990936e-26
-  m_labelHash: 2.480907e-28
+  m_labelHash: 1.6911767e-21
   m_SpriteKey: 0
   m_SpriteHash: 1041379584
 --- !u!95 &4259996642940716189
@@ -338,13 +340,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySFX
   walkSFX:
-  - {fileID: 8300000, guid: e8447020657cb944fa9ae9383e5f5f98, type: 3}
-  - {fileID: 8300000, guid: 60bba958a64f3c14ab9477360f74f562, type: 3}
-  - {fileID: 8300000, guid: da951194069bd024f82c24d0d08a6500, type: 3}
-  - {fileID: 8300000, guid: 06e783238f2339e4585e8cf231decf34, type: 3}
+  - {fileID: 8300000, guid: b1c62984b93b5c74b88b118437632eab, type: 3}
+  - {fileID: 8300000, guid: 4d27f4b67ca0e4c4d815ce33e30ca601, type: 3}
   attackSFX:
-  - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
-  deathSFX: {fileID: 8300000, guid: 2bd90bbb7aba732429fbe03134d1896f, type: 3}
+  - {fileID: 8300000, guid: 365e6ae89174b7840a8688acd4b1448f, type: 3}
+  deathSFX: {fileID: 8300000, guid: 7e4a8d7d9d207be4f8c99d8c79a42263, type: 3}
 --- !u!82 &5812311695043802781
 AudioSource:
   m_ObjectHideFlags: 0
