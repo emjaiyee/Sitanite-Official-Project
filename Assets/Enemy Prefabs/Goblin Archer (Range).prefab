@@ -186,6 +186,8 @@ MonoBehaviour:
   maxHealth: 25
   damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   damageFlashDuration: 0.12
+  hitBounceDistance: 0.02
+  hitBounceDuration: 0.1
   isMiniBoss: 0
   enemyName: 
   basePierceResistance: 5
@@ -445,13 +447,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySFX
   walkSFX:
-  - {fileID: 8300000, guid: e8447020657cb944fa9ae9383e5f5f98, type: 3}
-  - {fileID: 8300000, guid: 60bba958a64f3c14ab9477360f74f562, type: 3}
-  - {fileID: 8300000, guid: da951194069bd024f82c24d0d08a6500, type: 3}
-  - {fileID: 8300000, guid: 06e783238f2339e4585e8cf231decf34, type: 3}
+  - {fileID: 8300000, guid: 5e0b1021059f7c94ba1edd02380617d3, type: 3}
+  - {fileID: 8300000, guid: 26d7b941cf196914f99d5148aceffb98, type: 3}
   attackSFX:
-  - {fileID: 8300000, guid: b69bca7f0bc6d1a4b971af539fd59788, type: 3}
-  deathSFX: {fileID: 8300000, guid: 2bd90bbb7aba732429fbe03134d1896f, type: 3}
+  - {fileID: 8300000, guid: 8ca96d5df7b08a745b7390cad658ce6d, type: 3}
+  deathSFX: {fileID: 8300000, guid: 37fa089a226ba474da1dde8af7fd5d3e, type: 3}
 --- !u!114 &6514933062211407794
 MonoBehaviour:
   m_ObjectHideFlags: 0

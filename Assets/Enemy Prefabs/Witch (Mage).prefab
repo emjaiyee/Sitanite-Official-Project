@@ -186,6 +186,8 @@ MonoBehaviour:
   maxHealth: 40
   damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   damageFlashDuration: 0.12
+  hitBounceDistance: 0.02
+  hitBounceDuration: 0.1
   isMiniBoss: 0
   enemyName: Witch
   basePierceResistance: 5
@@ -310,7 +312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteResolver
   m_CategoryHash: 1.8990936e-26
-  m_labelHash: 2.480907e-28
+  m_labelHash: 1.6911767e-21
   m_SpriteKey: 0
   m_SpriteHash: 1041379584
 --- !u!95 &3463651732144763740
@@ -445,13 +447,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySFX
   walkSFX:
-  - {fileID: 8300000, guid: e8447020657cb944fa9ae9383e5f5f98, type: 3}
-  - {fileID: 8300000, guid: 60bba958a64f3c14ab9477360f74f562, type: 3}
-  - {fileID: 8300000, guid: da951194069bd024f82c24d0d08a6500, type: 3}
-  - {fileID: 8300000, guid: 06e783238f2339e4585e8cf231decf34, type: 3}
+  - {fileID: 8300000, guid: c7d9b5b801b6bb74dbc8d532ea37b3d1, type: 3}
+  - {fileID: 8300000, guid: f1d61dfc1f81a2646a991397b8c48bbd, type: 3}
   attackSFX:
-  - {fileID: 8300000, guid: b69bca7f0bc6d1a4b971af539fd59788, type: 3}
-  deathSFX: {fileID: 8300000, guid: 2bd90bbb7aba732429fbe03134d1896f, type: 3}
+  - {fileID: 8300000, guid: f36cfba8ce79fba4695a962054b7ed95, type: 3}
+  deathSFX: {fileID: 8300000, guid: fba5b298ae5fa1e4ebeed75f03577d11, type: 3}
 --- !u!114 &6514933062211407794
 MonoBehaviour:
   m_ObjectHideFlags: 0
