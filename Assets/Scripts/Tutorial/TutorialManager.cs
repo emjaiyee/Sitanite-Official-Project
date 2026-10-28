@@ -15,18 +15,6 @@ public class TutorialManager : MonoBehaviour
     [Tooltip("Optional panel to hide/show the tutorial UI.")]
     public GameObject tutorialPanel;
 
-    [Header("Floor")]
-    [SerializeField] private FloorManager floorManager;
-    [SerializeField] private RoomManager roomManager;
-
-    [Header("Tutorial Progression")]
-    [SerializeField] private PlayerStats playerStats;
-    [SerializeField] private PlayerAttributesNTraits playerAttributes;
-    [SerializeField] private PlayerStatsUI playerStatsUI;
-    [SerializeField] private PlayerInventory playerInventory;
-    [Min(0)] [SerializeField] private int fightRewardAttributePoints = 1;
-    [Min(0)] [SerializeField] private int fightRewardTraitPoints = 3;
-
     [Header("Fading Transitions")]
     [Tooltip("CanvasGroup on the main Tutorial Panel (fades in at start, out at end).")]
     public CanvasGroup panelCanvasGroup;
@@ -38,27 +26,14 @@ public class TutorialManager : MonoBehaviour
     private int currentStepIndex = 0;
     private bool isTutorialActive = false;
     private bool isTransitioning = false;
-    private bool isCurrentStepActivated;
     private Coroutine transitionCoroutine;
-    private Coroutine promptLifetimeCoroutine;
     
     // Tracks which keys have been successfully pressed in the current step
     private HashSet<KeyCode> keysPressedForCurrentStep = new HashSet<KeyCode>();
 
-    public int CurrentStepIndex => currentStepIndex;
-    public bool IsCurrentStepActive =>
-        isTutorialActive &&
-        isCurrentStepActivated &&
-        !isTransitioning;
-
     private void Start()
     {
-        if (!IsOnTutorialFloor())
-        {
-            HideTutorialPanel();
-            return;
-        }
-
+        // Automatically start the tutorial if steps exist, or you can call StartTutorial() externally
         if (steps != null && steps.Count > 0)
         {
             StartTutorial();
@@ -67,26 +42,12 @@ public class TutorialManager : MonoBehaviour
 
     public void StartTutorial()
     {
-        if (!IsOnTutorialFloor())
-        {
-            HideTutorialPanel();
-            return;
-        }
-
         if (transitionCoroutine != null) StopCoroutine(transitionCoroutine);
         transitionCoroutine = StartCoroutine(StartTutorialRoutine());
     }
 
     private IEnumerator StartTutorialRoutine()
     {
-        yield return null;
-
-        if (!IsOnTutorialFloor())
-            yield break;
-
-        SetTutorialRoomGatewayLocked(1, true);
-        ResetTutorialPlayerProgression();
-
         currentStepIndex = 0;
         isTutorialActive = true;
         isTransitioning = true;
@@ -115,40 +76,19 @@ public class TutorialManager : MonoBehaviour
         }
 
         isTransitioning = false;
-        BeginCurrentStep();
+        ShowCurrentStep();
     }
 
     private void Update()
     {
-        if (!IsOnTutorialFloor())
-        {
-            if (isTutorialActive)
-                EndTutorial();
-
-            return;
-        }
-
-        if (
-            !isTutorialActive ||
-            !isCurrentStepActivated ||
-            steps == null ||
-            currentStepIndex >= steps.Count ||
-            isTransitioning
-        )
+        // Pause input monitoring if the tutorial is inactive, finished, or currently fading
+        if (!isTutorialActive || steps == null || currentStepIndex >= steps.Count || isTransitioning) 
             return;
 
         TutorialStep currentStep = steps[currentStepIndex];
 
-        if (TryCompletePanelRequirement(currentStep))
-            return;
-
-        if (
-            currentStep.completionRequirement !=
-                TutorialCompletionRequirement.RequiredKeys ||
-            currentStep.requiresExternalCompletion ||
-            currentStep.requiredKeys == null ||
-            currentStep.requiredKeys.Count == 0
-        )
+        // If no required keys are set, we just wait for an external script to call CompleteCurrentStep()
+        if (currentStep.requiredKeys == null || currentStep.requiredKeys.Count == 0)
             return;
 
         // Monitor player input for all of the current step's required keys
@@ -176,43 +116,10 @@ public class TutorialManager : MonoBehaviour
         transitionCoroutine = StartCoroutine(TransitionToStepRoutine(steps[currentStepIndex]));
     }
 
-    private void BeginCurrentStep()
-    {
-        TutorialStep currentStep = steps[currentStepIndex];
-        isCurrentStepActivated = !currentStep.waitForActivation;
-
-        if (isCurrentStepActivated)
-            ShowCurrentStep();
-        else
-            HideCurrentPrompt();
-    }
-
-    public void ActivateCurrentStep(int stepIndex)
-    {
-        if (
-            !isTutorialActive ||
-            isTransitioning ||
-            isCurrentStepActivated ||
-            stepIndex != currentStepIndex ||
-            steps == null ||
-            currentStepIndex >= steps.Count ||
-            !steps[currentStepIndex].waitForActivation
-        )
-        {
-            return;
-        }
-
-        isCurrentStepActivated = true;
-        ShowCurrentStep();
-    }
-
     private IEnumerator TransitionToStepRoutine(TutorialStep step)
     {
         isTransitioning = true;
         keysPressedForCurrentStep.Clear();
-
-        if (tutorialPanel != null)
-            tutorialPanel.SetActive(true);
 
         // Fade out the text if it's currently visible (e.g. from a previous step)
         if (promptTextUI != null && promptTextUI.color.a > 0f)
@@ -236,45 +143,23 @@ public class TutorialManager : MonoBehaviour
         }
 
         isTransitioning = false;
-        StartPromptLifetime(step);
     }
 
     public void CompleteCurrentStep()
     {
-        if (
-            !isTutorialActive ||
-            !isCurrentStepActivated ||
-            isTransitioning
-        )
-        {
-            return;
-        }
+        if (!isTutorialActive || isTransitioning) return;
 
         TutorialStep step = steps[currentStepIndex];
         
         // Trigger completion events (e.g., granting the player an item)
         step.onStepComplete?.Invoke();
 
-        if (step.unlockRoomGatewayOnCompletion > 0)
-        {
-            SetTutorialRoomGatewayLocked(
-                step.unlockRoomGatewayOnCompletion,
-                false
-            );
-        }
-
-        if (step.grantsTutorialProgression)
-            GrantTutorialPlayerProgression();
-
-        if (step.unlocksFloorGatewayOnCompletion)
-            UnlockTutorialFloorGateway();
-
         currentStepIndex++;
 
         // Dynamically transition to the next step
         if (currentStepIndex < steps.Count)
         {
-            BeginCurrentStep();
+            ShowCurrentStep();
         }
         else
         {
@@ -285,7 +170,6 @@ public class TutorialManager : MonoBehaviour
     public void EndTutorial()
     {
         isTutorialActive = false;
-        StopPromptLifetime();
         
         if (transitionCoroutine != null)
             StopCoroutine(transitionCoroutine);
@@ -345,230 +229,5 @@ public class TutorialManager : MonoBehaviour
         }
         c.a = targetAlpha;
         promptTextUI.color = c;
-    }
-
-    private bool IsOnTutorialFloor()
-    {
-        if (floorManager == null)
-            floorManager = FindFirstObjectByType<FloorManager>();
-
-        if (floorManager == null)
-        {
-            Debug.LogError(
-                "TutorialManager requires a FloorManager reference.",
-                this
-            );
-            return false;
-        }
-
-        return floorManager.IsTutorialFloor;
-    }
-
-    private void HideTutorialPanel()
-    {
-        isTutorialActive = false;
-        isCurrentStepActivated = false;
-        StopPromptLifetime();
-
-        if (transitionCoroutine != null)
-        {
-            StopCoroutine(transitionCoroutine);
-            transitionCoroutine = null;
-        }
-
-        if (tutorialPanel != null)
-            tutorialPanel.SetActive(false);
-    }
-
-    public void HideCurrentPrompt()
-    {
-        StopPromptLifetime();
-
-        if (tutorialPanel != null)
-            tutorialPanel.SetActive(false);
-    }
-
-    private bool TryCompletePanelRequirement(TutorialStep step)
-    {
-        switch (step.completionRequirement)
-        {
-            case TutorialCompletionRequirement.AttributePanelOpened:
-                if (GetPlayerStatsUI() != null && playerStatsUI.IsOpen)
-                    CompleteCurrentStep();
-                return true;
-
-            case TutorialCompletionRequirement.AllocationPointsSpent:
-                if (
-                    GetPlayerStatsUI() != null &&
-                    !playerStatsUI.HasRemainingAttributePoints() &&
-                    !playerStatsUI.HasRemainingTraitPoints()
-                )
-                {
-                    CompleteCurrentStep();
-                }
-                return true;
-
-            case TutorialCompletionRequirement.AttributePanelClosed:
-                if (GetPlayerStatsUI() != null && !playerStatsUI.IsOpen)
-                    CompleteCurrentStep();
-                return true;
-
-            case TutorialCompletionRequirement.InventoryPanelOpened:
-                if (GetPlayerInventory() != null && playerInventory.IsOpen)
-                    CompleteCurrentStep();
-                return true;
-
-            case TutorialCompletionRequirement.InventoryPanelClosed:
-                if (GetPlayerInventory() != null && !playerInventory.IsOpen)
-                    CompleteCurrentStep();
-                return true;
-
-            default:
-                return false;
-        }
-    }
-
-    private void StartPromptLifetime(TutorialStep step)
-    {
-        StopPromptLifetime();
-
-        if (step.promptLifetime > 0f)
-        {
-            promptLifetimeCoroutine = StartCoroutine(
-                HidePromptAfterLifetime(step.promptLifetime)
-            );
-        }
-    }
-
-    private IEnumerator HidePromptAfterLifetime(float lifetime)
-    {
-        yield return new WaitForSeconds(lifetime);
-        promptLifetimeCoroutine = null;
-        HideCurrentPrompt();
-    }
-
-    private void StopPromptLifetime()
-    {
-        if (promptLifetimeCoroutine == null)
-            return;
-
-        StopCoroutine(promptLifetimeCoroutine);
-        promptLifetimeCoroutine = null;
-    }
-
-    private void ResetTutorialPlayerProgression()
-    {
-        ResolvePlayerProgressionReferences();
-
-        if (playerStats == null || playerAttributes == null)
-        {
-            Debug.LogError(
-                "TutorialManager requires PlayerStats and " +
-                "PlayerAttributesNTraits to reset tutorial progression.",
-                this
-            );
-            return;
-        }
-
-        playerStats.SetLevelAndExperience(0);
-        playerAttributes.SetAllocationPoints(0, 0);
-    }
-
-    private void GrantTutorialPlayerProgression()
-    {
-        ResolvePlayerProgressionReferences();
-
-        if (playerStats == null || playerAttributes == null)
-        {
-            Debug.LogError(
-                "TutorialManager requires PlayerStats and " +
-                "PlayerAttributesNTraits to grant tutorial progression.",
-                this
-            );
-            return;
-        }
-
-        playerStats.SetLevelAndExperience(1);
-        playerAttributes.SetAllocationPoints(
-            fightRewardAttributePoints,
-            fightRewardTraitPoints
-        );
-    }
-
-    private void ResolvePlayerProgressionReferences()
-    {
-        if (Player.Instance == null)
-            return;
-
-        if (playerStats == null)
-            playerStats = Player.Instance.GetComponent<PlayerStats>();
-
-        if (playerAttributes == null)
-        {
-            playerAttributes =
-                Player.Instance.GetComponent<PlayerAttributesNTraits>();
-        }
-    }
-
-    private PlayerStatsUI GetPlayerStatsUI()
-    {
-        if (playerStatsUI == null)
-        {
-            playerStatsUI = FindFirstObjectByType<PlayerStatsUI>(
-                FindObjectsInactive.Include
-            );
-        }
-
-        return playerStatsUI;
-    }
-
-    private PlayerInventory GetPlayerInventory()
-    {
-        if (playerInventory == null && Player.Instance != null)
-        {
-            playerInventory =
-                Player.Instance.GetComponent<PlayerInventory>();
-        }
-
-        return playerInventory;
-    }
-
-    private void UnlockTutorialFloorGateway()
-    {
-        if (roomManager == null)
-            roomManager = FindFirstObjectByType<RoomManager>();
-
-        if (roomManager == null)
-        {
-            Debug.LogError(
-                "TutorialManager requires a RoomManager reference.",
-                this
-            );
-            return;
-        }
-
-        roomManager.UnlockTutorialFloorGateway();
-    }
-
-    private void SetTutorialRoomGatewayLocked(
-        int roomNumber,
-        bool locked)
-    {
-        if (roomManager == null)
-            roomManager = FindFirstObjectByType<RoomManager>();
-
-        if (roomManager == null)
-        {
-            Debug.LogError(
-                "TutorialManager requires a RoomManager reference.",
-                this
-            );
-            return;
-        }
-
-        roomManager.SetTutorialRoomGatewayLocked(
-            roomNumber,
-            locked
-        );
     }
 }

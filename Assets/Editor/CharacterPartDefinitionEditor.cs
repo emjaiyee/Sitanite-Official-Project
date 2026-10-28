@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.U2D.Sprites;
 using UnityEngine;
@@ -95,15 +94,20 @@ public class CharacterPartDefinitionEditor : Editor
         }
     }
 
-    public static bool TrySliceSpriteSheet(
+    private static bool TrySliceSpriteSheet(
         DirectionalSpriteAnimation animation,
         string animationPropertyName,
-        out string error,
-        int directionCount = 8)
+        out string error)
     {
         if (animation.spriteSheet == null)
         {
             error = "Assign an unsliced Sprite Sheet first.";
+            return false;
+        }
+
+        if (animation.cellSize.x < 1 || animation.cellSize.y < 1)
+        {
+            error = "Cell Size values must both be at least 1.";
             return false;
         }
 
@@ -115,39 +119,9 @@ public class CharacterPartDefinitionEditor : Editor
             return false;
         }
 
-        int expectedFrameCount = directionCount * animation.framesPerDirection;
-        if (importer.spriteImportMode == SpriteImportMode.Multiple)
-        {
-            Sprite[] existingFrames = LoadExistingSprites(assetPath);
-            if (existingFrames.Length > 0)
-            {
-                if (existingFrames.Length != expectedFrameCount)
-                {
-                    error = $"The sheet has {existingFrames.Length} existing slices; expected {expectedFrameCount} for {directionCount} directions with {animation.framesPerDirection} frames each.";
-                    return false;
-                }
-
-                animation.sourceFrames = existingFrames;
-                error = null;
-                return true;
-            }
-        }
-
-        if (animation.cellSize.x < 1 || animation.cellSize.y < 1)
-        {
-            error = "Cell Size values must both be at least 1.";
-            return false;
-        }
-
-        if (animation.pivot.x < 0f || animation.pivot.x > 1f ||
-            animation.pivot.y < 0f || animation.pivot.y > 1f)
-        {
-            error = "Pivot values must be between 0 and 1.";
-            return false;
-        }
-
         int columns = animation.spriteSheet.width / animation.cellSize.x;
         int rows = animation.spriteSheet.height / animation.cellSize.y;
+        int expectedFrameCount = 8 * animation.framesPerDirection;
         int frameCount = columns * rows;
 
         if (animation.spriteSheet.width % animation.cellSize.x != 0 ||
@@ -159,7 +133,7 @@ public class CharacterPartDefinitionEditor : Editor
 
         if (frameCount != expectedFrameCount)
         {
-            error = $"The grid contains {frameCount} frames; expected {expectedFrameCount} for {directionCount} directions with {animation.framesPerDirection} frames each.";
+            error = $"The grid contains {frameCount} frames; expected {expectedFrameCount} for 8 directions with {animation.framesPerDirection} frames each.";
             return false;
         }
 
@@ -189,7 +163,7 @@ public class CharacterPartDefinitionEditor : Editor
                         animation.cellSize.y
                     ),
                     alignment = SpriteAlignment.Center,
-                    pivot = animation.pivot,
+                    pivot = new Vector2(0.5f, 0.5f),
                     spriteID = GUID.Generate()
                 };
             }
@@ -207,31 +181,6 @@ public class CharacterPartDefinitionEditor : Editor
         }
 
         error = null;
-        return true;
-    }
-
-    public static bool TrySliceSpriteSheet(
-        SpriteAnimation animation,
-        string animationPropertyName,
-        out string error)
-    {
-        if (animation == null)
-        {
-            error = "Animation is not assigned.";
-            return false;
-        }
-
-        DirectionalSpriteAnimation sliceData = new DirectionalSpriteAnimation
-        {
-            spriteSheet = animation.spriteSheet,
-            cellSize = animation.cellSize,
-            pivot = animation.pivot,
-            framesPerDirection = animation.frameCount
-        };
-        if (!TrySliceSpriteSheet(sliceData, animationPropertyName, out error, 1))
-            return false;
-
-        animation.frames = sliceData.sourceFrames;
         return true;
     }
 
@@ -258,23 +207,6 @@ public class CharacterPartDefinitionEditor : Editor
         }
 
         return sourceFrames;
-    }
-
-    private static Sprite[] LoadExistingSprites(string assetPath)
-    {
-        List<Sprite> sprites = new List<Sprite>();
-        foreach (Object asset in AssetDatabase.LoadAllAssetsAtPath(assetPath))
-        {
-            if (asset is Sprite sprite)
-                sprites.Add(sprite);
-        }
-
-        sprites.Sort((left, right) =>
-        {
-            int row = right.rect.y.CompareTo(left.rect.y);
-            return row != 0 ? row : left.rect.x.CompareTo(right.rect.x);
-        });
-        return sprites.ToArray();
     }
 
     private static DirectionalSpriteAnimation GetAnimation(

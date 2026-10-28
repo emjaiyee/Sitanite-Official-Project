@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &744819740254605028
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8117855276665226801}
-  m_Layer: 7
-  m_Name: Range
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8117855276665226801
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 744819740254605028}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5700263183971444938}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &865754995451389841
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,105 +182,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
---- !u!1 &1160656442888320940
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3759872893080482509}
-  - component: {fileID: 804187546746558350}
-  m_Layer: 7
-  m_Name: WeaponAudioController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3759872893080482509
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160656442888320940}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2826949009369197633}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &804187546746558350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160656442888320940}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6a3fe7befbe6244c93f5ddbac4ce69c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponAudioController
-  playerEquipment: {fileID: 705827018461203480}
-  audioSource: {fileID: 2461000000000000001}
-  weaponProfiles:
-  - weaponId: Dagger
-    attackSounds:
-    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
-    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
-    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
-    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
-    skills:
-    - skillType: 5
-      skillSound: {fileID: 8300000, guid: 1f1384126b650a042ad35f385802c483, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
-  - weaponId: IronSword
-    attackSounds:
-    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
-    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
-    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
-    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
-    skills:
-    - skillType: 7
-      skillSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
-  - weaponId: GreatSword
-    attackSounds:
-    - {fileID: 8300000, guid: c38d7bfdba4cd8945bc4a3de146fe16c, type: 3}
-    - {fileID: 8300000, guid: fe5d104109c79904b93fa77087f69031, type: 3}
-    - {fileID: 8300000, guid: 52bac5a1085cf714abd25c012702b262, type: 3}
-    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
-    skills:
-    - skillType: 1
-      skillSound: {fileID: 8300000, guid: 4446d606f2286564fb78e69d7a2fb7b3, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
-  - weaponId: BattleAxe
-    attackSounds:
-    - {fileID: 8300000, guid: 01d267fcac7ae6f4c9683ba9bac13dd5, type: 3}
-    - {fileID: 8300000, guid: 5da2630e84fd85d40b2fc2451e0e6e8b, type: 3}
-    - {fileID: 8300000, guid: 83917e694569d99479e544d119509e0e, type: 3}
-    attackSound: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
-    skills:
-    - skillType: 8
-      skillSound: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
-      chargeStartSound: {fileID: 0}
-      chargeLoopSound: {fileID: 0}
-      fullyChargedSound: {fileID: 0}
-      chargeReleaseSound: {fileID: 0}
 --- !u!1 &1199253049118536975
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,90 +273,6 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
---- !u!1 &1996626965479749209
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3631446287988921009}
-  - component: {fileID: 5098357441300053352}
-  m_Layer: 7
-  m_Name: Light
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3631446287988921009
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1996626965479749209}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2826949009369197633}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5098357441300053352
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1996626965479749209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.Light2D
-  m_ComponentVersion: 2
-  m_LightType: 3
-  m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.645
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.45
-  m_LightVolumeIntensity: 0.24
-  m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 000000005b88a64823d508d30f07ee677fe02e7c
-  m_LightCookieSprite: {fileID: 0}
-  m_DeprecatedPointLightCookieSprite: {fileID: 0}
-  m_LightOrder: 0
-  m_AlphaBlendOnOverlap: 0
-  m_OverlapOperation: 0
-  m_NormalMapDistance: 3
-  m_NormalMapQuality: 2
-  m_UseNormalMap: 0
-  m_ShadowsEnabled: 0
-  m_ShadowIntensity: 0.296
-  m_ShadowSoftness: 0.3
-  m_ShadowSoftnessFalloffIntensity: 0.301
-  m_ShadowVolumeIntensityEnabled: 0
-  m_ShadowVolumeIntensity: 0.75
-  m_LocalBounds:
-    m_Center: {x: 0, y: -0.00000011920929, z: 0}
-    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
-  m_PointLightInnerAngle: 360
-  m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 1
-  m_ShapeLightParametricSides: 5
-  m_ShapeLightParametricAngleOffset: 0
-  m_ShapeLightParametricRadius: 1
-  m_ShapeLightFalloffSize: 0.5
-  m_ShapeLightFalloffOffset: {x: 0, y: 0}
-  m_ShapePath:
-  - {x: -0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: 0.5, z: 0}
-  - {x: -0.5, y: 0.5, z: 0}
 --- !u!1 &2649066790600765314
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,7 +396,7 @@ MonoBehaviour:
   sortingOrderOffset: -1
   audioMixerGroup: {fileID: 0}
   persistBetweenScenes: 1
---- !u!1 &2718112565132081930
+--- !u!1 &3238182830033098384
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -618,53 +404,29 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5700263183971444938}
-  - component: {fileID: 9107765637611900218}
+  - component: {fileID: 7243014762650509835}
   m_Layer: 7
-  m_Name: EquippedWeapon
+  m_Name: HeadAnchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5700263183971444938
+--- !u!4 &7243014762650509835
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2718112565132081930}
+  m_GameObject: {fileID: 3238182830033098384}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.026, y: 0.373, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3371824977953561613}
-  - {fileID: 8117855276665226801}
+  m_Children: []
   m_Father: {fileID: 2826949009369197633}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9107765637611900218
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2718112565132081930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9151eaabf0d9249468e3ef8e7db168de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::WeaponController
-  attackPoint: {fileID: 3371824977953561613}
-  firePoint: {fileID: 8117855276665226801}
-  fullyChargedIndicatorPrefab: {fileID: 0}
-  indicatorRotationSpeed: 180
-  indicatorPulseSpeed: 3
-  indicatorPulseMin: 0.9
-  indicatorPulseMax: 1.1
-  rotateIndicator: 1
-  pulseIndicator: 1
 --- !u!1 &3652299398545989156
 GameObject:
   m_ObjectHideFlags: 0
@@ -756,7 +518,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
---- !u!1 &3741309096213540547
+--- !u!1 &4336376229756608363
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -764,29 +526,100 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3371824977953561613}
+  - component: {fileID: 4010089403443479278}
+  - component: {fileID: 5054263625668655327}
   m_Layer: 7
-  m_Name: Melee
+  m_Name: EquippedWeapon (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3371824977953561613
+--- !u!4 &4010089403443479278
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3741309096213540547}
+  m_GameObject: {fileID: 4336376229756608363}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.21207002, y: -0.0077899992, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5700263183971444938}
+  m_Children:
+  - {fileID: 3941947605430007349}
+  - {fileID: 5352275539185182039}
+  m_Father: {fileID: 2826949009369197633}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5054263625668655327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4336376229756608363}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9151eaabf0d9249468e3ef8e7db168de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponController
+  attackPoint: {fileID: 3941947605430007349}
+  firePoint: {fileID: 5352275539185182039}
+  meleeAttackHitIcon: {fileID: 5860520732734022520, guid: d7f37ae496cd76940ab7898c44433fce, type: 3}
+  rangedAttackHitIcon: {fileID: -415446080585258355, guid: 74b6e97e4d16b094c906767ff06ac10b, type: 3}
+  spellAttackHitIcon: {fileID: 9087382598824751646, guid: e89bf042aa6107447a32b35dd867c02f, type: 3}
+  meleeHitImpactSprite: {fileID: 8143209405666569851, guid: 7e8e0100cb7886848ac4af575c0c816e, type: 3}
+  rangedHitImpactSprite: {fileID: -4643097303080971243, guid: 0a01080d51fc5c9488be49d6d4e0b273, type: 3}
+  spellHitImpactSprite: {fileID: -2174163284124869246, guid: 0a01080d51fc5c9488be49d6d4e0b273, type: 3}
+  meleeHitImpactSprites:
+  - {fileID: 4700236355478268897, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: -4517724868450821911, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 164341638057162896, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 2574299327220513861, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 6030980039057921079, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  rangedHitImpactSprites:
+  - {fileID: 4700236355478268897, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: -4517724868450821911, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 164341638057162896, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 2574299327220513861, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  - {fileID: 6030980039057921079, guid: fda80517e63c1b2499a1ba78cf80f828, type: 3}
+  meleeHitImpactAnimationScale: 0.4
+  rangedHitImpactAnimationScale: 0.4
+  airTomeHitImpactSprites:
+  - {fileID: 1679817834216870078, guid: 060d34e97b100ad468215c3d8cdae3f7, type: 3}
+  - {fileID: 4235429567275493950, guid: 060d34e97b100ad468215c3d8cdae3f7, type: 3}
+  - {fileID: -2083636004794133557, guid: 060d34e97b100ad468215c3d8cdae3f7, type: 3}
+  - {fileID: 6174521685786194121, guid: 060d34e97b100ad468215c3d8cdae3f7, type: 3}
+  fireTomeHitImpactSprites:
+  - {fileID: 5758761366942597453, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: -5160090253338139024, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: 7545543559299576297, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: 8937004231079439934, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: 288368275741848637, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: -1302614737226487090, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: -1302614737226487090, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  - {fileID: -1302614737226487090, guid: 20c689eb757d1d64aaf48227ace01c03, type: 3}
+  lightningTomeHitImpactSprites:
+  - {fileID: 8657385633858729600, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: 6223061409204288474, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: 6223061409204288474, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: -431893521208912307, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: 6241556379378038001, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: 6241556379378038001, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  - {fileID: -431893521208912307, guid: 2ed4ca981a84f904291261efb7cbeda5, type: 3}
+  tomeHitImpactFramesPerSecond: 12
+  meleeHitImpactSize: 0.4
+  rangedHitImpactSize: 0.4
+  spellHitImpactSize: 0.4
+  attackHitIconSize: 0.2
+  fullyChargedIndicatorPrefab: {fileID: 0}
+  indicatorRotationSpeed: 180
+  indicatorPulseSpeed: 3
+  indicatorPulseMin: 0.9
+  indicatorPulseMax: 1.1
+  rotateIndicator: 1
+  pulseIndicator: 1
 --- !u!1 &5054948953897289759
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,8 +672,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5054948953897289759}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.018, y: 0.011, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.086, y: -0.026, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -852,11 +685,11 @@ Transform:
   - {fileID: 2665722754575717680}
   - {fileID: 7690639867013062086}
   - {fileID: 5536741838045283725}
-  - {fileID: 5700263183971444938}
   - {fileID: 2122828002183849022}
-  - {fileID: 3759872893080482509}
   - {fileID: 867530900000000002}
-  - {fileID: 3631446287988921009}
+  - {fileID: 4010089403443479278}
+  - {fileID: 7243014762650509835}
+  - {fileID: 7225888979902232640}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &2092788580339462318
@@ -1067,7 +900,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerEquipment
   defaultWeapon: {fileID: 0}
-  weaponController: {fileID: 9107765637611900218}
+  weaponController: {fileID: 5054263625668655327}
 --- !u!114 &8104287118109228845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1212,8 +1045,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c79c9ef22d437a04989cd472afb4ae57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttributesNTraits
-  starterAttributePoints: 1
-  starterTraitPoints: 3
+  starterAttributePoints: 100
+  starterTraitPoints: 100
   availableAttributePoints: 0
   availableTraitPoints: 0
   strength: 5
@@ -1232,6 +1065,10 @@ MonoBehaviour:
   precision: 1
   fortitude: 1
   willpower: 1
+  baseBasicAttackCriticalChance: 0.05
+  criticalChancePerDexterity: 0.01
+  criticalChancePerAgility: 0.01
+  maximumBasicAttackCriticalChance: 0.75
   warriorDefaults:
     strength: 10
     dexterity: 7
@@ -1316,6 +1153,22 @@ MonoBehaviour:
   headwearRenderer: {fileID: 7266763579535133445}
   weaponOverRenderer: {fileID: 2491044693711779770}
   shieldRenderer: {fileID: 867530900000000003}
+  meleeCounterFireVisualPrefab: {fileID: 1204842434327493669, guid: 47dc4ed0f3189454e8420a9bbbbb06d3, type: 3}
+  blockedVisualPrefab: {fileID: 1204842434327493669, guid: 432b358fd004bc84da29b724b145a960, type: 3}
+  parryVisualPrefab: {fileID: 1204842434327493669, guid: 31ba31c1a7fb71145bc624d39c587ae8, type: 3}
+  criticalHitVisualPrefab: {fileID: 1204842434327493669, guid: 161914fb9440db64aa93449754299d5d, type: 3}
+  levelUpAnimationFrames:
+  - {fileID: -4230014217294484830, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
+  - {fileID: -2821234824445798732, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
+  - {fileID: -2514271238872577292, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
+  - {fileID: 5943568548410235718, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
+  - {fileID: 4311918508091399830, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
+  - {fileID: 4198416513621913421, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
+  - {fileID: -7232841917665999307, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
+  - {fileID: -1370934938650804869, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
+  levelUpAnimationFramesPerSecond: 8
+  levelUpAnimationScale: 1
+  levelUpAnimationOpacity: 1
 --- !u!114 &8044024218569010500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1340,18 +1193,21 @@ MonoBehaviour:
   attributes: {fileID: 3176237796533987833}
   playerStats: {fileID: 8549833145988909020}
   warriorStartingGear:
-  - {fileID: 11400000, guid: 7420c82adfcd121419c29d473304b588, type: 2}
-  - {fileID: 11400000, guid: c1b1708b113e1e944b9cc4f8fdb1114b, type: 2}
-  - {fileID: 11400000, guid: 03c6e9d0387ccac40bd2d370f99c3857, type: 2}
   - {fileID: 11400000, guid: 80d107fb911d022438723e0719533275, type: 2}
-  rangerStartingGear:
-  - {fileID: 11400000, guid: f6a9c10a0cdb92e4b931de18d8c2fd30, type: 2}
+  - {fileID: 11400000, guid: 63a619380b08d55479ad76b7672ee149, type: 2}
+  - {fileID: 11400000, guid: ab59b5d8b1b1fdc49aab773d0628d828, type: 2}
+  - {fileID: 11400000, guid: 6edc49bc30a7c0947a2fa7c6eb015509, type: 2}
   - {fileID: 11400000, guid: 8c51dfc58d0d4f8ca88644c0f1a11b54, type: 2}
+  rangerStartingGear:
+  - {fileID: 11400000, guid: dfb5ff6536537fa44b6a06bc9ce73882, type: 2}
+  - {fileID: 11400000, guid: 9fc0f09a282c2594cbae6329029ad609, type: 2}
+  - {fileID: 11400000, guid: 7138a7da4f590e4458ecde51737c696e, type: 2}
+  - {fileID: 11400000, guid: 6e06c0a729177df4cbb8c29ba2d1d87d, type: 2}
   mageStartingGear:
-  - {fileID: 11400000, guid: d3ec1a675e1627b49a2bb7cd282e4739, type: 2}
-  - {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
-  - {fileID: 11400000, guid: 12b486c90eeea3841a4f7554aefebdd0, type: 2}
   - {fileID: 11400000, guid: 05209c6759f80f44980eb67a74c3320b, type: 2}
+  - {fileID: 11400000, guid: d3ec1a675e1627b49a2bb7cd282e4739, type: 2}
+  - {fileID: 11400000, guid: 12b486c90eeea3841a4f7554aefebdd0, type: 2}
+  - {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
   warriorStartingItems:
   - {fileID: 11400000, guid: 47332dcf82319f14bb1079669c1f2ff4, type: 2}
   - {fileID: 11400000, guid: afcf9a321fddc074280691cca2052f45, type: 2}
@@ -1488,18 +1344,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ed8f20832f242e592f44a0dcf512140, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerShieldDefense
-  blockingSkill: 0
-  skillExperience: 0
-  minimumSkillArmorMultiplier: 0.5
   parryArmorMultiplier: 1.5
   counterOpportunityDuration: 0.6
   counterDamageMultiplier: 1.5
   audioSource: {fileID: 2461000000000000001}
-  blockedSfx: {fileID: 0}
+  blockedSfx: {fileID: 8300000, guid: d6e82ced7cc0fac4fa0a36da5fbe67e8, type: 3}
   successfulParrySfx: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
-  successfulCounterSfx: {fileID: 8300000, guid: 7b3102123949fa044876597c6c7ad35a, type: 3}
-  feedbackHeight: 1.1
+  successfulCounterSfx: {fileID: 8300000, guid: d0a5ffbb2d3bdd142bdfb783349e011d, type: 3}
   feedbackDuration: 0.7
+  feedbackIconHeight: 0.35
+  feedbackShakeAmount: 0.025
+  feedbackShakeFrequency: 22
+  headAnchor: {fileID: 7243014762650509835}
+  parryFeedbackSprite: {fileID: 2094730840173597636, guid: 999e6d9a5a9e8914980d51ead1fe9f96, type: 3}
+  blockedFeedbackSprite: {fileID: 3364847379591482952, guid: ad44c78eeaea427408a81c33d783c7c7, type: 3}
+  unsuccessfulBlockFeedbackSprite: {fileID: -8051091215052046005, guid: 11f9b6a59ed2a0249b5f1b463c27c641, type: 3}
+  counterFeedbackSprite: {fileID: 6459305140957623979, guid: 528565492703b2844980a5d0817dafea, type: 3}
 --- !u!95 &6756481364951381221
 Animator:
   serializedVersion: 7
@@ -1681,6 +1541,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9fcaaae7066c8434fba527de8ba00ee2, type: 3}
   femaleDeathClips:
   - {fileID: 8300000, guid: 9c1ad205476fab442a14f6c6929112cf, type: 3}
+  levelUpClip: {fileID: 8300000, guid: 145ea7d8cd62796458137f93814719e2, type: 3}
   hurtCooldown: 2
   hurtDamageThreshold: 0.15
 --- !u!114 &5004489628805899625
@@ -1986,6 +1847,68 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+--- !u!1 &6321335890682992289
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3941947605430007349}
+  m_Layer: 7
+  m_Name: Melee
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3941947605430007349
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6321335890682992289}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.082, y: -0.024, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4010089403443479278}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6664082881418092712
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5352275539185182039}
+  m_Layer: 7
+  m_Name: Range
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5352275539185182039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6664082881418092712}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.234, y: -0.06, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4010089403443479278}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6700994303678030655
 GameObject:
   m_ObjectHideFlags: 0
@@ -2259,3 +2182,413 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
+--- !u!1001 &6857317424617527661
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2826949009369197633}
+    m_Modifications:
+    - target: {fileID: 4186759088098511465, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_Name
+      value: WeaponAudioController (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.08714
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.11147
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: 2461000000000000001}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: playerEquipment
+      value: 
+      objectReference: {fileID: 705827018461203480}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.size
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'rangedHitImpactSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 9131213d4ee325642a239666bc54c9f0, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'rangedHitImpactSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 333444d805dca3d44ab0c46cf5ae6c7b, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'rangedHitImpactSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 9131213d4ee325642a239666bc54c9f0, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].weaponId
+      value: TomeOfFire
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].weaponId
+      value: TomeOfLightning
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[6].weaponId
+      value: TomeOfAir
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[7].weaponId
+      value: CrossBow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[8].weaponId
+      value: ShortBow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[9].weaponId
+      value: LongBow
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[10].weaponId
+      value: Critical Hit
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 5b49261ee03191a42a9d73b804fdc936, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 54026f241a8c3cd4c8014f88f1efd606, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[6].attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: c1bbe826cfb0daa45bef7ba259eb43d2, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[7].attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 55db909a546333b45b34dddd2ca54ac4, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[8].attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: a3de87a9bbdaf5746a2dc4b2661e15ab, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[9].attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4f1538fbb1f3a844199326ca81b23245, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[10].attackSound
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[0].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[1].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[2].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[3].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[6].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[7].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[8].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[9].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[10].criticalHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: d0a5ffbb2d3bdd142bdfb783349e011d, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[6].skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[7].skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[8].skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[9].skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[10].skills.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponHitImpactProfiles.Array.data[0].hitImpactSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 9ea5290cf844fa948b92dab822a96c51, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponHitImpactProfiles.Array.data[1].hitImpactSound
+      value: 
+      objectReference: {fileID: 8300000, guid: deeb9b491629fea48b461407e95112f6, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponHitImpactProfiles.Array.data[2].hitImpactSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 6d4f7c5f87b7f4a4eb7d8896cd21ae67, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[6].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[7].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[8].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[9].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[10].attackSounds.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[4].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 2b7d6babedce02b468371ba4b0a511b5, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[4].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 5b49261ee03191a42a9d73b804fdc936, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[4].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 3a99012728362a348a2ff9e5a8a34bb6, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[5].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 1663398df6318944a9b14f3cc57c7e91, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[5].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: b48697f184541b5478bc76470ab6ea05, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[5].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 39c7ef639a35f1f479e9e36b58824574, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[6].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: fb482db8c9571d34e87e07f03c404861, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[6].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: ad66b3402ae26fe49b3f3ae58073a1ca, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[6].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: c1bbe826cfb0daa45bef7ba259eb43d2, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[7].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: a0b4092e6552e7d4493cc658f3a90209, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[7].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 12f11e7170d00e94491a4815c9bd4cb2, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[7].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 55db909a546333b45b34dddd2ca54ac4, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[8].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: a3de87a9bbdaf5746a2dc4b2661e15ab, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[8].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 432a21a709875d94b8013da4275722eb, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[8].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 4f1538fbb1f3a844199326ca81b23245, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[9].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: a3de87a9bbdaf5746a2dc4b2661e15ab, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[9].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 432a21a709875d94b8013da4275722eb, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[9].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 4f1538fbb1f3a844199326ca81b23245, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[10].attackSounds.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: a3de87a9bbdaf5746a2dc4b2661e15ab, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[10].attackSounds.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 432a21a709875d94b8013da4275722eb, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: 'weaponProfiles.Array.data[10].attackSounds.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 4f1538fbb1f3a844199326ca81b23245, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].skills.Array.data[0].skillType
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].skillType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[6].skills.Array.data[0].skillType
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[7].skills.Array.data[0].skillType
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[8].skills.Array.data[0].skillType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[9].skills.Array.data[0].skillType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[10].skills.Array.data[0].skillType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[4].skills.Array.data[0].skillSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 2b7d6babedce02b468371ba4b0a511b5, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].skillSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[6].skills.Array.data[0].skillSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 336729870ef4b3044a26393f2e6b8558, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[7].skills.Array.data[0].skillSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 095176b446af5f44484eb0da11ff68f2, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[8].skills.Array.data[0].skillSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 92da7cdc88d8c1b409f6d99f167bfc44, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[9].skills.Array.data[0].skillSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[10].skills.Array.data[0].skillSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 3084167d042252e459f0180d43b22002, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].chargeLoopSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 64e5e4fe7f51dfd42bf8f5b9f40c1687, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].chargeStartSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 37c78b61bcfe7a64f9eb2e411248ddf1, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].fullyChargedSound
+      value: 
+      objectReference: {fileID: 8300000, guid: f58458dd2096b7b47ab93b5da4337b48, type: 3}
+    - target: {fileID: 8591955533989256645, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+      propertyPath: weaponProfiles.Array.data[5].skills.Array.data[0].chargeReleaseSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 6eb625b62de22a8498d45611f0cc2c7f, type: 3}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+--- !u!4 &7225888979902232640 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4282244175314280749, guid: 172ba6789cdc85b4a9e2834cdf049bfd, type: 3}
+  m_PrefabInstance: {fileID: 6857317424617527661}
+  m_PrefabAsset: {fileID: 0}

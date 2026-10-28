@@ -26,11 +26,6 @@ public class UISuppressor : MonoBehaviour
     /// </summary>
     public CanvasGroup CanvasGroup => canvasGroup;
 
-    /// <summary>
-    /// Gets whether this UI is currently suppressed.
-    /// </summary>
-    public bool IsSuppressed { get; private set; }
-
     #endregion
 
     #region Lifecycle
@@ -74,7 +69,6 @@ public class UISuppressor : MonoBehaviour
         if (canvasGroup == null)
             return;
 
-        IsSuppressed = true;
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
@@ -89,7 +83,6 @@ public class UISuppressor : MonoBehaviour
         if (canvasGroup == null)
             return;
 
-        IsSuppressed = false;
         canvasGroup.alpha = originalAlpha;
         canvasGroup.interactable = originalInteractable;
         canvasGroup.blocksRaycasts = originalBlocksRaycasts;

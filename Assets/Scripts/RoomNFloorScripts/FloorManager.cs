@@ -3,27 +3,14 @@ using UnityEngine;
 
 public class FloorManager : MonoBehaviour
 {
-    public const int TutorialFloor = 0;
-
-    [System.Serializable]
-    private class ManggagawayBossFloor
-    {
-        [Tooltip("The exact floor for Manggagaway. Set to 0 to leave the boss floor unassigned.")]
-        [Min(0)] public int floor = 0;
-    }
-
     [Header("Current Floor")]
-    [SerializeField, Min(TutorialFloor)]
-    private int currentFloor = TutorialFloor;
+    [SerializeField, Min(1)]
+    private int currentFloor = 1;
 
     [Header("Floor Configurations")]
     [SerializeField]
     private List<FloorConfiguration> floorConfigurations =
         new List<FloorConfiguration>();
-
-    [Header("Manggagaway Boss Floor")]
-    [SerializeField]
-    private ManggagawayBossFloor manggagawayBossFloor = new ManggagawayBossFloor();
 
     [Header("References")]
     [SerializeField]
@@ -32,8 +19,6 @@ public class FloorManager : MonoBehaviour
     [SerializeField] private DungeonMemory dungeonMemory;
 
     public int CurrentFloor => currentFloor;
-    public bool IsTutorialFloor => currentFloor == TutorialFloor;
-    public bool IsManggagawayBossFloor => IsManggagawayFloor(currentFloor);
 
     public FloorConfiguration CurrentConfiguration
     {
@@ -46,24 +31,6 @@ public class FloorManager : MonoBehaviour
     private void Awake()
     {
         ValidateConfigurations();
-        ApplyRequestedStartingFloor();
-    }
-
-    public bool HasFloor(int floor)
-    {
-        return floor == TutorialFloor ||
-               IsManggagawayFloor(floor) ||
-               GetConfigurationForFloor(floor) != null;
-    }
-
-    // Debug only: must be called before Start generates the first floor.
-    public bool SetStartingFloor(int floor)
-    {
-        if (floor < TutorialFloor || !HasFloor(floor))
-            return false;
-
-        currentFloor = floor;
-        return true;
     }
 
     private void Start()
@@ -76,11 +43,7 @@ public class FloorManager : MonoBehaviour
         FloorConfiguration configuration =
             CurrentConfiguration;
 
-        if (
-            configuration == null &&
-            !IsTutorialFloor &&
-            !IsManggagawayBossFloor
-        )
+        if (configuration == null)
         {
             Debug.LogError(
                 $"Cannot generate Floor {currentFloor}: " +
@@ -100,9 +63,7 @@ public class FloorManager : MonoBehaviour
         }
 
         roomManager.GenerateFloor(
-            configuration,
-            IsManggagawayBossFloor,
-            IsTutorialFloor
+            configuration
         );
 
         if (roomManager.GeneratedRooms.Count > 0 && Player.Instance != null)
@@ -122,10 +83,7 @@ public class FloorManager : MonoBehaviour
     {
         int nextFloor = currentFloor + 1;
 
-        if (
-            nextFloor != TutorialFloor &&
-            !IsManggagawayFloor(nextFloor) &&
-            GetConfigurationForFloor(nextFloor) == null)
+        if (GetConfigurationForFloor(nextFloor) == null)
         {
             Debug.LogError(
                 $"Cannot enter Floor {nextFloor}: " +
@@ -137,13 +95,6 @@ public class FloorManager : MonoBehaviour
 
         currentFloor = nextFloor;
         GenerateCurrentFloor();
-    }
-
-    private bool IsManggagawayFloor(int floor)
-    {
-        return manggagawayBossFloor != null &&
-               manggagawayBossFloor.floor > 0 &&
-               manggagawayBossFloor.floor == floor;
     }
 
     private FloorConfiguration GetConfigurationForFloor(
@@ -218,34 +169,6 @@ public class FloorManager : MonoBehaviour
                     "any room sizes."
                 );
             }
-        }
-    }
-
-    private void ApplyRequestedStartingFloor()
-    {
-        if (Player.Instance == null)
-            return;
-
-        PlayerStats playerStats =
-            Player.Instance.GetComponent<PlayerStats>();
-
-        if (
-            playerStats == null ||
-            !playerStats.TryConsumeRequestedStartingFloor(
-                out int requestedFloor
-            )
-        )
-        {
-            return;
-        }
-
-        if (!SetStartingFloor(requestedFloor))
-        {
-            Debug.LogError(
-                $"Cannot start on requested Floor {requestedFloor}: " +
-                "no matching floor is configured.",
-                this
-            );
         }
     }
 }

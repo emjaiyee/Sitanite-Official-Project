@@ -86,19 +86,7 @@ public static class PlayerDamage
         }
 
         if (target is EnemyHealth enemy)
-        {
-            PlayerSkill playerSkill = Player.Instance != null
-                ? Player.Instance.GetComponent<PlayerSkill>()
-                : null;
-
-            enemy.TakePlayerDamage(
-                amount,
-                type,
-                source,
-                attackType,
-                playerSkill != null && playerSkill.IsSkillActive
-            );
-        }
+            enemy.TakePlayerDamage(amount, type, source, attackType);
         else
             target.TakeDamage(amount, type, source);
     }
