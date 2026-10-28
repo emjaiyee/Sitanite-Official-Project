@@ -117,7 +117,7 @@ Transform:
   m_GameObject: {fileID: 867530900000000001}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.0516, y: -0.0648, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -672,7 +672,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5054948953897289759}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.086, y: -0.026, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1153,10 +1153,16 @@ MonoBehaviour:
   headwearRenderer: {fileID: 7266763579535133445}
   weaponOverRenderer: {fileID: 2491044693711779770}
   shieldRenderer: {fileID: 867530900000000003}
-  meleeCounterFireVisualPrefab: {fileID: 1204842434327493669, guid: 47dc4ed0f3189454e8420a9bbbbb06d3, type: 3}
+  meleeCounterFireVisualPrefab: {fileID: 1204842434327493669, guid: 0ff318634525bc741b7c897b17d306c9, type: 3}
   blockedVisualPrefab: {fileID: 1204842434327493669, guid: 432b358fd004bc84da29b724b145a960, type: 3}
   parryVisualPrefab: {fileID: 1204842434327493669, guid: 31ba31c1a7fb71145bc624d39c587ae8, type: 3}
   criticalHitVisualPrefab: {fileID: 1204842434327493669, guid: 161914fb9440db64aa93449754299d5d, type: 3}
+  shieldGuardForwardOffset: 0.12
+  shieldGuardBobAmount: 0.015
+  shieldGuardBobFrequency: 4
+  shieldGuardEaseDuration: 0.12
+  shieldRecoilDuration: 0.16
+  shieldRecoilDistance: 0.08
   levelUpAnimationFrames:
   - {fileID: -4230014217294484830, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
   - {fileID: -2821234824445798732, guid: 02050a81c474e05449c30a30d18153fb, type: 3}
@@ -1200,14 +1206,16 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8c51dfc58d0d4f8ca88644c0f1a11b54, type: 2}
   rangerStartingGear:
   - {fileID: 11400000, guid: dfb5ff6536537fa44b6a06bc9ce73882, type: 2}
-  - {fileID: 11400000, guid: 9fc0f09a282c2594cbae6329029ad609, type: 2}
-  - {fileID: 11400000, guid: 7138a7da4f590e4458ecde51737c696e, type: 2}
   - {fileID: 11400000, guid: 6e06c0a729177df4cbb8c29ba2d1d87d, type: 2}
+  - {fileID: 11400000, guid: 7138a7da4f590e4458ecde51737c696e, type: 2}
+  - {fileID: 11400000, guid: 9fc0f09a282c2594cbae6329029ad609, type: 2}
+  - {fileID: 11400000, guid: 8c51dfc58d0d4f8ca88644c0f1a11b54, type: 2}
   mageStartingGear:
   - {fileID: 11400000, guid: 05209c6759f80f44980eb67a74c3320b, type: 2}
+  - {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
   - {fileID: 11400000, guid: d3ec1a675e1627b49a2bb7cd282e4739, type: 2}
   - {fileID: 11400000, guid: 12b486c90eeea3841a4f7554aefebdd0, type: 2}
-  - {fileID: 11400000, guid: 1b6c94ca03afb604b8d42c7e21155a5a, type: 2}
+  - {fileID: 11400000, guid: 8c51dfc58d0d4f8ca88644c0f1a11b54, type: 2}
   warriorStartingItems:
   - {fileID: 11400000, guid: 47332dcf82319f14bb1079669c1f2ff4, type: 2}
   - {fileID: 11400000, guid: afcf9a321fddc074280691cca2052f45, type: 2}
@@ -1349,6 +1357,7 @@ MonoBehaviour:
   counterDamageMultiplier: 1.5
   audioSource: {fileID: 2461000000000000001}
   blockedSfx: {fileID: 8300000, guid: d6e82ced7cc0fac4fa0a36da5fbe67e8, type: 3}
+  unsuccessfulBlockSfx: {fileID: 8300000, guid: f666f3dee9c46294fa3a6666a48e8662, type: 3}
   successfulParrySfx: {fileID: 8300000, guid: eb014d16395d0a04d82d027e52d6880f, type: 3}
   successfulCounterSfx: {fileID: 8300000, guid: d0a5ffbb2d3bdd142bdfb783349e011d, type: 3}
   feedbackDuration: 0.7
