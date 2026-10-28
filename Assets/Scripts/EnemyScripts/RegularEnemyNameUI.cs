@@ -29,7 +29,7 @@ public class RegularEnemyNameUI : MonoBehaviour
     {
         if (nameText == null)
             return;
-        if (enemyHealth == null || enemyHealth.IsMiniBoss || enemyHealth.GetComponent<EnemyLich>() != null ||
+        if (enemyHealth == null || enemyHealth.IsMiniBoss || enemyHealth.IsMainBoss || enemyHealth.GetComponent<EnemyLich>() != null ||
             enemyHealth.GetComponent<FallenDescender>() != null || enemyHealth.CurrentHealth <= 0)
         {
             nameText.text = string.Empty;

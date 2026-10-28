@@ -9,16 +9,23 @@ public class BossHealthBarUI : MonoBehaviour
     [SerializeField] private Slider healthSlider;
     [SerializeField] private TMP_Text bossNameText;
     [SerializeField, Min(0f)] private float fadeDuration = 0.2f;
+    [Tooltip("Use a separate UI instance for main bosses. Leave off on the existing mini-boss bar.")]
+    [SerializeField] private bool trackMainBoss;
 
     private EnemySpawnerManager spawnerManager;
     private EnemyHealth bossHealth;
     private PlayerRoomTracker roomTracker;
     private float targetAlpha;
+    private EnemyManggagaway mainBoss;
+    private float nextBossSearch;
+    private UISuppressor uiSuppressor;
 
     private void Awake()
     {
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
+
+        uiSuppressor = GetComponent<UISuppressor>();
 
         if (healthSlider == null)
             healthSlider = GetComponentInChildren<Slider>(true);
@@ -30,11 +37,37 @@ public class BossHealthBarUI : MonoBehaviour
 
     private void OnEnable()
     {
-        BindToSpawner();
+        if (!trackMainBoss)
+            BindToSpawner();
     }
 
     private void Update()
     {
+        if (trackMainBoss)
+        {
+            if (roomTracker == null && Player.Instance != null)
+                roomTracker = Player.Instance.GetComponent<PlayerRoomTracker>();
+            if (Time.unscaledTime >= nextBossSearch)
+            {
+                nextBossSearch = Time.unscaledTime + 0.5f;
+                mainBoss = null;
+                foreach (EnemyManggagaway candidate in FindObjectsByType<EnemyManggagaway>(FindObjectsSortMode.None))
+                {
+                    if (!candidate.IsDead && roomTracker != null && candidate.Room != null &&
+                        candidate.Room == roomTracker.CurrentRoom)
+                    {
+                        mainBoss = candidate;
+                        break;
+                    }
+                }
+                BindBoss(mainBoss != null ? mainBoss.Health : null);
+            }
+            RefreshName();
+            UpdateVisibility();
+            UpdateFade();
+            return;
+        }
+
         if (spawnerManager == null)
             BindToSpawner();
 
@@ -72,6 +105,9 @@ public class BossHealthBarUI : MonoBehaviour
 
     private void BindBoss(EnemyHealth health)
     {
+        if (health != null && health.IsMainBoss != trackMainBoss)
+            health = null;
+
         if (health == bossHealth)
             return;
 
@@ -121,7 +157,7 @@ public class BossHealthBarUI : MonoBehaviour
         if (bossNameText == null)
             return;
 
-        if (bossHealth == null || !bossHealth.IsMiniBoss || bossHealth.CurrentHealth <= 0 ||
+        if (bossHealth == null || (!bossHealth.IsMiniBoss && !bossHealth.IsMainBoss) || bossHealth.CurrentHealth <= 0 ||
             string.IsNullOrWhiteSpace(bossHealth.EnemyName))
         {
             bossNameText.text = string.Empty;
@@ -145,7 +181,10 @@ public class BossHealthBarUI : MonoBehaviour
         if (roomTracker == null && Player.Instance != null)
             roomTracker = Player.Instance.GetComponent<PlayerRoomTracker>();
 
-        bool isInBossRoom =
+        bool isInBossRoom = trackMainBoss
+            ? bossHealth != null && mainBoss != null && !mainBoss.IsDead &&
+                roomTracker != null && mainBoss.Room != null && roomTracker.CurrentRoom == mainBoss.Room
+            :
             bossHealth != null &&
             spawnerManager != null &&
             spawnerManager.ActiveBossRoom != null &&
@@ -162,7 +201,7 @@ public class BossHealthBarUI : MonoBehaviour
 
     private void UpdateFade()
     {
-        if (canvasGroup == null)
+        if (canvasGroup == null || (uiSuppressor != null && uiSuppressor.IsSuppressed))
             return;
 
         float duration = Mathf.Max(0f, fadeDuration);

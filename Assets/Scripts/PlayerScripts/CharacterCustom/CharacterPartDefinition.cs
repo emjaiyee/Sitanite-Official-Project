@@ -11,6 +11,9 @@ public class DirectionalSpriteAnimation
     [Tooltip("Size of each animation frame in pixels.")]
     public Vector2Int cellSize = new Vector2Int(32, 32);
 
+    [Tooltip("Normalized pivot used when slicing this sheet. (0, 0) is bottom-left; (1, 1) is top-right.")]
+    public Vector2 pivot = new Vector2(0.5f, 0.5f);
+
     [Min(1)]
     [Tooltip("The number of consecutive source frames assigned to each direction.")]
     public int framesPerDirection = 1;

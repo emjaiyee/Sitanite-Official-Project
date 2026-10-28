@@ -1798,24 +1798,7 @@ MonoBehaviour:
   - stepName: Movement
     promptText: W, A, S, D to walk
     requiredKeys: 77000000610000007300000064000000
-    onStepStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onStepComplete:
-      m_PersistentCalls:
-        m_Calls: []
-  - stepName: Aim and attack
-    promptText: Drag mouse to aim and left mouse button (LMB) to attack
-    requiredKeys: 43010000
-    onStepStart:
-      m_PersistentCalls:
-        m_Calls: []
-    onStepComplete:
-      m_PersistentCalls:
-        m_Calls: []
-  - stepName: Weapon skill
-    promptText: Press F key to trigger weapon skill
-    requiredKeys: 66000000
+    unlockRoomGatewayOnCompletion: 0
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1825,15 +1808,76 @@ MonoBehaviour:
   - stepName: Dash
     promptText: To dash press SPACEBAR Key
     requiredKeys: 20000000
+    unlockRoomGatewayOnCompletion: 1
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
     onStepComplete:
       m_PersistentCalls:
         m_Calls: []
-  - stepName: Player attributes
+  - stepName: Aim and attack
+    promptText: Drag mouse to aim and left mouse button (LMB) to attack
+    requiredKeys: []
+    waitForActivation: 1
+    requiresExternalCompletion: 1
+    completionRequirement: 1
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Weapon skill
+    promptText: Press F key to trigger weapon skill
+    requiredKeys: []
+    waitForActivation: 0
+    requiresExternalCompletion: 1
+    completionRequirement: 1
+    unlockRoomGatewayOnCompletion: 2
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Fight
+    promptText: Defeat the slime.
+    requiredKeys: []
+    waitForActivation: 1
+    requiresExternalCompletion: 1
+    completionRequirement: 1
+    grantsTutorialProgression: 1
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Player Attribute
     promptText: To access player stats and attributes press the C Key.
-    requiredKeys: 63000000
+    requiredKeys: []
+    completionRequirement: 2
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Points
+    promptText: Spend your available attribute and trait points.
+    requiredKeys: []
+    completionRequirement: 3
+    promptLifetime: 5
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Attribute Exit
+    promptText: Close the attributes panel.
+    requiredKeys: []
+    completionRequirement: 4
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1842,7 +1886,20 @@ MonoBehaviour:
         m_Calls: []
   - stepName: Player Inventory
     promptText: To open your inventory press the TAB Key.
-    requiredKeys: 09000000
+    requiredKeys: []
+    completionRequirement: 5
+    promptLifetime: 5
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Inventory Exit
+    promptText: Close the inventory panel.
+    requiredKeys: []
+    completionRequirement: 6
+    unlocksFloorGatewayOnCompletion: 1
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1851,6 +1908,8 @@ MonoBehaviour:
         m_Calls: []
   promptTextUI: {fileID: 719744662}
   tutorialPanel: {fileID: 993998113}
+  floorManager: {fileID: 1969959510}
+  roomManager: {fileID: 0}
   panelCanvasGroup: {fileID: 993998117}
   panelFadeDuration: 1
   textFadeDuration: 0.5

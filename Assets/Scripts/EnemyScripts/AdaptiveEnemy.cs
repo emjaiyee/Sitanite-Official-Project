@@ -21,7 +21,7 @@ public class AdaptiveEnemy : MonoBehaviour
     public void Configure(DungeonMemory.Adaptation adaptation, RoomInstance encounterRoom, PlayerStats player)
     {
         EnemyHealth health = GetComponent<EnemyHealth>();
-        if (health.IsMiniBoss || GetComponent<EnemyLich>() != null || GetComponent<FallenDescender>() != null || Active)
+        if (health.IsMiniBoss || health.IsMainBoss || GetComponent<EnemyLich>() != null || GetComponent<FallenDescender>() != null || Active)
             return;
 
         resistantType = adaptation.damageType;
@@ -70,7 +70,7 @@ public class AdaptiveEnemy : MonoBehaviour
 
     public static DamageType GetAdaptedDamageType(EnemyHealth attacker)
     {
-        if (attacker == null || attacker.IsMiniBoss)
+        if (attacker == null || attacker.IsMiniBoss || attacker.IsMainBoss)
             return DamageType.None;
         AdaptiveEnemy adaptation = attacker.GetComponent<AdaptiveEnemy>();
         return adaptation != null ? adaptation.ResistantType : DamageType.None;

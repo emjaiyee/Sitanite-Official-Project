@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
+public class EnemyHealth : MonoBehaviour, IDamageable
 {
     [Header("Health")]
     [SerializeField] private int maxHealth = 10;
@@ -12,12 +12,6 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
     [SerializeField] private Color damageFlashColor = new Color(1f, 0.25f, 0.25f, 1f);
     [Min(0.01f)]
     [SerializeField] private float damageFlashDuration = 0.12f;
-
-    [Header("Hit Reaction")]
-    [Min(0f)]
-    [SerializeField] private float hitBounceDistance = 0.02f;
-    [Min(0f)]
-    [SerializeField] private float hitBounceDuration = 0.1f;
 
     [Header("Run Statistics")]
     [SerializeField] private bool isMiniBoss;
@@ -42,7 +36,13 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
     public int CurrentHealth { get; private set; }
     public int MaxHealth => maxHealth;
     public bool IsMiniBoss => isMiniBoss;
+    public bool IsMainBoss => GetComponent<EnemyManggagaway>() != null;
     public string EnemyName => enemyName;
+    public bool IsInvulnerable { get; private set; }
+    public int DamageHealthFloor { get; private set; }
+    public bool IsReceivingPlayerDamage => playerHit;
+    public bool IsReceivingPlayerSkillDamage =>
+        playerHit && playerSkillHit;
 
     [Header("Runtime (Debug)")]
     [Tooltip("Runtime current HP. Read-only display for the Inspector.")]
@@ -52,11 +52,18 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
     public event Action<EnemyHealth> OnHealthChanged;
     /// <summary>Fired after damage is applied. Second arg is the damage origin, if known.</summary>
     public event Action<EnemyHealth, Vector3?> OnDamaged;
+    public event Action<int, int> OnDamageTaken;
+
+    public void SetDamageProtection(bool invulnerable, int healthFloor = 0)
+    {
+        IsInvulnerable = invulnerable;
+        DamageHealthFloor = Mathf.Clamp(healthFloor, 0, maxHealth);
+    }
 
     private bool hasDied;
     private Dictionary<DamageType, float> configuredResistances;
     private bool playerHit;
-    private bool playerHitCritical;
+    private bool playerSkillHit;
     private WeaponAttackType playerAttackType;
     private DamageType lastDamageType;
     private AdaptiveEnemy adaptation;
@@ -94,7 +101,6 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
 
     private bool baseStatsCached;
     private Coroutine damageFlashRoutine;
-    private Coroutine hitBounceRoutine;
     private SpriteRenderer[] damageFeedbackRenderers;
     private Color[] originalRendererColors;
     private int baseMaxHealth;
@@ -130,15 +136,6 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
     private void OnDisable()
     {
         StopDamageFlash(restoreColors: true);
-        if (hitBounceRoutine != null)
-        {
-            StopCoroutine(hitBounceRoutine);
-            hitBounceRoutine = null;
-        }
-
-        EnemyLich lich = GetComponent<EnemyLich>();
-        if (lich != null)
-            lich.PauseMovement(false);
     }
 
     public void ApplyLevelScaling(int level)
@@ -257,7 +254,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
         if (amount <= 0)
             return;
 
-        if (hasDied)
+        if (hasDied || IsInvulnerable)
             return;
 
         if (CurrentHealth <= 0)
@@ -266,31 +263,24 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
         lastDamageType = damageType;
         if (adaptation == null)
             adaptation = GetComponent<AdaptiveEnemy>();
-        amount = adaptation != null && !isMiniBoss && adaptation.Matches(damageType)
+        amount = adaptation != null && !isMiniBoss && !IsMainBoss && adaptation.Matches(damageType)
             ? adaptation.Mitigate(amount, damageType)
             : Mathf.RoundToInt(
             Mathf.Max(1f, amount - GetDamageResistance(damageType))
         );
 
-        CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
+        int healthBefore = CurrentHealth;
+        CurrentHealth = Mathf.Max(DamageHealthFloor, CurrentHealth - amount);
+        int appliedDamage = healthBefore - CurrentHealth;
         runtimeCurrentHealth = CurrentHealth;
 
         if (CurrentHealth > 0)
-        {
             StartDamageFlash();
-            if (playerHit)
-                StartHitBounce(damageSource);
-        }
 
         // Show the damage number above the enemy, colored by type.
-        DamagePopupSpawner.Spawn(
-            transform,
-            amount,
-            damageType,
-            0.8f,
-            playerHitCritical
-        );
+        DamagePopupSpawner.Spawn(transform, amount, damageType, 0.8f);
 
+        OnDamageTaken?.Invoke(healthBefore, appliedDamage);
         OnHealthChanged?.Invoke(this);
         OnDamaged?.Invoke(this, damageSource);
 
@@ -308,79 +298,16 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
         }
     }
 
-    private void StartHitBounce(Vector3? damageSource)
-    {
-        if (hitBounceDistance <= 0f || hitBounceDuration <= 0f)
-            return;
-
-        Vector2 direction = damageSource.HasValue
-            ? (Vector2)transform.position - (Vector2)damageSource.Value
-            : Vector2.zero;
-
-        if (direction.sqrMagnitude <= 0.0001f &&
-            Player.Instance != null)
-        {
-            direction =
-                (Vector2)transform.position -
-                (Vector2)Player.Instance.transform.position;
-        }
-
-        if (direction.sqrMagnitude <= 0.0001f)
-            direction = Vector2.right;
-
-        direction.Normalize();
-
-        EnemyMelee melee = GetComponent<EnemyMelee>();
-        if (melee != null)
-            melee.ApplyStagger(hitBounceDuration);
-
-        EnemyRange ranged = GetComponent<EnemyRange>();
-        if (ranged != null)
-            ranged.ApplyStagger(hitBounceDuration);
-
-        EnemyLich lich = GetComponent<EnemyLich>();
-        if (lich != null)
-            lich.PauseMovement(true);
-
-        if (hitBounceRoutine != null)
-            StopCoroutine(hitBounceRoutine);
-
-        hitBounceRoutine = StartCoroutine(BounceBack(direction));
-    }
-
-    private IEnumerator BounceBack(Vector2 direction)
-    {
-        Vector3 start = transform.position;
-        Vector3 end = start + (Vector3)(direction * hitBounceDistance);
-        float elapsed = 0f;
-
-        while (elapsed < hitBounceDuration)
-        {
-            elapsed += Time.deltaTime;
-            float progress = Mathf.Clamp01(elapsed / hitBounceDuration);
-            float easedProgress = 1f - (1f - progress) * (1f - progress);
-            transform.position = Vector3.Lerp(start, end, easedProgress);
-            yield return null;
-        }
-
-        transform.position = end;
-        EnemyLich lich = GetComponent<EnemyLich>();
-        if (lich != null)
-            lich.PauseMovement(false);
-
-        hitBounceRoutine = null;
-    }
-
     public void TakePlayerDamage(
         int amount,
         DamageType type,
         Vector3? source,
         WeaponAttackType attackType,
-        bool isCriticalHit = false)
+        bool isSkillDamage = false)
     {
         playerHit = true;
+        playerSkillHit = isSkillDamage;
         playerAttackType = attackType;
-        playerHitCritical = isCriticalHit;
         try
         {
             TakeDamage(amount, type, source);
@@ -388,23 +315,8 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
         finally
         {
             playerHit = false;
-            playerHitCritical = false;
+            playerSkillHit = false;
         }
-    }
-
-    public void TakeCriticalDamage(
-        int amount,
-        DamageType damageType,
-        Vector3? damageSource,
-        WeaponAttackType attackType)
-    {
-        TakePlayerDamage(
-            amount,
-            damageType,
-            damageSource,
-            attackType,
-            true
-        );
     }
 
     public void PlayCounterHitVisual(GameObject visualPrefab, Vector3 sourcePosition)
@@ -430,7 +342,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
     {
         if (adaptation == null)
             adaptation = GetComponent<AdaptiveEnemy>();
-        if (adaptation != null && !isMiniBoss && adaptation.Matches(damageType))
+        if (adaptation != null && !isMiniBoss && !IsMainBoss && adaptation.Matches(damageType))
             return adaptation.DamageResistance;
         if (configuredResistances != null)
         {
@@ -678,7 +590,7 @@ public class EnemyHealth : MonoBehaviour, IDamageable, ICriticalDamageable
         if (Player.Instance != null)
         {
             Player.Instance.RecordEnemyDefeated(
-                isMiniBoss || GetComponentInParent<EnemyLich>() != null
+                isMiniBoss || IsMainBoss || GetComponentInParent<EnemyLich>() != null
             );
         }
 
