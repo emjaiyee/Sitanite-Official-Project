@@ -149,7 +149,7 @@ MonoBehaviour:
   maxHealth: 60
   damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   damageFlashDuration: 0.12
-  isMiniBoss: 1
+  isMiniBoss: 0
   enemyName: Mr Slime
   basePierceResistance: 0
   baseStabResistance: 0
@@ -211,18 +211,18 @@ MonoBehaviour:
   CurrentStateInspector: 0
   detectionRadius: 6
   alertedDuration: 15
-  playerCollider:
+  raycastLayerDetection:
     serializedVersion: 2
     m_Bits: 4294967295
-  moveSpeed: 2
-  attackRadiusX: 0.8
-  attackRadiusY: 0.6
-  attackDamageType: 2
+  moveSpeed: 0.5
+  attackRadiusX: 1
+  attackRadiusY: 1
+  attackDamageType: 256
   damage: 2
   attackCooldown: 1.5
-  useChargedAttack: 0
   attackPrefab: {fileID: 0}
   markPoint: 0.2
+  useChargedAttack: 0
   chargeRadiusX: 1.5
   chargeRadiusY: 1.2
   chargedAttackDamageType: 4
