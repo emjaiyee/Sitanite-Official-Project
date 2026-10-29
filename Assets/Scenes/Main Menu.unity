@@ -3134,15 +3134,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   playlist:
-  - {fileID: 8300000, guid: 0364ae403a01e5d4ea127ce75d3dd48a, type: 3}
   - {fileID: 8300000, guid: c5c2c2cb54413044abddad6a14718fec, type: 3}
-  - {fileID: 8300000, guid: 4029cef7a216fba4d8c0978978039a02, type: 3}
   mixerGroup: {fileID: 0}
   defaultVolume: 0.5
   volumePrefsKey: MusicVolume
   defaultSfxVolume: 1
   playOnStart: 1
-  persistBetweenScenes: 1
+  persistBetweenScenes: 0
 --- !u!82 &1021529010
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5690,7 +5688,7 @@ MonoBehaviour:
   indicatorHoverOffset: 4
   hoverColor: {r: 1, g: 1, b: 1, a: 1}
   hoverSfx: {fileID: 8300000, guid: 115a7ceddf7bb9b459e7f31f16fb5edd, type: 3}
-  hoverSfxVolume: 1
+  hoverSfxVolume: 0.5
   hoverSfxMinPitch: 0.9
   hoverSfxMaxPitch: 1.1
   hoverSfxCooldown: 0.18
@@ -5717,7 +5715,7 @@ MonoBehaviour:
   indicatorHoverOffset: 4
   hoverColor: {r: 1, g: 1, b: 1, a: 1}
   hoverSfx: {fileID: 8300000, guid: 115a7ceddf7bb9b459e7f31f16fb5edd, type: 3}
-  hoverSfxVolume: 1
+  hoverSfxVolume: 0.5
   hoverSfxMinPitch: 0.9
   hoverSfxMaxPitch: 1.1
   hoverSfxCooldown: 0.18
@@ -5744,7 +5742,7 @@ MonoBehaviour:
   indicatorHoverOffset: 4
   hoverColor: {r: 1, g: 1, b: 1, a: 1}
   hoverSfx: {fileID: 8300000, guid: 115a7ceddf7bb9b459e7f31f16fb5edd, type: 3}
-  hoverSfxVolume: 1
+  hoverSfxVolume: 0.5
   hoverSfxMinPitch: 0.9
   hoverSfxMaxPitch: 1.1
   hoverSfxCooldown: 0.18

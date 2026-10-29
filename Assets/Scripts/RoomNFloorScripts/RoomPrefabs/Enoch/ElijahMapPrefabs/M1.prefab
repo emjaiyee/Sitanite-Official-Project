@@ -543,6 +543,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8476889398548625696}
+  - component: {fileID: -5018572743697932599}
   m_Layer: 0
   m_Name: M1
   m_TagString: Untagged
@@ -575,6 +576,20 @@ Transform:
   - {fileID: 3556789709952572189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5018572743697932599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2228596940141609432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25eae2a357da4c740983d12249cedf0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RoomInstance
+  minimumPots: 0
+  maximumPots: 10
 --- !u!1 &2645643741098193300
 GameObject:
   m_ObjectHideFlags: 0

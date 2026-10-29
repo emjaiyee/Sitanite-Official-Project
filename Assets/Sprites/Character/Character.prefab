@@ -657,6 +657,7 @@ GameObject:
   - component: {fileID: 7101310602471255051}
   - component: {fileID: 883713577534690513}
   - component: {fileID: 5551288465383920434}
+  - component: {fileID: 5839619476213120805}
   m_Layer: 7
   m_Name: Character
   m_TagString: Player
@@ -1200,9 +1201,9 @@ MonoBehaviour:
   playerStats: {fileID: 8549833145988909020}
   warriorStartingGear:
   - {fileID: 11400000, guid: 80d107fb911d022438723e0719533275, type: 2}
-  - {fileID: 11400000, guid: 63a619380b08d55479ad76b7672ee149, type: 2}
-  - {fileID: 11400000, guid: ab59b5d8b1b1fdc49aab773d0628d828, type: 2}
-  - {fileID: 11400000, guid: 6edc49bc30a7c0947a2fa7c6eb015509, type: 2}
+  - {fileID: 11400000, guid: 7420c82adfcd121419c29d473304b588, type: 2}
+  - {fileID: 11400000, guid: c1b1708b113e1e944b9cc4f8fdb1114b, type: 2}
+  - {fileID: 11400000, guid: 03c6e9d0387ccac40bd2d370f99c3857, type: 2}
   - {fileID: 11400000, guid: 8c51dfc58d0d4f8ca88644c0f1a11b54, type: 2}
   rangerStartingGear:
   - {fileID: 11400000, guid: dfb5ff6536537fa44b6a06bc9ce73882, type: 2}
@@ -1674,6 +1675,58 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerAttack
   attackAction: {fileID: 1120369429361536294, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   attackMovementLockDuration: 0.2
+--- !u!114 &5839619476213120805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5054948953897289759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.Light2D
+  m_ComponentVersion: 2
+  m_LightType: 3
+  m_BlendStyleIndex: 0
+  m_FalloffIntensity: 0.5
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 0.25
+  m_LightVolumeIntensity: 1
+  m_LightVolumeEnabled: 0
+  m_ApplyToSortingLayers: 000000005b88a64823d508d30f07ee677fe02e7c
+  m_LightCookieSprite: {fileID: 0}
+  m_DeprecatedPointLightCookieSprite: {fileID: 0}
+  m_LightOrder: 0
+  m_AlphaBlendOnOverlap: 0
+  m_OverlapOperation: 0
+  m_NormalMapDistance: 3
+  m_NormalMapQuality: 2
+  m_UseNormalMap: 0
+  m_ShadowsEnabled: 0
+  m_ShadowIntensity: 0.75
+  m_ShadowSoftness: 0.3
+  m_ShadowSoftnessFalloffIntensity: 0.5
+  m_ShadowVolumeIntensityEnabled: 0
+  m_ShadowVolumeIntensity: 0.75
+  m_LocalBounds:
+    m_Center: {x: 0, y: -0.00000011920929, z: 0}
+    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
+  m_PointLightInnerAngle: 360
+  m_PointLightOuterAngle: 360
+  m_PointLightInnerRadius: 0
+  m_PointLightOuterRadius: 0.4
+  m_ShapeLightParametricSides: 5
+  m_ShapeLightParametricAngleOffset: 0
+  m_ShapeLightParametricRadius: 1
+  m_ShapeLightFalloffSize: 0.5
+  m_ShapeLightFalloffOffset: {x: 0, y: 0}
+  m_ShapePath:
+  - {x: -0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: -0.5, z: 0}
+  - {x: 0.5, y: 0.5, z: 0}
+  - {x: -0.5, y: 0.5, z: 0}
 --- !u!1 &5246304247548789014
 GameObject:
   m_ObjectHideFlags: 0
