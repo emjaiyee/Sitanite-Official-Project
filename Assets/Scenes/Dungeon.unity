@@ -1163,8 +1163,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.00068665}
-  m_SizeDelta: {x: 1920, y: 199.27}
+  m_AnchoredPosition: {x: 0, y: 0.2985}
+  m_SizeDelta: {x: 409, y: 77.6874}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &719744662
 MonoBehaviour:
@@ -1213,8 +1213,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40
-  m_fontSizeBase: 40
+  m_fontSize: 20
+  m_fontSizeBase: 20
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1860,6 +1860,7 @@ MonoBehaviour:
     promptText: Press W,A,S,D to walk.
     requiredKeys: 77000000610000007300000064000000
     waitForActivation: 0
+    activationRoomNumber: 0
     requiresExternalCompletion: 0
     completionRequirement: 0
     unlockRoomGatewayOnCompletion: 0
@@ -1876,6 +1877,7 @@ MonoBehaviour:
     promptText: Press SPACEBAR to Dash
     requiredKeys: 20000000
     waitForActivation: 0
+    activationRoomNumber: 0
     requiresExternalCompletion: 0
     completionRequirement: 0
     unlockRoomGatewayOnCompletion: 1
@@ -1892,6 +1894,7 @@ MonoBehaviour:
     promptText: Aim your cursor at the Dummy and press Left Click (LMB) to attack.
     requiredKeys: 
     waitForActivation: 1
+    activationRoomNumber: 0
     requiresExternalCompletion: 1
     completionRequirement: 1
     unlockRoomGatewayOnCompletion: 0
@@ -1908,6 +1911,7 @@ MonoBehaviour:
     promptText: Now do the same thing with your weapon's skill by pressing F.
     requiredKeys: 
     waitForActivation: 0
+    activationRoomNumber: 0
     requiresExternalCompletion: 1
     completionRequirement: 1
     unlockRoomGatewayOnCompletion: 2
@@ -1924,10 +1928,66 @@ MonoBehaviour:
     promptText: Defeat the slime.
     requiredKeys: 
     waitForActivation: 1
+    activationRoomNumber: 0
     requiresExternalCompletion: 1
     completionRequirement: 1
-    unlockRoomGatewayOnCompletion: 0
+    unlockRoomGatewayOnCompletion: 3
     grantsTutorialProgression: 1
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Block
+    promptText: Hold the Right Mouse Button while facing the goblin. Keep your guard
+      up until a normal block succeeds; regular blocks can fail based on shield block
+      chance.
+    requiredKeys:
+    waitForActivation: 1
+    activationRoomNumber: 4
+    requiresExternalCompletion: 1
+    completionRequirement: 7
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Parry
+    promptText: Watch the green timing bar. Raise your guard just before the goblin's
+      hit; the training shield's parry window lasts 0.2 seconds.
+    requiredKeys:
+    waitForActivation: 0
+    activationRoomNumber: 0
+    requiresExternalCompletion: 1
+    completionRequirement: 8
+    unlockRoomGatewayOnCompletion: 0
+    grantsTutorialProgression: 0
+    unlocksFloorGatewayOnCompletion: 0
+    promptLifetime: 0
+    onStepStart:
+      m_PersistentCalls:
+        m_Calls: []
+    onStepComplete:
+      m_PersistentCalls:
+        m_Calls: []
+  - stepName: Counterattack
+    promptText: After a successful parry, follow the gold countdown bar and press
+      Left Mouse Button before it empties to counterattack.
+    requiredKeys:
+    waitForActivation: 0
+    activationRoomNumber: 0
+    requiresExternalCompletion: 1
+    completionRequirement: 9
+    unlockRoomGatewayOnCompletion: 4
+    grantsTutorialProgression: 0
     unlocksFloorGatewayOnCompletion: 0
     promptLifetime: 0
     onStepStart:
@@ -1941,6 +2001,7 @@ MonoBehaviour:
       the C Key.
     requiredKeys: 
     waitForActivation: 0
+    activationRoomNumber: 0
     requiresExternalCompletion: 0
     completionRequirement: 2
     unlockRoomGatewayOnCompletion: 0
@@ -1957,6 +2018,7 @@ MonoBehaviour:
     promptText: Spend your available attribute and trait points.
     requiredKeys: 
     waitForActivation: 0
+    activationRoomNumber: 0
     requiresExternalCompletion: 0
     completionRequirement: 3
     unlockRoomGatewayOnCompletion: 0
@@ -1973,6 +2035,7 @@ MonoBehaviour:
     promptText: Close the player stats panel.
     requiredKeys: 
     waitForActivation: 0
+    activationRoomNumber: 0
     requiresExternalCompletion: 0
     completionRequirement: 4
     unlockRoomGatewayOnCompletion: 0
@@ -1989,6 +2052,7 @@ MonoBehaviour:
     promptText: To open your inventory press the TAB Key.
     requiredKeys: 
     waitForActivation: 0
+    activationRoomNumber: 0
     requiresExternalCompletion: 0
     completionRequirement: 5
     unlockRoomGatewayOnCompletion: 0
@@ -2006,6 +2070,7 @@ MonoBehaviour:
       it and continue to the next floor. '
     requiredKeys: 
     waitForActivation: 0
+    activationRoomNumber: 0
     requiresExternalCompletion: 0
     completionRequirement: 6
     unlockRoomGatewayOnCompletion: 0
@@ -2021,11 +2086,12 @@ MonoBehaviour:
   promptTextUI: {fileID: 719744662}
   tutorialPanel: {fileID: 993998113}
   floorManager: {fileID: 1969959510}
-  roomManager: {fileID: 0}
-  playerStats: {fileID: 0}
-  playerAttributes: {fileID: 0}
-  playerStatsUI: {fileID: 0}
-  playerInventory: {fileID: 0}
+  roomManager: {fileID: 392303936547265579}
+  playerStats: {fileID: 8549833145988909020, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+  playerAttributes: {fileID: 3176237796533987833, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+  playerStatsUI: {fileID: 1859191467}
+  playerInventory: {fileID: 1614004183530562516, guid: 4d3b8cbe4d10e034e95c1e56b90f3ecd, type: 3}
+  tutorialTrainingShield: {fileID: 11400000, guid: 8c51dfc58d0d4f8ca88644c0f1a11b54, type: 2}
   fightRewardAttributePoints: 1
   fightRewardTraitPoints: 3
   panelCanvasGroup: {fileID: 993998117}
@@ -2110,7 +2176,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d4d86c0e76d2294d9b8b07664d5a4d9, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::HeadsUpTextManager
   fadeInDuration: 0.25
   holdDuration: 3
@@ -2186,8 +2252,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -440.37}
-  m_SizeDelta: {x: 0, y: -880.7333}
+  m_AnchoredPosition: {x: 0, y: -170}
+  m_SizeDelta: {x: 0, y: -338.1325}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &993998115
 MonoBehaviour:
@@ -2202,7 +2268,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5803922}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3007,7 +3073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4746419276213960198, guid: ef1be36b6ca230a4d99d5a616eab4d1c, type: 3}
       propertyPath: m_Sprite
-      value: 
+      value:
       objectReference: {fileID: 21300000, guid: 3925d87f8c54c1847a21bb2538a06354, type: 3}
     - target: {fileID: 4746419276213960198, guid: ef1be36b6ca230a4d99d5a616eab4d1c, type: 3}
       propertyPath: m_Color.a
@@ -3220,7 +3286,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
   m_IgnoreReversedGraphics: 1
   m_BlockingObjects: 0
@@ -3282,7 +3348,7 @@ RectTransform:
   m_GameObject: {fileID: 1254526033}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 993998114}
@@ -5894,6 +5960,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 311414bbe2c79254a8155ef9d920ddef, type: 3}
+--- !u!114 &1859191467 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1788738405076259536, guid: 311414bbe2c79254a8155ef9d920ddef, type: 3}
+  m_PrefabInstance: {fileID: 1859191466}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6019428408eb541bdba5a31d7c674d, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsUI
 --- !u!1 &1887743749
 GameObject:
   m_ObjectHideFlags: 0
@@ -6502,6 +6579,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1560379032716864039, guid: e8a0919e694201b4fae8a35112632897, type: 3}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: tutorialSpawnConfiguration.tutorialGoblinRoom
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: tutorialSpawnConfiguration.trainingDummyPrefab
       value: 
       objectReference: {fileID: 6230687625572412080, guid: 1f11ede1bcbd83f4cb6a3d5daae68e6e, type: 3}
@@ -6509,6 +6590,10 @@ PrefabInstance:
       propertyPath: tutorialSpawnConfiguration.tutorialSlimePrefab
       value: 
       objectReference: {fileID: 1872629995945725381, guid: 704391d698ee8c449b87184a23ee3b68, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: tutorialSpawnConfiguration.tutorialGoblinPrefab
+      value:
+      objectReference: {fileID: 5945256498423393129, guid: 31392a082ec2e074e8d3762b2981a204, type: 3}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: bossSpawnConfigurations.Array.data[0].spawnChance
       value: 0.15
@@ -6886,6 +6971,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
   m_PrefabInstance: {fileID: 392303936547265577}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &392303936547265579 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
+  m_PrefabInstance: {fileID: 392303936547265577}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb51e5b25ef14ed4d883b35a523f58b1, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::RoomManager
 --- !u!1001 &5390065605662560241
 PrefabInstance:
   m_ObjectHideFlags: 0

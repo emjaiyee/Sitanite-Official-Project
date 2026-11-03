@@ -11,7 +11,10 @@ public enum TutorialCompletionRequirement
     AllocationPointsSpent,
     AttributePanelClosed,
     InventoryPanelOpened,
-    InventoryPanelClosed
+    InventoryPanelClosed,
+    SuccessfulShieldBlock,
+    SuccessfulShieldParry,
+    ShieldCounterAttack
 }
 
 [System.Serializable]
@@ -29,6 +32,9 @@ public class TutorialStep
 
     [Tooltip("Wait for a tutorial trigger before displaying this step.")]
     public bool waitForActivation;
+
+    [Tooltip("Room number that activates this step when entered. Set to 0 to use a trigger.")]
+    [Min(0)] public int activationRoomNumber;
 
     [Tooltip("Requires a tutorial script to complete this step.")]
     public bool requiresExternalCompletion;

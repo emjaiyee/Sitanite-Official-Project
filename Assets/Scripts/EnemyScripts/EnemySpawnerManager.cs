@@ -102,6 +102,10 @@ public class EnemySpawnerManager : MonoBehaviour
         [Header("Tutorial Slime")]
         public GameObject tutorialSlimePrefab;
         [Min(1)] public int tutorialSlimeRoom = 3;
+
+        [Header("Tutorial Goblin")]
+        public GameObject tutorialGoblinPrefab;
+        [Min(1)] public int tutorialGoblinRoom = 4;
     }
 
     [Header("Floor Spawn Configurations")]
@@ -384,6 +388,14 @@ public class EnemySpawnerManager : MonoBehaviour
             tutorialSpawnConfiguration.tutorialSlimeRoom,
             "tutorial slime"
         );
+        if (tutorialSpawnConfiguration.tutorialGoblinPrefab != null)
+        {
+            SpawnTutorialEnemy(
+                tutorialSpawnConfiguration.tutorialGoblinPrefab,
+                tutorialSpawnConfiguration.tutorialGoblinRoom,
+                "tutorial goblin"
+            );
+        }
     }
 
     private void SpawnTutorialEnemy(

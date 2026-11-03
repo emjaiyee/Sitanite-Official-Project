@@ -1,11 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PlayerStats), typeof(PlayerWASD))]
 public class PlayerShieldDefense : MonoBehaviour
 {
-    public const float MinimumBlockChance = 0.1f;
-    public const float MaximumBlockChance = 0.7f;
+    public const float MinimumBlockChance = 0.3f;
+    public const float MaximumBlockChance = 0.8f;
     public const float DefaultParryArmorMultiplier = 1.5f;
     public const float DefaultCounterOpportunityDuration = 0.6f;
     public const float DefaultCounterDamageMultiplier = 1.5f;
@@ -64,6 +65,30 @@ public class PlayerShieldDefense : MonoBehaviour
     public float BaseCounterDamageMultiplier => counterDamageMultiplier;
     public bool HasCounterOpportunity =>
         Time.time < counterOpportunityUntil;
+    public float CounterOpportunityRemaining =>
+        Mathf.Max(0f, counterOpportunityUntil - Time.time);
+    public bool TutorialDefenseIsStaminaFree { get; set; }
+    public float TutorialParryWindowOverride { get; set; }
+    public float CurrentParryWindow
+    {
+        get
+        {
+            if (
+                TutorialDefenseIsStaminaFree &&
+                TutorialParryWindowOverride > 0f
+            )
+            {
+                return TutorialParryWindowOverride;
+            }
+
+            return GetEquippedShieldParryWindow();
+        }
+    }
+
+    public event Action<float> OnGuardStarted;
+    public event Action OnSuccessfulBlock;
+    public event Action OnSuccessfulParry;
+    public event Action OnCounterAttackPerformed;
 
     public static float GetBlockChance(int upgradeLevel)
     {
@@ -103,7 +128,10 @@ public class PlayerShieldDefense : MonoBehaviour
         bool guarding = canGuard && mouse != null && mouse.rightButton.isPressed;
 
         if (guarding && !wasGuarding)
+        {
             guardStartedAt = Time.time;
+            OnGuardStarted?.Invoke(CurrentParryWindow);
+        }
 
         IsGuarding = guarding;
         wasGuarding = guarding;
@@ -194,7 +222,11 @@ public class PlayerShieldDefense : MonoBehaviour
             shieldData.BlockStaminaCost +
             damage * shieldData.BlockStaminaCostPerDamage;
 
-        if (staminaCost > 0f && !stats.UseStamina(staminaCost))
+        if (
+            !TutorialDefenseIsStaminaFree &&
+            staminaCost > 0f &&
+            !stats.UseStamina(staminaCost)
+        )
         {
             SetFeedback(
                 unsuccessfulBlockFeedbackSprite,
@@ -204,8 +236,8 @@ public class PlayerShieldDefense : MonoBehaviour
             return damage;
         }
 
-        bool isParry = Time.time - guardStartedAt <= shieldData.ParryWindow;
-        if (!isParry && Random.value >= GetBlockChance(shield.UpgradeLevel))
+        bool isParry = Time.time - guardStartedAt <= CurrentParryWindow;
+        if (!isParry && UnityEngine.Random.value >= GetBlockChance(shield.UpgradeLevel))
         {
             SetFeedback(
                 unsuccessfulBlockFeedbackSprite,
@@ -215,6 +247,10 @@ public class PlayerShieldDefense : MonoBehaviour
             return damage;
         }
         wasBlocked = true;
+        if (isParry)
+            OnSuccessfulParry?.Invoke();
+        else
+            OnSuccessfulBlock?.Invoke();
 
         float blockArmor =
             shieldData.BlockArmor *
@@ -257,6 +293,7 @@ public class PlayerShieldDefense : MonoBehaviour
         SetFeedback(counterFeedbackSprite, Time.time + feedbackDuration);
         if (successfulCounterSfx != null && audioSource != null)
             audioSource.PlayOneShot(successfulCounterSfx);
+        OnCounterAttackPerformed?.Invoke();
     }
 
     private bool HasEquippedShield()
@@ -265,6 +302,22 @@ public class PlayerShieldDefense : MonoBehaviour
             EquipmentManager.Instance.GetEquippedItem(EquipmentType.Shield) is InventoryItem shield &&
             shield.Data != null &&
             shield.Data.BlockArmor > 0f;
+    }
+
+    private float GetEquippedShieldParryWindow()
+    {
+        if (
+            EquipmentManager.Instance != null &&
+            EquipmentManager.Instance.GetEquippedItem(
+                EquipmentType.Shield
+            ) is InventoryItem shield &&
+            shield.Data != null
+        )
+        {
+            return shield.Data.ParryWindow;
+        }
+
+        return 0f;
     }
 
     private void FaceCursorWhileGuarding()
