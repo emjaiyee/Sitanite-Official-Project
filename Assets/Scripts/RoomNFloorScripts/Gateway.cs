@@ -45,7 +45,16 @@ public class Gateway : MonoBehaviour
             GetComponentInParent<RoomManager>();
 
         if (roomManager != null && roomManager.HandleGatewayEntered(this))
+        {
+            if (flow == GatewayFlow.Floor &&
+                roomManager.ActiveFloorGateway == this &&
+                roomManager.IsFloorGatewayUnlocked)
+            {
+                PlayPassageEnteredSfx();
+            }
+
             return;
+        }
 
         if (destination == null)
         {
@@ -65,9 +74,19 @@ public class Gateway : MonoBehaviour
             return;
         }
 
+        if (RoomTransitionManager.Instance.IsTransitioning)
+            return;
+
         RoomTransitionManager.Instance.TransitionPlayer(
             other.transform,
             destination
         );
+
+        PlayPassageEnteredSfx();
+    }
+
+    private void PlayPassageEnteredSfx()
+    {
+        AudioManager.PlayPassageEnteredSfx(transform.position);
     }
 }

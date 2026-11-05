@@ -41,6 +41,11 @@ public class AudioManager : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float defaultSfxVolume = DefaultSfxVolume;
 
+    [Header("Gameplay SFX")]
+    [SerializeField] private AudioClip doorwayUnlockedSfx;
+    [SerializeField] private AudioClip floorPassageUnlockedSfx;
+    [SerializeField] private AudioClip passageEnteredSfx;
+
     [Header("Behavior")]
     [SerializeField] private bool playOnStart = true;
     [SerializeField] private bool persistBetweenScenes = true;
@@ -192,6 +197,30 @@ public class AudioManager : MonoBehaviour
     }
 
     public float GetSfxVolume() => sfxVolume;
+
+    public static void PlayDoorwayUnlockedSfx(Vector3 position)
+    {
+        if (Instance != null)
+            Instance.PlaySfx(Instance.doorwayUnlockedSfx, position);
+    }
+
+    public static void PlayFloorPassageUnlockedSfx(Vector3 position)
+    {
+        if (Instance != null)
+            Instance.PlaySfx(Instance.floorPassageUnlockedSfx, position);
+    }
+
+    public static void PlayPassageEnteredSfx(Vector3 position)
+    {
+        if (Instance != null)
+            Instance.PlaySfx(Instance.passageEnteredSfx, position);
+    }
+
+    private void PlaySfx(AudioClip clip, Vector3 position)
+    {
+        if (clip != null)
+            AudioSource.PlayClipAtPoint(clip, position, sfxVolume);
+    }
 
     public static void RegisterSfxSource(AudioSource source)
     {

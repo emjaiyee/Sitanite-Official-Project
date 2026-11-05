@@ -23,9 +23,11 @@ public class GatewayVisibility : MonoBehaviour
     [SerializeField] private Light2D light2D;
 
     private bool currentState;
+    private bool initialized;
     private Color originalColor;
     private float originalLightIntensity;
     private Coroutine fadeCoroutine;
+    private Gateway gateway;
 
 
     public bool IsVisible => currentState;
@@ -42,6 +44,8 @@ public class GatewayVisibility : MonoBehaviour
 
     protected virtual void Awake()
     {
+        gateway = GetComponent<Gateway>();
+
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -73,6 +77,7 @@ public class GatewayVisibility : MonoBehaviour
         currentState = !visibleWhenUnlocked;
 
         SetVisible(visibleWhenUnlocked);
+        initialized = true;
     }
 
 
@@ -101,7 +106,16 @@ public class GatewayVisibility : MonoBehaviour
             return;
         }
 
+        bool wasVisible = currentState;
         currentState = visible;
+
+        if (initialized && visible && !wasVisible)
+        {
+            if (gateway != null && gateway.Flow == GatewayFlow.Floor)
+                AudioManager.PlayFloorPassageUnlockedSfx(transform.position);
+            else
+                AudioManager.PlayDoorwayUnlockedSfx(transform.position);
+        }
 
 
         // ---------------------------------------------
