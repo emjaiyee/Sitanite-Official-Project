@@ -117,7 +117,6 @@ public class MainMenuOptionsTransition : MonoBehaviour
 
         menuButtons.transform.localScale = buttonsTargetScale;
         menuLogos.transform.localScale = logosTargetScale;
-        yield return FadeMenu(1f, 0f);
         sceneTransitionManager.TransitionToScene();
     }
 
@@ -162,7 +161,6 @@ public class MainMenuOptionsTransition : MonoBehaviour
         if (duration == 0f)
         {
             SetAlpha(menuButtons, to);
-            SetAlpha(menuLogos, to);
             yield break;
         }
 
@@ -171,12 +169,10 @@ public class MainMenuOptionsTransition : MonoBehaviour
             elapsed += Time.unscaledDeltaTime;
             float alpha = Mathf.Lerp(from, to, Mathf.Clamp01(elapsed / duration));
             SetAlpha(menuButtons, alpha);
-            SetAlpha(menuLogos, alpha);
             yield return null;
         }
 
         SetAlpha(menuButtons, to);
-        SetAlpha(menuLogos, to);
     }
 
     private IEnumerator Fade(CanvasGroup group, float from, float to)

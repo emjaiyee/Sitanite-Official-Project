@@ -10,7 +10,6 @@ public class SceneTransitionManager : MonoBehaviour
     [Header("Fade")]
     [SerializeField] private CanvasGroup fadeCanvas;
     [SerializeField] private float fadeToBlackDuration = 0.5f;
-    [SerializeField] private float fadeToBlackSpeed = 2f;
 
     private bool isTransitioning;
 
@@ -113,7 +112,7 @@ public class SceneTransitionManager : MonoBehaviour
         float startAlpha = fadeCanvas.alpha;
         float elapsed = 0f;
 
-        if (fadeToBlackDuration <= 0f || fadeToBlackSpeed <= 0f)
+        if (fadeToBlackDuration <= 0f)
         {
             fadeCanvas.alpha = 1f;
             yield break;
@@ -122,16 +121,11 @@ public class SceneTransitionManager : MonoBehaviour
         while (elapsed < fadeToBlackDuration)
         {
             elapsed += Time.unscaledDeltaTime;
-
-            fadeCanvas.alpha = Mathf.MoveTowards(
-                fadeCanvas.alpha,
+            fadeCanvas.alpha = Mathf.Lerp(
+                startAlpha,
                 1f,
-                fadeToBlackSpeed * Time.unscaledDeltaTime
+                Mathf.Clamp01(elapsed / fadeToBlackDuration)
             );
-
-            if (fadeCanvas.alpha >= 1f)
-                break;
-
             yield return null;
         }
 
