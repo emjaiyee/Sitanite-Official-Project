@@ -28,6 +28,9 @@ public class Loot : MonoBehaviour
     [Header("Drop Pickup Delay")]
     [Min(0f)] [SerializeField] private float ownerPickupGracePeriod = 1.5f;
 
+    [Header("Loot Lifetime")]
+    [Min(0.1f)] [SerializeField] private float lifetime = 120f;
+
     private SpriteRenderer[] outlineRenderers;
     private bool pickupInProgress;
     private PlayerInventory dropOwner;
@@ -51,6 +54,8 @@ public class Loot : MonoBehaviour
 
         if (TryGetComponent<Collider2D>(out var col))
             col.isTrigger = true;
+
+        Destroy(gameObject, Mathf.Max(0.1f, lifetime));
     }
 
     private void Start()

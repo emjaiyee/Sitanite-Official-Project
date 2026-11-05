@@ -775,11 +775,26 @@ public class TutorialManager : MonoBehaviour
         SetTutorialParryWindow(0f);
         UnsubscribeFromShieldDefense();
         StopPromptLifetime();
+        CleanupTutorialDummy();
         
         if (transitionCoroutine != null)
             StopCoroutine(transitionCoroutine);
 
         StartCoroutine(EndTutorialRoutine());
+    }
+
+    private void CleanupTutorialDummy()
+    {
+        TutorialDummyStepTrigger[] tutorialDummies =
+            FindObjectsOfType<TutorialDummyStepTrigger>(true);
+
+        foreach (TutorialDummyStepTrigger tutorialDummy in tutorialDummies)
+        {
+            if (tutorialDummy == null || tutorialDummy.gameObject == null)
+                continue;
+
+            Destroy(tutorialDummy.gameObject);
+        }
     }
 
     private IEnumerator EndTutorialRoutine()
@@ -860,6 +875,7 @@ public class TutorialManager : MonoBehaviour
         SetTutorialDefenseStaminaFree(false);
         SetTutorialParryWindow(0f);
         StopPromptLifetime();
+        CleanupTutorialDummy();
 
         if (transitionCoroutine != null)
         {
