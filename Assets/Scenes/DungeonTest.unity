@@ -1867,7 +1867,7 @@ MonoBehaviour:
     promptText: Spend your available attribute and trait points.
     requiredKeys: []
     completionRequirement: 3
-    promptLifetime: 5
+    promptLifetime: 0
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1888,7 +1888,7 @@ MonoBehaviour:
     promptText: To open your inventory press the TAB Key.
     requiredKeys: []
     completionRequirement: 5
-    promptLifetime: 5
+    promptLifetime: 0
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -1896,7 +1896,8 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - stepName: Inventory Exit
-    promptText: Close the inventory panel.
+    promptText: Close the inventory to finish the tutorial and unlock the gateway
+      to Floor 1.
     requiredKeys: []
     completionRequirement: 6
     unlocksFloorGatewayOnCompletion: 1

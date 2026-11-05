@@ -1163,8 +1163,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.2985}
-  m_SizeDelta: {x: 409, y: 77.6874}
+  m_AnchoredPosition: {x: 15.4899, y: -1.1914988}
+  m_SizeDelta: {x: 1847.0952, y: 137.264}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &719744662
 MonoBehaviour:
@@ -1188,8 +1188,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: TutorialText
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
+  m_sharedMaterial: {fileID: -1302548172749785638, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1213,8 +1213,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1945,7 +1945,7 @@ MonoBehaviour:
     promptText: Hold the Right Mouse Button while facing the goblin. Keep your guard
       up until a normal block succeeds; regular blocks can fail based on shield block
       chance.
-    requiredKeys:
+    requiredKeys: 
     waitForActivation: 1
     activationRoomNumber: 4
     requiresExternalCompletion: 1
@@ -1963,7 +1963,7 @@ MonoBehaviour:
   - stepName: Parry
     promptText: Watch the green timing bar. Raise your guard just before the goblin's
       hit; the training shield's parry window lasts 0.2 seconds.
-    requiredKeys:
+    requiredKeys: 
     waitForActivation: 0
     activationRoomNumber: 0
     requiresExternalCompletion: 1
@@ -1981,7 +1981,7 @@ MonoBehaviour:
   - stepName: Counterattack
     promptText: After a successful parry, follow the gold countdown bar and press
       Left Mouse Button before it empties to counterattack.
-    requiredKeys:
+    requiredKeys: 
     waitForActivation: 0
     activationRoomNumber: 0
     requiresExternalCompletion: 1
@@ -2024,7 +2024,7 @@ MonoBehaviour:
     unlockRoomGatewayOnCompletion: 0
     grantsTutorialProgression: 0
     unlocksFloorGatewayOnCompletion: 0
-    promptLifetime: 5
+    promptLifetime: 0
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -2050,7 +2050,7 @@ MonoBehaviour:
         m_Calls: []
   - stepName: Player Inventory
     promptText: To open your inventory press the TAB Key.
-    requiredKeys: 
+    requiredKeys: 09000000
     waitForActivation: 0
     activationRoomNumber: 0
     requiresExternalCompletion: 0
@@ -2058,7 +2058,7 @@ MonoBehaviour:
     unlockRoomGatewayOnCompletion: 0
     grantsTutorialProgression: 0
     unlocksFloorGatewayOnCompletion: 0
-    promptLifetime: 5
+    promptLifetime: 0
     onStepStart:
       m_PersistentCalls:
         m_Calls: []
@@ -2066,9 +2066,9 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls: []
   - stepName: Inventory Exit
-    promptText: 'Once you familiarized yourself with your inventory, you may close
-      it and continue to the next floor. '
-    requiredKeys: 
+    promptText: Close the inventory to finish the tutorial and unlock the gateway
+      to Floor 1.
+    requiredKeys: 09000000
     waitForActivation: 0
     activationRoomNumber: 0
     requiresExternalCompletion: 0
@@ -2176,7 +2176,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d4d86c0e76d2294d9b8b07664d5a4d9, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HeadsUpTextManager
   fadeInDuration: 0.25
   holdDuration: 3
@@ -2252,8 +2252,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -170}
-  m_SizeDelta: {x: 0, y: -338.1325}
+  m_AnchoredPosition: {x: 0, y: -450.23956}
+  m_SizeDelta: {x: 0, y: -898.6117}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &993998115
 MonoBehaviour:
@@ -2317,7 +2317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0ba87cb429d4ae42a5afd8a5fe3653f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TMPFontApplier
-  fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  fontAsset: {fileID: 11400000, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
 --- !u!1 &1073644083
 GameObject:
   m_ObjectHideFlags: 0
@@ -3073,7 +3073,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4746419276213960198, guid: ef1be36b6ca230a4d99d5a616eab4d1c, type: 3}
       propertyPath: m_Sprite
-      value:
+      value: 
       objectReference: {fileID: 21300000, guid: 3925d87f8c54c1847a21bb2538a06354, type: 3}
     - target: {fileID: 4746419276213960198, guid: ef1be36b6ca230a4d99d5a616eab4d1c, type: 3}
       propertyPath: m_Color.a
@@ -3286,7 +3286,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GraphicRaycaster
   m_IgnoreReversedGraphics: 1
   m_BlockingObjects: 0
@@ -3348,7 +3348,7 @@ RectTransform:
   m_GameObject: {fileID: 1254526033}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 993998114}
@@ -5969,7 +5969,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e6019428408eb541bdba5a31d7c674d, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsUI
 --- !u!1 &1887743749
 GameObject:
@@ -6592,7 +6592,7 @@ PrefabInstance:
       objectReference: {fileID: 1872629995945725381, guid: 704391d698ee8c449b87184a23ee3b68, type: 3}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: tutorialSpawnConfiguration.tutorialGoblinPrefab
-      value:
+      value: 
       objectReference: {fileID: 5945256498423393129, guid: 31392a082ec2e074e8d3762b2981a204, type: 3}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: bossSpawnConfigurations.Array.data[0].spawnChance
@@ -6610,6 +6610,54 @@ PrefabInstance:
       propertyPath: bossSpawnConfigurations.Array.data[0].activationChance
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: spawnConfigurations.Array.data[0].enemyPrefabs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: spawnConfigurations.Array.data[1].enemyPrefabs.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: spawnConfigurations.Array.data[2].enemyPrefabs.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'spawnConfigurations.Array.data[0].enemyPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 5945256498423393129, guid: f13a035537d474345b57f9df6709d103, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'spawnConfigurations.Array.data[0].enemyPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 5945256498423393129, guid: 31392a082ec2e074e8d3762b2981a204, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'spawnConfigurations.Array.data[0].enemyPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8748001588763141578, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'spawnConfigurations.Array.data[0].enemyPrefabs.Array.data[3]'
+      value: 
+      objectReference: {fileID: 8748001588763141578, guid: 33d8443ee32822244846bcd5db9d9897, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'spawnConfigurations.Array.data[1].enemyPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 5945256498423393129, guid: 8d8e68e09acb16a448e051ee9f1cf58c, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'spawnConfigurations.Array.data[1].enemyPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2290695894656021834, guid: 58264b95a41a22749b5cd046a986af7d, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'spawnConfigurations.Array.data[1].enemyPrefabs.Array.data[2]'
+      value: 
+      objectReference: {fileID: 5945256498423393129, guid: 18d21cd5e8f231d4295eb8d73df7311a, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'spawnConfigurations.Array.data[2].enemyPrefabs.Array.data[0]'
+      value: 
+      objectReference: {fileID: 5945256498423393129, guid: 53c6eb86de4e6dd4bb1d74e4379de0a2, type: 3}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: 'spawnConfigurations.Array.data[2].enemyPrefabs.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8748001588763141578, guid: 68f46b5da7272b34a8322ee954c399ed, type: 3}
     - target: {fileID: 7232374485406703367, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: secretGatewayChance
       value: 0.35
@@ -6980,7 +7028,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb51e5b25ef14ed4d883b35a523f58b1, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomManager
 --- !u!1001 &5390065605662560241
 PrefabInstance:

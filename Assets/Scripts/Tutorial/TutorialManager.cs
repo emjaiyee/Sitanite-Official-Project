@@ -1206,12 +1206,20 @@ public class TutorialManager : MonoBehaviour
 
     private PlayerInventory GetPlayerInventory()
     {
-        if (playerInventory == null && Player.Instance != null)
+        if (Player.Instance != null)
         {
-            playerInventory =
+            PlayerInventory runtimeInventory =
                 Player.Instance.GetComponent<PlayerInventory>();
+            if (runtimeInventory != null)
+            {
+                playerInventory = runtimeInventory;
+                return playerInventory;
+            }
         }
 
+        playerInventory = FindFirstObjectByType<PlayerInventory>(
+            FindObjectsInactive.Include
+        );
         return playerInventory;
     }
 
