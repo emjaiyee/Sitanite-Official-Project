@@ -1067,9 +1067,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 4fe28fabb300a9a45a50ba09ad949292, type: 3}
     - target: {fileID: 5928218404035780619, guid: d9beee715046c46429e831e64487474a, type: 3}
+      propertyPath: bossPlaylist.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5928218404035780619, guid: d9beee715046c46429e831e64487474a, type: 3}
       propertyPath: floorPassageUnlockedSfx
       value: 
       objectReference: {fileID: 8300000, guid: e398f12cc543d544ebf2a6f83f7c43e0, type: 3}
+    - target: {fileID: 5928218404035780619, guid: d9beee715046c46429e831e64487474a, type: 3}
+      propertyPath: 'bossPlaylist.Array.data[0]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 3243baa9ebd7d2e4a9b4998c44451e67, type: 3}
     - target: {fileID: 7300903922151645849, guid: d9beee715046c46429e831e64487474a, type: 3}
       propertyPath: m_Name
       value: AudioManager

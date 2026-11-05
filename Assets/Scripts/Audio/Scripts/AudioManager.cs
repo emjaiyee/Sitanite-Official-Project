@@ -30,6 +30,10 @@ public class AudioManager : MonoBehaviour
     [Header("Playlist (plays in order, then loops back to start)")]
     [SerializeField] private List<AudioClip> playlist = new List<AudioClip>();
 
+    [Header("Boss Encounter Music")]
+    [Tooltip("Optional alternate soundtrack to play when the Manggagaway boss is active. Leave empty to keep the normal playlist.")]
+    [SerializeField] private List<AudioClip> bossPlaylist = new List<AudioClip>();
+
     [Header("Audio Routing (optional)")]
     [Tooltip("Optional: assign if you're using an AudioMixer. Leave empty to just use AudioSource.volume.")]
     [SerializeField] private AudioMixerGroup mixerGroup;
@@ -52,8 +56,11 @@ public class AudioManager : MonoBehaviour
 
     private AudioSource audioSource;
     private int currentTrackIndex = 0;
+    private int defaultTrackIndex = 0;
     private float sfxVolume;
     private float nextSfxSourceCleanupTime;
+    private bool bossThemeActive;
+    private EnemyHealth activeBossHealth;
     private readonly Dictionary<AudioSource, float> sfxSources =
         new Dictionary<AudioSource, float>();
 
@@ -89,6 +96,7 @@ public class AudioManager : MonoBehaviour
 
         PendingSfxSources.Clear();
         SceneManager.sceneLoaded += OnSceneLoaded;
+        BindBossSpawnListener();
         RefreshSfxSources();
     }
 
@@ -100,7 +108,8 @@ public class AudioManager : MonoBehaviour
 
     private void Update()
     {
-        if (playlist.Count > 0 &&
+        List<AudioClip> activePlaylist = GetActivePlaylist();
+        if (activePlaylist.Count > 0 &&
             !audioSource.isPlaying &&
             audioSource.time == 0f &&
             HasPlayedAtLeastOnce())
@@ -121,13 +130,95 @@ public class AudioManager : MonoBehaviour
         if (Instance != this)
             return;
 
+        UnbindBossSpawnListener();
+        if (activeBossHealth != null)
+            activeBossHealth.OnEnemyDied -= HandleBossDefeated;
+
         SceneManager.sceneLoaded -= OnSceneLoaded;
         Instance = null;
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        BindBossSpawnListener();
         RefreshSfxSources();
+    }
+
+    private void BindBossSpawnListener()
+    {
+        EnemySpawnerManager manager = EnemySpawnerManager.Instance;
+        if (manager == null)
+            return;
+
+        manager.OnBossSpawned -= HandleBossSpawned;
+        manager.OnBossSpawned += HandleBossSpawned;
+    }
+
+    private void UnbindBossSpawnListener()
+    {
+        EnemySpawnerManager manager = EnemySpawnerManager.Instance;
+        if (manager == null)
+            return;
+
+        manager.OnBossSpawned -= HandleBossSpawned;
+    }
+
+    private void HandleBossSpawned(EnemyHealth bossHealth)
+    {
+        if (bossHealth == null || bossHealth.GetComponent<EnemyManggagaway>() == null)
+            return;
+
+        if (activeBossHealth != null)
+            activeBossHealth.OnEnemyDied -= HandleBossDefeated;
+
+        activeBossHealth = bossHealth;
+        activeBossHealth.OnEnemyDied += HandleBossDefeated;
+        SetBossTheme(true);
+    }
+
+    private void HandleBossDefeated(GameObject deadBoss)
+    {
+        if (activeBossHealth != null)
+            activeBossHealth.OnEnemyDied -= HandleBossDefeated;
+
+        activeBossHealth = null;
+        SetBossTheme(false);
+    }
+
+    public void SetBossTheme(bool active)
+    {
+        bossThemeActive = active;
+        if (active)
+        {
+            defaultTrackIndex = Mathf.Clamp(currentTrackIndex, 0, Mathf.Max(0, playlist.Count - 1));
+            if (bossPlaylist.Count == 0)
+                return;
+
+            PlayTrackFromList(bossPlaylist, 0);
+            return;
+        }
+
+        if (playlist.Count == 0)
+            return;
+
+        PlayTrackFromList(playlist, defaultTrackIndex);
+    }
+
+    private List<AudioClip> GetActivePlaylist()
+    {
+        return bossThemeActive && bossPlaylist.Count > 0 ? bossPlaylist : playlist;
+    }
+
+    private void PlayTrackFromList(List<AudioClip> tracks, int index)
+    {
+        if (tracks == null || tracks.Count == 0)
+            return;
+
+        int normalizedIndex = ((index % tracks.Count) + tracks.Count) % tracks.Count;
+        currentTrackIndex = normalizedIndex;
+        audioSource.clip = tracks[normalizedIndex];
+        audioSource.Play();
+        hasStartedPlaylist = true;
     }
 
     private bool hasStartedPlaylist = false;
@@ -140,19 +231,20 @@ public class AudioManager : MonoBehaviour
     /// <summary>Plays a specific track by index and starts the auto-advance cycle.</summary>
     public void PlayTrack(int index)
     {
-        if (playlist.Count == 0) return;
+        List<AudioClip> activePlaylist = GetActivePlaylist();
+        if (activePlaylist.Count == 0) return;
 
-        currentTrackIndex = ((index % playlist.Count) + playlist.Count) % playlist.Count;
-        audioSource.clip = playlist[currentTrackIndex];
-        audioSource.Play();
-        hasStartedPlaylist = true;
+        PlayTrackFromList(activePlaylist, index);
     }
 
     /// <summary>Advances to the next track, wrapping back to the first after the last.</summary>
     public void PlayNextTrack()
     {
-        int nextIndex = (currentTrackIndex + 1) % playlist.Count;
-        PlayTrack(nextIndex);
+        List<AudioClip> activePlaylist = GetActivePlaylist();
+        if (activePlaylist.Count == 0) return;
+
+        int nextIndex = (currentTrackIndex + 1) % activePlaylist.Count;
+        PlayTrackFromList(activePlaylist, nextIndex);
     }
 
     /// <summary>Stops playback entirely.</summary>
