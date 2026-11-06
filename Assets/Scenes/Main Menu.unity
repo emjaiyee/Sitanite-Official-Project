@@ -2117,7 +2117,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: v0.1.4
+  m_text: v0.2.1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
   m_sharedMaterial: {fileID: -1302548172749785638, guid: d35e6114564931147a4ded64c36a72ef, type: 2}
@@ -3349,6 +3349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   playlist:
   - {fileID: 8300000, guid: c5c2c2cb54413044abddad6a14718fec, type: 3}
+  bossPlaylist: []
   mixerGroup: {fileID: 0}
   defaultVolume: 0.5
   volumePrefsKey: MusicVolume
