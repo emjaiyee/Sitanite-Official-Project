@@ -186,8 +186,6 @@ MonoBehaviour:
   maxHealth: 25
   damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   damageFlashDuration: 0.12
-  hitBounceDistance: 0.02
-  hitBounceDuration: 0.1
   isMiniBoss: 0
   enemyName: 
   basePierceResistance: 5
@@ -229,8 +227,8 @@ MonoBehaviour:
   radiusX: 2.2
   radiusY: 1.8
   projectileDamageType: 1
-  projectileDamage: 10
-  attackCooldown: 2.5
+  projectileDamage: 15
+  attackCooldown: 2
   projectileSpeed: 2.5
   projectileLifetime: 16
   attackPoint: {fileID: 2598113663948595218}

@@ -186,8 +186,6 @@ MonoBehaviour:
   maxHealth: 40
   damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   damageFlashDuration: 0.12
-  hitBounceDistance: 0.02
-  hitBounceDuration: 0.1
   isMiniBoss: 0
   enemyName: Witch
   basePierceResistance: 5
@@ -229,7 +227,7 @@ MonoBehaviour:
   radiusX: 2.4
   radiusY: 1.2
   projectileDamageType: 64
-  projectileDamage: 10
+  projectileDamage: 30
   attackCooldown: 2.5
   projectileSpeed: 2.5
   projectileLifetime: 16

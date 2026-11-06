@@ -30,6 +30,12 @@ public class RoomManager : MonoBehaviour
     [Header("Room Progression")]
     [SerializeField] private bool lockNextRoomUntilCleared = true;
 
+    [Header("Upgrade Merchant")]
+    [Range(0f, 1f)]
+    [SerializeField] private float upgradeMerchantSpawnChance = 0.2f;
+    [SerializeField] private GameObject upgradeMerchantPrefab;
+    [SerializeField] private Vector3 upgradeMerchantSpawnOffset;
+
     [Header("Special Gateways")]
     [Range(0f, 1f)]
     [SerializeField] private float secretGatewayChance = 0.35f;
@@ -1663,6 +1669,8 @@ public class RoomManager : MonoBehaviour
             true
         );
 
+        TrySpawnUpgradeMerchant(clearedRoom);
+
 
         // -------------------------------------------------
         // UPDATE CURRENT ROOM PROGRESSION
@@ -1712,6 +1720,28 @@ public class RoomManager : MonoBehaviour
         Debug.Log(
             $"Room progression advanced. " +
             $"Current room: {currentRoomNumber}."
+        );
+    }
+
+    private void TrySpawnUpgradeMerchant(RoomInstance room)
+    {
+        if (room == null ||
+            upgradeMerchantPrefab == null ||
+            upgradeMerchantSpawnChance <= 0f ||
+            (upgradeMerchantSpawnChance < 1f &&
+             Random.value >= upgradeMerchantSpawnChance))
+        {
+            return;
+        }
+
+        Vector3 spawnPosition =
+            room.transform.position + upgradeMerchantSpawnOffset;
+
+        Instantiate(
+            upgradeMerchantPrefab,
+            spawnPosition,
+            Quaternion.identity,
+            room.transform
         );
     }
 

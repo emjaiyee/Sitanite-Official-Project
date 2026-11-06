@@ -243,6 +243,9 @@ MonoBehaviour:
   - {fileID: 4446540059129025920, guid: c0a710d2d6370be44b56ac80bddf06e3, type: 3}
   roomSpacingX: 60
   lockNextRoomUntilCleared: 1
+  upgradeMerchantSpawnChance: 0.2
+  upgradeMerchantPrefab: {fileID: 1002362884478653117, guid: 3d75e887cef8f474cb29cf8b868b251c, type: 3}
+  upgradeMerchantSpawnOffset: {x: 0, y: 0, z: 0}
   secretGatewayChance: 1
   floorManager: {fileID: 274238991486715204}
   secretRoomPrefabs:

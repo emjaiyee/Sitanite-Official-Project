@@ -154,8 +154,6 @@ MonoBehaviour:
   maxHealth: 28
   damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   damageFlashDuration: 0.12
-  hitBounceDistance: 0.02
-  hitBounceDuration: 0.1
   isMiniBoss: 0
   enemyName: 
   basePierceResistance: 0
@@ -196,8 +194,8 @@ MonoBehaviour:
   attackRadiusX: 0.8
   attackRadiusY: 0.6
   attackDamageType: 2
-  damage: 10
-  attackCooldown: 3
+  damage: 7
+  attackCooldown: 1.5
   attackPrefab: {fileID: 9219959829639980943, guid: e1560b468edb77e4aa486a1d9604ab7f, type: 3}
   markPoint: 0.3
   useChargedAttack: 0

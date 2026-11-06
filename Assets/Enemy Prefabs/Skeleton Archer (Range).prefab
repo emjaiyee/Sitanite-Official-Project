@@ -155,8 +155,6 @@ MonoBehaviour:
   maxHealth: 35
   damageFlashColor: {r: 1, g: 0.25, b: 0.25, a: 1}
   damageFlashDuration: 0.12
-  hitBounceDistance: 0.02
-  hitBounceDuration: 0.1
   isMiniBoss: 0
   enemyName: Crossbowman Skeleton
   basePierceResistance: 2
@@ -198,7 +196,7 @@ MonoBehaviour:
   radiusX: 2.6
   radiusY: 2
   projectileDamageType: 1
-  projectileDamage: 10
+  projectileDamage: 12
   attackCooldown: 3
   projectileSpeed: 2
   projectileLifetime: 16
@@ -281,7 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteResolver
   m_CategoryHash: 1.8990936e-26
-  m_labelHash: 2.480907e-28
+  m_labelHash: 1.6911767e-21
   m_SpriteKey: 0
   m_SpriteHash: 1041379584
 --- !u!95 &6784845555405096029
