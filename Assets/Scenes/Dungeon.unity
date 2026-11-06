@@ -6595,6 +6595,38 @@ PrefabInstance:
       propertyPath: manggagawayBossFloor.floor
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootChance
+      value: 0.804
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].maximumFloor
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].minimumFloor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[0].itemData
+      value: 
+      objectReference: {fileID: 11400000, guid: 783ea7c9365446d194b7d07af7582724, type: 2}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[0].dropWeight
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[0].maximumQuantity
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2053656258525702528, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: lootConfigurations.Array.data[0].lootPool.Array.data[0].minimumQuantity
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3305503357049295372, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -7204,6 +7236,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5945256498423393129, guid: 31392a082ec2e074e8d3762b2981a204, type: 3}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: bossSpawnConfigurations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: manggagawayConfiguration.enemyPrefab
       value: 
       objectReference: {fileID: 1560379032716864039, guid: e8a0919e694201b4fae8a35112632897, type: 3}
@@ -7225,15 +7261,15 @@ PrefabInstance:
       objectReference: {fileID: 5945256498423393129, guid: 31392a082ec2e074e8d3762b2981a204, type: 3}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: bossSpawnConfigurations.Array.data[0].spawnChance
-      value: 0.15
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: bossSpawnConfigurations.Array.data[0].maximumFloor
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: bossSpawnConfigurations.Array.data[0].minimumFloor
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: bossSpawnConfigurations.Array.data[0].activationChance
