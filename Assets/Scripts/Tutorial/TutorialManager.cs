@@ -737,8 +737,63 @@ public class TutorialManager : MonoBehaviour
         }
 
         TutorialStep step = steps[currentStepIndex];
-        
-        // Trigger completion events (e.g., granting the player an item)
+        ApplyStepCompletion(step);
+
+        currentStepIndex++;
+
+        // Dynamically transition to the next step
+        if (currentStepIndex < steps.Count)
+        {
+            BeginCurrentStep();
+        }
+        else
+        {
+            EndTutorial();
+        }
+    }
+
+    public void CompleteDefenseStepsAfterGoblinDefeated()
+    {
+        if (
+            !isTutorialActive ||
+            steps == null ||
+            currentStepIndex >= steps.Count ||
+            !IsShieldDefenseStep(steps[currentStepIndex])
+        )
+        {
+            return;
+        }
+
+        if (transitionCoroutine != null)
+        {
+            StopCoroutine(transitionCoroutine);
+            transitionCoroutine = null;
+        }
+
+        StopPromptLifetime();
+        isTransitioning = false;
+        isCurrentStepActivated = true;
+
+        while (
+            currentStepIndex < steps.Count &&
+            IsShieldDefenseStep(steps[currentStepIndex])
+        )
+        {
+            ApplyStepCompletion(steps[currentStepIndex]);
+            currentStepIndex++;
+        }
+
+        SetTutorialDefenseStaminaFree(false);
+        SetTutorialParryWindow(0f);
+
+        if (currentStepIndex < steps.Count)
+            BeginCurrentStep();
+        else
+            EndTutorial();
+    }
+
+    private void ApplyStepCompletion(TutorialStep step)
+    {
         step.onStepComplete?.Invoke();
 
         if (step.unlockRoomGatewayOnCompletion > 0)
@@ -754,18 +809,19 @@ public class TutorialManager : MonoBehaviour
 
         if (step.unlocksFloorGatewayOnCompletion)
             UnlockTutorialFloorGateway();
+    }
 
-        currentStepIndex++;
+    private static bool IsShieldDefenseStep(TutorialStep step)
+    {
+        if (step == null)
+            return false;
 
-        // Dynamically transition to the next step
-        if (currentStepIndex < steps.Count)
-        {
-            BeginCurrentStep();
-        }
-        else
-        {
-            EndTutorial();
-        }
+        return step.completionRequirement ==
+                   TutorialCompletionRequirement.SuccessfulShieldBlock ||
+               step.completionRequirement ==
+                   TutorialCompletionRequirement.SuccessfulShieldParry ||
+               step.completionRequirement ==
+                   TutorialCompletionRequirement.ShieldCounterAttack;
     }
 
     public void EndTutorial()

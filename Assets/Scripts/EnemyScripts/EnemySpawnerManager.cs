@@ -157,6 +157,7 @@ public class EnemySpawnerManager : MonoBehaviour
     private readonly Dictionary<RoomInstance, HashSet<EnemySpawnPoint>> clearedSpawnPoints =
         new Dictionary<RoomInstance, HashSet<EnemySpawnPoint>>();
     private readonly Dictionary<EnemySpawnPoint, Action> clearHandlers = new Dictionary<EnemySpawnPoint, Action>();
+    private EnemyHealth tutorialGoblinHealth;
     private bool hasSpawnedFloorEnemies;
     private bool adaptationFrozen;
     private DungeonMemory.Adaptation floorAdaptation;
@@ -174,12 +175,16 @@ public class EnemySpawnerManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        UnsubscribeFromTutorialGoblin();
+
         if (Instance == this)
             Instance = null;
     }
 
     public void BeginFloor(FloorManager floor)
     {
+        UnsubscribeFromTutorialGoblin();
+
         if (ActiveBossHealth != null)
             ActiveBossHealth.OnEnemyDied -= HandleActiveBossDied;
 
@@ -393,7 +398,8 @@ public class EnemySpawnerManager : MonoBehaviour
             SpawnTutorialEnemy(
                 tutorialSpawnConfiguration.tutorialGoblinPrefab,
                 tutorialSpawnConfiguration.tutorialGoblinRoom,
-                "tutorial goblin"
+                "tutorial goblin",
+                true
             );
         }
     }
@@ -401,7 +407,8 @@ public class EnemySpawnerManager : MonoBehaviour
     private void SpawnTutorialEnemy(
         GameObject prefab,
         int roomNumber,
-        string enemyName)
+        string enemyName,
+        bool isTutorialGoblin = false)
     {
         if (prefab == null)
         {
@@ -454,7 +461,48 @@ public class EnemySpawnerManager : MonoBehaviour
                 $"{roomNumber}.",
                 spawnPoint
             );
+            return;
         }
+
+        if (isTutorialGoblin)
+            SubscribeToTutorialGoblin(spawnedEnemy);
+    }
+
+    private void SubscribeToTutorialGoblin(GameObject goblin)
+    {
+        UnsubscribeFromTutorialGoblin();
+
+        tutorialGoblinHealth = goblin.GetComponent<EnemyHealth>();
+        if (tutorialGoblinHealth == null)
+        {
+            Debug.LogError(
+                "The tutorial goblin requires an EnemyHealth component to " +
+                "complete the defense tutorial when defeated.",
+                goblin
+            );
+            return;
+        }
+
+        tutorialGoblinHealth.OnEnemyDied += HandleTutorialGoblinDied;
+    }
+
+    private void UnsubscribeFromTutorialGoblin()
+    {
+        if (tutorialGoblinHealth == null)
+            return;
+
+        tutorialGoblinHealth.OnEnemyDied -= HandleTutorialGoblinDied;
+        tutorialGoblinHealth = null;
+    }
+
+    private void HandleTutorialGoblinDied(GameObject goblin)
+    {
+        UnsubscribeFromTutorialGoblin();
+
+        TutorialManager tutorialManager =
+            FindFirstObjectByType<TutorialManager>();
+        if (tutorialManager != null)
+            tutorialManager.CompleteDefenseStepsAfterGoblinDefeated();
     }
 
     private RoomInstance FindRegisteredRoom(int roomNumber)
