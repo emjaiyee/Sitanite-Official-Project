@@ -8,9 +8,14 @@ public class MainMenuDisplaySettings : MonoBehaviour
     private const string FullscreenKey = "DisplayFullscreen";
     private const string ResolutionWidthKey = "DisplayResolutionWidth";
     private const string ResolutionHeightKey = "DisplayResolutionHeight";
+    private const string BrightnessKey = "DungeonBrightness";
+    private const float MinimumBrightness = 0.5f;
+    private const float MaximumBrightness = 2f;
 
     [SerializeField] private Toggle fullscreenToggle;
     [SerializeField] private TMP_Dropdown resolutionDropdown;
+    [SerializeField] private Slider brightnessSlider;
+    [SerializeField] private TMP_Text brightnessLabel;
 
     private readonly List<Resolution> resolutions = new List<Resolution>();
     private bool isFullscreen;
@@ -41,6 +46,41 @@ public class MainMenuDisplaySettings : MonoBehaviour
         fullscreenToggle.onValueChanged.AddListener(SetFullscreen);
         resolutionDropdown.onValueChanged.AddListener(SetResolution);
         ApplySavedDisplaySettings();
+
+        if (brightnessSlider != null)
+        {
+            VolumeSliderBinder volumeSliderBinder =
+                brightnessSlider.GetComponent<VolumeSliderBinder>();
+            if (volumeSliderBinder != null)
+            {
+                volumeSliderBinder.enabled = false;
+                Debug.LogWarning(
+                    "The brightness Slider has a VolumeSliderBinder. It has been disabled; " +
+                    "remove that component from the brightness Slider in the Inspector.",
+                    brightnessSlider
+                );
+            }
+
+            brightnessSlider.minValue = MinimumBrightness;
+            brightnessSlider.maxValue = MaximumBrightness;
+            brightnessSlider.SetValueWithoutNotify(
+                Mathf.Clamp(
+                    PlayerPrefs.GetFloat(BrightnessKey, 1f),
+                    MinimumBrightness,
+                    MaximumBrightness
+                )
+            );
+            brightnessSlider.onValueChanged.AddListener(SetBrightness);
+        }
+
+        if (brightnessLabel != null)
+            brightnessLabel.text = "BRIGHTNESS";
+
+        if (brightnessSlider == null || brightnessLabel == null)
+            Debug.LogWarning(
+                "Assign a brightness Slider and label in the options panel to enable brightness controls.",
+                this
+            );
     }
 
     private void OnDestroy()
@@ -50,6 +90,17 @@ public class MainMenuDisplaySettings : MonoBehaviour
 
         if (resolutionDropdown != null)
             resolutionDropdown.onValueChanged.RemoveListener(SetResolution);
+
+        if (brightnessSlider != null)
+            brightnessSlider.onValueChanged.RemoveListener(SetBrightness);
+    }
+
+    private void SetBrightness(float brightness)
+    {
+        PlayerPrefs.SetFloat(
+            BrightnessKey,
+            Mathf.Clamp(brightness, MinimumBrightness, MaximumBrightness)
+        );
     }
 
     private void BuildResolutionList()
