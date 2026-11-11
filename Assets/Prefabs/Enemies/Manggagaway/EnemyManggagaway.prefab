@@ -186,15 +186,15 @@ MonoBehaviour:
   phaseThreshold: 0.45
   transformationFallbackDuration: 1.5
   projectilePrefab: {fileID: 2075433876138900805, guid: 2fa71d86c8e586e4dbf6c37ea0543fa1, type: 3}
-  projectileCooldown: 1.5
-  projectileSpeed: 2
-  projectileLifetime: 2
+  projectileCooldown: 3
+  projectileSpeed: 1.2
+  projectileLifetime: 1.5
   projectileHitRadius: 0.15
   projectileDamage: 20
   projectileDamageType: 64
   beamPrefab: {fileID: 4327279951456421179, guid: 23dbe4a94d87e644084797d0a774e645, type: 3}
   beamChargePrefab: {fileID: 8900346283138230521, guid: 24401c407ff6e0344890a646a6e0a593, type: 3}
-  beamChargeDuration: 1.5
+  beamChargeDuration: 2
   beamCooldown: 8
   beamChance: 0.35
   beamWidth: 0.6
