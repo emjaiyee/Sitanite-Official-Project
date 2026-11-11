@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class RoomManager : MonoBehaviour
 {
@@ -34,7 +35,6 @@ public class RoomManager : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float upgradeMerchantSpawnChance = 0.2f;
     [SerializeField] private GameObject upgradeMerchantPrefab;
-    [SerializeField] private Vector3 upgradeMerchantSpawnOffset;
 
     [Header("Special Gateways")]
     [Range(0f, 1f)]
@@ -1734,8 +1734,35 @@ public class RoomManager : MonoBehaviour
             return;
         }
 
+        List<Vector3> walkablePositions = new List<Vector3>();
+        AStarWalkableMap[] walkableMaps =
+            room.GetComponentsInChildren<AStarWalkableMap>(true);
+
+        foreach (AStarWalkableMap walkableMap in walkableMaps)
+        {
+            if (walkableMap == null || walkableMap.Tilemap == null)
+                continue;
+
+            Tilemap tilemap = walkableMap.Tilemap;
+            foreach (Vector3Int cell in tilemap.cellBounds.allPositionsWithin)
+            {
+                if (tilemap.HasTile(cell))
+                    walkablePositions.Add(tilemap.GetCellCenterWorld(cell));
+            }
+        }
+
+        if (walkablePositions.Count == 0)
+        {
+            Debug.LogWarning(
+                $"Cannot spawn an upgrade merchant in Room {room.RoomNumber}: " +
+                "the room has no walkable tiles.",
+                room
+            );
+            return;
+        }
+
         Vector3 spawnPosition =
-            room.transform.position + upgradeMerchantSpawnOffset;
+            walkablePositions[Random.Range(0, walkablePositions.Count)];
 
         Instantiate(
             upgradeMerchantPrefab,
