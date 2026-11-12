@@ -178,9 +178,9 @@ MonoBehaviour:
   room: {fileID: 0}
   spriteAnimator: {fileID: 2707602183335237345}
   attackPoint: {fileID: 5629835413886801559}
-  detectionRadius: 20
+  detectionRadius: 25
   moveSpeed: 0.8
-  projectileRange: 6
+  projectileRange: 4
   stoppingDistance: 1
   pathRefreshInterval: 0.5
   phaseThreshold: 0.45
@@ -208,7 +208,7 @@ MonoBehaviour:
   aoeDamageType: 256
   summonPrefab: {fileID: 1636909773633105260, guid: 0e30733826f0b3948a709453f0d95b63, type: 3}
   summonPool:
-  - {fileID: 1602161633568627328, guid: 95d02915be4766c44a1ba686e0f87317, type: 3}
+  - {fileID: 8748001588763141578, guid: 68f46b5da7272b34a8322ee954c399ed, type: 3}
   summonCooldown: 60
   summonCount: 3
   maxLivingSummons: 5
@@ -219,10 +219,10 @@ MonoBehaviour:
   healDuration: 60
   teleportPrefab: {fileID: 4314980141992138859, guid: 61986a2371583584a93664f02ee50fb7, type: 3}
   teleportCooldown: 120
-  overwhelmHitCount: 5
-  overwhelmDamageFraction: 0.2
+  overwhelmHitCount: 3
+  overwhelmDamageFraction: 0.15
   successionWindow: 5
-  teleportMinPlayerDistance: 6
+  teleportMinPlayerDistance: 3
   blockingLayers:
     serializedVersion: 2
     m_Bits: 8

@@ -1036,18 +1036,6 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
---- !u!114 &619394803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 619394800}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f7d8a6c4b2e41d5a013c9e6f4a8b7d2, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::DungeonGlobalLightBrightness
 --- !u!4 &619394802
 Transform:
   m_ObjectHideFlags: 0
@@ -1063,6 +1051,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &619394803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 619394800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f7d8a6c4b2e41d5a013c9e6f4a8b7d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DungeonGlobalLightBrightness
 --- !u!1001 &624507382
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7575,6 +7575,22 @@ PrefabInstance:
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: tutorialSpawnConfiguration.tutorialGoblinRoom
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: spawnConfigurations.Array.data[1].maximumFloor
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: spawnConfigurations.Array.data[1].minimumFloor
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: spawnConfigurations.Array.data[2].maximumFloor
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
+      propertyPath: spawnConfigurations.Array.data[2].minimumFloor
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6699783301931685193, guid: 1c56150265914714582b50b143a5a449, type: 3}
       propertyPath: tutorialSpawnConfiguration.trainingDummyPrefab

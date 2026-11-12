@@ -22361,6 +22361,7 @@ MonoBehaviour:
   tilemapLevel: 0
   disableAtThreshold: 1
   disableThreshold: 1
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 430748074491761052}
@@ -27261,6 +27262,7 @@ MonoBehaviour:
   tilemapLevel: 1
   disableAtThreshold: 1
   disableThreshold: 1
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 25675579863135290}
@@ -27745,6 +27747,7 @@ MonoBehaviour:
   tilemapLevel: 0
   disableAtThreshold: 1
   disableThreshold: 3
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 1511607071840702626}
@@ -29519,6 +29522,7 @@ MonoBehaviour:
   tilemapLevel: 1
   disableAtThreshold: 1
   disableThreshold: 1
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 5304888193939329921}
@@ -29673,6 +29677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25eae2a357da4c740983d12249cedf0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RoomInstance
+  minimumPots: 0
+  maximumPots: 10
 --- !u!1 &3475399083157432936
 GameObject:
   m_ObjectHideFlags: 0
@@ -30552,6 +30558,7 @@ MonoBehaviour:
   tilemapLevel: 0
   disableAtThreshold: 1
   disableThreshold: 3
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 929503981753000041}
@@ -61641,6 +61648,7 @@ MonoBehaviour:
   tilemapLevel: 2
   disableAtThreshold: 1
   disableThreshold: 2
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 2456901999793628138}
@@ -68279,6 +68287,7 @@ MonoBehaviour:
   tilemapLevel: 1
   disableAtThreshold: 1
   disableThreshold: 1
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 3963877373825460513}
@@ -68502,6 +68511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Gateway
   direction: 2
   flow: 1
+  elevationLevel: 0
   destination: {fileID: 0}
 --- !u!61 &720613267429074045
 BoxCollider2D:
@@ -237813,6 +237823,7 @@ MonoBehaviour:
   tilemapLevel: 0
   disableAtThreshold: 1
   disableThreshold: 2
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 6199435797663835094}
@@ -253644,6 +253655,7 @@ MonoBehaviour:
   tilemapLevel: 2
   disableAtThreshold: 1
   disableThreshold: 1
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 6928426635620066180}
@@ -253826,6 +253838,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Gateway
   direction: 1
   flow: 0
+  elevationLevel: 0
   destination: {fileID: 0}
 --- !u!1 &8850186386389056457
 GameObject:
@@ -267444,6 +267457,7 @@ MonoBehaviour:
   tilemapLevel: 1
   disableAtThreshold: 1
   disableThreshold: 3
+  affectColliders: 1
   smoothFade: 1
   fadeDuration: 0.2
   tilemap: {fileID: 7261009190122164132}
